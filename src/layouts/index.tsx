@@ -1,12 +1,21 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 
-import { Flex } from '@chakra-ui/react';
+import { Flex, Box } from '@chakra-ui/react';
+
+import Header from '@components/Header';
 
 const Layout: React.FC = ({ children }) => {
   return (
-    <Flex direction="column" align="center" p={[3, '', 6]}>
-      {children}
-    </Flex>
+    <>
+      <Helmet defaultTitle="Home" titleTemplate="Cards & Treasure Admin - %s" />
+      <Flex direction="column" align="center">
+        <Header />
+        <Box width="100%" p={[3, null, 6, 8]}>
+          {children}
+        </Box>
+      </Flex>
+    </>
   );
 };
 

@@ -19,11 +19,11 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@definitions/*": [
-        "src/definitions/*"
+      "@config/*": [
+        "src/config/*"
       ],
-      "@definitions": [
-        "src/definitions"
+      "@config": [
+        "src/config"
       ],
       "@components/*": [
         "src/components/*"
@@ -32,7 +32,7 @@
         "src/components"
       ],
       "@layouts/*": [
-        "src/components/*"
+        "src/layouts/*"
       ],
       "@layouts": [
         "src/layouts"
