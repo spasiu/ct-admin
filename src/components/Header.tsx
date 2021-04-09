@@ -9,7 +9,7 @@ import { HStack, Box, Flex, Link, Avatar, Button } from '@chakra-ui/react';
 
 import navigation from '@config/navigation.json';
 
-const Header: React.FC = (props) => {
+const Header: React.FC = () => {
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
   const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -22,7 +22,6 @@ const Header: React.FC = (props) => {
       bg="white"
       alignItems={'center'}
       justifyContent={'space-between'}
-      {...props}
     >
       <HStack as="nav" align="flex-start" spacing={4}>
         {navigation.primary.map((item) => (
