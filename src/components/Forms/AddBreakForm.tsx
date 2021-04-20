@@ -25,8 +25,7 @@ import {
   InsertBreakMutationVariables,
   Break_Type_Enum,
 } from '@generated/graphql';
-import { BreakTypeLabels } from '@config/values';
-import { enumToArray } from '@utils/enum';
+import { BreakTypeValues } from '@config/values';
 
 const INSERT_BREAK = gql`
   mutation InsertBreak($data: Breaks_insert_input!) {
@@ -70,13 +69,14 @@ type TFormData = {
   description: string;
   event_id: string;
   image: string;
-  break_type: string;
+  break_type: Break_Type_Enum;
   spots: number;
   teams_per_spot: number;
   price: number;
 };
 
 type TFormProps = {
+  event_id?: string;
   callback: () => void;
 };
 
@@ -85,9 +85,7 @@ type TFormProps = {
  * TODO: Handle errors
  *
  */
-const AddBreakForm: React.FC<TFormProps> = ({ callback }) => {
-  const allBreakTypes = enumToArray(Break_Type_Enum);
-
+const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
   const [user] = useAuthState(auth);
 
   const [
@@ -104,6 +102,9 @@ const AddBreakForm: React.FC<TFormProps> = ({ callback }) => {
     formState: { errors },
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      event_id: event_id,
+    },
   });
 
   useEffect(() => {
@@ -115,7 +116,6 @@ const AddBreakForm: React.FC<TFormProps> = ({ callback }) => {
    * @param result object Validated form result
    */
   const onSubmit = (result: TFormData) => {
-    console.log(result);
     if (user) {
       addBreak({
         variables: {
@@ -126,7 +126,7 @@ const AddBreakForm: React.FC<TFormProps> = ({ callback }) => {
             image: '',
             spots: result.spots,
             teams_per_spot: result.teams_per_spot,
-            break_type: Break_Type_Enum.HitDraft,
+            break_type: result.break_type,
             price: result.price,
           },
         },
@@ -173,8 +173,8 @@ const AddBreakForm: React.FC<TFormProps> = ({ callback }) => {
         <FormLabel>Break Type</FormLabel>
         <Select {...register('break_type')}>
           <option value="">Select...</option>
-          {allBreakTypes.map((type) => (
-            <option key={`option-${type.value}`} value={type.value}>
+          {BreakTypeValues.map((type) => (
+            <option key={`option-${type.label}`} value={type.value}>
               {type.label}
             </option>
           ))}

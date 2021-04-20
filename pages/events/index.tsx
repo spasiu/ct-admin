@@ -3,6 +3,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import { gql, useQuery } from '@apollo/client';
 import format from 'date-fns/format';
 import { MdDelete, MdCheckBoxOutlineBlank } from 'react-icons/md';
+import { FaCalendarPlus } from 'react-icons/fa';
 
 import {
   Heading,
@@ -51,6 +52,7 @@ const GET_EVENTS = gql`
 const EventsPage: React.FC = () => {
   const [isAddEventModalOpen, setAddEventModalOpen] = useState(false);
   const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
+  const [eventId, setEventId] = useState('');
 
   const {
     loading: eventLoading,
@@ -76,7 +78,10 @@ const EventsPage: React.FC = () => {
               leftIcon={<AddIcon />}
               colorScheme="blue"
               isFullWidth
-              onClick={() => setAddBreakModalOpen(true)}
+              onClick={() => {
+                setEventId(''); // reset event ID for blank modal
+                setAddBreakModalOpen(true);
+              }}
             >
               Add Break
             </Button>
@@ -114,9 +119,20 @@ const EventsPage: React.FC = () => {
                         <Td textAlign="right">
                           <IconButton
                             borderRadius="50%"
+                            bg="buttons.bgBlue"
+                            aria-label="Add Break"
+                            icon={<Icon as={FaCalendarPlus} w={5} h={5} />}
+                            onClick={() => {
+                              setEventId(event.id); // set event ID
+                              setAddBreakModalOpen(true);
+                            }}
+                            mr={5}
+                          />
+                          <IconButton
+                            borderRadius="50%"
                             bg="buttons.bgRed"
                             aria-label="Delete"
-                            icon={<Icon as={MdDelete} w={6} h={6} />}
+                            icon={<Icon as={MdDelete} w={5} h={5} />}
                           />
                         </Td>
                       </Tr>
@@ -144,6 +160,7 @@ const EventsPage: React.FC = () => {
           setModalOpen={setAddBreakModalOpen}
         >
           <AddBreakForm
+            event_id={eventId}
             callback={() => {
               setAddBreakModalOpen(false);
             }}
