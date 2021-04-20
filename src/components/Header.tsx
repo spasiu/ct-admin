@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Image from 'next/image';
 
 import { auth } from '@config/firebase';
 import { HStack, Box, Flex, Link, Avatar, Button } from '@chakra-ui/react';
@@ -18,12 +19,19 @@ const Header: React.FC = () => {
     <Flex
       as="header"
       width={'100%'}
-      p={[3, null, 6, 8]}
+      p={[3, null, 6]}
       bg="white"
       alignItems={'center'}
-      justifyContent={'space-between'}
+      justifyContent={'flex-start'}
     >
-      <HStack as="nav" align="flex-start" spacing={4}>
+      <Image
+        src="/images/ct-logo.png"
+        alt="Logo"
+        width="90"
+        height="70"
+        objectFit="contain"
+      />
+      <HStack as="nav" align="center" ml={8} spacing={4}>
         {navigation.primary.map((item) => (
           <Box key={`main-nav-item-${item.label}`}>
             <NextLink href={item.path} passHref>
@@ -44,7 +52,7 @@ const Header: React.FC = () => {
         ))}
       </HStack>
       {!loading && (
-        <Flex alignItems={'center'}>
+        <Flex ml="auto" alignItems={'center'}>
           {user && <Avatar size="md" src={user.photoURL || undefined}></Avatar>}
           {!user && (
             <Button

@@ -48,7 +48,19 @@
       ],
       "@styles": [
         "src/styles"
-      ]
+      ],
+      "@generated/*": [
+        "src/generated/*"
+      ],
+      "@generated": [
+        "src/generated"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@utils": [
+        "src/utils"
+      ],
     }
   },
   "include": [
