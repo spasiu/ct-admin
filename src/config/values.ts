@@ -1,4 +1,4 @@
-import { Break_Type_Enum } from '@generated/graphql';
+import { Break_Type_Enum, Sku_Type_Enum } from '@generated/graphql';
 
 export const BreakTypeValues = [
   {
@@ -25,4 +25,11 @@ export const BreakTypeValues = [
     label: 'Personal',
     value: Break_Type_Enum.Personal,
   },
+];
+
+export const SKUTypeValues = [
+  { label: 'Case', value: Sku_Type_Enum.Case },
+  { label: 'Box', value: Sku_Type_Enum.Box },
+  { label: 'Pack', value: Sku_Type_Enum.Pack },
+  { label: 'Card', value: Sku_Type_Enum.Card },
 ];

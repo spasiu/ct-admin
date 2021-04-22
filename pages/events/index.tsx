@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { AddIcon } from '@chakra-ui/icons';
-import { gql, useQuery } from '@apollo/client';
+import { AddIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import format from 'date-fns/format';
-import { MdDelete, MdCheckBoxOutlineBlank } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 import { FaCalendarPlus } from 'react-icons/fa';
+import NextLink from 'next/link';
 
 import {
   Heading,
@@ -18,26 +18,18 @@ import {
   Td,
   Icon,
   IconButton,
+  Link,
 } from '@chakra-ui/react';
 
 import { gridSpace } from '@config/chakra/constants';
+import paths from '@config/paths';
 import Layout from '@layouts';
 import Sidebar from '@components/Sidebar';
 import SEO from '@components/SEO';
 import AddEventForm from '@components/Forms/AddEventForm';
 import AddBreakForm from '@components/Forms/AddBreakForm';
 import FormModal from '@components/Modals/FormModal';
-import { GetEventsQuery } from '@generated/graphql';
-
-const GET_EVENTS = gql`
-  query GetEvents {
-    Events(limit: 10) {
-      id
-      title
-      start_time
-    }
-  }
-`;
+import { useGetEventsQuery } from '@generated/graphql';
 
 /**
  *
@@ -55,10 +47,11 @@ const EventsPage: React.FC = () => {
   const [eventId, setEventId] = useState('');
 
   const {
-    loading: eventLoading,
-    error: eventError,
-    data: eventData,
-  } = useQuery<GetEventsQuery>(GET_EVENTS);
+    loading: eventQueryLoading,
+    error: eventQueryError,
+    data: eventQueryData,
+    refetch: refetchEvents,
+  } = useGetEventsQuery();
 
   return (
     <>
@@ -91,53 +84,57 @@ const EventsPage: React.FC = () => {
               Upcoming Events
             </Heading>
 
-            {!eventLoading && eventData && (
+            {eventQueryData && (
               <Table>
                 <Thead>
                   <Tr>
-                    <Th>
-                      <Icon as={MdCheckBoxOutlineBlank} w={6} h={6} />
-                    </Th>
-                    <Th>Date</Th>
-                    <Th>Time</Th>
                     <Th>Event Name</Th>
+                    <Th>Breaker</Th>
+                    <Th>Date & Time</Th>
+                    <Th>Breaks</Th>
                     <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {eventData.Events.map((event) => {
-                    const startDate = new Date(event.start_time);
-
-                    return (
-                      <Tr key={event.id} bg="white">
-                        <Td>
-                          <Icon as={MdCheckBoxOutlineBlank} w={6} h={6} />
-                        </Td>
-                        <Td>{format(startDate, 'LLL dd, y')}</Td>
-                        <Td>{format(startDate, 'h:mm a')}</Td>
-                        <Td>{event.title}</Td>
-                        <Td textAlign="right">
-                          <IconButton
-                            borderRadius="50%"
-                            bg="buttons.bgBlue"
-                            aria-label="Add Break"
-                            icon={<Icon as={FaCalendarPlus} w={5} h={5} />}
-                            onClick={() => {
-                              setEventId(event.id); // set event ID
-                              setAddBreakModalOpen(true);
-                            }}
-                            mr={5}
-                          />
-                          <IconButton
-                            borderRadius="50%"
-                            bg="buttons.bgRed"
-                            aria-label="Delete"
-                            icon={<Icon as={MdDelete} w={5} h={5} />}
-                          />
-                        </Td>
-                      </Tr>
-                    );
-                  })}
+                  {eventQueryData.Events.map((event) => (
+                    <Tr key={event.id} bg="white">
+                      <Td>
+                        <NextLink href={`${paths.events}/${event.id}`} passHref>
+                          <Link fontWeight="bold">
+                            {event.title}
+                            <ChevronRightIcon ml={2} />
+                          </Link>
+                        </NextLink>
+                      </Td>
+                      <Td>{event.User.id}</Td>
+                      <Td>
+                        {format(
+                          new Date(event.start_time),
+                          'LLL dd, y @ h:mm a',
+                        )}
+                      </Td>
+                      <Td>{event.Breaks_aggregate?.aggregate?.count}</Td>
+                      <Td textAlign="right">
+                        <IconButton
+                          borderRadius="50%"
+                          bg="buttons.bgBlue"
+                          aria-label="Add Break"
+                          icon={<Icon as={FaCalendarPlus} w={5} h={5} />}
+                          onClick={() => {
+                            setEventId(event.id); // set event ID
+                            setAddBreakModalOpen(true);
+                          }}
+                          mr={4}
+                        />
+                        <IconButton
+                          borderRadius="50%"
+                          bg="buttons.bgRed"
+                          aria-label="Delete"
+                          icon={<Icon as={MdDelete} w={5} h={5} />}
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             )}
@@ -151,6 +148,7 @@ const EventsPage: React.FC = () => {
           <AddEventForm
             callback={() => {
               setAddEventModalOpen(false);
+              refetchEvents();
             }}
           />
         </FormModal>

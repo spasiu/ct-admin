@@ -12,7 +12,7 @@ const Sidebar: React.FC<SidebarType> = ({
   px = [0],
 }: SidebarType) => {
   return (
-    <Box width="20%" minWidth="270px" px={px}>
+    <Box width="20%" minWidth="330px" px={px}>
       <VStack borderRadius={5} bg="white" p={6} spacing={4}>
         {children}
       </VStack>

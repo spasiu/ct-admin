@@ -16,6 +16,7 @@ import {
   Button,
   Flex,
   Icon,
+  Textarea,
 } from '@chakra-ui/react';
 
 import { auth } from '@config/firebase';
@@ -125,11 +126,11 @@ const AddEventForm: React.FC<TFormProps> = ({ callback }) => {
 
       <FormControl isInvalid={!!errors.description} mb={5}>
         <FormLabel>Description</FormLabel>
-        <Input {...register('description')} />
+        <Textarea {...register('description')} />
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.start_time} mb={5}>
+      <FormControl isInvalid={!!errors.start_time} mb={10}>
         <FormLabel>Start Time</FormLabel>
         <Controller
           name="start_time"

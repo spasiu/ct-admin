@@ -36,18 +36,18 @@ export type Boolean_Comparison_Exp = {
 export type Breaks = {
   __typename?: 'Breaks';
   /** An object relationship */
+  Event: Events;
+  /** An object relationship */
+  Product?: Maybe<Products>;
+  /** An object relationship */
   break_status: Break_Status;
   break_type: Break_Type_Enum;
   created_at: Scalars['timestamptz'];
   description: Scalars['String'];
-  /** An object relationship */
-  event: Events;
   event_id: Scalars['uuid'];
   id: Scalars['uuid'];
   image: Scalars['String'];
   price: Scalars['money'];
-  /** An object relationship */
-  product?: Maybe<Products>;
   spots: Scalars['Int'];
   status: Break_Status_Enum;
   teams_per_spot: Scalars['Int'];
@@ -125,6 +125,8 @@ export type Breaks_Avg_Order_By = {
 
 /** Boolean expression to filter rows from the table "Breaks". All fields are combined with a logical 'AND'. */
 export type Breaks_Bool_Exp = {
+  Event?: Maybe<Events_Bool_Exp>;
+  Product?: Maybe<Products_Bool_Exp>;
   _and?: Maybe<Array<Maybe<Breaks_Bool_Exp>>>;
   _not?: Maybe<Breaks_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Breaks_Bool_Exp>>>;
@@ -132,12 +134,10 @@ export type Breaks_Bool_Exp = {
   break_type?: Maybe<Break_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   description?: Maybe<String_Comparison_Exp>;
-  event?: Maybe<Events_Bool_Exp>;
   event_id?: Maybe<Uuid_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   image?: Maybe<String_Comparison_Exp>;
   price?: Maybe<Money_Comparison_Exp>;
-  product?: Maybe<Products_Bool_Exp>;
   spots?: Maybe<Int_Comparison_Exp>;
   status?: Maybe<Break_Status_Enum_Comparison_Exp>;
   teams_per_spot?: Maybe<Int_Comparison_Exp>;
@@ -161,16 +161,16 @@ export type Breaks_Inc_Input = {
 
 /** input type for inserting data into table "Breaks" */
 export type Breaks_Insert_Input = {
+  Event?: Maybe<Events_Obj_Rel_Insert_Input>;
+  Product?: Maybe<Products_Obj_Rel_Insert_Input>;
   break_status?: Maybe<Break_Status_Obj_Rel_Insert_Input>;
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
-  event?: Maybe<Events_Obj_Rel_Insert_Input>;
   event_id?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
   image?: Maybe<Scalars['String']>;
   price?: Maybe<Scalars['money']>;
-  product?: Maybe<Products_Obj_Rel_Insert_Input>;
   spots?: Maybe<Scalars['Int']>;
   status?: Maybe<Break_Status_Enum>;
   teams_per_spot?: Maybe<Scalars['Int']>;
@@ -261,16 +261,16 @@ export type Breaks_On_Conflict = {
 
 /** ordering options when selecting data from "Breaks" */
 export type Breaks_Order_By = {
+  Event?: Maybe<Events_Order_By>;
+  Product?: Maybe<Products_Order_By>;
   break_status?: Maybe<Break_Status_Order_By>;
   break_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
-  event?: Maybe<Events_Order_By>;
   event_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image?: Maybe<Order_By>;
   price?: Maybe<Order_By>;
-  product?: Maybe<Products_Order_By>;
   spots?: Maybe<Order_By>;
   status?: Maybe<Order_By>;
   teams_per_spot?: Maybe<Order_By>;
@@ -464,12 +464,12 @@ export type Breaks_Variance_Order_By = {
 /** columns and relationships of "Events" */
 export type Events = {
   __typename?: 'Events';
+  /** An array relationship */
+  Breaks: Array<Breaks>;
+  /** An aggregated array relationship */
+  Breaks_aggregate: Breaks_Aggregate;
   /** An object relationship */
   User: Users;
-  /** An array relationship */
-  breaks: Array<Breaks>;
-  /** An aggregated array relationship */
-  breaks_aggregate: Breaks_Aggregate;
   created_at: Scalars['timestamptz'];
   description: Scalars['String'];
   /** An object relationship */
@@ -540,11 +540,11 @@ export type Events_Arr_Rel_Insert_Input = {
 
 /** Boolean expression to filter rows from the table "Events". All fields are combined with a logical 'AND'. */
 export type Events_Bool_Exp = {
+  Breaks?: Maybe<Breaks_Bool_Exp>;
   User?: Maybe<Users_Bool_Exp>;
   _and?: Maybe<Array<Maybe<Events_Bool_Exp>>>;
   _not?: Maybe<Events_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Events_Bool_Exp>>>;
-  breaks?: Maybe<Breaks_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   event_status?: Maybe<Event_Status_Bool_Exp>;
@@ -565,8 +565,8 @@ export enum Events_Constraint {
 
 /** input type for inserting data into table "Events" */
 export type Events_Insert_Input = {
+  Breaks?: Maybe<Breaks_Arr_Rel_Insert_Input>;
   User?: Maybe<Users_Obj_Rel_Insert_Input>;
-  breaks?: Maybe<Breaks_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   event_status?: Maybe<Event_Status_Obj_Rel_Insert_Input>;
@@ -653,8 +653,8 @@ export type Events_On_Conflict = {
 
 /** ordering options when selecting data from "Events" */
 export type Events_Order_By = {
+  Breaks_aggregate?: Maybe<Breaks_Aggregate_Order_By>;
   User?: Maybe<Users_Order_By>;
-  breaks_aggregate?: Maybe<Breaks_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   event_status?: Maybe<Event_Status_Order_By>;
@@ -746,9 +746,9 @@ export type Int_Comparison_Exp = {
 export type Products = {
   __typename?: 'Products';
   /** An object relationship */
-  SKU: Sku;
+  Break: Breaks;
   /** An object relationship */
-  break: Breaks;
+  SKU: Sku;
   break_id: Scalars['uuid'];
   cost_basis: Scalars['money'];
   created_at: Scalars['timestamptz'];
@@ -823,11 +823,11 @@ export type Products_Avg_Order_By = {
 
 /** Boolean expression to filter rows from the table "Products". All fields are combined with a logical 'AND'. */
 export type Products_Bool_Exp = {
+  Break?: Maybe<Breaks_Bool_Exp>;
   SKU?: Maybe<Sku_Bool_Exp>;
   _and?: Maybe<Array<Maybe<Products_Bool_Exp>>>;
   _not?: Maybe<Products_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Products_Bool_Exp>>>;
-  break?: Maybe<Breaks_Bool_Exp>;
   break_id?: Maybe<Uuid_Comparison_Exp>;
   cost_basis?: Maybe<Money_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -853,8 +853,8 @@ export type Products_Inc_Input = {
 
 /** input type for inserting data into table "Products" */
 export type Products_Insert_Input = {
+  Break?: Maybe<Breaks_Obj_Rel_Insert_Input>;
   SKU?: Maybe<Sku_Obj_Rel_Insert_Input>;
-  break?: Maybe<Breaks_Obj_Rel_Insert_Input>;
   break_id?: Maybe<Scalars['uuid']>;
   cost_basis?: Maybe<Scalars['money']>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -939,8 +939,8 @@ export type Products_On_Conflict = {
 
 /** ordering options when selecting data from "Products" */
 export type Products_Order_By = {
+  Break?: Maybe<Breaks_Order_By>;
   SKU?: Maybe<Sku_Order_By>;
-  break?: Maybe<Breaks_Order_By>;
   break_id?: Maybe<Order_By>;
   cost_basis?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
@@ -1088,10 +1088,14 @@ export type Products_Variance_Order_By = {
 /** columns and relationships of "SKU" */
 export type Sku = {
   __typename?: 'SKU';
+  /** An array relationship */
+  Products: Array<Products>;
+  /** An aggregated array relationship */
+  Products_aggregate: Products_Aggregate;
   autograph?: Maybe<Scalars['Boolean']>;
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand: Scalars['String'];
-  card_number?: Maybe<Scalars['Int']>;
+  card_number?: Maybe<Scalars['String']>;
   cards_per_pack?: Maybe<Scalars['Int']>;
   category: Scalars['String'];
   created_at: Scalars['timestamptz'];
@@ -1109,10 +1113,6 @@ export type Sku = {
   paralell?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
   product_type?: Maybe<Scalars['String']>;
-  /** An array relationship */
-  products: Array<Products>;
-  /** An aggregated array relationship */
-  products_aggregate: Products_Aggregate;
   rookie_card?: Maybe<Scalars['Boolean']>;
   sku_id: Scalars['String'];
   sku_type: Sku_Type_Enum;
@@ -1199,7 +1199,6 @@ export type Sku_Arr_Rel_Insert_Input = {
 export type Sku_Avg_Fields = {
   __typename?: 'SKU_avg_fields';
   boxes_per_case?: Maybe<Scalars['Float']>;
-  card_number?: Maybe<Scalars['Float']>;
   cards_per_pack?: Maybe<Scalars['Float']>;
   grade?: Maybe<Scalars['Float']>;
   numbered?: Maybe<Scalars['Float']>;
@@ -1211,7 +1210,6 @@ export type Sku_Avg_Fields = {
 /** order by avg() on columns of table "SKU" */
 export type Sku_Avg_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -1222,13 +1220,14 @@ export type Sku_Avg_Order_By = {
 
 /** Boolean expression to filter rows from the table "SKU". All fields are combined with a logical 'AND'. */
 export type Sku_Bool_Exp = {
+  Products?: Maybe<Products_Bool_Exp>;
   _and?: Maybe<Array<Maybe<Sku_Bool_Exp>>>;
   _not?: Maybe<Sku_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Sku_Bool_Exp>>>;
   autograph?: Maybe<Boolean_Comparison_Exp>;
   boxes_per_case?: Maybe<Int_Comparison_Exp>;
   brand?: Maybe<String_Comparison_Exp>;
-  card_number?: Maybe<Int_Comparison_Exp>;
+  card_number?: Maybe<String_Comparison_Exp>;
   cards_per_pack?: Maybe<Int_Comparison_Exp>;
   category?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -1246,7 +1245,6 @@ export type Sku_Bool_Exp = {
   paralell?: Maybe<String_Comparison_Exp>;
   player?: Maybe<String_Comparison_Exp>;
   product_type?: Maybe<String_Comparison_Exp>;
-  products?: Maybe<Products_Bool_Exp>;
   rookie_card?: Maybe<Boolean_Comparison_Exp>;
   sku_id?: Maybe<String_Comparison_Exp>;
   sku_type?: Maybe<Sku_Type_Enum_Comparison_Exp>;
@@ -1266,7 +1264,6 @@ export enum Sku_Constraint {
 /** input type for incrementing integer column in table "SKU" */
 export type Sku_Inc_Input = {
   boxes_per_case?: Maybe<Scalars['Int']>;
-  card_number?: Maybe<Scalars['Int']>;
   cards_per_pack?: Maybe<Scalars['Int']>;
   grade?: Maybe<Scalars['numeric']>;
   numbered?: Maybe<Scalars['Int']>;
@@ -1277,10 +1274,11 @@ export type Sku_Inc_Input = {
 
 /** input type for inserting data into table "SKU" */
 export type Sku_Insert_Input = {
+  Products?: Maybe<Products_Arr_Rel_Insert_Input>;
   autograph?: Maybe<Scalars['Boolean']>;
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand?: Maybe<Scalars['String']>;
-  card_number?: Maybe<Scalars['Int']>;
+  card_number?: Maybe<Scalars['String']>;
   cards_per_pack?: Maybe<Scalars['Int']>;
   category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -1298,7 +1296,6 @@ export type Sku_Insert_Input = {
   paralell?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
   product_type?: Maybe<Scalars['String']>;
-  products?: Maybe<Products_Arr_Rel_Insert_Input>;
   rookie_card?: Maybe<Scalars['Boolean']>;
   sku_id?: Maybe<Scalars['String']>;
   sku_type?: Maybe<Sku_Type_Enum>;
@@ -1314,7 +1311,7 @@ export type Sku_Max_Fields = {
   __typename?: 'SKU_max_fields';
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand?: Maybe<Scalars['String']>;
-  card_number?: Maybe<Scalars['Int']>;
+  card_number?: Maybe<Scalars['String']>;
   cards_per_pack?: Maybe<Scalars['Int']>;
   category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -1373,7 +1370,7 @@ export type Sku_Min_Fields = {
   __typename?: 'SKU_min_fields';
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand?: Maybe<Scalars['String']>;
-  card_number?: Maybe<Scalars['Int']>;
+  card_number?: Maybe<Scalars['String']>;
   cards_per_pack?: Maybe<Scalars['Int']>;
   category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -1451,6 +1448,7 @@ export type Sku_On_Conflict = {
 
 /** ordering options when selecting data from "SKU" */
 export type Sku_Order_By = {
+  Products_aggregate?: Maybe<Products_Aggregate_Order_By>;
   autograph?: Maybe<Order_By>;
   boxes_per_case?: Maybe<Order_By>;
   brand?: Maybe<Order_By>;
@@ -1472,7 +1470,6 @@ export type Sku_Order_By = {
   paralell?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
   product_type?: Maybe<Order_By>;
-  products_aggregate?: Maybe<Products_Aggregate_Order_By>;
   rookie_card?: Maybe<Order_By>;
   sku_id?: Maybe<Order_By>;
   sku_type?: Maybe<Order_By>;
@@ -1553,7 +1550,7 @@ export type Sku_Set_Input = {
   autograph?: Maybe<Scalars['Boolean']>;
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand?: Maybe<Scalars['String']>;
-  card_number?: Maybe<Scalars['Int']>;
+  card_number?: Maybe<Scalars['String']>;
   cards_per_pack?: Maybe<Scalars['Int']>;
   category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -1584,7 +1581,6 @@ export type Sku_Set_Input = {
 export type Sku_Stddev_Fields = {
   __typename?: 'SKU_stddev_fields';
   boxes_per_case?: Maybe<Scalars['Float']>;
-  card_number?: Maybe<Scalars['Float']>;
   cards_per_pack?: Maybe<Scalars['Float']>;
   grade?: Maybe<Scalars['Float']>;
   numbered?: Maybe<Scalars['Float']>;
@@ -1596,7 +1592,6 @@ export type Sku_Stddev_Fields = {
 /** order by stddev() on columns of table "SKU" */
 export type Sku_Stddev_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -1609,7 +1604,6 @@ export type Sku_Stddev_Order_By = {
 export type Sku_Stddev_Pop_Fields = {
   __typename?: 'SKU_stddev_pop_fields';
   boxes_per_case?: Maybe<Scalars['Float']>;
-  card_number?: Maybe<Scalars['Float']>;
   cards_per_pack?: Maybe<Scalars['Float']>;
   grade?: Maybe<Scalars['Float']>;
   numbered?: Maybe<Scalars['Float']>;
@@ -1621,7 +1615,6 @@ export type Sku_Stddev_Pop_Fields = {
 /** order by stddev_pop() on columns of table "SKU" */
 export type Sku_Stddev_Pop_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -1634,7 +1627,6 @@ export type Sku_Stddev_Pop_Order_By = {
 export type Sku_Stddev_Samp_Fields = {
   __typename?: 'SKU_stddev_samp_fields';
   boxes_per_case?: Maybe<Scalars['Float']>;
-  card_number?: Maybe<Scalars['Float']>;
   cards_per_pack?: Maybe<Scalars['Float']>;
   grade?: Maybe<Scalars['Float']>;
   numbered?: Maybe<Scalars['Float']>;
@@ -1646,7 +1638,6 @@ export type Sku_Stddev_Samp_Fields = {
 /** order by stddev_samp() on columns of table "SKU" */
 export type Sku_Stddev_Samp_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -1659,7 +1650,6 @@ export type Sku_Stddev_Samp_Order_By = {
 export type Sku_Sum_Fields = {
   __typename?: 'SKU_sum_fields';
   boxes_per_case?: Maybe<Scalars['Int']>;
-  card_number?: Maybe<Scalars['Int']>;
   cards_per_pack?: Maybe<Scalars['Int']>;
   grade?: Maybe<Scalars['numeric']>;
   numbered?: Maybe<Scalars['Int']>;
@@ -1671,7 +1661,6 @@ export type Sku_Sum_Fields = {
 /** order by sum() on columns of table "SKU" */
 export type Sku_Sum_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -1744,7 +1733,6 @@ export enum Sku_Update_Column {
 export type Sku_Var_Pop_Fields = {
   __typename?: 'SKU_var_pop_fields';
   boxes_per_case?: Maybe<Scalars['Float']>;
-  card_number?: Maybe<Scalars['Float']>;
   cards_per_pack?: Maybe<Scalars['Float']>;
   grade?: Maybe<Scalars['Float']>;
   numbered?: Maybe<Scalars['Float']>;
@@ -1756,7 +1744,6 @@ export type Sku_Var_Pop_Fields = {
 /** order by var_pop() on columns of table "SKU" */
 export type Sku_Var_Pop_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -1769,7 +1756,6 @@ export type Sku_Var_Pop_Order_By = {
 export type Sku_Var_Samp_Fields = {
   __typename?: 'SKU_var_samp_fields';
   boxes_per_case?: Maybe<Scalars['Float']>;
-  card_number?: Maybe<Scalars['Float']>;
   cards_per_pack?: Maybe<Scalars['Float']>;
   grade?: Maybe<Scalars['Float']>;
   numbered?: Maybe<Scalars['Float']>;
@@ -1781,7 +1767,6 @@ export type Sku_Var_Samp_Fields = {
 /** order by var_samp() on columns of table "SKU" */
 export type Sku_Var_Samp_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -1794,7 +1779,6 @@ export type Sku_Var_Samp_Order_By = {
 export type Sku_Variance_Fields = {
   __typename?: 'SKU_variance_fields';
   boxes_per_case?: Maybe<Scalars['Float']>;
-  card_number?: Maybe<Scalars['Float']>;
   cards_per_pack?: Maybe<Scalars['Float']>;
   grade?: Maybe<Scalars['Float']>;
   numbered?: Maybe<Scalars['Float']>;
@@ -1806,7 +1790,6 @@ export type Sku_Variance_Fields = {
 /** order by variance() on columns of table "SKU" */
 export type Sku_Variance_Order_By = {
   boxes_per_case?: Maybe<Order_By>;
-  card_number?: Maybe<Order_By>;
   cards_per_pack?: Maybe<Order_By>;
   grade?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
@@ -4168,17 +4151,6 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['uuid']>>;
 };
 
-export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetEventsQuery = (
-  { __typename?: 'query_root' }
-  & { Events: Array<(
-    { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time'>
-  )> }
-);
-
 export type InsertBreakMutationVariables = Exact<{
   data: Breaks_Insert_Input;
 }>;
@@ -4205,43 +4177,75 @@ export type InsertEventMutation = (
   )> }
 );
 
+export type InsertSkuMutationVariables = Exact<{
+  data: Sku_Insert_Input;
+}>;
 
-export const GetEventsDocument = gql`
-    query GetEvents {
-  Events(limit: 10) {
-    id
-    title
-    start_time
-  }
-}
-    `;
 
-/**
- * __useGetEventsQuery__
- *
- * To run a query within a React component, call `useGetEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEventsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetEventsQuery, GetEventsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetEventsQuery, GetEventsQueryVariables>(GetEventsDocument, options);
-      }
-export function useGetEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventsQuery, GetEventsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetEventsQuery, GetEventsQueryVariables>(GetEventsDocument, options);
-        }
-export type GetEventsQueryHookResult = ReturnType<typeof useGetEventsQuery>;
-export type GetEventsLazyQueryHookResult = ReturnType<typeof useGetEventsLazyQuery>;
-export type GetEventsQueryResult = Apollo.QueryResult<GetEventsQuery, GetEventsQueryVariables>;
+export type InsertSkuMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_SKU_one?: Maybe<(
+    { __typename?: 'SKU' }
+    & Pick<Sku, 'id'>
+  )> }
+);
+
+export type GetSkUsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSkUsQuery = (
+  { __typename?: 'query_root' }
+  & { SKU: Array<(
+    { __typename?: 'SKU' }
+    & Pick<Sku, 'id' | 'sku_id' | 'manufacturer' | 'brand' | 'category' | 'year1' | 'year2' | 'product_type'>
+  )> }
+);
+
+export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEventsQuery = (
+  { __typename?: 'query_root' }
+  & { Events: Array<(
+    { __typename?: 'Events' }
+    & Pick<Events, 'id' | 'title' | 'start_time'>
+    & { User: (
+      { __typename?: 'Users' }
+      & Pick<Users, 'id'>
+    ), Breaks: Array<(
+      { __typename?: 'Breaks' }
+      & Pick<Breaks, 'id'>
+    )>, Breaks_aggregate: (
+      { __typename?: 'Breaks_aggregate' }
+      & { aggregate?: Maybe<(
+        { __typename?: 'Breaks_aggregate_fields' }
+        & Pick<Breaks_Aggregate_Fields, 'count'>
+      )> }
+    ) }
+  )> }
+);
+
+export type GetEventByIdQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetEventByIdQuery = (
+  { __typename?: 'query_root' }
+  & { Events_by_pk?: Maybe<(
+    { __typename?: 'Events' }
+    & Pick<Events, 'id' | 'title' | 'start_time'>
+    & { User: (
+      { __typename?: 'Users' }
+      & Pick<Users, 'id'>
+    ), Breaks: Array<(
+      { __typename?: 'Breaks' }
+      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots'>
+    )> }
+  )> }
+);
+
+
 export const InsertBreakDocument = gql`
     mutation InsertBreak($data: Breaks_insert_input!) {
   insert_Breaks_one(object: $data) {
@@ -4308,3 +4312,171 @@ export function useInsertEventMutation(baseOptions?: Apollo.MutationHookOptions<
 export type InsertEventMutationHookResult = ReturnType<typeof useInsertEventMutation>;
 export type InsertEventMutationResult = Apollo.MutationResult<InsertEventMutation>;
 export type InsertEventMutationOptions = Apollo.BaseMutationOptions<InsertEventMutation, InsertEventMutationVariables>;
+export const InsertSkuDocument = gql`
+    mutation InsertSKU($data: SKU_insert_input!) {
+  insert_SKU_one(object: $data) {
+    id
+  }
+}
+    `;
+export type InsertSkuMutationFn = Apollo.MutationFunction<InsertSkuMutation, InsertSkuMutationVariables>;
+
+/**
+ * __useInsertSkuMutation__
+ *
+ * To run a mutation, you first call `useInsertSkuMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertSkuMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertSkuMutation, { data, loading, error }] = useInsertSkuMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useInsertSkuMutation(baseOptions?: Apollo.MutationHookOptions<InsertSkuMutation, InsertSkuMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertSkuMutation, InsertSkuMutationVariables>(InsertSkuDocument, options);
+      }
+export type InsertSkuMutationHookResult = ReturnType<typeof useInsertSkuMutation>;
+export type InsertSkuMutationResult = Apollo.MutationResult<InsertSkuMutation>;
+export type InsertSkuMutationOptions = Apollo.BaseMutationOptions<InsertSkuMutation, InsertSkuMutationVariables>;
+export const GetSkUsDocument = gql`
+    query GetSKUs {
+  SKU {
+    id
+    sku_id
+    manufacturer
+    brand
+    category
+    year1
+    year2
+    product_type
+  }
+}
+    `;
+
+/**
+ * __useGetSkUsQuery__
+ *
+ * To run a query within a React component, call `useGetSkUsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSkUsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSkUsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSkUsQuery(baseOptions?: Apollo.QueryHookOptions<GetSkUsQuery, GetSkUsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSkUsQuery, GetSkUsQueryVariables>(GetSkUsDocument, options);
+      }
+export function useGetSkUsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSkUsQuery, GetSkUsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSkUsQuery, GetSkUsQueryVariables>(GetSkUsDocument, options);
+        }
+export type GetSkUsQueryHookResult = ReturnType<typeof useGetSkUsQuery>;
+export type GetSkUsLazyQueryHookResult = ReturnType<typeof useGetSkUsLazyQuery>;
+export type GetSkUsQueryResult = Apollo.QueryResult<GetSkUsQuery, GetSkUsQueryVariables>;
+export const GetEventsDocument = gql`
+    query GetEvents {
+  Events {
+    id
+    title
+    start_time
+    User {
+      id
+    }
+    Breaks {
+      id
+    }
+    Breaks_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetEventsQuery__
+ *
+ * To run a query within a React component, call `useGetEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetEventsQuery, GetEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEventsQuery, GetEventsQueryVariables>(GetEventsDocument, options);
+      }
+export function useGetEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventsQuery, GetEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEventsQuery, GetEventsQueryVariables>(GetEventsDocument, options);
+        }
+export type GetEventsQueryHookResult = ReturnType<typeof useGetEventsQuery>;
+export type GetEventsLazyQueryHookResult = ReturnType<typeof useGetEventsLazyQuery>;
+export type GetEventsQueryResult = Apollo.QueryResult<GetEventsQuery, GetEventsQueryVariables>;
+export const GetEventByIdDocument = gql`
+    query GetEventById($id: uuid!) {
+  Events_by_pk(id: $id) {
+    id
+    title
+    start_time
+    User {
+      id
+    }
+    Breaks {
+      id
+      title
+      break_type
+      price
+      spots
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetEventByIdQuery__
+ *
+ * To run a query within a React component, call `useGetEventByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEventByIdQuery(baseOptions: Apollo.QueryHookOptions<GetEventByIdQuery, GetEventByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEventByIdQuery, GetEventByIdQueryVariables>(GetEventByIdDocument, options);
+      }
+export function useGetEventByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventByIdQuery, GetEventByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEventByIdQuery, GetEventByIdQueryVariables>(GetEventByIdDocument, options);
+        }
+export type GetEventByIdQueryHookResult = ReturnType<typeof useGetEventByIdQuery>;
+export type GetEventByIdLazyQueryHookResult = ReturnType<typeof useGetEventByIdLazyQuery>;
+export type GetEventByIdQueryResult = Apollo.QueryResult<GetEventByIdQuery, GetEventByIdQueryVariables>;

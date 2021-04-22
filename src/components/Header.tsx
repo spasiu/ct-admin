@@ -6,9 +6,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import Image from 'next/image';
 
 import { auth } from '@config/firebase';
+import navigation from '@config/navigation';
 import { HStack, Box, Flex, Link, Avatar, Button } from '@chakra-ui/react';
-
-import navigation from '@config/navigation.json';
 
 const Header: React.FC = () => {
   const [user, loading] = useAuthState(auth);
@@ -19,16 +18,16 @@ const Header: React.FC = () => {
     <Flex
       as="header"
       width={'100%'}
-      p={[3, null, 6]}
+      py={[2, null, 4]}
+      px={6}
       bg="white"
-      alignItems={'center'}
       justifyContent={'flex-start'}
     >
       <Image
         src="/images/ct-logo.png"
         alt="Logo"
-        width="90"
-        height="70"
+        width="80"
+        height="60"
         objectFit="contain"
       />
       <HStack as="nav" align="center" ml={8} spacing={4}>

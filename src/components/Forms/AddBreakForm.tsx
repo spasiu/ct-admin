@@ -15,7 +15,7 @@ import {
   Flex,
   Icon,
   Select,
-  Box,
+  Textarea,
 } from '@chakra-ui/react';
 
 import { auth } from '@config/firebase';
@@ -96,7 +96,6 @@ const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
   );
 
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -151,6 +150,13 @@ const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
       >
         <Icon as={MdCameraAlt} w={8} h={8} />
       </Flex>
+
+      <FormControl isInvalid={!!errors.event_id} mb={5}>
+        <FormLabel>Event ID</FormLabel>
+        <Input {...register('event_id')} isReadOnly={!!event_id} />
+        <FormErrorMessage>{errors.event_id?.message}</FormErrorMessage>
+      </FormControl>
+
       <FormControl isInvalid={!!errors.title} mb={5}>
         <FormLabel>Title</FormLabel>
         <Input {...register('title')} />
@@ -159,53 +165,60 @@ const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
 
       <FormControl isInvalid={!!errors.description} mb={5}>
         <FormLabel>Description</FormLabel>
-        <Input {...register('description')} />
+        <Textarea {...register('description')} />
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={!!errors.event_id} mb={5}>
-        <FormLabel>Event ID</FormLabel>
-        <Input {...register('event_id')} />
-        <FormErrorMessage>{errors.event_id?.message}</FormErrorMessage>
-      </FormControl>
+      <Flex mx={gridSpace.parent} mb={5}>
+        <FormControl
+          isInvalid={!!errors.break_type}
+          width="50%"
+          px={gridSpace.child}
+        >
+          <FormLabel>Break Type</FormLabel>
+          <Select {...register('break_type')}>
+            <option value="">Select...</option>
+            {BreakTypeValues.map((type) => (
+              <option key={`option-${type.label}`} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>{errors.break_type?.message}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl isInvalid={!!errors.break_type} mb={5}>
-        <FormLabel>Break Type</FormLabel>
-        <Select {...register('break_type')}>
-          <option value="">Select...</option>
-          {BreakTypeValues.map((type) => (
-            <option key={`option-${type.label}`} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </Select>
-        <FormErrorMessage>{errors.break_type?.message}</FormErrorMessage>
-      </FormControl>
-
-      <Flex mx={gridSpace.parent}>
-        <Box width="50%" px={gridSpace.child}>
-          <FormControl isInvalid={!!errors.spots} mb={5}>
-            <FormLabel>Spots</FormLabel>
-            <Input {...register('spots')} />
-            <FormErrorMessage>{errors.spots?.message}</FormErrorMessage>
-          </FormControl>
-        </Box>
-        <Box width="50%" px={gridSpace.child}>
-          <FormControl isInvalid={!!errors.teams_per_spot} mb={5}>
-            <FormLabel>Teams Per Spot</FormLabel>
-            <Input {...register('teams_per_spot')} />
-            <FormErrorMessage>
-              {errors.teams_per_spot?.message}
-            </FormErrorMessage>
-          </FormControl>
-        </Box>
+        <FormControl
+          isInvalid={!!errors.price}
+          width="50%"
+          px={gridSpace.child}
+        >
+          <FormLabel>Price</FormLabel>
+          <Input {...register('price')} />
+          <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
+        </FormControl>
       </Flex>
 
-      <FormControl isInvalid={!!errors.price} mb={5}>
-        <FormLabel>Price</FormLabel>
-        <Input {...register('price')} />
-        <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
-      </FormControl>
+      <Flex mx={gridSpace.parent} mb={10}>
+        <FormControl
+          isInvalid={!!errors.spots}
+          width="50%"
+          px={gridSpace.child}
+        >
+          <FormLabel>Spots</FormLabel>
+          <Input {...register('spots')} />
+          <FormErrorMessage>{errors.spots?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl
+          isInvalid={!!errors.teams_per_spot}
+          width="50%"
+          px={gridSpace.child}
+        >
+          <FormLabel>Teams Per Spot</FormLabel>
+          <Input {...register('teams_per_spot')} />
+          <FormErrorMessage>{errors.teams_per_spot?.message}</FormErrorMessage>
+        </FormControl>
+      </Flex>
 
       <Flex justifyContent="center">
         <Button mb={4} px={10} colorScheme="blue" type="submit">

@@ -1,4 +1,8 @@
-export const enumToMap = (enumeration: any): Map<string, string | number> => {
+type TEnum = {
+  [id: string]: string | number;
+};
+
+export const enumToMap = (enumeration: TEnum): Map<string, string | number> => {
   const map = new Map<string, string | number>();
   for (const key in enumeration) {
     //TypeScript does not allow enum keys to be numeric
@@ -14,7 +18,7 @@ export const enumToMap = (enumeration: any): Map<string, string | number> => {
 };
 
 export const enumToArray = (
-  enumeration: any,
+  enumeration: TEnum,
 ): Array<{ value: string; label: string | number }> => {
   const mapOfEnum = enumToMap(enumeration);
 

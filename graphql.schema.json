@@ -161,6 +161,34 @@
         "description": "columns and relationships of \"Breaks\"",
         "fields": [
           {
+            "name": "Event",
+            "description": "An object relationship",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Events",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Product",
+            "description": "An object relationship",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Products",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "break_status",
             "description": "An object relationship",
             "args": [],
@@ -218,22 +246,6 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "event",
-            "description": "An object relationship",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Events",
                 "ofType": null
               }
             },
@@ -300,18 +312,6 @@
                 "name": "money",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "product",
-            "description": "An object relationship",
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Products",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -962,6 +962,30 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "Event",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Events_bool_exp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Product",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_bool_exp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "_and",
             "description": null,
             "type": {
@@ -1054,18 +1078,6 @@
             "deprecationReason": null
           },
           {
-            "name": "event",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Events_bool_exp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "event_id",
             "description": null,
             "type": {
@@ -1107,18 +1119,6 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "money_comparison_exp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "product",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Products_bool_exp",
               "ofType": null
             },
             "defaultValue": null,
@@ -1273,6 +1273,30 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "Event",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Events_obj_rel_insert_input",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Product",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_obj_rel_insert_input",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "break_status",
             "description": null,
             "type": {
@@ -1321,18 +1345,6 @@
             "deprecationReason": null
           },
           {
-            "name": "event",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Events_obj_rel_insert_input",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "event_id",
             "description": null,
             "type": {
@@ -1374,18 +1386,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "money",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "product",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Products_obj_rel_insert_input",
               "ofType": null
             },
             "defaultValue": null,
@@ -2153,6 +2153,30 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "Event",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Events_order_by",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Product",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_order_by",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "break_status",
             "description": null,
             "type": {
@@ -2201,18 +2225,6 @@
             "deprecationReason": null
           },
           {
-            "name": "event",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Events_order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "event_id",
             "description": null,
             "type": {
@@ -2254,18 +2266,6 @@
             "type": {
               "kind": "ENUM",
               "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "product",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Products_order_by",
               "ofType": null
             },
             "defaultValue": null,
@@ -3361,23 +3361,7 @@
         "description": "columns and relationships of \"Events\"",
         "fields": [
           {
-            "name": "User",
-            "description": "An object relationship",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Users",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "breaks",
+            "name": "Breaks",
             "description": "An array relationship",
             "args": [
               {
@@ -3478,7 +3462,7 @@
             "deprecationReason": null
           },
           {
-            "name": "breaks_aggregate",
+            "name": "Breaks_aggregate",
             "description": "An aggregated array relationship",
             "args": [
               {
@@ -3564,6 +3548,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Breaks_aggregate",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "User",
+            "description": "An object relationship",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Users",
                 "ofType": null
               }
             },
@@ -3960,6 +3960,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "Breaks",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Breaks_bool_exp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "User",
             "description": null,
             "type": {
@@ -4010,18 +4022,6 @@
                 "name": "Events_bool_exp",
                 "ofType": null
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "breaks",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Breaks_bool_exp",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -4176,11 +4176,11 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "User",
+            "name": "Breaks",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "Users_obj_rel_insert_input",
+              "name": "Breaks_arr_rel_insert_input",
               "ofType": null
             },
             "defaultValue": null,
@@ -4188,11 +4188,11 @@
             "deprecationReason": null
           },
           {
-            "name": "breaks",
+            "name": "User",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "Breaks_arr_rel_insert_input",
+              "name": "Users_obj_rel_insert_input",
               "ofType": null
             },
             "defaultValue": null,
@@ -4912,11 +4912,11 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "User",
+            "name": "Breaks_aggregate",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "Users_order_by",
+              "name": "Breaks_aggregate_order_by",
               "ofType": null
             },
             "defaultValue": null,
@@ -4924,11 +4924,11 @@
             "deprecationReason": null
           },
           {
-            "name": "breaks_aggregate",
+            "name": "User",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "Breaks_aggregate_order_by",
+              "name": "Users_order_by",
               "ofType": null
             },
             "defaultValue": null,
@@ -5477,6 +5477,22 @@
         "description": "columns and relationships of \"Products\"",
         "fields": [
           {
+            "name": "Break",
+            "description": "An object relationship",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Breaks",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SKU",
             "description": "An object relationship",
             "args": [],
@@ -5486,22 +5502,6 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "SKU",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "break",
-            "description": "An object relationship",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Breaks",
                 "ofType": null
               }
             },
@@ -6108,6 +6108,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "Break",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Breaks_bool_exp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SKU",
             "description": null,
             "type": {
@@ -6158,18 +6170,6 @@
                 "name": "Products_bool_exp",
                 "ofType": null
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "break",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Breaks_bool_exp",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -6329,11 +6329,11 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "SKU",
+            "name": "Break",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "SKU_obj_rel_insert_input",
+              "name": "Breaks_obj_rel_insert_input",
               "ofType": null
             },
             "defaultValue": null,
@@ -6341,11 +6341,11 @@
             "deprecationReason": null
           },
           {
-            "name": "break",
+            "name": "SKU",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "Breaks_obj_rel_insert_input",
+              "name": "SKU_obj_rel_insert_input",
               "ofType": null
             },
             "defaultValue": null,
@@ -7041,11 +7041,11 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "SKU",
+            "name": "Break",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "SKU_order_by",
+              "name": "Breaks_order_by",
               "ofType": null
             },
             "defaultValue": null,
@@ -7053,11 +7053,11 @@
             "deprecationReason": null
           },
           {
-            "name": "break",
+            "name": "SKU",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "Breaks_order_by",
+              "name": "SKU_order_by",
               "ofType": null
             },
             "defaultValue": null,
@@ -7745,6 +7745,200 @@
         "description": "columns and relationships of \"SKU\"",
         "fields": [
           {
+            "name": "Products",
+            "description": "An array relationship",
+            "args": [
+              {
+                "name": "distinct_on",
+                "description": "distinct select on columns",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Products_select_column",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "limit",
+                "description": "limit the number of rows returned",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": "skip the first n rows. Use only with order_by",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "order_by",
+                "description": "sort the rows by one or more columns",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "Products_order_by",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "where",
+                "description": "filter the rows returned",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "Products_bool_exp",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Products",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Products_aggregate",
+            "description": "An aggregated array relationship",
+            "args": [
+              {
+                "name": "distinct_on",
+                "description": "distinct select on columns",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "Products_select_column",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "limit",
+                "description": "limit the number of rows returned",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": "skip the first n rows. Use only with order_by",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "order_by",
+                "description": "sort the rows by one or more columns",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "Products_order_by",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "where",
+                "description": "filter the rows returned",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "Products_bool_exp",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Products_aggregate",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "autograph",
             "description": null,
             "args": [],
@@ -7790,7 +7984,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8024,200 +8218,6 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "products",
-            "description": "An array relationship",
-            "args": [
-              {
-                "name": "distinct_on",
-                "description": "distinct select on columns",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "ENUM",
-                      "name": "Products_select_column",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "limit",
-                "description": "limit the number of rows returned",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "offset",
-                "description": "skip the first n rows. Use only with order_by",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "order_by",
-                "description": "sort the rows by one or more columns",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "Products_order_by",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "where",
-                "description": "filter the rows returned",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "Products_bool_exp",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Products",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "products_aggregate",
-            "description": "An aggregated array relationship",
-            "args": [
-              {
-                "name": "distinct_on",
-                "description": "distinct select on columns",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "ENUM",
-                      "name": "Products_select_column",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "limit",
-                "description": "limit the number of rows returned",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "offset",
-                "description": "skip the first n rows. Use only with order_by",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "order_by",
-                "description": "sort the rows by one or more columns",
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "INPUT_OBJECT",
-                      "name": "Products_order_by",
-                      "ofType": null
-                    }
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "where",
-                "description": "filter the rows returned",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "Products_bool_exp",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Products_aggregate",
-                "ofType": null
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8775,18 +8775,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "args": [],
@@ -8883,18 +8871,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "type": {
@@ -8977,6 +8953,18 @@
         "description": "Boolean expression to filter rows from the table \"SKU\". All fields are combined with a logical 'AND'.",
         "fields": null,
         "inputFields": [
+          {
+            "name": "Products",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_bool_exp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "_and",
             "description": null,
@@ -9062,7 +9050,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "Int_comparison_exp",
+              "name": "String_comparison_exp",
               "ofType": null
             },
             "defaultValue": null,
@@ -9274,18 +9262,6 @@
             "deprecationReason": null
           },
           {
-            "name": "products",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Products_bool_exp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "rookie_card",
             "description": null,
             "type": {
@@ -9422,18 +9398,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "type": {
@@ -9517,6 +9481,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "Products",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_arr_rel_insert_input",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "autograph",
             "description": null,
             "type": {
@@ -9557,7 +9533,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null,
@@ -9769,18 +9745,6 @@
             "deprecationReason": null
           },
           {
-            "name": "products",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Products_arr_rel_insert_input",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "rookie_card",
             "description": null,
             "type": {
@@ -9916,7 +9880,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10538,7 +10502,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11285,6 +11249,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "Products_aggregate",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_aggregate_order_by",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "autograph",
             "description": null,
             "type": {
@@ -11530,18 +11506,6 @@
             "type": {
               "kind": "ENUM",
               "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "products_aggregate",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "Products_aggregate_order_by",
               "ofType": null
             },
             "defaultValue": null,
@@ -11902,7 +11866,7 @@
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null,
@@ -12220,18 +12184,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "args": [],
@@ -12328,18 +12280,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "type": {
@@ -12423,18 +12363,6 @@
         "fields": [
           {
             "name": "boxes_per_case",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "card_number",
             "description": null,
             "args": [],
             "type": {
@@ -12542,18 +12470,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "type": {
@@ -12637,18 +12553,6 @@
         "fields": [
           {
             "name": "boxes_per_case",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "card_number",
             "description": null,
             "args": [],
             "type": {
@@ -12756,18 +12660,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "type": {
@@ -12851,18 +12743,6 @@
         "fields": [
           {
             "name": "boxes_per_case",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "card_number",
             "description": null,
             "args": [],
             "type": {
@@ -12959,18 +12839,6 @@
         "inputFields": [
           {
             "name": "boxes_per_case",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "card_number",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -13255,18 +13123,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "args": [],
@@ -13363,18 +13219,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "type": {
@@ -13458,18 +13302,6 @@
         "fields": [
           {
             "name": "boxes_per_case",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "card_number",
             "description": null,
             "args": [],
             "type": {
@@ -13577,18 +13409,6 @@
             "deprecationReason": null
           },
           {
-            "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cards_per_pack",
             "description": null,
             "type": {
@@ -13672,18 +13492,6 @@
         "fields": [
           {
             "name": "boxes_per_case",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "card_number",
             "description": null,
             "args": [],
             "type": {
@@ -13780,18 +13588,6 @@
         "inputFields": [
           {
             "name": "boxes_per_case",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "card_number",
             "description": null,
             "type": {
               "kind": "ENUM",
