@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { AddIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { AddIcon, ChevronRightIcon, HamburgerIcon } from '@chakra-ui/icons';
 import format from 'date-fns/format';
-import { MdDelete } from 'react-icons/md';
-import { FaCalendarPlus } from 'react-icons/fa';
+import { MdDelete, MdPlaylistAdd, MdModeEdit } from 'react-icons/md';
 import NextLink from 'next/link';
 
 import {
@@ -19,6 +18,10 @@ import {
   Icon,
   IconButton,
   Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 
 import { gridSpace } from '@config/chakra/constants';
@@ -29,7 +32,17 @@ import SEO from '@components/SEO';
 import AddEventForm from '@components/Forms/AddEventForm';
 import AddBreakForm from '@components/Forms/AddBreakForm';
 import FormModal from '@components/Modals/FormModal';
-import { useGetEventsQuery } from '@generated/graphql';
+import {
+  useGetEventsQuery,
+  useDeleteEventsAndBreaksByEventIdsMutation,
+} from '@generated/graphql';
+
+type TSelectedEvent = {
+  id: string;
+  title: string;
+  description: string;
+  start_time: string;
+};
 
 /**
  *
@@ -39,12 +52,16 @@ import { useGetEventsQuery } from '@generated/graphql';
  * TODO: Add multi select
  * TODO: Filter by upcoming only
  * TODO: Select row
+ * TODO: Attach breaks to something else when deleting event
  *
  */
 const EventsPage: React.FC = () => {
   const [isAddEventModalOpen, setAddEventModalOpen] = useState(false);
   const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
   const [eventId, setEventId] = useState('');
+  const [selectedEvent, setSelectedEvent] = useState<
+    TSelectedEvent | undefined
+  >(undefined);
 
   const {
     loading: eventQueryLoading,
@@ -52,6 +69,19 @@ const EventsPage: React.FC = () => {
     data: eventQueryData,
     refetch: refetchEvents,
   } = useGetEventsQuery();
+
+  const [
+    deleteEventsById,
+    {
+      data: deleteEventsMutationData,
+      loading: deleteEventsMutationLoading,
+      error: deleteEventsMutationError,
+    },
+  ] = useDeleteEventsAndBreaksByEventIdsMutation({
+    onCompleted: () => {
+      refetchEvents();
+    },
+  });
 
   return (
     <>
@@ -63,7 +93,10 @@ const EventsPage: React.FC = () => {
               leftIcon={<AddIcon />}
               colorScheme="blue"
               isFullWidth
-              onClick={() => setAddEventModalOpen(true)}
+              onClick={() => {
+                setSelectedEvent(undefined);
+                setAddEventModalOpen(true);
+              }}
             >
               Add Event
             </Button>
@@ -106,7 +139,7 @@ const EventsPage: React.FC = () => {
                           </Link>
                         </NextLink>
                       </Td>
-                      <Td>{event.User.id}</Td>
+                      <Td>{`${event.User?.Profile?.first_name} ${event.User?.Profile?.last_name}`}</Td>
                       <Td>
                         {format(
                           new Date(event.start_time),
@@ -115,23 +148,43 @@ const EventsPage: React.FC = () => {
                       </Td>
                       <Td>{event.Breaks_aggregate?.aggregate?.count}</Td>
                       <Td textAlign="right">
-                        <IconButton
-                          borderRadius="50%"
-                          bg="buttons.bgBlue"
-                          aria-label="Add Break"
-                          icon={<Icon as={FaCalendarPlus} w={5} h={5} />}
-                          onClick={() => {
-                            setEventId(event.id); // set event ID
-                            setAddBreakModalOpen(true);
-                          }}
-                          mr={4}
-                        />
-                        <IconButton
-                          borderRadius="50%"
-                          bg="buttons.bgRed"
-                          aria-label="Delete"
-                          icon={<Icon as={MdDelete} w={5} h={5} />}
-                        />
+                        <Menu>
+                          <MenuButton
+                            as={IconButton}
+                            aria-label="Options"
+                            icon={<HamburgerIcon />}
+                          />
+                          <MenuList>
+                            <MenuItem
+                              icon={<Icon as={MdPlaylistAdd} w={4} h={4} />}
+                              onClick={() => {
+                                setEventId(event.id); // set event ID
+                                setAddBreakModalOpen(true);
+                              }}
+                            >
+                              Add Break
+                            </MenuItem>
+                            <MenuItem
+                              icon={<Icon as={MdModeEdit} w={4} h={4} />}
+                              onClick={() => {
+                                setSelectedEvent(event); // set event
+                                setAddEventModalOpen(true);
+                              }}
+                            >
+                              Edit
+                            </MenuItem>
+                            <MenuItem
+                              icon={<Icon as={MdDelete} w={4} h={4} />}
+                              onClick={() => {
+                                deleteEventsById({
+                                  variables: { ids: [event.id] },
+                                });
+                              }}
+                            >
+                              Delete
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
                       </Td>
                     </Tr>
                   ))}
@@ -146,6 +199,7 @@ const EventsPage: React.FC = () => {
           setModalOpen={setAddEventModalOpen}
         >
           <AddEventForm
+            event={selectedEvent}
             callback={() => {
               setAddEventModalOpen(false);
               refetchEvents();

@@ -1085,6 +1085,313 @@ export type Products_Variance_Order_By = {
   cost_basis?: Maybe<Order_By>;
 };
 
+/** columns and relationships of "Profiles" */
+export type Profiles = {
+  __typename?: 'Profiles';
+  /** An object relationship */
+  User: Users;
+  bio: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  facebook?: Maybe<Scalars['String']>;
+  first_name: Scalars['String'];
+  id: Scalars['uuid'];
+  image: Scalars['String'];
+  instagram?: Maybe<Scalars['String']>;
+  last_name: Scalars['String'];
+  linkedin?: Maybe<Scalars['String']>;
+  tiktok?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id: Scalars['String'];
+  video: Scalars['String'];
+};
+
+/** aggregated selection of "Profiles" */
+export type Profiles_Aggregate = {
+  __typename?: 'Profiles_aggregate';
+  aggregate?: Maybe<Profiles_Aggregate_Fields>;
+  nodes: Array<Profiles>;
+};
+
+/** aggregate fields of "Profiles" */
+export type Profiles_Aggregate_Fields = {
+  __typename?: 'Profiles_aggregate_fields';
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Profiles_Max_Fields>;
+  min?: Maybe<Profiles_Min_Fields>;
+};
+
+
+/** aggregate fields of "Profiles" */
+export type Profiles_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Profiles_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "Profiles" */
+export type Profiles_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Profiles_Max_Order_By>;
+  min?: Maybe<Profiles_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "Profiles" */
+export type Profiles_Arr_Rel_Insert_Input = {
+  data: Array<Profiles_Insert_Input>;
+  on_conflict?: Maybe<Profiles_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "Profiles". All fields are combined with a logical 'AND'. */
+export type Profiles_Bool_Exp = {
+  User?: Maybe<Users_Bool_Exp>;
+  _and?: Maybe<Array<Maybe<Profiles_Bool_Exp>>>;
+  _not?: Maybe<Profiles_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Profiles_Bool_Exp>>>;
+  bio?: Maybe<String_Comparison_Exp>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  facebook?: Maybe<String_Comparison_Exp>;
+  first_name?: Maybe<String_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  image?: Maybe<String_Comparison_Exp>;
+  instagram?: Maybe<String_Comparison_Exp>;
+  last_name?: Maybe<String_Comparison_Exp>;
+  linkedin?: Maybe<String_Comparison_Exp>;
+  tiktok?: Maybe<String_Comparison_Exp>;
+  twitter?: Maybe<String_Comparison_Exp>;
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  user_id?: Maybe<String_Comparison_Exp>;
+  video?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "Profiles" */
+export enum Profiles_Constraint {
+  /** unique or primary key constraint */
+  ProfilesPkey = 'Profiles_pkey',
+  /** unique or primary key constraint */
+  ProfilesUserIdKey = 'Profiles_user_id_key'
+}
+
+/** input type for inserting data into table "Profiles" */
+export type Profiles_Insert_Input = {
+  User?: Maybe<Users_Obj_Rel_Insert_Input>;
+  bio?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  facebook?: Maybe<Scalars['String']>;
+  first_name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  image?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
+  tiktok?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+  video?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Profiles_Max_Fields = {
+  __typename?: 'Profiles_max_fields';
+  bio?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  facebook?: Maybe<Scalars['String']>;
+  first_name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  image?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
+  tiktok?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+  video?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "Profiles" */
+export type Profiles_Max_Order_By = {
+  bio?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  facebook?: Maybe<Order_By>;
+  first_name?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  image?: Maybe<Order_By>;
+  instagram?: Maybe<Order_By>;
+  last_name?: Maybe<Order_By>;
+  linkedin?: Maybe<Order_By>;
+  tiktok?: Maybe<Order_By>;
+  twitter?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+  video?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Profiles_Min_Fields = {
+  __typename?: 'Profiles_min_fields';
+  bio?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  facebook?: Maybe<Scalars['String']>;
+  first_name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  image?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
+  tiktok?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+  video?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "Profiles" */
+export type Profiles_Min_Order_By = {
+  bio?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  facebook?: Maybe<Order_By>;
+  first_name?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  image?: Maybe<Order_By>;
+  instagram?: Maybe<Order_By>;
+  last_name?: Maybe<Order_By>;
+  linkedin?: Maybe<Order_By>;
+  tiktok?: Maybe<Order_By>;
+  twitter?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+  video?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "Profiles" */
+export type Profiles_Mutation_Response = {
+  __typename?: 'Profiles_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Profiles>;
+};
+
+/** input type for inserting object relation for remote table "Profiles" */
+export type Profiles_Obj_Rel_Insert_Input = {
+  data: Profiles_Insert_Input;
+  on_conflict?: Maybe<Profiles_On_Conflict>;
+};
+
+/** on conflict condition type for table "Profiles" */
+export type Profiles_On_Conflict = {
+  constraint: Profiles_Constraint;
+  update_columns: Array<Profiles_Update_Column>;
+  where?: Maybe<Profiles_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "Profiles" */
+export type Profiles_Order_By = {
+  User?: Maybe<Users_Order_By>;
+  bio?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  facebook?: Maybe<Order_By>;
+  first_name?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  image?: Maybe<Order_By>;
+  instagram?: Maybe<Order_By>;
+  last_name?: Maybe<Order_By>;
+  linkedin?: Maybe<Order_By>;
+  tiktok?: Maybe<Order_By>;
+  twitter?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+  video?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "Profiles" */
+export type Profiles_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "Profiles" */
+export enum Profiles_Select_Column {
+  /** column name */
+  Bio = 'bio',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Facebook = 'facebook',
+  /** column name */
+  FirstName = 'first_name',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Image = 'image',
+  /** column name */
+  Instagram = 'instagram',
+  /** column name */
+  LastName = 'last_name',
+  /** column name */
+  Linkedin = 'linkedin',
+  /** column name */
+  Tiktok = 'tiktok',
+  /** column name */
+  Twitter = 'twitter',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id',
+  /** column name */
+  Video = 'video'
+}
+
+/** input type for updating data in table "Profiles" */
+export type Profiles_Set_Input = {
+  bio?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  facebook?: Maybe<Scalars['String']>;
+  first_name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  image?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
+  tiktok?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+  video?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "Profiles" */
+export enum Profiles_Update_Column {
+  /** column name */
+  Bio = 'bio',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Facebook = 'facebook',
+  /** column name */
+  FirstName = 'first_name',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Image = 'image',
+  /** column name */
+  Instagram = 'instagram',
+  /** column name */
+  LastName = 'last_name',
+  /** column name */
+  Linkedin = 'linkedin',
+  /** column name */
+  Tiktok = 'tiktok',
+  /** column name */
+  Twitter = 'twitter',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id',
+  /** column name */
+  Video = 'video'
+}
+
 /** columns and relationships of "SKU" */
 export type Sku = {
   __typename?: 'SKU';
@@ -1114,9 +1421,9 @@ export type Sku = {
   player?: Maybe<Scalars['String']>;
   product_type?: Maybe<Scalars['String']>;
   rookie_card?: Maybe<Scalars['Boolean']>;
+  series?: Maybe<Scalars['String']>;
   sku_id: Scalars['String'];
   sku_type: Sku_Type_Enum;
-  sub_brand?: Maybe<Scalars['String']>;
   /** An object relationship */
   type: Sku_Type;
   updated_at: Scalars['timestamptz'];
@@ -1246,9 +1553,9 @@ export type Sku_Bool_Exp = {
   player?: Maybe<String_Comparison_Exp>;
   product_type?: Maybe<String_Comparison_Exp>;
   rookie_card?: Maybe<Boolean_Comparison_Exp>;
+  series?: Maybe<String_Comparison_Exp>;
   sku_id?: Maybe<String_Comparison_Exp>;
   sku_type?: Maybe<Sku_Type_Enum_Comparison_Exp>;
-  sub_brand?: Maybe<String_Comparison_Exp>;
   type?: Maybe<Sku_Type_Bool_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   year1?: Maybe<Smallint_Comparison_Exp>;
@@ -1297,9 +1604,9 @@ export type Sku_Insert_Input = {
   player?: Maybe<Scalars['String']>;
   product_type?: Maybe<Scalars['String']>;
   rookie_card?: Maybe<Scalars['Boolean']>;
+  series?: Maybe<Scalars['String']>;
   sku_id?: Maybe<Scalars['String']>;
   sku_type?: Maybe<Sku_Type_Enum>;
-  sub_brand?: Maybe<Scalars['String']>;
   type?: Maybe<Sku_Type_Obj_Rel_Insert_Input>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   year1?: Maybe<Scalars['smallint']>;
@@ -1329,8 +1636,8 @@ export type Sku_Max_Fields = {
   paralell?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
   product_type?: Maybe<Scalars['String']>;
+  series?: Maybe<Scalars['String']>;
   sku_id?: Maybe<Scalars['String']>;
-  sub_brand?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   year1?: Maybe<Scalars['smallint']>;
   year2?: Maybe<Scalars['smallint']>;
@@ -1358,8 +1665,8 @@ export type Sku_Max_Order_By = {
   paralell?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
   product_type?: Maybe<Order_By>;
+  series?: Maybe<Order_By>;
   sku_id?: Maybe<Order_By>;
-  sub_brand?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   year1?: Maybe<Order_By>;
   year2?: Maybe<Order_By>;
@@ -1388,8 +1695,8 @@ export type Sku_Min_Fields = {
   paralell?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
   product_type?: Maybe<Scalars['String']>;
+  series?: Maybe<Scalars['String']>;
   sku_id?: Maybe<Scalars['String']>;
-  sub_brand?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   year1?: Maybe<Scalars['smallint']>;
   year2?: Maybe<Scalars['smallint']>;
@@ -1417,8 +1724,8 @@ export type Sku_Min_Order_By = {
   paralell?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
   product_type?: Maybe<Order_By>;
+  series?: Maybe<Order_By>;
   sku_id?: Maybe<Order_By>;
-  sub_brand?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   year1?: Maybe<Order_By>;
   year2?: Maybe<Order_By>;
@@ -1471,9 +1778,9 @@ export type Sku_Order_By = {
   player?: Maybe<Order_By>;
   product_type?: Maybe<Order_By>;
   rookie_card?: Maybe<Order_By>;
+  series?: Maybe<Order_By>;
   sku_id?: Maybe<Order_By>;
   sku_type?: Maybe<Order_By>;
-  sub_brand?: Maybe<Order_By>;
   type?: Maybe<Sku_Type_Order_By>;
   updated_at?: Maybe<Order_By>;
   year1?: Maybe<Order_By>;
@@ -1532,11 +1839,11 @@ export enum Sku_Select_Column {
   /** column name */
   RookieCard = 'rookie_card',
   /** column name */
+  Series = 'series',
+  /** column name */
   SkuId = 'sku_id',
   /** column name */
   SkuType = 'sku_type',
-  /** column name */
-  SubBrand = 'sub_brand',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -1569,9 +1876,9 @@ export type Sku_Set_Input = {
   player?: Maybe<Scalars['String']>;
   product_type?: Maybe<Scalars['String']>;
   rookie_card?: Maybe<Scalars['Boolean']>;
+  series?: Maybe<Scalars['String']>;
   sku_id?: Maybe<Scalars['String']>;
   sku_type?: Maybe<Sku_Type_Enum>;
-  sub_brand?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   year1?: Maybe<Scalars['smallint']>;
   year2?: Maybe<Scalars['smallint']>;
@@ -1716,11 +2023,11 @@ export enum Sku_Update_Column {
   /** column name */
   RookieCard = 'rookie_card',
   /** column name */
+  Series = 'series',
+  /** column name */
   SkuId = 'sku_id',
   /** column name */
   SkuType = 'sku_type',
-  /** column name */
-  SubBrand = 'sub_brand',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -1824,6 +2131,8 @@ export type Users = {
   Events: Array<Events>;
   /** An aggregated array relationship */
   Events_aggregate: Events_Aggregate;
+  /** An object relationship */
+  Profile?: Maybe<Profiles>;
   created_at: Scalars['timestamptz'];
   id: Scalars['String'];
   role: User_Role_Enum;
@@ -1890,6 +2199,7 @@ export type Users_Arr_Rel_Insert_Input = {
 /** Boolean expression to filter rows from the table "Users". All fields are combined with a logical 'AND'. */
 export type Users_Bool_Exp = {
   Events?: Maybe<Events_Bool_Exp>;
+  Profile?: Maybe<Profiles_Bool_Exp>;
   _and?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
   _not?: Maybe<Users_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
@@ -1909,6 +2219,7 @@ export enum Users_Constraint {
 /** input type for inserting data into table "Users" */
 export type Users_Insert_Input = {
   Events?: Maybe<Events_Arr_Rel_Insert_Input>;
+  Profile?: Maybe<Profiles_Obj_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['String']>;
   role?: Maybe<User_Role_Enum>;
@@ -1971,6 +2282,7 @@ export type Users_On_Conflict = {
 /** ordering options when selecting data from "Users" */
 export type Users_Order_By = {
   Events_aggregate?: Maybe<Events_Aggregate_Order_By>;
+  Profile?: Maybe<Profiles_Order_By>;
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   role?: Maybe<Order_By>;
@@ -2566,6 +2878,10 @@ export type Mutation_Root = {
   delete_Products?: Maybe<Products_Mutation_Response>;
   /** delete single row from the table: "Products" */
   delete_Products_by_pk?: Maybe<Products>;
+  /** delete data from the table: "Profiles" */
+  delete_Profiles?: Maybe<Profiles_Mutation_Response>;
+  /** delete single row from the table: "Profiles" */
+  delete_Profiles_by_pk?: Maybe<Profiles>;
   /** delete data from the table: "SKU" */
   delete_SKU?: Maybe<Sku_Mutation_Response>;
   /** delete single row from the table: "SKU" */
@@ -2606,6 +2922,10 @@ export type Mutation_Root = {
   insert_Products?: Maybe<Products_Mutation_Response>;
   /** insert a single row into the table: "Products" */
   insert_Products_one?: Maybe<Products>;
+  /** insert data into the table: "Profiles" */
+  insert_Profiles?: Maybe<Profiles_Mutation_Response>;
+  /** insert a single row into the table: "Profiles" */
+  insert_Profiles_one?: Maybe<Profiles>;
   /** insert data into the table: "SKU" */
   insert_SKU?: Maybe<Sku_Mutation_Response>;
   /** insert a single row into the table: "SKU" */
@@ -2646,6 +2966,10 @@ export type Mutation_Root = {
   update_Products?: Maybe<Products_Mutation_Response>;
   /** update single row of the table: "Products" */
   update_Products_by_pk?: Maybe<Products>;
+  /** update data of the table: "Profiles" */
+  update_Profiles?: Maybe<Profiles_Mutation_Response>;
+  /** update single row of the table: "Profiles" */
+  update_Profiles_by_pk?: Maybe<Profiles>;
   /** update data of the table: "SKU" */
   update_SKU?: Maybe<Sku_Mutation_Response>;
   /** update single row of the table: "SKU" */
@@ -2709,6 +3033,18 @@ export type Mutation_RootDelete_ProductsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Products_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_ProfilesArgs = {
+  where: Profiles_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Profiles_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -2836,6 +3172,20 @@ export type Mutation_RootInsert_ProductsArgs = {
 export type Mutation_RootInsert_Products_OneArgs = {
   object: Products_Insert_Input;
   on_conflict?: Maybe<Products_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_ProfilesArgs = {
+  objects: Array<Profiles_Insert_Input>;
+  on_conflict?: Maybe<Profiles_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Profiles_OneArgs = {
+  object: Profiles_Insert_Input;
+  on_conflict?: Maybe<Profiles_On_Conflict>;
 };
 
 
@@ -2980,6 +3330,20 @@ export type Mutation_RootUpdate_Products_By_PkArgs = {
   _inc?: Maybe<Products_Inc_Input>;
   _set?: Maybe<Products_Set_Input>;
   pk_columns: Products_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_ProfilesArgs = {
+  _set?: Maybe<Profiles_Set_Input>;
+  where: Profiles_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Profiles_By_PkArgs = {
+  _set?: Maybe<Profiles_Set_Input>;
+  pk_columns: Profiles_Pk_Columns_Input;
 };
 
 
@@ -3133,6 +3497,12 @@ export type Query_Root = {
   Products_aggregate: Products_Aggregate;
   /** fetch data from the table: "Products" using primary key columns */
   Products_by_pk?: Maybe<Products>;
+  /** fetch data from the table: "Profiles" */
+  Profiles: Array<Profiles>;
+  /** fetch aggregated fields from the table: "Profiles" */
+  Profiles_aggregate: Profiles_Aggregate;
+  /** fetch data from the table: "Profiles" using primary key columns */
+  Profiles_by_pk?: Maybe<Profiles>;
   /** fetch data from the table: "SKU" */
   SKU: Array<Sku>;
   /** fetch aggregated fields from the table: "SKU" */
@@ -3252,6 +3622,32 @@ export type Query_RootProducts_AggregateArgs = {
 
 /** query root */
 export type Query_RootProducts_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** query root */
+export type Query_RootProfilesArgs = {
+  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Profiles_Order_By>>;
+  where?: Maybe<Profiles_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootProfiles_AggregateArgs = {
+  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Profiles_Order_By>>;
+  where?: Maybe<Profiles_Bool_Exp>;
+};
+
+
+/** query root */
+export type Query_RootProfiles_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -3646,6 +4042,12 @@ export type Subscription_Root = {
   Products_aggregate: Products_Aggregate;
   /** fetch data from the table: "Products" using primary key columns */
   Products_by_pk?: Maybe<Products>;
+  /** fetch data from the table: "Profiles" */
+  Profiles: Array<Profiles>;
+  /** fetch aggregated fields from the table: "Profiles" */
+  Profiles_aggregate: Profiles_Aggregate;
+  /** fetch data from the table: "Profiles" using primary key columns */
+  Profiles_by_pk?: Maybe<Profiles>;
   /** fetch data from the table: "SKU" */
   SKU: Array<Sku>;
   /** fetch aggregated fields from the table: "SKU" */
@@ -3765,6 +4167,32 @@ export type Subscription_RootProducts_AggregateArgs = {
 
 /** subscription root */
 export type Subscription_RootProducts_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** subscription root */
+export type Subscription_RootProfilesArgs = {
+  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Profiles_Order_By>>;
+  where?: Maybe<Profiles_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootProfiles_AggregateArgs = {
+  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Profiles_Order_By>>;
+  where?: Maybe<Profiles_Bool_Exp>;
+};
+
+
+/** subscription root */
+export type Subscription_RootProfiles_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -4151,19 +4579,6 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['uuid']>>;
 };
 
-export type InsertBreakMutationVariables = Exact<{
-  data: Breaks_Insert_Input;
-}>;
-
-
-export type InsertBreakMutation = (
-  { __typename?: 'mutation_root' }
-  & { insert_Breaks_one?: Maybe<(
-    { __typename?: 'Breaks' }
-    & Pick<Breaks, 'id'>
-  )> }
-);
-
 export type InsertEventMutationVariables = Exact<{
   data: Events_Insert_Input;
 }>;
@@ -4177,6 +4592,89 @@ export type InsertEventMutation = (
   )> }
 );
 
+export type UpdateEventMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  data: Events_Set_Input;
+}>;
+
+
+export type UpdateEventMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Events_by_pk?: Maybe<(
+    { __typename?: 'Events' }
+    & Pick<Events, 'id' | 'description' | 'image' | 'user_id' | 'title' | 'start_time'>
+  )> }
+);
+
+export type DeleteEventByIdsMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type DeleteEventByIdsMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_Events?: Maybe<(
+    { __typename?: 'Events_mutation_response' }
+    & Pick<Events_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
+export type DeleteEventsAndBreaksByEventIdsMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type DeleteEventsAndBreaksByEventIdsMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_Breaks?: Maybe<(
+    { __typename?: 'Breaks_mutation_response' }
+    & Pick<Breaks_Mutation_Response, 'affected_rows'>
+  )>, delete_Events?: Maybe<(
+    { __typename?: 'Events_mutation_response' }
+    & Pick<Events_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
+export type InsertBreakMutationVariables = Exact<{
+  data: Breaks_Insert_Input;
+}>;
+
+
+export type InsertBreakMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_Breaks_one?: Maybe<(
+    { __typename?: 'Breaks' }
+    & Pick<Breaks, 'id'>
+  )> }
+);
+
+export type UpdateBreakMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  data: Breaks_Set_Input;
+}>;
+
+
+export type UpdateBreakMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Breaks_by_pk?: Maybe<(
+    { __typename?: 'Breaks' }
+    & Pick<Breaks, 'id'>
+  )> }
+);
+
+export type DeleteBreakByIdsMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type DeleteBreakByIdsMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_Breaks?: Maybe<(
+    { __typename?: 'Breaks_mutation_response' }
+    & Pick<Breaks_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 export type InsertSkuMutationVariables = Exact<{
   data: Sku_Insert_Input;
 }>;
@@ -4185,6 +4683,20 @@ export type InsertSkuMutationVariables = Exact<{
 export type InsertSkuMutation = (
   { __typename?: 'mutation_root' }
   & { insert_SKU_one?: Maybe<(
+    { __typename?: 'SKU' }
+    & Pick<Sku, 'id'>
+  )> }
+);
+
+export type UpdateSkuMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  data: Sku_Set_Input;
+}>;
+
+
+export type UpdateSkuMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_SKU_by_pk?: Maybe<(
     { __typename?: 'SKU' }
     & Pick<Sku, 'id'>
   )> }
@@ -4208,10 +4720,14 @@ export type GetEventsQuery = (
   { __typename?: 'query_root' }
   & { Events: Array<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'description'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id'>
+      & { Profile?: Maybe<(
+        { __typename?: 'Profiles' }
+        & Pick<Profiles, 'first_name' | 'last_name'>
+      )> }
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id'>
@@ -4234,51 +4750,22 @@ export type GetEventByIdQuery = (
   { __typename?: 'query_root' }
   & { Events_by_pk?: Maybe<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'description'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id'>
+      & { Profile?: Maybe<(
+        { __typename?: 'Profiles' }
+        & Pick<Profiles, 'first_name' | 'last_name'>
+      )> }
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
-      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots'>
+      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image'>
     )> }
   )> }
 );
 
 
-export const InsertBreakDocument = gql`
-    mutation InsertBreak($data: Breaks_insert_input!) {
-  insert_Breaks_one(object: $data) {
-    id
-  }
-}
-    `;
-export type InsertBreakMutationFn = Apollo.MutationFunction<InsertBreakMutation, InsertBreakMutationVariables>;
-
-/**
- * __useInsertBreakMutation__
- *
- * To run a mutation, you first call `useInsertBreakMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInsertBreakMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [insertBreakMutation, { data, loading, error }] = useInsertBreakMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useInsertBreakMutation(baseOptions?: Apollo.MutationHookOptions<InsertBreakMutation, InsertBreakMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InsertBreakMutation, InsertBreakMutationVariables>(InsertBreakDocument, options);
-      }
-export type InsertBreakMutationHookResult = ReturnType<typeof useInsertBreakMutation>;
-export type InsertBreakMutationResult = Apollo.MutationResult<InsertBreakMutation>;
-export type InsertBreakMutationOptions = Apollo.BaseMutationOptions<InsertBreakMutation, InsertBreakMutationVariables>;
 export const InsertEventDocument = gql`
     mutation InsertEvent($data: Events_insert_input!) {
   insert_Events_one(object: $data) {
@@ -4312,6 +4799,214 @@ export function useInsertEventMutation(baseOptions?: Apollo.MutationHookOptions<
 export type InsertEventMutationHookResult = ReturnType<typeof useInsertEventMutation>;
 export type InsertEventMutationResult = Apollo.MutationResult<InsertEventMutation>;
 export type InsertEventMutationOptions = Apollo.BaseMutationOptions<InsertEventMutation, InsertEventMutationVariables>;
+export const UpdateEventDocument = gql`
+    mutation UpdateEvent($id: uuid!, $data: Events_set_input!) {
+  update_Events_by_pk(pk_columns: {id: $id}, _set: $data) {
+    id
+    description
+    image
+    user_id
+    title
+    start_time
+  }
+}
+    `;
+export type UpdateEventMutationFn = Apollo.MutationFunction<UpdateEventMutation, UpdateEventMutationVariables>;
+
+/**
+ * __useUpdateEventMutation__
+ *
+ * To run a mutation, you first call `useUpdateEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEventMutation, { data, loading, error }] = useUpdateEventMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateEventMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEventMutation, UpdateEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEventMutation, UpdateEventMutationVariables>(UpdateEventDocument, options);
+      }
+export type UpdateEventMutationHookResult = ReturnType<typeof useUpdateEventMutation>;
+export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutation>;
+export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutation, UpdateEventMutationVariables>;
+export const DeleteEventByIdsDocument = gql`
+    mutation DeleteEventByIds($ids: [uuid!]) {
+  delete_Events(where: {id: {_in: $ids}}) {
+    affected_rows
+  }
+}
+    `;
+export type DeleteEventByIdsMutationFn = Apollo.MutationFunction<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>;
+
+/**
+ * __useDeleteEventByIdsMutation__
+ *
+ * To run a mutation, you first call `useDeleteEventByIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEventByIdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEventByIdsMutation, { data, loading, error }] = useDeleteEventByIdsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useDeleteEventByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>(DeleteEventByIdsDocument, options);
+      }
+export type DeleteEventByIdsMutationHookResult = ReturnType<typeof useDeleteEventByIdsMutation>;
+export type DeleteEventByIdsMutationResult = Apollo.MutationResult<DeleteEventByIdsMutation>;
+export type DeleteEventByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>;
+export const DeleteEventsAndBreaksByEventIdsDocument = gql`
+    mutation DeleteEventsAndBreaksByEventIds($ids: [uuid!]) {
+  delete_Breaks(where: {Event: {id: {_in: $ids}}}) {
+    affected_rows
+  }
+  delete_Events(where: {id: {_in: $ids}}) {
+    affected_rows
+  }
+}
+    `;
+export type DeleteEventsAndBreaksByEventIdsMutationFn = Apollo.MutationFunction<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>;
+
+/**
+ * __useDeleteEventsAndBreaksByEventIdsMutation__
+ *
+ * To run a mutation, you first call `useDeleteEventsAndBreaksByEventIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEventsAndBreaksByEventIdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEventsAndBreaksByEventIdsMutation, { data, loading, error }] = useDeleteEventsAndBreaksByEventIdsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useDeleteEventsAndBreaksByEventIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>(DeleteEventsAndBreaksByEventIdsDocument, options);
+      }
+export type DeleteEventsAndBreaksByEventIdsMutationHookResult = ReturnType<typeof useDeleteEventsAndBreaksByEventIdsMutation>;
+export type DeleteEventsAndBreaksByEventIdsMutationResult = Apollo.MutationResult<DeleteEventsAndBreaksByEventIdsMutation>;
+export type DeleteEventsAndBreaksByEventIdsMutationOptions = Apollo.BaseMutationOptions<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>;
+export const InsertBreakDocument = gql`
+    mutation InsertBreak($data: Breaks_insert_input!) {
+  insert_Breaks_one(object: $data) {
+    id
+  }
+}
+    `;
+export type InsertBreakMutationFn = Apollo.MutationFunction<InsertBreakMutation, InsertBreakMutationVariables>;
+
+/**
+ * __useInsertBreakMutation__
+ *
+ * To run a mutation, you first call `useInsertBreakMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertBreakMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertBreakMutation, { data, loading, error }] = useInsertBreakMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useInsertBreakMutation(baseOptions?: Apollo.MutationHookOptions<InsertBreakMutation, InsertBreakMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertBreakMutation, InsertBreakMutationVariables>(InsertBreakDocument, options);
+      }
+export type InsertBreakMutationHookResult = ReturnType<typeof useInsertBreakMutation>;
+export type InsertBreakMutationResult = Apollo.MutationResult<InsertBreakMutation>;
+export type InsertBreakMutationOptions = Apollo.BaseMutationOptions<InsertBreakMutation, InsertBreakMutationVariables>;
+export const UpdateBreakDocument = gql`
+    mutation UpdateBreak($id: uuid!, $data: Breaks_set_input!) {
+  update_Breaks_by_pk(pk_columns: {id: $id}, _set: $data) {
+    id
+  }
+}
+    `;
+export type UpdateBreakMutationFn = Apollo.MutationFunction<UpdateBreakMutation, UpdateBreakMutationVariables>;
+
+/**
+ * __useUpdateBreakMutation__
+ *
+ * To run a mutation, you first call `useUpdateBreakMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBreakMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBreakMutation, { data, loading, error }] = useUpdateBreakMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateBreakMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBreakMutation, UpdateBreakMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBreakMutation, UpdateBreakMutationVariables>(UpdateBreakDocument, options);
+      }
+export type UpdateBreakMutationHookResult = ReturnType<typeof useUpdateBreakMutation>;
+export type UpdateBreakMutationResult = Apollo.MutationResult<UpdateBreakMutation>;
+export type UpdateBreakMutationOptions = Apollo.BaseMutationOptions<UpdateBreakMutation, UpdateBreakMutationVariables>;
+export const DeleteBreakByIdsDocument = gql`
+    mutation DeleteBreakByIds($ids: [uuid!]) {
+  delete_Breaks(where: {id: {_in: $ids}}) {
+    affected_rows
+  }
+}
+    `;
+export type DeleteBreakByIdsMutationFn = Apollo.MutationFunction<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>;
+
+/**
+ * __useDeleteBreakByIdsMutation__
+ *
+ * To run a mutation, you first call `useDeleteBreakByIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBreakByIdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBreakByIdsMutation, { data, loading, error }] = useDeleteBreakByIdsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useDeleteBreakByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>(DeleteBreakByIdsDocument, options);
+      }
+export type DeleteBreakByIdsMutationHookResult = ReturnType<typeof useDeleteBreakByIdsMutation>;
+export type DeleteBreakByIdsMutationResult = Apollo.MutationResult<DeleteBreakByIdsMutation>;
+export type DeleteBreakByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>;
 export const InsertSkuDocument = gql`
     mutation InsertSKU($data: SKU_insert_input!) {
   insert_SKU_one(object: $data) {
@@ -4345,6 +5040,40 @@ export function useInsertSkuMutation(baseOptions?: Apollo.MutationHookOptions<In
 export type InsertSkuMutationHookResult = ReturnType<typeof useInsertSkuMutation>;
 export type InsertSkuMutationResult = Apollo.MutationResult<InsertSkuMutation>;
 export type InsertSkuMutationOptions = Apollo.BaseMutationOptions<InsertSkuMutation, InsertSkuMutationVariables>;
+export const UpdateSkuDocument = gql`
+    mutation UpdateSKU($id: uuid!, $data: SKU_set_input!) {
+  update_SKU_by_pk(pk_columns: {id: $id}, _set: $data) {
+    id
+  }
+}
+    `;
+export type UpdateSkuMutationFn = Apollo.MutationFunction<UpdateSkuMutation, UpdateSkuMutationVariables>;
+
+/**
+ * __useUpdateSkuMutation__
+ *
+ * To run a mutation, you first call `useUpdateSkuMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSkuMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSkuMutation, { data, loading, error }] = useUpdateSkuMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateSkuMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSkuMutation, UpdateSkuMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSkuMutation, UpdateSkuMutationVariables>(UpdateSkuDocument, options);
+      }
+export type UpdateSkuMutationHookResult = ReturnType<typeof useUpdateSkuMutation>;
+export type UpdateSkuMutationResult = Apollo.MutationResult<UpdateSkuMutation>;
+export type UpdateSkuMutationOptions = Apollo.BaseMutationOptions<UpdateSkuMutation, UpdateSkuMutationVariables>;
 export const GetSkUsDocument = gql`
     query GetSKUs {
   SKU {
@@ -4388,12 +5117,17 @@ export type GetSkUsLazyQueryHookResult = ReturnType<typeof useGetSkUsLazyQuery>;
 export type GetSkUsQueryResult = Apollo.QueryResult<GetSkUsQuery, GetSkUsQueryVariables>;
 export const GetEventsDocument = gql`
     query GetEvents {
-  Events {
+  Events(order_by: {start_time: asc}) {
     id
     title
     start_time
+    description
     User {
       id
+      Profile {
+        first_name
+        last_name
+      }
     }
     Breaks {
       id
@@ -4439,15 +5173,23 @@ export const GetEventByIdDocument = gql`
     id
     title
     start_time
+    description
     User {
       id
+      Profile {
+        first_name
+        last_name
+      }
     }
-    Breaks {
+    Breaks(order_by: {created_at: asc}) {
       id
       title
       break_type
       price
       spots
+      description
+      teams_per_spot
+      image
     }
   }
 }

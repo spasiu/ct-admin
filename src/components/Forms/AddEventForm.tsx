@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { MdCameraAlt } from 'react-icons/md';
 import DatePicker from 'react-datepicker';
-import { gql, useMutation } from '@apollo/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import format from 'date-fns/format';
 
@@ -22,17 +21,9 @@ import {
 import { auth } from '@config/firebase';
 import DatePickerDisplay from '@components/DatePickerDisplay';
 import {
-  InsertEventMutation,
-  InsertEventMutationVariables,
+  useInsertEventMutation,
+  useUpdateEventMutation,
 } from '@generated/graphql';
-
-const INSERT_EVENT = gql`
-  mutation InsertEvent($data: Events_insert_input!) {
-    insert_Events_one(object: $data) {
-      id
-    }
-  }
-`;
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -44,29 +35,48 @@ const schema = yup.object().shape({
 });
 
 type TFormData = {
+  id?: string;
   title: string;
   description: string;
   start_time: Date;
 };
 
 type TFormProps = {
+  event?: {
+    id: string;
+    title: string;
+    description: string;
+    start_time: string;
+  };
   callback: () => void;
 };
 
 /**
  *
  * TODO: Handle errors
+ * TODO: Add image
  *
  */
-const AddEventForm: React.FC<TFormProps> = ({ callback }) => {
+const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
   const [user] = useAuthState(auth);
 
   const [
-    addEvent,
-    { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useMutation<InsertEventMutation, InsertEventMutationVariables>(
-    INSERT_EVENT,
-  );
+    insertEvent,
+    {
+      data: insertMutationData,
+      loading: insertMutationLoading,
+      error: insertMutationError,
+    },
+  ] = useInsertEventMutation({ onCompleted: callback });
+
+  const [
+    updateEvent,
+    {
+      data: updateMutationData,
+      loading: updateMutationLoading,
+      error: updateMutationError,
+    },
+  ] = useUpdateEventMutation({ onCompleted: callback });
 
   const {
     control,
@@ -75,11 +85,11 @@ const AddEventForm: React.FC<TFormProps> = ({ callback }) => {
     formState: { errors },
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      ...(event || {}),
+      start_time: event ? new Date(event?.start_time) : undefined,
+    },
   });
-
-  useEffect(() => {
-    mutationData && callback && callback();
-  }, [mutationData]);
 
   /**
    * Handle form submission
@@ -87,17 +97,33 @@ const AddEventForm: React.FC<TFormProps> = ({ callback }) => {
    */
   const onSubmit = (result: TFormData) => {
     if (user) {
-      addEvent({
-        variables: {
-          data: {
-            user_id: user.uid,
-            title: result.title,
-            description: result.description,
-            image: '',
-            start_time: format(result.start_time, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-          },
-        },
-      });
+      const operation = event?.id ? 'UPDATE' : 'ADD';
+
+      const submitData = {
+        user_id: user.uid,
+        title: result.title,
+        description: result.description,
+        image: '',
+        start_time: format(result.start_time, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+      };
+
+      switch (operation) {
+        case 'ADD':
+          insertEvent({
+            variables: {
+              data: submitData,
+            },
+          });
+          break;
+        case 'UPDATE':
+          updateEvent({
+            variables: {
+              id: event?.id,
+              data: submitData,
+            },
+          });
+          break;
+      }
     }
   };
 

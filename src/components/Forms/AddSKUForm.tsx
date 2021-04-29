@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { gql, useMutation } from '@apollo/client';
 
 import {
   FormErrorMessage,
@@ -19,20 +18,12 @@ import {
 } from '@chakra-ui/react';
 
 import {
-  InsertSkuMutation,
-  InsertSkuMutationVariables,
+  useInsertSkuMutation,
+  useUpdateSkuMutation,
   Sku_Type_Enum,
 } from '@generated/graphql';
 import { SKUTypeValues } from '@config/values';
 import { gridSpace } from '@config/chakra/constants';
-
-const INSERT_SKU = gql`
-  mutation InsertSKU($data: SKU_insert_input!) {
-    insert_SKU_one(object: $data) {
-      id
-    }
-  }
-`;
 
 const schema = yup.object().shape({
   sku_id: yup.string().required('Required'),
@@ -54,7 +45,7 @@ const schema = yup.object().shape({
     .typeError('Numbers only'),
   manufacturer: yup.string().required('Required'),
   brand: yup.string().required('Required'),
-  sub_brand: yup.string(),
+  series: yup.string(),
   category: yup.string().required('Required'),
   product_type: yup.string().when('sku_type', {
     is: (val: string) => val && val !== Sku_Type_Enum.Card,
@@ -136,10 +127,9 @@ type TFormData = {
   sku_type: Sku_Type_Enum;
   location: string;
   year1: number;
-  year2: number;
   manufacturer: string;
   brand: string;
-  sub_brand: string;
+  series: string;
   category: string;
   product_type: string;
   boxes_per_case: number;
@@ -158,6 +148,31 @@ type TFormData = {
 };
 
 type TFormProps = {
+  sku?: {
+    id: string;
+    sku_id: string;
+    sku_type: string;
+    location: string;
+    year1: number;
+    manufacturer: string;
+    brand: string;
+    series: string;
+    category: string;
+    product_type: string;
+    boxes_per_case: number;
+    packs_per_box: number;
+    cards_per_pack: number;
+    card_number: string;
+    player: string;
+    paralell: string;
+    insert: string;
+    rookie_card: boolean;
+    memoribillia: string;
+    autograph: boolean;
+    numbered: number;
+    grader: string;
+    grade: number;
+  };
   callback: () => void;
 };
 
@@ -168,11 +183,24 @@ type TFormProps = {
  * TODO: Generate description
  *
  */
-const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
+const AddSKUForm: React.FC<TFormProps> = ({ sku, callback }) => {
   const [
     addSKU,
-    { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useMutation<InsertSkuMutation, InsertSkuMutationVariables>(INSERT_SKU);
+    {
+      data: addSKUMutationData,
+      loading: addSKUMutationLoading,
+      error: addSKUMutationError,
+    },
+  ] = useInsertSkuMutation({ onCompleted: callback });
+
+  const [
+    updateSKU,
+    {
+      data: updateSKUMutationData,
+      loading: updateSKUMutationLoading,
+      error: updateSKUMutationError,
+    },
+  ] = useUpdateSkuMutation({ onCompleted: callback });
 
   const {
     register,
@@ -181,26 +209,37 @@ const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
     formState: { errors },
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      ...(sku || {}),
+      sku_type: SKUTypeValues.find((s) => s.value === sku?.sku_type)?.value,
+    },
   });
-
-  useEffect(() => {
-    mutationData && callback && callback();
-  }, [mutationData]);
 
   /**
    * Handle form submission
    * @param result object Validated form result
    */
   const onSubmit = (result: TFormData) => {
-    addSKU({
-      variables: {
-        data: {
-          image: '',
-          description: '',
-          ...result,
-        },
-      },
-    });
+    const operation = sku ? 'UPDATE' : 'ADD';
+
+    const submitData = {
+      image: '',
+      description: '',
+      ...result,
+    };
+
+    switch (operation) {
+      case 'ADD':
+        addSKU({
+          variables: {
+            data: submitData,
+          },
+        });
+        break;
+      case 'UPDATE':
+        updateSKU({ variables: { id: sku?.id, data: submitData } });
+        break;
+    }
   };
 
   const watchSKUType = watch('sku_type');
@@ -258,15 +297,27 @@ const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
 
             <Flex mx={gridSpace.parent} mb={5}>
               <FormControl
+                isInvalid={!!errors.year1}
+                width="50%"
+                px={gridSpace.child}
+              >
+                <FormLabel>Year</FormLabel>
+                <Input {...register('year1')} />
+                <FormErrorMessage>{errors.year1?.message}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl
                 isInvalid={!!errors.category}
                 width="50%"
                 px={gridSpace.child}
               >
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Sport/Category</FormLabel>
                 <Input {...register('category')} />
                 <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
               </FormControl>
+            </Flex>
 
+            <Flex mx={gridSpace.parent} mb={5}>
               <FormControl
                 isInvalid={!!errors.manufacturer}
                 width="50%"
@@ -278,9 +329,7 @@ const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
                   {errors.manufacturer?.message}
                 </FormErrorMessage>
               </FormControl>
-            </Flex>
 
-            <Flex mx={gridSpace.parent} mb={5}>
               <FormControl
                 isInvalid={!!errors.brand}
                 width="50%"
@@ -290,19 +339,19 @@ const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
                 <Input {...register('brand')} />
                 <FormErrorMessage>{errors.brand?.message}</FormErrorMessage>
               </FormControl>
-
-              <FormControl
-                isInvalid={!!errors.sub_brand}
-                width="50%"
-                px={gridSpace.child}
-              >
-                <FormLabel>Sub-Brand</FormLabel>
-                <Input {...register('sub_brand')} />
-                <FormErrorMessage>{errors.sub_brand?.message}</FormErrorMessage>
-              </FormControl>
             </Flex>
 
             <Flex mx={gridSpace.parent} mb={5}>
+              <FormControl
+                isInvalid={!!errors.series}
+                width="50%"
+                px={gridSpace.child}
+              >
+                <FormLabel>Series</FormLabel>
+                <Input {...register('series')} />
+                <FormErrorMessage>{errors.series?.message}</FormErrorMessage>
+              </FormControl>
+
               {watchSKUType !== Sku_Type_Enum.Card && (
                 <FormControl
                   isInvalid={!!errors.product_type}
@@ -316,26 +365,6 @@ const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
                   </FormErrorMessage>
                 </FormControl>
               )}
-
-              <FormControl
-                isInvalid={!!errors.year1}
-                width="25%"
-                px={gridSpace.child}
-              >
-                <FormLabel>Year 1</FormLabel>
-                <Input {...register('year1')} />
-                <FormErrorMessage>{errors.year1?.message}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl
-                isInvalid={!!errors.year2}
-                width="25%"
-                px={gridSpace.child}
-              >
-                <FormLabel>Year 2</FormLabel>
-                <Input {...register('year2')} />
-                <FormErrorMessage>{errors.year2?.message}</FormErrorMessage>
-              </FormControl>
             </Flex>
 
             {watchSKUType !== Sku_Type_Enum.Card && (
@@ -438,18 +467,6 @@ const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
                 </Flex>
 
                 <Flex mx={gridSpace.parent} mb={5}>
-                  <FormControl
-                    isInvalid={!!errors.memoribillia}
-                    width="50%"
-                    px={gridSpace.child}
-                  >
-                    <FormLabel>Memoribillia</FormLabel>
-                    <Input {...register('memoribillia')} />
-                    <FormErrorMessage>
-                      {errors.memoribillia?.message}
-                    </FormErrorMessage>
-                  </FormControl>
-
                   <HStack width="50%" px={gridSpace.child} mt={8} spacing={8}>
                     <Checkbox
                       size="lg"
@@ -466,6 +483,18 @@ const AddSKUForm: React.FC<TFormProps> = ({ callback }) => {
                       Autograph
                     </Checkbox>
                   </HStack>
+
+                  <FormControl
+                    isInvalid={!!errors.memoribillia}
+                    width="50%"
+                    px={gridSpace.child}
+                  >
+                    <FormLabel>Memoribillia</FormLabel>
+                    <Input {...register('memoribillia')} />
+                    <FormErrorMessage>
+                      {errors.memoribillia?.message}
+                    </FormErrorMessage>
+                  </FormControl>
                 </Flex>
 
                 <Flex mx={gridSpace.parent} mb={5}>

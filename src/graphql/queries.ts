@@ -17,12 +17,17 @@ export const GET_SKUS = gql`
 
 export const GET_EVENTS = gql`
   query GetEvents {
-    Events {
+    Events(order_by: { start_time: asc }) {
       id
       title
       start_time
+      description
       User {
         id
+        Profile {
+          first_name
+          last_name
+        }
       }
       Breaks {
         id
@@ -42,15 +47,23 @@ export const GET_EVENT_BY_ID = gql`
       id
       title
       start_time
+      description
       User {
         id
+        Profile {
+          first_name
+          last_name
+        }
       }
-      Breaks {
+      Breaks(order_by: { created_at: asc }) {
         id
         title
         break_type
         price
         spots
+        description
+        teams_per_spot
+        image
       }
     }
   }

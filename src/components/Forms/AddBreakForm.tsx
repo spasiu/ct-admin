@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { MdCameraAlt } from 'react-icons/md';
-import { gql, useMutation } from '@apollo/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 import {
@@ -21,19 +20,11 @@ import {
 import { auth } from '@config/firebase';
 import { gridSpace } from '@config/chakra/constants';
 import {
-  InsertBreakMutation,
-  InsertBreakMutationVariables,
   Break_Type_Enum,
+  useInsertBreakMutation,
+  useUpdateBreakMutation,
 } from '@generated/graphql';
 import { BreakTypeValues } from '@config/values';
-
-const INSERT_BREAK = gql`
-  mutation InsertBreak($data: Breaks_insert_input!) {
-    insert_Breaks_one(object: $data) {
-      id
-    }
-  }
-`;
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -65,6 +56,7 @@ const schema = yup.object().shape({
 });
 
 type TFormData = {
+  id?: string;
   title: string;
   description: string;
   event_id: string;
@@ -77,23 +69,49 @@ type TFormData = {
 
 type TFormProps = {
   event_id?: string;
+  break_data?: {
+    id?: string;
+    title: string;
+    description: string;
+    image: string;
+    break_type: string;
+    spots: number;
+    teams_per_spot: number;
+    price: string;
+  };
   callback: () => void;
 };
 
 /**
  *
  * TODO: Handle errors
- *
+ * TODO: Add image handling
+ * TODO: Add event autocomplete/dropdown
  */
-const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
+const AddBreakForm: React.FC<TFormProps> = ({
+  event_id,
+  break_data,
+  callback,
+}) => {
   const [user] = useAuthState(auth);
 
   const [
     addBreak,
-    { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useMutation<InsertBreakMutation, InsertBreakMutationVariables>(
-    INSERT_BREAK,
-  );
+    {
+      data: addBreakMutationData,
+      loading: addBreakMutationLoading,
+      error: addBreakMutationError,
+    },
+  ] = useInsertBreakMutation({ onCompleted: callback });
+
+  const [
+    updateBreak,
+    {
+      data: updateBreakMutationData,
+      loading: updateBreakMutationLoading,
+      error: updateBreakMutationError,
+    },
+  ] = useUpdateBreakMutation({ onCompleted: callback });
 
   const {
     register,
@@ -103,12 +121,15 @@ const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
     resolver: yupResolver(schema),
     defaultValues: {
       event_id: event_id,
+      ...(break_data || {}),
+      price: break_data
+        ? Number(break_data.price.replace(/[^0-9.-]+/g, ''))
+        : undefined,
+      break_type: BreakTypeValues.find(
+        (b) => b.value === break_data?.break_type,
+      )?.value,
     },
   });
-
-  useEffect(() => {
-    mutationData && callback && callback();
-  }, [mutationData]);
 
   /**
    * Handle form submission
@@ -116,20 +137,35 @@ const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
    */
   const onSubmit = (result: TFormData) => {
     if (user) {
-      addBreak({
-        variables: {
-          data: {
-            event_id: result.event_id,
-            title: result.title,
-            description: result.description,
-            image: '',
-            spots: result.spots,
-            teams_per_spot: result.teams_per_spot,
-            break_type: result.break_type,
-            price: result.price,
-          },
-        },
-      });
+      const operation = break_data ? 'UPDATE' : 'ADD';
+
+      const submitData = {
+        event_id: result.event_id,
+        title: result.title,
+        description: result.description,
+        image: '',
+        spots: result.spots,
+        teams_per_spot: result.teams_per_spot,
+        break_type: result.break_type,
+        price: result.price,
+      };
+
+      switch (operation) {
+        case 'ADD':
+          addBreak({
+            variables: {
+              data: submitData,
+            },
+          });
+          break;
+        case 'UPDATE':
+          updateBreak({
+            variables: {
+              id: break_data?.id,
+              data: submitData,
+            },
+          });
+      }
     }
   };
 
@@ -153,7 +189,10 @@ const AddBreakForm: React.FC<TFormProps> = ({ event_id, callback }) => {
 
       <FormControl isInvalid={!!errors.event_id} mb={5}>
         <FormLabel>Event ID</FormLabel>
-        <Input {...register('event_id')} isReadOnly={!!event_id} />
+        <Input
+          {...register('event_id')}
+          isReadOnly={!!event_id || !!break_data}
+        />
         <FormErrorMessage>{errors.event_id?.message}</FormErrorMessage>
       </FormControl>
 
