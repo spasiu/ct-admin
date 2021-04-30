@@ -37,8 +37,10 @@ export type Breaks = {
   __typename?: 'Breaks';
   /** An object relationship */
   Event: Events;
-  /** An object relationship */
-  Product?: Maybe<Products>;
+  /** An array relationship */
+  Products: Array<Products>;
+  /** An aggregated array relationship */
+  Products_aggregate: Products_Aggregate;
   /** An object relationship */
   break_status: Break_Status;
   break_type: Break_Type_Enum;
@@ -55,6 +57,26 @@ export type Breaks = {
   /** An object relationship */
   type: Break_Type;
   updated_at: Scalars['timestamptz'];
+};
+
+
+/** columns and relationships of "Breaks" */
+export type BreaksProductsArgs = {
+  distinct_on?: Maybe<Array<Products_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Products_Order_By>>;
+  where?: Maybe<Products_Bool_Exp>;
+};
+
+
+/** columns and relationships of "Breaks" */
+export type BreaksProducts_AggregateArgs = {
+  distinct_on?: Maybe<Array<Products_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Products_Order_By>>;
+  where?: Maybe<Products_Bool_Exp>;
 };
 
 /** aggregated selection of "Breaks" */
@@ -126,7 +148,7 @@ export type Breaks_Avg_Order_By = {
 /** Boolean expression to filter rows from the table "Breaks". All fields are combined with a logical 'AND'. */
 export type Breaks_Bool_Exp = {
   Event?: Maybe<Events_Bool_Exp>;
-  Product?: Maybe<Products_Bool_Exp>;
+  Products?: Maybe<Products_Bool_Exp>;
   _and?: Maybe<Array<Maybe<Breaks_Bool_Exp>>>;
   _not?: Maybe<Breaks_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Breaks_Bool_Exp>>>;
@@ -162,7 +184,7 @@ export type Breaks_Inc_Input = {
 /** input type for inserting data into table "Breaks" */
 export type Breaks_Insert_Input = {
   Event?: Maybe<Events_Obj_Rel_Insert_Input>;
-  Product?: Maybe<Products_Obj_Rel_Insert_Input>;
+  Products?: Maybe<Products_Arr_Rel_Insert_Input>;
   break_status?: Maybe<Break_Status_Obj_Rel_Insert_Input>;
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -262,7 +284,7 @@ export type Breaks_On_Conflict = {
 /** ordering options when selecting data from "Breaks" */
 export type Breaks_Order_By = {
   Event?: Maybe<Events_Order_By>;
-  Product?: Maybe<Products_Order_By>;
+  Products_aggregate?: Maybe<Products_Aggregate_Order_By>;
   break_status?: Maybe<Break_Status_Order_By>;
   break_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
@@ -746,10 +768,10 @@ export type Int_Comparison_Exp = {
 export type Products = {
   __typename?: 'Products';
   /** An object relationship */
-  Break: Breaks;
+  Break?: Maybe<Breaks>;
   /** An object relationship */
   SKU: Sku;
-  break_id: Scalars['uuid'];
+  break_id?: Maybe<Scalars['uuid']>;
   cost_basis: Scalars['money'];
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
@@ -840,8 +862,6 @@ export type Products_Bool_Exp = {
 
 /** unique or primary key constraints on table "Products" */
 export enum Products_Constraint {
-  /** unique or primary key constraint */
-  ProductsBreakIdKey = 'Products_break_id_key',
   /** unique or primary key constraint */
   ProductsPkey = 'Products_pkey'
 }
@@ -4702,6 +4722,19 @@ export type UpdateSkuMutation = (
   )> }
 );
 
+export type DeleteSkuByIdsMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type DeleteSkuByIdsMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_SKU?: Maybe<(
+    { __typename?: 'SKU_mutation_response' }
+    & Pick<Sku_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 export type GetSkUsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4709,7 +4742,7 @@ export type GetSkUsQuery = (
   { __typename?: 'query_root' }
   & { SKU: Array<(
     { __typename?: 'SKU' }
-    & Pick<Sku, 'id' | 'sku_id' | 'manufacturer' | 'brand' | 'category' | 'year1' | 'year2' | 'product_type'>
+    & Pick<Sku, 'id' | 'sku_id' | 'sku_type' | 'location' | 'year1' | 'manufacturer' | 'brand' | 'series' | 'category' | 'product_type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'paralell' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade'>
   )> }
 );
 
@@ -5074,17 +5107,65 @@ export function useUpdateSkuMutation(baseOptions?: Apollo.MutationHookOptions<Up
 export type UpdateSkuMutationHookResult = ReturnType<typeof useUpdateSkuMutation>;
 export type UpdateSkuMutationResult = Apollo.MutationResult<UpdateSkuMutation>;
 export type UpdateSkuMutationOptions = Apollo.BaseMutationOptions<UpdateSkuMutation, UpdateSkuMutationVariables>;
+export const DeleteSkuByIdsDocument = gql`
+    mutation DeleteSKUByIds($ids: [uuid!]) {
+  delete_SKU(where: {id: {_in: $ids}}) {
+    affected_rows
+  }
+}
+    `;
+export type DeleteSkuByIdsMutationFn = Apollo.MutationFunction<DeleteSkuByIdsMutation, DeleteSkuByIdsMutationVariables>;
+
+/**
+ * __useDeleteSkuByIdsMutation__
+ *
+ * To run a mutation, you first call `useDeleteSkuByIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSkuByIdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSkuByIdsMutation, { data, loading, error }] = useDeleteSkuByIdsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useDeleteSkuByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSkuByIdsMutation, DeleteSkuByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteSkuByIdsMutation, DeleteSkuByIdsMutationVariables>(DeleteSkuByIdsDocument, options);
+      }
+export type DeleteSkuByIdsMutationHookResult = ReturnType<typeof useDeleteSkuByIdsMutation>;
+export type DeleteSkuByIdsMutationResult = Apollo.MutationResult<DeleteSkuByIdsMutation>;
+export type DeleteSkuByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteSkuByIdsMutation, DeleteSkuByIdsMutationVariables>;
 export const GetSkUsDocument = gql`
     query GetSKUs {
-  SKU {
+  SKU(order_by: {created_at: asc}) {
     id
     sku_id
+    sku_type
+    location
+    year1
     manufacturer
     brand
+    series
     category
-    year1
-    year2
     product_type
+    boxes_per_case
+    packs_per_box
+    cards_per_pack
+    card_number
+    player
+    paralell
+    insert
+    rookie_card
+    memoribillia
+    autograph
+    numbered
+    grader
+    grade
   }
 }
     `;

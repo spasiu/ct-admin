@@ -2,15 +2,30 @@ import { gql } from '@apollo/client';
 
 export const GET_SKUS = gql`
   query GetSKUs {
-    SKU {
+    SKU(order_by: { created_at: asc }) {
       id
       sku_id
+      sku_type
+      location
+      year1
       manufacturer
       brand
+      series
       category
-      year1
-      year2
       product_type
+      boxes_per_case
+      packs_per_box
+      cards_per_pack
+      card_number
+      player
+      paralell
+      insert
+      rookie_card
+      memoribillia
+      autograph
+      numbered
+      grader
+      grade
     }
   }
 `;

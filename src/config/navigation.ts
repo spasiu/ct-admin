@@ -1,6 +1,16 @@
 import paths from '@config/paths';
 
-export default {
+type TNavLink = {
+  label: string;
+  path: string;
+};
+
+export type TNavData = {
+  primary: TNavLink[];
+  products: TNavLink[];
+};
+
+const navigation: TNavData = {
   primary: [
     {
       label: 'Home',
@@ -8,7 +18,7 @@ export default {
     },
     {
       label: 'Products & SKUs',
-      path: paths.products,
+      path: paths.skus,
     },
     {
       label: 'Events & Breaks',
@@ -19,4 +29,16 @@ export default {
       path: paths.hits,
     },
   ],
+  products: [
+    {
+      label: 'SKUs',
+      path: paths.skus,
+    },
+    {
+      label: 'Products',
+      path: paths.products,
+    },
+  ],
 };
+
+export default navigation;

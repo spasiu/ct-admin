@@ -2,10 +2,16 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { MdCameraAlt } from 'react-icons/md';
 import DatePicker from 'react-datepicker';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import format from 'date-fns/format';
+
+import {
+  useInsertEventMutation,
+  useUpdateEventMutation,
+} from '@generated/graphql';
+
+import { auth } from '@config/firebase';
 
 import {
   FormErrorMessage,
@@ -14,16 +20,12 @@ import {
   Input,
   Button,
   Flex,
-  Icon,
+  Box,
   Textarea,
 } from '@chakra-ui/react';
 
-import { auth } from '@config/firebase';
 import DatePickerDisplay from '@components/DatePickerDisplay';
-import {
-  useInsertEventMutation,
-  useUpdateEventMutation,
-} from '@generated/graphql';
+import ImageUploader from '@components/ImageUploader';
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -55,10 +57,12 @@ type TFormProps = {
  *
  * TODO: Handle errors
  * TODO: Add image
+ * TODO: Add ability to assign event
  *
  */
 const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
   const [user] = useAuthState(auth);
+  const operation = event?.id ? 'UPDATE' : 'ADD';
 
   const [
     insertEvent,
@@ -68,6 +72,8 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
       error: insertMutationError,
     },
   ] = useInsertEventMutation({ onCompleted: callback });
+
+  console.log(event);
 
   const [
     updateEvent,
@@ -97,10 +103,7 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
    */
   const onSubmit = (result: TFormData) => {
     if (user) {
-      const operation = event?.id ? 'UPDATE' : 'ADD';
-
       const submitData = {
-        user_id: user.uid,
         title: result.title,
         description: result.description,
         image: '',
@@ -111,7 +114,7 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
         case 'ADD':
           insertEvent({
             variables: {
-              data: submitData,
+              data: { user_id: user.uid, ...submitData },
             },
           });
           break;
@@ -129,33 +132,20 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-      <Flex
-        bg="background"
-        justifyContent="center"
-        alignItems="center"
-        mx="auto"
-        mb={5}
-        sx={{
-          width: '130px',
-          height: '130px',
-          borderRadius: '50%',
-          cursor: 'pointer',
-        }}
-      >
-        <Icon as={MdCameraAlt} w={8} h={8} />
-      </Flex>
+      <Box mb={5}>
+        <ImageUploader />
+      </Box>
+
       <FormControl isInvalid={!!errors.title} mb={5}>
         <FormLabel>Title</FormLabel>
         <Input {...register('title')} />
         <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
       </FormControl>
-
       <FormControl isInvalid={!!errors.description} mb={5}>
         <FormLabel>Description</FormLabel>
         <Textarea {...register('description')} />
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
-
       <FormControl isInvalid={!!errors.start_time} mb={10}>
         <FormLabel>Start Time</FormLabel>
         <Controller
@@ -176,10 +166,9 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
         />
         <FormErrorMessage>{errors.start_time?.message}</FormErrorMessage>
       </FormControl>
-
       <Flex justifyContent="center">
         <Button mb={4} px={10} colorScheme="blue" type="submit">
-          Add Event
+          {operation === 'UPDATE' ? 'Update Event' : 'Add Event'}
         </Button>
       </Flex>
     </form>

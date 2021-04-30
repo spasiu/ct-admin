@@ -2,8 +2,17 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { MdCameraAlt } from 'react-icons/md';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
+import {
+  Break_Type_Enum,
+  useInsertBreakMutation,
+  useUpdateBreakMutation,
+} from '@generated/graphql';
+
+import { auth } from '@config/firebase';
+import { gridSpace } from '@config/chakra/constants';
+import { BreakTypeValues } from '@config/values';
 
 import {
   FormErrorMessage,
@@ -12,19 +21,12 @@ import {
   Input,
   Button,
   Flex,
-  Icon,
+  Box,
   Select,
   Textarea,
 } from '@chakra-ui/react';
 
-import { auth } from '@config/firebase';
-import { gridSpace } from '@config/chakra/constants';
-import {
-  Break_Type_Enum,
-  useInsertBreakMutation,
-  useUpdateBreakMutation,
-} from '@generated/graphql';
-import { BreakTypeValues } from '@config/values';
+import ImageUploader from '@components/ImageUploader';
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -94,6 +96,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
   callback,
 }) => {
   const [user] = useAuthState(auth);
+  const operation = break_data ? 'UPDATE' : 'ADD';
 
   const [
     addBreak,
@@ -137,8 +140,6 @@ const AddBreakForm: React.FC<TFormProps> = ({
    */
   const onSubmit = (result: TFormData) => {
     if (user) {
-      const operation = break_data ? 'UPDATE' : 'ADD';
-
       const submitData = {
         event_id: result.event_id,
         title: result.title,
@@ -171,21 +172,9 @@ const AddBreakForm: React.FC<TFormProps> = ({
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-      <Flex
-        bg="background"
-        justifyContent="center"
-        alignItems="center"
-        mx="auto"
-        mb={5}
-        sx={{
-          width: '130px',
-          height: '130px',
-          borderRadius: '50%',
-          cursor: 'pointer',
-        }}
-      >
-        <Icon as={MdCameraAlt} w={8} h={8} />
-      </Flex>
+      <Box mb={5}>
+        <ImageUploader />
+      </Box>
 
       <FormControl isInvalid={!!errors.event_id} mb={5}>
         <FormLabel>Event ID</FormLabel>
@@ -261,7 +250,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
 
       <Flex justifyContent="center">
         <Button mb={4} px={10} colorScheme="blue" type="submit">
-          Add Break
+          {operation === 'UPDATE' ? 'Update Break' : 'Add Break'}
         </Button>
       </Flex>
     </form>

@@ -88,3 +88,11 @@ export const UPDATE_SKU = gql`
     }
   }
 `;
+
+export const DELETE_SKUS = gql`
+  mutation DeleteSKUByIds($ids: [uuid!]) {
+    delete_SKU(where: { id: { _in: $ids } }) {
+      affected_rows
+    }
+  }
+`;

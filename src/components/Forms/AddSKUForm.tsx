@@ -45,12 +45,15 @@ const schema = yup.object().shape({
     .typeError('Numbers only'),
   manufacturer: yup.string().required('Required'),
   brand: yup.string().required('Required'),
-  series: yup.string(),
+  series: yup.string().nullable(),
   category: yup.string().required('Required'),
-  product_type: yup.string().when('sku_type', {
-    is: (val: string) => val && val !== Sku_Type_Enum.Card,
-    then: yup.string().required('Required'),
-  }),
+  product_type: yup
+    .string()
+    .when('sku_type', {
+      is: (val: string) => val && val !== Sku_Type_Enum.Card,
+      then: yup.string().required('Required'),
+    })
+    .nullable(),
   boxes_per_case: yup
     .number()
     .integer()
@@ -90,18 +93,24 @@ const schema = yup.object().shape({
         ? schema.required('Required')
         : schema,
     ),
-  card_number: yup.string().when('sku_type', {
-    is: Sku_Type_Enum.Card,
-    then: yup.string().required('Required'),
-  }),
-  player: yup.string().when('sku_type', {
-    is: Sku_Type_Enum.Card,
-    then: yup.string().required('Required'),
-  }),
-  paralell: yup.string(),
-  insert: yup.string(),
+  card_number: yup
+    .string()
+    .when('sku_type', {
+      is: Sku_Type_Enum.Card,
+      then: yup.string().required('Required'),
+    })
+    .nullable(),
+  player: yup
+    .string()
+    .when('sku_type', {
+      is: Sku_Type_Enum.Card,
+      then: yup.string().required('Required'),
+    })
+    .nullable(),
+  paralell: yup.string().nullable(),
+  insert: yup.string().nullable(),
   rookie_card: yup.boolean(),
-  memoribillia: yup.string(),
+  memoribillia: yup.string().nullable(),
   autograph: yup.boolean(),
   numbered: yup
     .number()
@@ -111,7 +120,7 @@ const schema = yup.object().shape({
     })
     .nullable()
     .typeError('Numbers only'),
-  grader: yup.string(),
+  grader: yup.string().nullable(),
   grade: yup
     .number()
     .max(10)
@@ -129,22 +138,22 @@ type TFormData = {
   year1: number;
   manufacturer: string;
   brand: string;
-  series: string;
+  series: string | null;
   category: string;
-  product_type: string;
-  boxes_per_case: number;
-  packs_per_box: number;
-  cards_per_pack: number;
-  card_number: string;
-  player: string;
-  paralell: string;
-  insert: string;
-  rookie_card: boolean;
-  memoribillia: string;
-  autograph: boolean;
-  numbered: number;
-  grader: string;
-  grade: number;
+  product_type: string | null;
+  boxes_per_case: number | null;
+  packs_per_box: number | null;
+  cards_per_pack: number | null;
+  card_number: string | null;
+  player: string | null;
+  paralell: string | null;
+  insert: string | null;
+  rookie_card: boolean | null;
+  memoribillia: string | null;
+  autograph: boolean | null;
+  numbered: number | null;
+  grader: string | null;
+  grade: number | null;
 };
 
 type TFormProps = {
@@ -156,22 +165,22 @@ type TFormProps = {
     year1: number;
     manufacturer: string;
     brand: string;
-    series: string;
+    series?: string | null;
     category: string;
-    product_type: string;
-    boxes_per_case: number;
-    packs_per_box: number;
-    cards_per_pack: number;
-    card_number: string;
-    player: string;
-    paralell: string;
-    insert: string;
-    rookie_card: boolean;
-    memoribillia: string;
-    autograph: boolean;
-    numbered: number;
-    grader: string;
-    grade: number;
+    product_type?: string | null;
+    boxes_per_case?: number | null;
+    packs_per_box?: number | null;
+    cards_per_pack?: number | null;
+    card_number?: string | null;
+    player?: string | null;
+    paralell?: string | null;
+    insert?: string | null;
+    rookie_card?: boolean | null;
+    memoribillia?: string | null;
+    autograph?: boolean | null;
+    numbered?: number | null;
+    grader?: string | null;
+    grade?: number | null;
   };
   callback: () => void;
 };
@@ -184,6 +193,8 @@ type TFormProps = {
  *
  */
 const AddSKUForm: React.FC<TFormProps> = ({ sku, callback }) => {
+  const operation = sku ? 'UPDATE' : 'ADD';
+
   const [
     addSKU,
     {
@@ -220,8 +231,6 @@ const AddSKUForm: React.FC<TFormProps> = ({ sku, callback }) => {
    * @param result object Validated form result
    */
   const onSubmit = (result: TFormData) => {
-    const operation = sku ? 'UPDATE' : 'ADD';
-
     const submitData = {
       image: '',
       description: '',
@@ -539,7 +548,7 @@ const AddSKUForm: React.FC<TFormProps> = ({ sku, callback }) => {
 
         <Flex justifyContent="center">
           <Button mb={4} px={10} colorScheme="blue" type="submit">
-            Add SKU
+            {operation === 'UPDATE' ? 'Update SKU' : 'Add SKU'}
           </Button>
         </Flex>
       </form>
