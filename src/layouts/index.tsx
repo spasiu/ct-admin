@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import { Flex, Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 import Header from '@components/Header';
 

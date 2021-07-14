@@ -16,10 +16,8 @@ import {
   Tr,
   Th,
   Td,
-  Text,
   HStack,
   IconButton,
-  Flex,
   Link,
 } from '@chakra-ui/react';
 
@@ -274,13 +272,17 @@ const ProductDetailsPage: React.FC = () => {
                       <IconButton
                         aria-label="Edit"
                         icon={<MdEdit />}
-                        onClick={() => {}}
+                        onClick={() => {
+                          console.log('edit');
+                        }}
                       />
 
                       <IconButton
                         aria-label="Archive"
                         icon={<HiArchive />}
-                        onClick={() => {}}
+                        onClick={() => {
+                          console.log('archive');
+                        }}
                       />
                     </HStack>
                   </Td>

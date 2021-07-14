@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AddIcon } from '@chakra-ui/icons';
 import { MdVisibility, MdEdit } from 'react-icons/md';
-import { RiPlayListAddFill } from 'react-icons/ri';
 import { HiArchive } from 'react-icons/hi';
 import NextLink from 'next/link';
 

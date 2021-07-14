@@ -12,15 +12,10 @@ import {
   Input,
   Button,
   Flex,
-  Icon,
-  Textarea,
 } from '@chakra-ui/react';
 
 import { gridSpace } from '@config/chakra/constants';
-import {
-  useInsertInventoryMutation,
-  Inventory_Insert_Input,
-} from '@generated/graphql';
+import { useInsertInventoryMutation } from '@generated/graphql';
 import DatePickerDisplay from '@components/DatePickerDisplay';
 
 const schema = yup.object().shape({

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
-import { AddIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { MdDelete, MdModeEdit, MdEdit, MdVisibility } from 'react-icons/md';
+import { AddIcon } from '@chakra-ui/icons';
+import { MdEdit, MdVisibility } from 'react-icons/md';
 import { HiArchive } from 'react-icons/hi';
 import NextLink from 'next/link';
 
@@ -17,17 +17,11 @@ import {
   Tr,
   Th,
   Td,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Icon,
   IconButton,
   HStack,
   Image,
 } from '@chakra-ui/react';
 
-import { gridSpace } from '@config/chakra/constants';
 import Layout from '@layouts';
 import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';

@@ -33,7 +33,6 @@ import {
 } from '@chakra-ui/react';
 
 import ImageUploader from '@components/ImageUploader';
-import { constants } from 'node:perf_hooks';
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -317,7 +316,6 @@ const AddBreakForm: React.FC<TFormProps> = ({
 
   // Change Line Items
   useEffect(() => {
-    const currentLineItems = getValues('lineItems');
     const newLineItems = [];
 
     if (
@@ -515,7 +513,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
                 >
                   <Input
                     placeholder="Team/Division"
-                    {...register(`lineItems.${index}.value`)}
+                    {...register(`lineItems.${index}.value` as const)}
                   />
                 </FormControl>
                 <FormControl
@@ -527,7 +525,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
                 >
                   <Input
                     placeholder="Cost"
-                    {...register(`lineItems.${index}.cost`)}
+                    {...register(`lineItems.${index}.cost` as const)}
                     textAlign="right"
                   />
                 </FormControl>

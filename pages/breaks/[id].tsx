@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
-import { AddIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { MdDelete, MdModeEdit, MdEdit } from 'react-icons/md';
-import { HiArchive } from 'react-icons/hi';
+import { MdEdit } from 'react-icons/md';
 import NextLink from 'next/link';
 
 import {
@@ -17,12 +15,6 @@ import {
   Tr,
   Th,
   Td,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Icon,
-  IconButton,
   HStack,
   Image,
   Link,
@@ -30,12 +22,9 @@ import {
 
 import { useGetBreakByIdQuery } from '@generated/graphql';
 
-import { gridSpace } from '@config/chakra/constants';
 import Layout from '@layouts';
 import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
-import AddBreakForm from '@components/Forms/AddBreakForm';
-import FormModal from '@components/Modals/FormModal';
 import StatDisplay from '@components/StatDisplay';
 import paths from '@config/paths';
 import { BreakTypeValues } from '@config/values';
@@ -52,7 +41,6 @@ const BreakPage: React.FC = () => {
     loading: breakQueryLoading,
     error: breakQueryError,
     data: breakQueryData,
-    refetch: refetchEvent,
   } = useGetBreakByIdQuery({ variables: { id: breakId } });
 
   return (
@@ -64,7 +52,9 @@ const BreakPage: React.FC = () => {
             leftIcon={<MdEdit />}
             colorScheme="blue"
             size="sm"
-            onClick={() => {}}
+            onClick={() => {
+              console.log('edit break');
+            }}
           >
             Edit Break
           </Button>
@@ -135,15 +125,19 @@ const BreakPage: React.FC = () => {
                     </Box>
 
                     <HStack spacing={14}>
-                      <StatDisplay
-                        label="Spots"
-                        value={`${breakQueryData.Breaks_by_pk?.spots}`}
-                      />
+                      {breakQueryData.Breaks_by_pk?.spots && (
+                        <StatDisplay
+                          label="Spots"
+                          value={`${breakQueryData.Breaks_by_pk?.spots}`}
+                        />
+                      )}
 
-                      <StatDisplay
-                        label="Teams/Spot"
-                        value={breakQueryData.Breaks_by_pk?.spots}
-                      />
+                      {breakQueryData.Breaks_by_pk?.spots && (
+                        <StatDisplay
+                          label="Teams/Spot"
+                          value={breakQueryData.Breaks_by_pk?.spots}
+                        />
+                      )}
                     </HStack>
                   </Box>
                 </HStack>
