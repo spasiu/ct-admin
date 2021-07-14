@@ -6326,7 +6326,7 @@ export type GetEventByIdQuery = (
   { __typename?: 'query_root' }
   & { Events_by_pk?: Maybe<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time' | 'description'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'first_name' | 'last_name'>
@@ -7208,6 +7208,7 @@ export const GetEventByIdDocument = gql`
     title
     start_time
     description
+    status
     User {
       id
       first_name

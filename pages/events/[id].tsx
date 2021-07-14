@@ -9,6 +9,7 @@ import NextLink from 'next/link';
 import {
   Heading,
   Box,
+  Flex,
   Button,
   Text,
   Table,
@@ -20,6 +21,7 @@ import {
   IconButton,
   HStack,
   Image,
+  Tooltip,
 } from '@chakra-ui/react';
 
 import Layout from '@layouts';
@@ -30,6 +32,8 @@ import FormModal from '@components/Modals/FormModal';
 import {
   useGetEventByIdQuery,
   useArchiveBreaksByIdMutation,
+  useUpdateEventMutation,
+  Event_Status_Enum,
 } from '@generated/graphql';
 import { BreakTypeValues } from '@config/values';
 import paths from '@config/paths';
@@ -97,6 +101,19 @@ const EventPage: React.FC = () => {
     },
   });
 
+  const [
+    updateEvent,
+    {
+      data: updateMutationData,
+      loading: updateMutationLoading,
+      error: updateMutationError,
+    },
+  ] = useUpdateEventMutation({
+    onCompleted: () => {
+      refetchEvent();
+    },
+  });
+
   return (
     <>
       <SEO title="Event" />
@@ -136,6 +153,78 @@ const EventPage: React.FC = () => {
                     alt="Event Image"
                   />
                   <Box flex="1">
+                    <HStack spacing={4} mb={7}>
+                      {eventQueryData.Events_by_pk?.status ===
+                        Event_Status_Enum.Draft && (
+                        <>
+                          <Button
+                            colorScheme="green"
+                            size="sm"
+                            isDisabled={
+                              eventQueryData.Events_by_pk?.Breaks.length === 0
+                            }
+                            onClick={() => {
+                              updateEvent({
+                                variables: {
+                                  id: eventId,
+                                  data: { status: Event_Status_Enum.Scheduled },
+                                },
+                              });
+                            }}
+                          >
+                            Publish
+                          </Button>
+                          {eventQueryData.Events_by_pk?.Breaks.length === 0 && (
+                            <Text fontSize="sm">
+                              Must have at least one Break to publish
+                            </Text>
+                          )}
+                        </>
+                      )}
+
+                      {eventQueryData.Events_by_pk?.status ===
+                        Event_Status_Enum.Scheduled && (
+                        <>
+                          <Button
+                            colorScheme="blue"
+                            size="sm"
+                            onClick={() => {
+                              updateEvent({
+                                variables: {
+                                  id: eventId,
+                                  data: { status: Event_Status_Enum.Draft },
+                                },
+                              });
+                            }}
+                          >
+                            Set to Draft
+                          </Button>
+
+                          <Button
+                            colorScheme="red"
+                            size="sm"
+                            onClick={() => {
+                              updateEvent({
+                                variables: {
+                                  id: eventId,
+                                  data: { status: Event_Status_Enum.Live },
+                                },
+                              });
+                            }}
+                          >
+                            Go Live
+                          </Button>
+                        </>
+                      )}
+                    </HStack>
+
+                    <Box mb={7}>
+                      <Heading as="h3" size="sm" mb={1}>
+                        Status:
+                      </Heading>
+                      <Text>{eventQueryData.Events_by_pk?.status}</Text>
+                    </Box>
+
                     <Box mb={7}>
                       <Heading as="h3" size="sm" mb={1}>
                         Breaker:

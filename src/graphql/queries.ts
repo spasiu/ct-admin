@@ -222,6 +222,7 @@ export const GET_EVENT_BY_ID = gql`
       title
       start_time
       description
+      status
       User {
         id
         first_name
