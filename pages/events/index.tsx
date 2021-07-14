@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { AddIcon, ChevronRightIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
+import { MdVisibility, MdEdit } from 'react-icons/md';
+import { HiArchive } from 'react-icons/hi';
 import format from 'date-fns/format';
-import { MdDelete, MdPlaylistAdd, MdModeEdit } from 'react-icons/md';
 import NextLink from 'next/link';
 
 import {
   Heading,
-  Flex,
   Box,
   Button,
   Table,
@@ -15,22 +15,15 @@ import {
   Tr,
   Th,
   Td,
-  Icon,
   IconButton,
-  Link,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  HStack,
 } from '@chakra-ui/react';
 
-import { gridSpace } from '@config/chakra/constants';
 import paths from '@config/paths';
 import Layout from '@layouts';
-import Sidebar from '@components/Sidebar';
+import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
 import AddEventForm from '@components/Forms/AddEventForm';
-import AddBreakForm from '@components/Forms/AddBreakForm';
 import FormModal from '@components/Modals/FormModal';
 import {
   useGetEventsQuery,
@@ -42,6 +35,7 @@ type TSelectedEvent = {
   title: string;
   description: string;
   start_time: string;
+  status: string;
 };
 
 /**
@@ -57,8 +51,6 @@ type TSelectedEvent = {
  */
 const EventsPage: React.FC = () => {
   const [isAddEventModalOpen, setAddEventModalOpen] = useState(false);
-  const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
-  const [eventId, setEventId] = useState('');
   const [selectedEvent, setSelectedEvent] = useState<
     TSelectedEvent | undefined
   >(undefined);
@@ -87,112 +79,82 @@ const EventsPage: React.FC = () => {
     <>
       <SEO title="Events" />
       <Layout>
-        <Flex mx={gridSpace.parent}>
-          <Sidebar px={gridSpace.child}>
-            <Button
-              leftIcon={<AddIcon />}
-              colorScheme="blue"
-              isFullWidth
-              onClick={() => {
-                setSelectedEvent(undefined);
-                setAddEventModalOpen(true);
-              }}
-            >
-              Add Event
-            </Button>
-            <Button
-              leftIcon={<AddIcon />}
-              colorScheme="blue"
-              isFullWidth
-              onClick={() => {
-                setEventId(''); // reset event ID for blank modal
-                setAddBreakModalOpen(true);
-              }}
-            >
-              Add Break
-            </Button>
-          </Sidebar>
-          <Box flex={1} px={gridSpace.child} pt={8}>
-            <Heading as="h2" size="md" mb={6}>
-              Upcoming Events
-            </Heading>
+        <ActionBar>
+          <Button
+            leftIcon={<AddIcon />}
+            colorScheme="blue"
+            size="sm"
+            onClick={() => {
+              setSelectedEvent(undefined);
+              setAddEventModalOpen(true);
+            }}
+          >
+            Add Event
+          </Button>
+        </ActionBar>
 
-            {eventQueryData && (
-              <Table>
-                <Thead>
-                  <Tr>
-                    <Th>Event Name</Th>
-                    <Th>Breaker</Th>
-                    <Th>Date & Time</Th>
-                    <Th>Breaks</Th>
-                    <Th></Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {eventQueryData.Events.map((event) => (
-                    <Tr key={event.id} bg="white">
-                      <Td>
+        <Box flex={1} pt={8}>
+          <Heading as="h2" size="md" mb={6}>
+            Upcoming Events
+          </Heading>
+
+          {eventQueryData && (
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Event Name</Th>
+                  <Th>Breaker</Th>
+                  <Th>Date & Time</Th>
+                  <Th>Breaks</Th>
+                  <Th>Status</Th>
+                  <Th></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {eventQueryData.Events.map((event) => (
+                  <Tr key={event.id} bg="white">
+                    <Td>{event.title}</Td>
+                    <Td>{`${event.User?.first_name} ${event.User?.last_name}`}</Td>
+                    <Td>
+                      {format(new Date(event.start_time), 'LLL dd, y @ h:mm a')}
+                    </Td>
+                    <Td>{event.Breaks_aggregate?.aggregate?.count}</Td>
+                    <Td>{event.status}</Td>
+                    <Td textAlign="right">
+                      <HStack spacing={2} justify="flex-end">
                         <NextLink href={`${paths.events}/${event.id}`} passHref>
-                          <Link fontWeight="bold">
-                            {event.title}
-                            <ChevronRightIcon ml={2} />
-                          </Link>
-                        </NextLink>
-                      </Td>
-                      <Td>{`${event.User?.Profile?.first_name} ${event.User?.Profile?.last_name}`}</Td>
-                      <Td>
-                        {format(
-                          new Date(event.start_time),
-                          'LLL dd, y @ h:mm a',
-                        )}
-                      </Td>
-                      <Td>{event.Breaks_aggregate?.aggregate?.count}</Td>
-                      <Td textAlign="right">
-                        <Menu>
-                          <MenuButton
-                            as={IconButton}
-                            aria-label="Options"
-                            icon={<HamburgerIcon />}
+                          <IconButton
+                            as="a"
+                            aria-label="View"
+                            icon={<MdVisibility />}
                           />
-                          <MenuList>
-                            <MenuItem
-                              icon={<Icon as={MdPlaylistAdd} w={4} h={4} />}
-                              onClick={() => {
-                                setEventId(event.id); // set event ID
-                                setAddBreakModalOpen(true);
-                              }}
-                            >
-                              Add Break
-                            </MenuItem>
-                            <MenuItem
-                              icon={<Icon as={MdModeEdit} w={4} h={4} />}
-                              onClick={() => {
-                                setSelectedEvent(event); // set event
-                                setAddEventModalOpen(true);
-                              }}
-                            >
-                              Edit
-                            </MenuItem>
-                            <MenuItem
-                              icon={<Icon as={MdDelete} w={4} h={4} />}
-                              onClick={() => {
-                                deleteEventsById({
-                                  variables: { ids: [event.id] },
-                                });
-                              }}
-                            >
-                              Delete
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            )}
-          </Box>
-        </Flex>
+                        </NextLink>
+                        <IconButton
+                          aria-label="Edit"
+                          icon={<MdEdit />}
+                          onClick={() => {
+                            setSelectedEvent(event); // set event
+                            setAddEventModalOpen(true);
+                          }}
+                        />
+                        <IconButton
+                          aria-label="Archive"
+                          icon={<HiArchive />}
+                          onClick={() => {
+                            deleteEventsById({
+                              variables: { ids: [event.id] },
+                            });
+                          }}
+                        />
+                      </HStack>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          )}
+        </Box>
+
         <FormModal
           title="Add Event"
           isOpen={isAddEventModalOpen}
@@ -203,18 +165,6 @@ const EventsPage: React.FC = () => {
             callback={() => {
               setAddEventModalOpen(false);
               refetchEvents();
-            }}
-          />
-        </FormModal>
-        <FormModal
-          title="Add Break"
-          isOpen={isAddBreakModalOpen}
-          setModalOpen={setAddBreakModalOpen}
-        >
-          <AddBreakForm
-            event_id={eventId}
-            callback={() => {
-              setAddBreakModalOpen(false);
             }}
           />
         </FormModal>

@@ -17,9 +17,14 @@ if (!firebase.apps.length) {
   });
 }
 
+if (process.env.NEXT_PUBLIC_ENV && process.env.NEXT_PUBLIC_ENV === 'local') {
+  firebase.functions().useEmulator('localhost', 5001);
+}
+
 export const app = firebase.app();
 export const auth = firebase.auth();
 export const db = firebase.firestore();
 export const storage = firebase.storage();
+export const functions = firebase.functions();
 
-export default { app, auth, db, storage };
+export default { app, auth, db, storage, functions };

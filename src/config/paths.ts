@@ -4,4 +4,5 @@ export default {
   products: '/products',
   skus: '/skus',
   hits: '/hits',
+  breaks: '/breaks',
 };

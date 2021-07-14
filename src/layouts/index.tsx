@@ -14,12 +14,12 @@ const Layout: React.FC<TLayoutProps> = ({ children, pageNav }) => {
   return (
     <>
       <Helmet defaultTitle="Home" titleTemplate="Cards & Treasure Admin - %s" />
-      <Flex direction="column" align="center">
+      <Box>
         <Header pageNav={pageNav} />
         <Box width="100%" p={[3, null, 6, 8]}>
           {children}
         </Box>
-      </Flex>
+      </Box>
     </>
   );
 };

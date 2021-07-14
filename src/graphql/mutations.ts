@@ -50,6 +50,14 @@ export const INSERT_BREAK = gql`
   mutation InsertBreak($data: Breaks_insert_input!) {
     insert_Breaks_one(object: $data) {
       id
+      event_id
+      title
+      description
+      spots
+      teams_per_spot
+      break_type
+      price
+      image
     }
   }
 `;
@@ -70,28 +78,69 @@ export const DELETE_BREAKS = gql`
   }
 `;
 
+export const ARCHIVE_BREAKS = gql`
+  mutation ArchiveBreaksById($ids: [uuid!]) {
+    delete_BreakProductItems(where: { break_id: { _in: $ids } }) {
+      affected_rows
+    }
+
+    update_Inventory(
+      where: { break_id: { _in: $ids } }
+      _set: { break_id: null }
+    ) {
+      affected_rows
+    }
+
+    delete_Breaks(where: { id: { _in: $ids } }) {
+      affected_rows
+    }
+  }
+`;
+
 /**
- * SKU MUTATIONS
+ * PRODUCT MUTATIONS
  */
-export const INSERT_SKU = gql`
-  mutation InsertSKU($data: SKU_insert_input!) {
-    insert_SKU_one(object: $data) {
+export const INSERT_PRODUCT = gql`
+  mutation InsertProduct($data: Products_insert_input!) {
+    insert_Products_one(object: $data) {
       id
     }
   }
 `;
 
-export const UPDATE_SKU = gql`
-  mutation UpdateSKU($id: uuid!, $data: SKU_set_input!) {
-    update_SKU_by_pk(pk_columns: { id: $id }, _set: $data) {
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($id: uuid!, $data: Products_set_input!) {
+    update_Products_by_pk(pk_columns: { id: $id }, _set: $data) {
       id
     }
   }
 `;
 
-export const DELETE_SKUS = gql`
-  mutation DeleteSKUByIds($ids: [uuid!]) {
-    delete_SKU(where: { id: { _in: $ids } }) {
+export const DELETE_PRODUCTS = gql`
+  mutation DeleteProductsByIds($ids: [uuid!]) {
+    delete_Products(where: { id: { _in: $ids } }) {
+      affected_rows
+    }
+  }
+`;
+
+/**
+ * INVENTORY MUTATIONS
+ */
+export const INSERT_INVENTORY = gql`
+  mutation InsertInventory($inventory: [Inventory_insert_input!]!) {
+    insert_Inventory(objects: $inventory) {
+      affected_rows
+    }
+  }
+`;
+
+export const UPDATE_INVENTORY_BREAK = gql`
+  mutation UpdateInventoryBreak($ids: [uuid!], $breakId: uuid!) {
+    update_Inventory(
+      where: { id: { _in: $ids } }
+      _set: { break_id: $breakId }
+    ) {
       affected_rows
     }
   }

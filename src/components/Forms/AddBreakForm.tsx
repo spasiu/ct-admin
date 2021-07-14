@@ -1,16 +1,20 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 
 import {
   Break_Type_Enum,
+  InsertBreakMutation,
   useInsertBreakMutation,
   useUpdateBreakMutation,
+  useGetInventoryQuery,
+  useUpdateInventoryBreakMutation,
 } from '@generated/graphql';
 
-import { auth } from '@config/firebase';
+import { auth, functions } from '@config/firebase';
 import { gridSpace } from '@config/chakra/constants';
 import { BreakTypeValues } from '@config/values';
 
@@ -24,9 +28,12 @@ import {
   Box,
   Select,
   Textarea,
+  Spinner,
+  Heading,
 } from '@chakra-ui/react';
 
 import ImageUploader from '@components/ImageUploader';
+import { constants } from 'node:perf_hooks';
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -35,27 +42,77 @@ const schema = yup.object().shape({
   break_type: yup.string().required('Required'),
   spots: yup
     .number()
-    .typeError('Must be a number')
-    .integer('Must be an whole number')
-    .min(1, 'Must be greater than 0')
-    .required('Required'),
+    .transform((cv) => (isNaN(cv) ? undefined : cv))
+    .when('break_type', {
+      is: (val: string) => val && val !== Break_Type_Enum.Personal,
+      then: yup
+        .number()
+        .typeError('Must be a number')
+        .integer('Must be an whole number')
+        .min(1, 'Must be greater than 0')
+        .required('Required'),
+    }),
   teams_per_spot: yup
     .number()
-    .typeError('Must be a number')
-    .integer('Must be an whole number')
-    .min(1, 'Must be greater than 0')
-    .required('Required'),
+    .transform((cv) => (isNaN(cv) ? undefined : cv))
+    .when('break_type', {
+      is: (val: string) =>
+        val &&
+        val !== Break_Type_Enum.Personal &&
+        val !== Break_Type_Enum.PickYourTeam &&
+        val !== Break_Type_Enum.PickYourDivision,
+      then: yup
+        .number()
+        .typeError('Must be a number')
+        .integer('Must be an whole number')
+        .min(1, 'Must be greater than 0')
+        .required('Required'),
+    }),
   price: yup
     .number()
-    .typeError('Must be a number')
-    .test('is-currency', 'Must be a valid price', (value) => {
-      const currRegex = /^[1-9]\d*(\.\d{1,2})?$/;
+    .transform((cv) => (isNaN(cv) ? undefined : cv))
+    .when('break_type', {
+      is: (val: string) =>
+        val &&
+        val !== Break_Type_Enum.PickYourTeam &&
+        val !== Break_Type_Enum.PickYourDivision,
+      then: yup
+        .number()
+        .typeError('Must be a number')
+        .test('is-currency', 'Must be a valid price', (value) => {
+          const currRegex = /^[1-9]\d*(\.\d{1,2})?$/;
 
-      return value ? currRegex.test(String(value)) : false;
-    })
-    .min(0, 'Must be greater than 0')
-    .required('Required'),
+          return value ? currRegex.test(String(value)) : false;
+        })
+        .min(0, 'Must be greater than 0')
+        .required('Required'),
+    }),
+  lineItems: yup.array().of(
+    yup.object().shape({
+      value: yup.string().required('Required'),
+      cost: yup
+        .number()
+        .typeError('Must be a number')
+        .test('is-currency', 'Must be a valid price', (value) => {
+          const currRegex = /^[1-9]\d*(\.\d{1,2})?$/;
+
+          return value ? currRegex.test(String(value)) : false;
+        })
+        .min(0, 'Must be greater than 0')
+        .required('Required'),
+    }),
+  ),
 });
+
+type TInventoryAutcomplete = {
+  label: string;
+  value: string;
+};
+
+type TBreakLineItem = {
+  value: string;
+  cost: number;
+};
 
 type TFormData = {
   id?: string;
@@ -65,8 +122,12 @@ type TFormData = {
   image: string;
   break_type: Break_Type_Enum;
   spots: number;
-  teams_per_spot: number;
+  teams_per_spot?: number | null;
   price: number;
+  lineItems: {
+    value: string;
+    cost: number;
+  }[];
 };
 
 type TFormProps = {
@@ -78,8 +139,22 @@ type TFormProps = {
     image: string;
     break_type: string;
     spots: number;
-    teams_per_spot: number;
-    price: string;
+    teams_per_spot?: number | null | undefined;
+    price?: number | null;
+    line_items?: TBreakLineItem[];
+    Inventory: {
+      id: string;
+      location: string;
+      Product: {
+        id: string;
+        description?: string | null | undefined;
+      };
+    }[];
+    BreakProductItems: {
+      id: string;
+      title: string;
+      price: number;
+    }[];
   };
   callback: () => void;
 };
@@ -89,14 +164,89 @@ type TFormProps = {
  * TODO: Handle errors
  * TODO: Add image handling
  * TODO: Add event autocomplete/dropdown
+ * TODO: Validate products are chosen
+ * TODO: Show selected products on edit
  */
 const AddBreakForm: React.FC<TFormProps> = ({
   event_id,
   break_data,
   callback,
 }) => {
+  // Get firebase function
+  const createBreakProducts = functions.httpsCallable('createBreakProducts');
+  const [isLoading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
   const operation = break_data ? 'UPDATE' : 'ADD';
+  const [pickerInventory, setPickerInventory] = useState<
+    TInventoryAutcomplete[]
+  >([]);
+  const [selectedInventory, setSelectedInventory] = useState<
+    TInventoryAutcomplete[]
+  >([]);
+  const [breakLineItems, setBreakLineItems] = useState<TBreakLineItem[]>([]);
+
+  const onInsertComplete = (data: InsertBreakMutation) => {
+    const breakId = data.insert_Breaks_one?.id;
+    const inventoryIds = selectedInventory.map((item) => item.value);
+
+    createBreakProducts({
+      breakData: data.insert_Breaks_one,
+      lineItems: breakLineItems,
+    }).then(() => {
+      updateInventory({
+        variables: {
+          ids: inventoryIds,
+          breakId,
+        },
+      });
+    });
+  };
+
+  const handleCreateItem = (item: TInventoryAutcomplete) => {
+    setPickerInventory((curr) => [...curr, item]);
+    setSelectedInventory((curr) => [...curr, item]);
+  };
+
+  const handleSelectedItemsChange = (
+    selectedItems: TInventoryAutcomplete[] | undefined,
+  ) => {
+    if (selectedItems) {
+      console.log(selectedItems);
+      setSelectedInventory(selectedItems);
+    }
+  };
+
+  const {
+    loading: inventoryQueryLoading,
+    error: inventoryQueryError,
+    data: inventoryQueryData,
+  } = useGetInventoryQuery({
+    onCompleted: (data) => {
+      const selectedItemsIndex: number[] = [];
+      const pickerItems: TInventoryAutcomplete[] = [];
+
+      for (let idx = 0; idx < data.Inventory?.length; idx++) {
+        if (
+          data.Inventory[idx].break_id === null ||
+          data.Inventory[idx].break_id === break_data?.id
+        ) {
+          pickerItems.push({
+            label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
+            value: data.Inventory[idx].id,
+          });
+        }
+
+        if (data.Inventory[idx].break_id === break_data?.id) {
+          selectedItemsIndex.push(idx);
+        }
+      }
+
+      const selectedItems = selectedItemsIndex.map((pIdx) => pickerItems[pIdx]);
+
+      setPickerInventory(pickerItems);
+      setSelectedInventory(selectedItems);
+    },
+  });
 
   const [
     addBreak,
@@ -105,7 +255,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
       loading: addBreakMutationLoading,
       error: addBreakMutationError,
     },
-  ] = useInsertBreakMutation({ onCompleted: callback });
+  ] = useInsertBreakMutation({ onCompleted: onInsertComplete });
 
   const [
     updateBreak,
@@ -116,23 +266,72 @@ const AddBreakForm: React.FC<TFormProps> = ({
     },
   ] = useUpdateBreakMutation({ onCompleted: callback });
 
+  const [
+    updateInventory,
+    {
+      data: updateInventoryMutationData,
+      loading: updateInventoryMutationLoading,
+      error: updateInventoryMutationError,
+    },
+  ] = useUpdateInventoryBreakMutation({
+    onCompleted: () => {
+      setLoading(false);
+      callback();
+    },
+  });
+
   const {
+    control,
     register,
     handleSubmit,
+    watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
       event_id: event_id,
       ...(break_data || {}),
-      price: break_data
-        ? Number(break_data.price.replace(/[^0-9.-]+/g, ''))
-        : undefined,
+      price: break_data && break_data.price ? break_data.price : undefined,
       break_type: BreakTypeValues.find(
         (b) => b.value === break_data?.break_type,
       )?.value,
+      lineItems: break_data
+        ? break_data.BreakProductItems.map((item) => ({
+            value: item.title,
+            cost: item.price,
+          }))
+        : [],
     },
   });
+
+  const { fields } = useFieldArray({
+    control,
+    name: 'lineItems',
+  });
+
+  const watchType = watch('break_type');
+  const watchSpots = watch('spots');
+  const watchLineItems = watch('lineItems');
+
+  // Change Line Items
+  useEffect(() => {
+    const currentLineItems = getValues('lineItems');
+    const newLineItems = [];
+
+    if (
+      !isNaN(Number(watchSpots)) &&
+      (watchType === Break_Type_Enum.PickYourTeam ||
+        watchType === Break_Type_Enum.PickYourDivision)
+    ) {
+      for (let i = 0; i < Number(watchSpots); i++) {
+        newLineItems.push({ value: '', cost: 0 });
+      }
+    }
+
+    setValue('lineItems', newLineItems);
+  }, [watchSpots, watchType]);
 
   /**
    * Handle form submission
@@ -140,12 +339,19 @@ const AddBreakForm: React.FC<TFormProps> = ({
    */
   const onSubmit = (result: TFormData) => {
     if (user) {
+      setLoading(true);
+
+      setBreakLineItems(result.lineItems);
+
       const submitData = {
         event_id: result.event_id,
         title: result.title,
         description: result.description,
         image: '',
-        spots: result.spots,
+        spots:
+          result.break_type === Break_Type_Enum.Personal
+            ? selectedInventory.length
+            : result.spots,
         teams_per_spot: result.teams_per_spot,
         break_type: result.break_type,
         price: result.price,
@@ -171,89 +377,172 @@ const AddBreakForm: React.FC<TFormProps> = ({
   };
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-      <Box mb={5}>
-        <ImageUploader />
-      </Box>
-
-      <FormControl isInvalid={!!errors.event_id} mb={5}>
-        <FormLabel>Event ID</FormLabel>
-        <Input
-          {...register('event_id')}
-          isReadOnly={!!event_id || !!break_data}
-        />
-        <FormErrorMessage>{errors.event_id?.message}</FormErrorMessage>
-      </FormControl>
-
-      <FormControl isInvalid={!!errors.title} mb={5}>
-        <FormLabel>Title</FormLabel>
-        <Input {...register('title')} />
-        <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-      </FormControl>
-
-      <FormControl isInvalid={!!errors.description} mb={5}>
-        <FormLabel>Description</FormLabel>
-        <Textarea {...register('description')} />
-        <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
-      </FormControl>
-
-      <Flex mx={gridSpace.parent} mb={5}>
-        <FormControl
-          isInvalid={!!errors.break_type}
-          width="50%"
-          px={gridSpace.child}
+    <Box position="relative">
+      {isLoading && (
+        <Flex
+          position="absolute"
+          bg="white"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          opacity="0.7"
+          zIndex="1"
+          justifyContent="center"
+          alignItems="center"
         >
-          <FormLabel>Break Type</FormLabel>
-          <Select {...register('break_type')}>
-            <option value="">Select...</option>
-            {BreakTypeValues.map((type) => (
-              <option key={`option-${type.label}`} value={type.value}>
-                {type.label}
-              </option>
+          <Spinner size="lg" />
+        </Flex>
+      )}
+      <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <Box mb={5}>
+          <ImageUploader />
+        </Box>
+
+        <FormControl isInvalid={!!errors.event_id} mb={5}>
+          <FormLabel>Event ID</FormLabel>
+          <Input {...register('event_id')} />
+          <FormErrorMessage>{errors.event_id?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.title} mb={5}>
+          <FormLabel>Title</FormLabel>
+          <Input {...register('title')} />
+          <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.description} mb={5}>
+          <FormLabel>Description</FormLabel>
+          <Textarea {...register('description')} />
+          <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl>
+          <CUIAutoComplete
+            tagStyleProps={{
+              display: 'flex',
+              marginBottom: '4px !important',
+              marginInlineStart: '0px !important',
+            }}
+            label="Select products"
+            placeholder="Type a product description"
+            onCreateItem={handleCreateItem}
+            items={pickerInventory}
+            selectedItems={selectedInventory}
+            onSelectedItemsChange={(changes) => {
+              handleSelectedItemsChange(changes.selectedItems);
+            }}
+            hideToggleButton={true}
+            disableCreateItem={true}
+          />
+        </FormControl>
+
+        <Flex mx={gridSpace.parent} mb={5}>
+          <FormControl
+            isInvalid={!!errors.break_type}
+            width="50%"
+            px={gridSpace.child}
+          >
+            <FormLabel>Break Type</FormLabel>
+            <Select {...register('break_type')}>
+              <option value="">Select...</option>
+              {BreakTypeValues.map((type) => (
+                <option key={`option-${type.label}`} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </Select>
+            <FormErrorMessage>{errors.break_type?.message}</FormErrorMessage>
+          </FormControl>
+        </Flex>
+
+        <Flex mx={gridSpace.parent} mb={10}>
+          {watchType !== Break_Type_Enum.PickYourTeam &&
+            watchType !== Break_Type_Enum.PickYourDivision && (
+              <FormControl
+                isInvalid={!!errors.price}
+                width={1 / 3}
+                px={gridSpace.child}
+              >
+                <FormLabel>Price ($)</FormLabel>
+                <Input {...register('price')} />
+                <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
+              </FormControl>
+            )}
+
+          {watchType !== Break_Type_Enum.Personal && (
+            <FormControl
+              isInvalid={!!errors.spots}
+              width={1 / 3}
+              px={gridSpace.child}
+            >
+              <FormLabel>Spots</FormLabel>
+              <Input {...register('spots')} />
+              <FormErrorMessage>{errors.spots?.message}</FormErrorMessage>
+            </FormControl>
+          )}
+
+          {watchType !== Break_Type_Enum.Personal &&
+            watchType !== Break_Type_Enum.PickYourTeam &&
+            watchType !== Break_Type_Enum.PickYourDivision && (
+              <FormControl
+                isInvalid={!!errors.teams_per_spot}
+                width={1 / 3}
+                px={gridSpace.child}
+              >
+                <FormLabel>Teams Per Spot</FormLabel>
+                <Input {...register('teams_per_spot')} />
+                <FormErrorMessage>
+                  {errors.teams_per_spot?.message}
+                </FormErrorMessage>
+              </FormControl>
+            )}
+        </Flex>
+
+        {watchLineItems?.length > 0 && (
+          <Box mb={10}>
+            <Heading size="sm" mb={2}>
+              Line Items
+            </Heading>
+            {fields.map((field, index) => (
+              <Flex key={field.id} mx={gridSpace.parent} mb={2}>
+                <FormControl
+                  isInvalid={
+                    errors.lineItems && !!errors.lineItems[index]?.value
+                  }
+                  width="70%"
+                  px={gridSpace.child}
+                >
+                  <Input
+                    placeholder="Team/Division"
+                    {...register(`lineItems.${index}.value`)}
+                  />
+                </FormControl>
+                <FormControl
+                  isInvalid={
+                    errors.lineItems && !!errors.lineItems[index]?.cost
+                  }
+                  width="30%"
+                  px={gridSpace.child}
+                >
+                  <Input
+                    placeholder="Cost"
+                    {...register(`lineItems.${index}.cost`)}
+                    textAlign="right"
+                  />
+                </FormControl>
+              </Flex>
             ))}
-          </Select>
-          <FormErrorMessage>{errors.break_type?.message}</FormErrorMessage>
-        </FormControl>
+          </Box>
+        )}
 
-        <FormControl
-          isInvalid={!!errors.price}
-          width="50%"
-          px={gridSpace.child}
-        >
-          <FormLabel>Price</FormLabel>
-          <Input {...register('price')} />
-          <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
-        </FormControl>
-      </Flex>
-
-      <Flex mx={gridSpace.parent} mb={10}>
-        <FormControl
-          isInvalid={!!errors.spots}
-          width="50%"
-          px={gridSpace.child}
-        >
-          <FormLabel>Spots</FormLabel>
-          <Input {...register('spots')} />
-          <FormErrorMessage>{errors.spots?.message}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl
-          isInvalid={!!errors.teams_per_spot}
-          width="50%"
-          px={gridSpace.child}
-        >
-          <FormLabel>Teams Per Spot</FormLabel>
-          <Input {...register('teams_per_spot')} />
-          <FormErrorMessage>{errors.teams_per_spot?.message}</FormErrorMessage>
-        </FormControl>
-      </Flex>
-
-      <Flex justifyContent="center">
-        <Button mb={4} px={10} colorScheme="blue" type="submit">
-          {operation === 'UPDATE' ? 'Update Break' : 'Add Break'}
-        </Button>
-      </Flex>
-    </form>
+        <Flex justifyContent="center">
+          <Button mb={4} px={10} colorScheme="blue" type="submit">
+            {operation === 'UPDATE' ? 'Update Break' : 'Add Break'}
+          </Button>
+        </Flex>
+      </form>
+    </Box>
   );
 };
 

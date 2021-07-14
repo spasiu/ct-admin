@@ -49,6 +49,7 @@ type TFormProps = {
     title: string;
     description: string;
     start_time: string;
+    status: string;
   };
   callback: () => void;
 };
@@ -72,8 +73,6 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
       error: insertMutationError,
     },
   ] = useInsertEventMutation({ onCompleted: callback });
-
-  console.log(event);
 
   const [
     updateEvent,

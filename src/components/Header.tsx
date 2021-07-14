@@ -85,15 +85,26 @@ const Header: React.FC<THeaderProps> = ({ pageNav }) => {
           justifyContent={'flex-start'}
         >
           <HStack>
-            {secondaryNav.map((item) => (
-              <Box key={`sub-nav-item-${item.label}`}>
-                <NextLink href={item.path} passHref>
-                  <Link px={5} py={3} borderRadius={5}>
-                    {item.label}
-                  </Link>
-                </NextLink>
-              </Box>
-            ))}
+            {secondaryNav.map((item) => {
+              const isCurrent =
+                router.asPath === item.path ||
+                (item.path !== '/' && router.asPath.indexOf(item.path) === 0);
+
+              return (
+                <Box key={`sub-nav-item-${item.label}`}>
+                  <NextLink href={item.path} passHref>
+                    <Link
+                      px={5}
+                      py={3}
+                      borderRadius={5}
+                      fontWeight={isCurrent ? 'bold' : 'normal'}
+                    >
+                      {item.label}
+                    </Link>
+                  </NextLink>
+                </Box>
+              );
+            })}
           </HStack>
         </Flex>
       )}

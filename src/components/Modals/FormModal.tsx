@@ -29,7 +29,6 @@ const FormModal: React.FC<TFormModal> = ({
       isOpen={isOpen}
       closeOnOverlayClick={false}
       onClose={() => {
-        console.log('closing');
         setModalOpen && setModalOpen(false);
       }}
     >

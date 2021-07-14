@@ -13,8 +13,7 @@ const ImageUploader: React.FC = () => {
         mb={5}
         sx={{
           width: '130px',
-          height: '130px',
-          borderRadius: '50%',
+          height: '150px',
           cursor: 'pointer',
         }}
       >
