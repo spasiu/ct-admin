@@ -6144,7 +6144,9 @@ export type UpdateInventoryBreakMutation = (
   )> }
 );
 
-export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetProductsQueryVariables = Exact<{
+  unitOfMeasure?: Maybe<Array<Unit_Of_Measure_Enum> | Unit_Of_Measure_Enum>;
+}>;
 
 
 export type GetProductsQuery = (
@@ -6834,8 +6836,11 @@ export type UpdateInventoryBreakMutationHookResult = ReturnType<typeof useUpdate
 export type UpdateInventoryBreakMutationResult = Apollo.MutationResult<UpdateInventoryBreakMutation>;
 export type UpdateInventoryBreakMutationOptions = Apollo.BaseMutationOptions<UpdateInventoryBreakMutation, UpdateInventoryBreakMutationVariables>;
 export const GetProductsDocument = gql`
-    query GetProducts {
-  Products(order_by: {created_at: asc}) {
+    query GetProducts($unitOfMeasure: [unit_of_measure_enum!]) {
+  Products(
+    order_by: {created_at: asc}
+    where: {unit_of_measure: {_in: $unitOfMeasure}}
+  ) {
     id
     unit_of_measure
     description
@@ -6898,6 +6903,7 @@ export const GetProductsDocument = gql`
  * @example
  * const { data, loading, error } = useGetProductsQuery({
  *   variables: {
+ *      unitOfMeasure: // value for 'unitOfMeasure'
  *   },
  * });
  */

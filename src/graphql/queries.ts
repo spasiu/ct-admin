@@ -1,8 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const GET_PRODUCTS = gql`
-  query GetProducts {
-    Products(order_by: { created_at: asc }) {
+  query GetProducts($unitOfMeasure: [unit_of_measure_enum!]) {
+    Products(
+      order_by: { created_at: asc }
+      where: { unit_of_measure: { _in: $unitOfMeasure } }
+    ) {
       id
       unit_of_measure
       description

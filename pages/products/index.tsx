@@ -7,6 +7,7 @@ import NextLink from 'next/link';
 import {
   useGetProductsQuery,
   useDeleteProductsByIdsMutation,
+  Unit_Of_Measure_Enum,
 } from '@generated/graphql';
 
 import paths from '@config/paths';
@@ -23,6 +24,11 @@ import {
   Td,
   HStack,
   IconButton,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
 } from '@chakra-ui/react';
 
 import Layout from '@layouts';
@@ -66,11 +72,30 @@ const ProductsPage: React.FC = () => {
   >(undefined);
 
   const {
-    data: productQueryData,
-    loading: productQueryLoading,
-    error: productQueryError,
-    refetch: refetchProducts,
-  } = useGetProductsQuery();
+    data: sealedWaxProductQueryData,
+    loading: sealedWaxProductLoading,
+    error: sealedWaxProductError,
+    refetch: refetchSealedProducts,
+  } = useGetProductsQuery({
+    variables: {
+      unitOfMeasure: [
+        Unit_Of_Measure_Enum.Box,
+        Unit_Of_Measure_Enum.Case,
+        Unit_Of_Measure_Enum.Pack,
+      ],
+    },
+  });
+
+  const {
+    data: cardsProductQueryData,
+    loading: cardsProductLoading,
+    error: cardsProductError,
+    refetch: refetchCardProducts,
+  } = useGetProductsQuery({
+    variables: {
+      unitOfMeasure: [Unit_Of_Measure_Enum.Card],
+    },
+  });
 
   const [
     deleteProducts,
@@ -81,7 +106,8 @@ const ProductsPage: React.FC = () => {
     },
   ] = useDeleteProductsByIdsMutation({
     onCompleted: () => {
-      refetchProducts();
+      refetchSealedProducts();
+      refetchCardProducts();
     },
   });
 
@@ -108,88 +134,172 @@ const ProductsPage: React.FC = () => {
             Products
           </Heading>
 
-          {productQueryData && (
-            <Table width="100%">
-              <Thead>
-                <Tr>
-                  <Th>Sport/Category</Th>
-                  <Th>Unit of Measure</Th>
-                  <Th>Year</Th>
-                  <Th>Manufacturer</Th>
-                  <Th>Brand</Th>
-                  <Th>Series</Th>
-                  <Th>Type</Th>
-                  <Th># Available</Th>
-                  <Th># Assigned</Th>
-                  <Th>Avg. Cost</Th>
-                  <Th>Dollars on Hand</Th>
-                  <Th textAlign="right">Actions</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {productQueryData.Products.map((prod) => (
-                  <Tr key={prod.id} bg="white">
-                    <Td>{prod.category}</Td>
-                    <Td>{prod.unit_of_measure}</Td>
-                    <Td>{prod.year}</Td>
-                    <Td>{prod.manufacturer}</Td>
-                    <Td>{prod.brand}</Td>
-                    <Td>{prod.series}</Td>
-                    <Td>{prod.type}</Td>
-                    <Td>{prod.unassignedCount?.aggregate?.count}</Td>
-                    <Td>{prod.assignedCount?.aggregate?.count}</Td>
-                    <Td>
-                      {new Intl.NumberFormat('en', {
-                        style: 'currency',
-                        currency: 'USD',
-                      }).format(
-                        prod.averageCost?.aggregate?.avg?.cost_basis || 0,
-                      )}
-                    </Td>
-                    <Td>
-                      {new Intl.NumberFormat('en', {
-                        style: 'currency',
-                        currency: 'USD',
-                      }).format(
-                        prod.totalCost?.aggregate?.sum?.cost_basis || 0,
-                      )}
-                    </Td>
-                    <Td textAlign="right">
-                      <HStack spacing={2} justify="flex-end">
-                        <NextLink
-                          href={`${paths.products}/${prod.id}`}
-                          passHref
-                        >
-                          <IconButton
-                            as="a"
-                            aria-label="View"
-                            icon={<MdVisibility />}
-                          />
-                        </NextLink>
-                        <IconButton
-                          aria-label="Edit"
-                          icon={<MdEdit />}
-                          onClick={() => {
-                            setSelectedProduct(prod);
-                            setAddProductModalOpen(true);
-                          }}
-                        />
-                        <IconButton
-                          aria-label="Archive"
-                          icon={<HiArchive />}
-                          onClick={() => {
-                            deleteProducts({
-                              variables: { ids: [prod.id] },
-                            });
-                          }}
-                        />
-                      </HStack>
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          )}
+          <Tabs size="lg" colorScheme="red">
+            <TabList mb={6}>
+              <Tab>Sealed Wax</Tab>
+              <Tab>Cards</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel p={0}>
+                {sealedWaxProductQueryData && (
+                  <Table width="100%">
+                    <Thead>
+                      <Tr>
+                        <Th>Sport/Category</Th>
+                        <Th>Unit of Measure</Th>
+                        <Th>Year</Th>
+                        <Th>Manufacturer</Th>
+                        <Th>Brand</Th>
+                        <Th>Series</Th>
+                        <Th>Type</Th>
+                        <Th># Available</Th>
+                        <Th># Assigned</Th>
+                        <Th>Avg. Cost</Th>
+                        <Th>Dollars on Hand</Th>
+                        <Th textAlign="right">Actions</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {sealedWaxProductQueryData.Products.map((prod) => (
+                        <Tr key={prod.id} bg="white">
+                          <Td>{prod.category}</Td>
+                          <Td>{prod.unit_of_measure}</Td>
+                          <Td>{prod.year}</Td>
+                          <Td>{prod.manufacturer}</Td>
+                          <Td>{prod.brand}</Td>
+                          <Td>{prod.series}</Td>
+                          <Td>{prod.type}</Td>
+                          <Td>{prod.unassignedCount?.aggregate?.count}</Td>
+                          <Td>{prod.assignedCount?.aggregate?.count}</Td>
+                          <Td>
+                            {new Intl.NumberFormat('en', {
+                              style: 'currency',
+                              currency: 'USD',
+                            }).format(
+                              prod.averageCost?.aggregate?.avg?.cost_basis || 0,
+                            )}
+                          </Td>
+                          <Td>
+                            {new Intl.NumberFormat('en', {
+                              style: 'currency',
+                              currency: 'USD',
+                            }).format(
+                              prod.totalCost?.aggregate?.sum?.cost_basis || 0,
+                            )}
+                          </Td>
+                          <Td textAlign="right">
+                            <HStack spacing={2} justify="flex-end">
+                              <NextLink
+                                href={`${paths.products}/${prod.id}`}
+                                passHref
+                              >
+                                <IconButton
+                                  as="a"
+                                  aria-label="View"
+                                  icon={<MdVisibility />}
+                                />
+                              </NextLink>
+                              <IconButton
+                                aria-label="Edit"
+                                icon={<MdEdit />}
+                                onClick={() => {
+                                  setSelectedProduct(prod);
+                                  setAddProductModalOpen(true);
+                                }}
+                              />
+                              <IconButton
+                                aria-label="Archive"
+                                icon={<HiArchive />}
+                                onClick={() => {
+                                  deleteProducts({
+                                    variables: { ids: [prod.id] },
+                                  });
+                                }}
+                              />
+                            </HStack>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                )}
+              </TabPanel>
+              <TabPanel p={0}>
+                {cardsProductQueryData && (
+                  <Table width="100%">
+                    <Thead>
+                      <Tr>
+                        <Th>Sport/Category</Th>
+                        <Th>Card</Th>
+                        <Th># Available</Th>
+                        <Th># Assigned</Th>
+                        <Th>Avg. Cost</Th>
+                        <Th>Dollars on Hand</Th>
+                        <Th textAlign="right">Actions</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {cardsProductQueryData.Products.map((prod) => (
+                        <Tr key={prod.id} bg="white">
+                          <Td>{prod.category}</Td>
+                          <Td>{prod.description}</Td>
+                          <Td>{prod.unassignedCount?.aggregate?.count}</Td>
+                          <Td>{prod.assignedCount?.aggregate?.count}</Td>
+                          <Td>
+                            {new Intl.NumberFormat('en', {
+                              style: 'currency',
+                              currency: 'USD',
+                            }).format(
+                              prod.averageCost?.aggregate?.avg?.cost_basis || 0,
+                            )}
+                          </Td>
+                          <Td>
+                            {new Intl.NumberFormat('en', {
+                              style: 'currency',
+                              currency: 'USD',
+                            }).format(
+                              prod.totalCost?.aggregate?.sum?.cost_basis || 0,
+                            )}
+                          </Td>
+                          <Td textAlign="right">
+                            <HStack spacing={2} justify="flex-end">
+                              <NextLink
+                                href={`${paths.products}/${prod.id}`}
+                                passHref
+                              >
+                                <IconButton
+                                  as="a"
+                                  aria-label="View"
+                                  icon={<MdVisibility />}
+                                />
+                              </NextLink>
+                              <IconButton
+                                aria-label="Edit"
+                                icon={<MdEdit />}
+                                onClick={() => {
+                                  setSelectedProduct(prod);
+                                  setAddProductModalOpen(true);
+                                }}
+                              />
+                              <IconButton
+                                aria-label="Archive"
+                                icon={<HiArchive />}
+                                onClick={() => {
+                                  deleteProducts({
+                                    variables: { ids: [prod.id] },
+                                  });
+                                }}
+                              />
+                            </HStack>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                )}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Box>
 
         <FormModal
@@ -201,7 +311,8 @@ const ProductsPage: React.FC = () => {
             product={selectedProduct}
             callback={() => {
               setAddProductModalOpen(false);
-              refetchProducts();
+              refetchSealedProducts();
+              refetchCardProducts();
             }}
           />
         </FormModal>
