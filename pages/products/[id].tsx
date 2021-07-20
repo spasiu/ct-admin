@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { AddIcon } from '@chakra-ui/icons';
 import { MdEdit } from 'react-icons/md';
 import { HiArchive } from 'react-icons/hi';
+import { RiInboxUnarchiveLine } from 'react-icons/ri';
 import format from 'date-fns/format';
 import NextLink from 'next/link';
 
@@ -23,7 +24,8 @@ import {
 
 import {
   useGetProductByIdQuery,
-  useDeleteProductsByIdsMutation,
+  useArchiveProductsByIdsMutation,
+  useUnarchiveProductsByIdsMutation,
 } from '@generated/graphql';
 
 import paths from '@config/paths';
@@ -80,15 +82,28 @@ const ProductDetailsPage: React.FC = () => {
   });
 
   const [
-    deleteProducts,
+    archiveProducts,
     {
-      data: deleteProductsMutationData,
-      loading: deleteProductsMutationLoading,
-      error: deleteProductsMutationError,
+      data: archiveProductsMutationData,
+      loading: archiveProductsMutationLoading,
+      error: archiveProductsMutationError,
     },
-  ] = useDeleteProductsByIdsMutation({
+  ] = useArchiveProductsByIdsMutation({
     onCompleted: () => {
-      router.push(paths.products);
+      refetchProduct();
+    },
+  });
+
+  const [
+    UnarchiveProducts,
+    {
+      data: UnarchiveProductsMutationData,
+      loading: UnarchiveProductsMutationLoading,
+      error: UnarchiveProductsMutationError,
+    },
+  ] = useUnarchiveProductsByIdsMutation({
+    onCompleted: () => {
+      refetchProduct();
     },
   });
 
@@ -144,18 +159,35 @@ const ProductDetailsPage: React.FC = () => {
             Edit
           </Button>
 
-          <Button
-            size="sm"
-            leftIcon={<HiArchive />}
-            colorScheme="blue"
-            onClick={() => {
-              deleteProducts({
-                variables: { ids: [product?.id] },
-              });
-            }}
-          >
-            Archive
-          </Button>
+          {product?.available && (
+            <Button
+              size="sm"
+              leftIcon={<HiArchive />}
+              colorScheme="blue"
+              onClick={() => {
+                archiveProducts({
+                  variables: { ids: [product?.id] },
+                });
+              }}
+            >
+              Archive
+            </Button>
+          )}
+
+          {!product?.available && (
+            <Button
+              size="sm"
+              leftIcon={<RiInboxUnarchiveLine />}
+              colorScheme="green"
+              onClick={() => {
+                UnarchiveProducts({
+                  variables: { ids: [product?.id] },
+                });
+              }}
+            >
+              Make Available
+            </Button>
+          )}
         </ActionBar>
 
         <Box flex={1} pt={8}>

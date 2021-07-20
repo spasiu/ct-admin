@@ -21,6 +21,7 @@ import {
   useInsertProductMutation,
   useUpdateProductMutation,
   Unit_Of_Measure_Enum,
+  useGetFilteredExtensibleValuesQuery,
 } from '@generated/graphql';
 import { UnitOfMeasureValues } from '@config/values';
 import { gridSpace } from '@config/chakra/constants';
@@ -30,7 +31,10 @@ const schema = yup.object().shape({
   year: yup
     .string()
     .required('Required')
-    .matches(/^\d{4}(?:-\d{2}){0,1}$/, 'Enter a valid year or year range'),
+    .matches(
+      /^\d{4}(?:-(\d{2}|\d{4})){0,1}$/,
+      'Enter a valid year or year range',
+    ),
   manufacturer: yup.string().required('Required'),
   brand: yup.string().required('Required'),
   series: yup.string().nullable(),
@@ -182,6 +186,51 @@ type TFormProps = {
 const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
   const operation = product ? 'UPDATE' : 'ADD';
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm<TFormData>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      ...(product || {}),
+      unit_of_measure: UnitOfMeasureValues.find(
+        (s) => s.value === product?.unit_of_measure,
+      )?.value,
+    },
+  });
+
+  const {
+    loading: extensibleValueQueryLoading,
+    error: extensibleValueQueryError,
+    data: extensibleValueQueryData,
+  } = useGetFilteredExtensibleValuesQuery({
+    variables: {
+      fields: [
+        'product_brand',
+        'product_category',
+        'product_grader',
+        'product_insert',
+        'product_manufacturer',
+        'product_memoribillia',
+        'product_paralell',
+        'product_series',
+        'product_type',
+        'product_year',
+      ],
+    },
+    onCompleted: () => {
+      reset({
+        ...(product || {}),
+        unit_of_measure: UnitOfMeasureValues.find(
+          (s) => s.value === product?.unit_of_measure,
+        )?.value,
+      });
+    },
+  });
+
   const [
     addProduct,
     {
@@ -199,21 +248,6 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
       error: updateProductMutationError,
     },
   ] = useUpdateProductMutation({ onCompleted: callback });
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<TFormData>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      ...(product || {}),
-      unit_of_measure: UnitOfMeasureValues.find(
-        (s) => s.value === product?.unit_of_measure,
-      )?.value,
-    },
-  });
 
   /**
    * Handle form submission
@@ -275,7 +309,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                 px={gridSpace.child}
               >
                 <FormLabel>Year</FormLabel>
-                <Input {...register('year')} />
+                <Select {...register('year')}>
+                  <option value="">Select...</option>
+                  {extensibleValueQueryData?.ExtensibleValues.filter(
+                    (o) => o.field === 'product_year',
+                  ).map((val) => (
+                    <option key={`option-${val.id}`} value={val.value}>
+                      {val.value}
+                    </option>
+                  ))}
+                </Select>
                 <FormErrorMessage>{errors.year?.message}</FormErrorMessage>
               </FormControl>
 
@@ -285,7 +328,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                 px={gridSpace.child}
               >
                 <FormLabel>Sport/Category</FormLabel>
-                <Input {...register('category')} />
+                <Select {...register('category')}>
+                  <option value="">Select...</option>
+                  {extensibleValueQueryData?.ExtensibleValues.filter(
+                    (o) => o.field === 'product_category',
+                  ).map((val) => (
+                    <option key={`option-${val.id}`} value={val.value}>
+                      {val.value}
+                    </option>
+                  ))}
+                </Select>
                 <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
               </FormControl>
             </Flex>
@@ -297,7 +349,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                 px={gridSpace.child}
               >
                 <FormLabel>Manufacturer</FormLabel>
-                <Input {...register('manufacturer')} />
+                <Select {...register('manufacturer')}>
+                  <option value="">Select...</option>
+                  {extensibleValueQueryData?.ExtensibleValues.filter(
+                    (o) => o.field === 'product_manufacturer',
+                  ).map((val) => (
+                    <option key={`option-${val.id}`} value={val.value}>
+                      {val.value}
+                    </option>
+                  ))}
+                </Select>
                 <FormErrorMessage>
                   {errors.manufacturer?.message}
                 </FormErrorMessage>
@@ -309,7 +370,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                 px={gridSpace.child}
               >
                 <FormLabel>Brand</FormLabel>
-                <Input {...register('brand')} />
+                <Select {...register('brand')}>
+                  <option value="">Select...</option>
+                  {extensibleValueQueryData?.ExtensibleValues.filter(
+                    (o) => o.field === 'product_brand',
+                  ).map((val) => (
+                    <option key={`option-${val.id}`} value={val.value}>
+                      {val.value}
+                    </option>
+                  ))}
+                </Select>
                 <FormErrorMessage>{errors.brand?.message}</FormErrorMessage>
               </FormControl>
             </Flex>
@@ -321,7 +391,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                 px={gridSpace.child}
               >
                 <FormLabel>Series</FormLabel>
-                <Input {...register('series')} />
+                <Select {...register('series')}>
+                  <option value="">Select...</option>
+                  {extensibleValueQueryData?.ExtensibleValues.filter(
+                    (o) => o.field === 'product_series',
+                  ).map((val) => (
+                    <option key={`option-${val.id}`} value={val.value}>
+                      {val.value}
+                    </option>
+                  ))}
+                </Select>
                 <FormErrorMessage>{errors.series?.message}</FormErrorMessage>
               </FormControl>
 
@@ -332,7 +411,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                   px={gridSpace.child}
                 >
                   <FormLabel>Type</FormLabel>
-                  <Input {...register('type')} />
+                  <Select {...register('type')}>
+                    <option value="">Select...</option>
+                    {extensibleValueQueryData?.ExtensibleValues.filter(
+                      (o) => o.field === 'product_type',
+                    ).map((val) => (
+                      <option key={`option-${val.id}`} value={val.value}>
+                        {val.value}
+                      </option>
+                    ))}
+                  </Select>
                   <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
                 </FormControl>
               )}
@@ -418,7 +506,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                     px={gridSpace.child}
                   >
                     <FormLabel>Parallel</FormLabel>
-                    <Input {...register('paralell')} />
+                    <Select {...register('paralell')}>
+                      <option value="">Select...</option>
+                      {extensibleValueQueryData?.ExtensibleValues.filter(
+                        (o) => o.field === 'product_paralell',
+                      ).map((val) => (
+                        <option key={`option-${val.id}`} value={val.value}>
+                          {val.value}
+                        </option>
+                      ))}
+                    </Select>
                     <FormErrorMessage>
                       {errors.paralell?.message}
                     </FormErrorMessage>
@@ -430,7 +527,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                     px={gridSpace.child}
                   >
                     <FormLabel>Insert</FormLabel>
-                    <Input {...register('insert')} />
+                    <Select {...register('insert')}>
+                      <option value="">Select...</option>
+                      {extensibleValueQueryData?.ExtensibleValues.filter(
+                        (o) => o.field === 'product_insert',
+                      ).map((val) => (
+                        <option key={`option-${val.id}`} value={val.value}>
+                          {val.value}
+                        </option>
+                      ))}
+                    </Select>
                     <FormErrorMessage>
                       {errors.insert?.message}
                     </FormErrorMessage>
@@ -461,7 +567,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                     px={gridSpace.child}
                   >
                     <FormLabel>Memoribillia</FormLabel>
-                    <Input {...register('memoribillia')} />
+                    <Select {...register('memoribillia')}>
+                      <option value="">Select...</option>
+                      {extensibleValueQueryData?.ExtensibleValues.filter(
+                        (o) => o.field === 'product_memoribillia',
+                      ).map((val) => (
+                        <option key={`option-${val.id}`} value={val.value}>
+                          {val.value}
+                        </option>
+                      ))}
+                    </Select>
                     <FormErrorMessage>
                       {errors.memoribillia?.message}
                     </FormErrorMessage>
@@ -487,7 +602,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                     px={gridSpace.child}
                   >
                     <FormLabel>Grader</FormLabel>
-                    <Input {...register('grader')} />
+                    <Select {...register('grader')}>
+                      <option value="">Select...</option>
+                      {extensibleValueQueryData?.ExtensibleValues.filter(
+                        (o) => o.field === 'product_grader',
+                      ).map((val) => (
+                        <option key={`option-${val.id}`} value={val.value}>
+                          {val.value}
+                        </option>
+                      ))}
+                    </Select>
                     <FormErrorMessage>
                       {errors.grader?.message}
                     </FormErrorMessage>

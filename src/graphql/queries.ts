@@ -1,10 +1,14 @@
 import { gql } from '@apollo/client';
 
 export const GET_PRODUCTS = gql`
-  query GetProducts($unitOfMeasure: [unit_of_measure_enum!]) {
+  query GetProducts($unitOfMeasure: [unit_of_measure_enum!], $input: String) {
     Products(
       order_by: { created_at: asc }
-      where: { unit_of_measure: { _in: $unitOfMeasure } }
+      where: {
+        unit_of_measure: { _in: $unitOfMeasure }
+        available: { _eq: true }
+        description: { _ilike: $input }
+      }
     ) {
       id
       unit_of_measure
@@ -28,6 +32,7 @@ export const GET_PRODUCTS = gql`
       numbered
       grader
       grade
+      available
       totalCost: Inventory_aggregate {
         aggregate {
           sum {
@@ -85,6 +90,7 @@ export const GET_PRODUCT_BY_ID = gql`
       numbered
       grader
       grade
+      available
       Inventory {
         id
         location
@@ -291,6 +297,29 @@ export const GET_BREAK_BY_ID = gql`
         title
         price
       }
+    }
+  }
+`;
+
+export const GET_EXTENSIBLE_VALUES = gql`
+  query GetExtensibleValues {
+    ExtensibleValues(order_by: { field: asc, value: asc }) {
+      id
+      field
+      value
+    }
+  }
+`;
+
+export const GET_FILTERED_EXTENSIBLE_VALUES = gql`
+  query GetFilteredExtensibleValues($fields: [String!]!) {
+    ExtensibleValues(
+      where: { field: { _in: $fields } }
+      order_by: { value: asc }
+    ) {
+      id
+      value
+      field
     }
   }
 `;

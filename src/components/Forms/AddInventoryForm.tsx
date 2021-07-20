@@ -12,10 +12,14 @@ import {
   Input,
   Button,
   Flex,
+  Select,
 } from '@chakra-ui/react';
 
 import { gridSpace } from '@config/chakra/constants';
-import { useInsertInventoryMutation } from '@generated/graphql';
+import {
+  useInsertInventoryMutation,
+  useGetFilteredExtensibleValuesQuery,
+} from '@generated/graphql';
 import DatePickerDisplay from '@components/DatePickerDisplay';
 
 const schema = yup.object().shape({
@@ -70,6 +74,14 @@ const AddInventoryForm: React.FC<TFormProps> = ({ product_id, callback }) => {
   ] = useInsertInventoryMutation({ onCompleted: callback });
 
   const {
+    loading: extensibleValueQueryLoading,
+    error: extensibleValueQueryError,
+    data: extensibleValueQueryData,
+  } = useGetFilteredExtensibleValuesQuery({
+    variables: { fields: ['inventory_location', 'inventory_supplier'] },
+  });
+
+  const {
     control,
     register,
     handleSubmit,
@@ -104,7 +116,16 @@ const AddInventoryForm: React.FC<TFormProps> = ({ product_id, callback }) => {
       <Flex mx={gridSpace.parent} mb={5}>
         <FormControl isInvalid={!!errors.supplier} px={gridSpace.child}>
           <FormLabel>Supplier</FormLabel>
-          <Input {...register('supplier')} />
+          <Select {...register('supplier')}>
+            <option value="">Select...</option>
+            {extensibleValueQueryData?.ExtensibleValues.filter(
+              (o) => o.field === 'inventory_supplier',
+            ).map((val) => (
+              <option key={`option-${val.id}`} value={val.value}>
+                {val.value}
+              </option>
+            ))}
+          </Select>
           <FormErrorMessage>{errors.supplier?.message}</FormErrorMessage>
         </FormControl>
 
@@ -137,7 +158,16 @@ const AddInventoryForm: React.FC<TFormProps> = ({ product_id, callback }) => {
 
         <FormControl isInvalid={!!errors.location} px={gridSpace.child}>
           <FormLabel>Location</FormLabel>
-          <Input {...register('location')} />
+          <Select {...register('location')}>
+            <option value="">Select...</option>
+            {extensibleValueQueryData?.ExtensibleValues.filter(
+              (o) => o.field === 'inventory_location',
+            ).map((val) => (
+              <option key={`option-${val.id}`} value={val.value}>
+                {val.value}
+              </option>
+            ))}
+          </Select>
           <FormErrorMessage>{errors.location?.message}</FormErrorMessage>
         </FormControl>
       </Flex>

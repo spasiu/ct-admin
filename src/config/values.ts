@@ -33,3 +33,18 @@ export const UnitOfMeasureValues = [
   { label: 'Pack', value: Unit_Of_Measure_Enum.Pack },
   { label: 'Card', value: Unit_Of_Measure_Enum.Card },
 ];
+
+export const ExtensibleValueFields = [
+  { value: 'inventory_location', label: 'Inventory - Location' },
+  { value: 'inventory_supplier', label: 'Inventory - Supplier' },
+  { value: 'product_brand', label: 'Product - Brand' },
+  { value: 'product_category', label: 'Product - Category' },
+  { value: 'product_grader', label: 'Product - Grader' },
+  { value: 'product_insert', label: 'Product - Insert' },
+  { value: 'product_manufacturer', label: 'Product - Manufacturer' },
+  { value: 'product_memoribillia', label: 'Product - Memoribillia' },
+  { value: 'product_paralell', label: 'Product - Paralell' },
+  { value: 'product_series', label: 'Product - Series' },
+  { value: 'product_type', label: 'Product - Type' },
+  { value: 'product_year', label: 'Product - Year' },
+];

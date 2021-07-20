@@ -7,6 +7,7 @@ type TNavLink = {
 
 export type TNavData = {
   primary: TNavLink[];
+  settings: TNavLink[];
 };
 
 const navigation: TNavData = {
@@ -26,6 +27,20 @@ const navigation: TNavData = {
     {
       label: 'Hits',
       path: paths.hits,
+    },
+    {
+      label: 'Settings',
+      path: paths.settings.values,
+    },
+  ],
+  settings: [
+    {
+      label: 'Values',
+      path: paths.settings.values,
+    },
+    {
+      label: 'Users',
+      path: paths.settings.users,
     },
   ],
 };

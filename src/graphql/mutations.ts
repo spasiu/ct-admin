@@ -124,6 +124,22 @@ export const DELETE_PRODUCTS = gql`
   }
 `;
 
+export const ARCHIVE_PRODUCTS = gql`
+  mutation ArchiveProductsByIds($ids: [uuid!]) {
+    update_Products(where: { id: { _in: $ids } }, _set: { available: false }) {
+      affected_rows
+    }
+  }
+`;
+
+export const UNARCHIVE_PRODUCTS = gql`
+  mutation UnarchiveProductsByIds($ids: [uuid!]) {
+    update_Products(where: { id: { _in: $ids } }, _set: { available: true }) {
+      affected_rows
+    }
+  }
+`;
+
 /**
  * INVENTORY MUTATIONS
  */
@@ -141,6 +157,17 @@ export const UPDATE_INVENTORY_BREAK = gql`
       where: { id: { _in: $ids } }
       _set: { break_id: $breakId }
     ) {
+      affected_rows
+    }
+  }
+`;
+
+/**
+ * SETTINGS MUTATIONS
+ */
+export const INSERT_EXTENSIBLE_VALUES = gql`
+  mutation InsertExtensibleValues($data: [ExtensibleValues_insert_input!]!) {
+    insert_ExtensibleValues(objects: $data) {
       affected_rows
     }
   }

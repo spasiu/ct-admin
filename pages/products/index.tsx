@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 
 import {
   useGetProductsQuery,
-  useDeleteProductsByIdsMutation,
+  useArchiveProductsByIdsMutation,
   Unit_Of_Measure_Enum,
 } from '@generated/graphql';
 
@@ -36,6 +36,7 @@ import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
 import FormModal from '@components/Modals/FormModal';
 import AddProductForm from '@components/Forms/AddProductForm';
+import FilterForm from '@components/Forms/FilterForm';
 
 type TSelectedProduct = {
   id: string;
@@ -61,10 +62,6 @@ type TSelectedProduct = {
   grade?: number | null;
 };
 
-/**
- *
- * TODO: Fix archive button to hide instead of delete product
- */
 const ProductsPage: React.FC = () => {
   const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<
@@ -83,6 +80,7 @@ const ProductsPage: React.FC = () => {
         Unit_Of_Measure_Enum.Case,
         Unit_Of_Measure_Enum.Pack,
       ],
+      input: '%',
     },
   });
 
@@ -94,17 +92,18 @@ const ProductsPage: React.FC = () => {
   } = useGetProductsQuery({
     variables: {
       unitOfMeasure: [Unit_Of_Measure_Enum.Card],
+      input: '%',
     },
   });
 
   const [
-    deleteProducts,
+    archiveProducts,
     {
-      data: deleteProductsMutationData,
-      loading: deleteProductsMutationLoading,
-      error: deleteProductsMutationError,
+      data: archiveProductsMutationData,
+      loading: archiveProductsMutationLoading,
+      error: archiveProductsMutationError,
     },
-  ] = useDeleteProductsByIdsMutation({
+  ] = useArchiveProductsByIdsMutation({
     onCompleted: () => {
       refetchSealedProducts();
       refetchCardProducts();
@@ -134,7 +133,27 @@ const ProductsPage: React.FC = () => {
             Products
           </Heading>
 
-          <Tabs size="lg" colorScheme="red">
+          <Box borderRadius={5} bg="white" p={5} maxWidth="600px" mb={10}>
+            <FilterForm
+              callback={(input: string) => {
+                console.log(input);
+                refetchSealedProducts({
+                  unitOfMeasure: [
+                    Unit_Of_Measure_Enum.Box,
+                    Unit_Of_Measure_Enum.Case,
+                    Unit_Of_Measure_Enum.Pack,
+                  ],
+                  input: `%${input}%`,
+                });
+                refetchCardProducts({
+                  unitOfMeasure: [Unit_Of_Measure_Enum.Card],
+                  input: `%${input}%`,
+                });
+              }}
+            />
+          </Box>
+
+          <Tabs size="lg" colorScheme="red" mb={10}>
             <TabList mb={6}>
               <Tab>Sealed Wax</Tab>
               <Tab>Cards</Tab>
@@ -203,7 +222,16 @@ const ProductsPage: React.FC = () => {
                                 aria-label="Edit"
                                 icon={<MdEdit />}
                                 onClick={() => {
-                                  setSelectedProduct(prod);
+                                  // Remove agreggate fields
+                                  const prodClone = (({
+                                    totalCost,
+                                    averageCost,
+                                    unassignedCount,
+                                    assignedCount,
+                                    ...o
+                                  }) => o)(prod);
+
+                                  setSelectedProduct(prodClone);
                                   setAddProductModalOpen(true);
                                 }}
                               />
@@ -211,7 +239,7 @@ const ProductsPage: React.FC = () => {
                                 aria-label="Archive"
                                 icon={<HiArchive />}
                                 onClick={() => {
-                                  deleteProducts({
+                                  archiveProducts({
                                     variables: { ids: [prod.id] },
                                   });
                                 }}
@@ -285,7 +313,7 @@ const ProductsPage: React.FC = () => {
                                 aria-label="Archive"
                                 icon={<HiArchive />}
                                 onClick={() => {
-                                  deleteProducts({
+                                  archiveProducts({
                                     variables: { ids: [prod.id] },
                                   });
                                 }}

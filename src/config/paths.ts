@@ -5,4 +5,8 @@ export default {
   skus: '/skus',
   hits: '/hits',
   breaks: '/breaks',
+  settings: {
+    values: '/settings/values',
+    users: '/settings/users',
+  },
 };

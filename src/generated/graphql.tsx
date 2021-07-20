@@ -1727,6 +1727,130 @@ export enum Events_Update_Column {
   UserId = 'user_id'
 }
 
+/** columns and relationships of "ExtensibleValues" */
+export type ExtensibleValues = {
+  __typename?: 'ExtensibleValues';
+  field: Scalars['String'];
+  id: Scalars['uuid'];
+  value: Scalars['String'];
+};
+
+/** aggregated selection of "ExtensibleValues" */
+export type ExtensibleValues_Aggregate = {
+  __typename?: 'ExtensibleValues_aggregate';
+  aggregate?: Maybe<ExtensibleValues_Aggregate_Fields>;
+  nodes: Array<ExtensibleValues>;
+};
+
+/** aggregate fields of "ExtensibleValues" */
+export type ExtensibleValues_Aggregate_Fields = {
+  __typename?: 'ExtensibleValues_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<ExtensibleValues_Max_Fields>;
+  min?: Maybe<ExtensibleValues_Min_Fields>;
+};
+
+
+/** aggregate fields of "ExtensibleValues" */
+export type ExtensibleValues_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<ExtensibleValues_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "ExtensibleValues". All fields are combined with a logical 'AND'. */
+export type ExtensibleValues_Bool_Exp = {
+  _and?: Maybe<Array<ExtensibleValues_Bool_Exp>>;
+  _not?: Maybe<ExtensibleValues_Bool_Exp>;
+  _or?: Maybe<Array<ExtensibleValues_Bool_Exp>>;
+  field?: Maybe<String_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  value?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "ExtensibleValues" */
+export enum ExtensibleValues_Constraint {
+  /** unique or primary key constraint */
+  ExtensibleValuesPkey = 'ExtensibleValues_pkey'
+}
+
+/** input type for inserting data into table "ExtensibleValues" */
+export type ExtensibleValues_Insert_Input = {
+  field?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type ExtensibleValues_Max_Fields = {
+  __typename?: 'ExtensibleValues_max_fields';
+  field?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type ExtensibleValues_Min_Fields = {
+  __typename?: 'ExtensibleValues_min_fields';
+  field?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "ExtensibleValues" */
+export type ExtensibleValues_Mutation_Response = {
+  __typename?: 'ExtensibleValues_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<ExtensibleValues>;
+};
+
+/** on conflict condition type for table "ExtensibleValues" */
+export type ExtensibleValues_On_Conflict = {
+  constraint: ExtensibleValues_Constraint;
+  update_columns?: Array<ExtensibleValues_Update_Column>;
+  where?: Maybe<ExtensibleValues_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "ExtensibleValues". */
+export type ExtensibleValues_Order_By = {
+  field?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  value?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: ExtensibleValues */
+export type ExtensibleValues_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "ExtensibleValues" */
+export enum ExtensibleValues_Select_Column {
+  /** column name */
+  Field = 'field',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Value = 'value'
+}
+
+/** input type for updating data in table "ExtensibleValues" */
+export type ExtensibleValues_Set_Input = {
+  field?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "ExtensibleValues" */
+export enum ExtensibleValues_Update_Column {
+  /** column name */
+  Field = 'field',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Value = 'value'
+}
+
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
 export type Int_Comparison_Exp = {
   _eq?: Maybe<Scalars['Int']>;
@@ -2264,6 +2388,7 @@ export type Products = {
   /** An aggregate relationship */
   Inventory_aggregate: Inventory_Aggregate;
   autograph?: Maybe<Scalars['Boolean']>;
+  available: Scalars['Boolean'];
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand: Scalars['String'];
   card_number?: Maybe<Scalars['String']>;
@@ -2390,6 +2515,7 @@ export type Products_Bool_Exp = {
   _not?: Maybe<Products_Bool_Exp>;
   _or?: Maybe<Array<Products_Bool_Exp>>;
   autograph?: Maybe<Boolean_Comparison_Exp>;
+  available?: Maybe<Boolean_Comparison_Exp>;
   boxes_per_case?: Maybe<Int_Comparison_Exp>;
   brand?: Maybe<String_Comparison_Exp>;
   card_number?: Maybe<String_Comparison_Exp>;
@@ -2436,6 +2562,7 @@ export type Products_Inc_Input = {
 export type Products_Insert_Input = {
   Inventory?: Maybe<Inventory_Arr_Rel_Insert_Input>;
   autograph?: Maybe<Scalars['Boolean']>;
+  available?: Maybe<Scalars['Boolean']>;
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand?: Maybe<Scalars['String']>;
   card_number?: Maybe<Scalars['String']>;
@@ -2596,6 +2723,7 @@ export type Products_On_Conflict = {
 export type Products_Order_By = {
   Inventory_aggregate?: Maybe<Inventory_Aggregate_Order_By>;
   autograph?: Maybe<Order_By>;
+  available?: Maybe<Order_By>;
   boxes_per_case?: Maybe<Order_By>;
   brand?: Maybe<Order_By>;
   card_number?: Maybe<Order_By>;
@@ -2632,6 +2760,8 @@ export type Products_Pk_Columns_Input = {
 export enum Products_Select_Column {
   /** column name */
   Autograph = 'autograph',
+  /** column name */
+  Available = 'available',
   /** column name */
   BoxesPerCase = 'boxes_per_case',
   /** column name */
@@ -2685,6 +2815,7 @@ export enum Products_Select_Column {
 /** input type for updating data in table "Products" */
 export type Products_Set_Input = {
   autograph?: Maybe<Scalars['Boolean']>;
+  available?: Maybe<Scalars['Boolean']>;
   boxes_per_case?: Maybe<Scalars['Int']>;
   brand?: Maybe<Scalars['String']>;
   card_number?: Maybe<Scalars['String']>;
@@ -2791,6 +2922,8 @@ export type Products_Sum_Order_By = {
 export enum Products_Update_Column {
   /** column name */
   Autograph = 'autograph',
+  /** column name */
+  Available = 'available',
   /** column name */
   BoxesPerCase = 'boxes_per_case',
   /** column name */
@@ -3943,6 +4076,10 @@ export type Mutation_Root = {
   delete_Events?: Maybe<Events_Mutation_Response>;
   /** delete single row from the table: "Events" */
   delete_Events_by_pk?: Maybe<Events>;
+  /** delete data from the table: "ExtensibleValues" */
+  delete_ExtensibleValues?: Maybe<ExtensibleValues_Mutation_Response>;
+  /** delete single row from the table: "ExtensibleValues" */
+  delete_ExtensibleValues_by_pk?: Maybe<ExtensibleValues>;
   /** delete data from the table: "Inventory" */
   delete_Inventory?: Maybe<Inventory_Mutation_Response>;
   /** delete single row from the table: "Inventory" */
@@ -4003,6 +4140,10 @@ export type Mutation_Root = {
   insert_Events?: Maybe<Events_Mutation_Response>;
   /** insert a single row into the table: "Events" */
   insert_Events_one?: Maybe<Events>;
+  /** insert data into the table: "ExtensibleValues" */
+  insert_ExtensibleValues?: Maybe<ExtensibleValues_Mutation_Response>;
+  /** insert a single row into the table: "ExtensibleValues" */
+  insert_ExtensibleValues_one?: Maybe<ExtensibleValues>;
   /** insert data into the table: "Inventory" */
   insert_Inventory?: Maybe<Inventory_Mutation_Response>;
   /** insert a single row into the table: "Inventory" */
@@ -4063,6 +4204,10 @@ export type Mutation_Root = {
   update_Events?: Maybe<Events_Mutation_Response>;
   /** update single row of the table: "Events" */
   update_Events_by_pk?: Maybe<Events>;
+  /** update data of the table: "ExtensibleValues" */
+  update_ExtensibleValues?: Maybe<ExtensibleValues_Mutation_Response>;
+  /** update single row of the table: "ExtensibleValues" */
+  update_ExtensibleValues_by_pk?: Maybe<ExtensibleValues>;
   /** update data of the table: "Inventory" */
   update_Inventory?: Maybe<Inventory_Mutation_Response>;
   /** update single row of the table: "Inventory" */
@@ -4162,6 +4307,18 @@ export type Mutation_RootDelete_EventsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Events_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_ExtensibleValuesArgs = {
+  where: ExtensibleValues_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_ExtensibleValues_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -4353,6 +4510,20 @@ export type Mutation_RootInsert_EventsArgs = {
 export type Mutation_RootInsert_Events_OneArgs = {
   object: Events_Insert_Input;
   on_conflict?: Maybe<Events_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_ExtensibleValuesArgs = {
+  objects: Array<ExtensibleValues_Insert_Input>;
+  on_conflict?: Maybe<ExtensibleValues_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_ExtensibleValues_OneArgs = {
+  object: ExtensibleValues_Insert_Input;
+  on_conflict?: Maybe<ExtensibleValues_On_Conflict>;
 };
 
 
@@ -4581,6 +4752,20 @@ export type Mutation_RootUpdate_Events_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_ExtensibleValuesArgs = {
+  _set?: Maybe<ExtensibleValues_Set_Input>;
+  where: ExtensibleValues_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_ExtensibleValues_By_PkArgs = {
+  _set?: Maybe<ExtensibleValues_Set_Input>;
+  pk_columns: ExtensibleValues_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_InventoryArgs = {
   _inc?: Maybe<Inventory_Inc_Input>;
   _set?: Maybe<Inventory_Set_Input>;
@@ -4785,6 +4970,12 @@ export type Query_Root = {
   Events_aggregate: Events_Aggregate;
   /** fetch data from the table: "Events" using primary key columns */
   Events_by_pk?: Maybe<Events>;
+  /** fetch data from the table: "ExtensibleValues" */
+  ExtensibleValues: Array<ExtensibleValues>;
+  /** fetch aggregated fields from the table: "ExtensibleValues" */
+  ExtensibleValues_aggregate: ExtensibleValues_Aggregate;
+  /** fetch data from the table: "ExtensibleValues" using primary key columns */
+  ExtensibleValues_by_pk?: Maybe<ExtensibleValues>;
   /** An array relationship */
   Inventory: Array<Inventory>;
   /** An aggregate relationship */
@@ -4959,6 +5150,29 @@ export type Query_RootEvents_AggregateArgs = {
 
 
 export type Query_RootEvents_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootExtensibleValuesArgs = {
+  distinct_on?: Maybe<Array<ExtensibleValues_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<ExtensibleValues_Order_By>>;
+  where?: Maybe<ExtensibleValues_Bool_Exp>;
+};
+
+
+export type Query_RootExtensibleValues_AggregateArgs = {
+  distinct_on?: Maybe<Array<ExtensibleValues_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<ExtensibleValues_Order_By>>;
+  where?: Maybe<ExtensibleValues_Bool_Exp>;
+};
+
+
+export type Query_RootExtensibleValues_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -5224,6 +5438,12 @@ export type Subscription_Root = {
   Events_aggregate: Events_Aggregate;
   /** fetch data from the table: "Events" using primary key columns */
   Events_by_pk?: Maybe<Events>;
+  /** fetch data from the table: "ExtensibleValues" */
+  ExtensibleValues: Array<ExtensibleValues>;
+  /** fetch aggregated fields from the table: "ExtensibleValues" */
+  ExtensibleValues_aggregate: ExtensibleValues_Aggregate;
+  /** fetch data from the table: "ExtensibleValues" using primary key columns */
+  ExtensibleValues_by_pk?: Maybe<ExtensibleValues>;
   /** An array relationship */
   Inventory: Array<Inventory>;
   /** An aggregate relationship */
@@ -5398,6 +5618,29 @@ export type Subscription_RootEvents_AggregateArgs = {
 
 
 export type Subscription_RootEvents_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootExtensibleValuesArgs = {
+  distinct_on?: Maybe<Array<ExtensibleValues_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<ExtensibleValues_Order_By>>;
+  where?: Maybe<ExtensibleValues_Bool_Exp>;
+};
+
+
+export type Subscription_RootExtensibleValues_AggregateArgs = {
+  distinct_on?: Maybe<Array<ExtensibleValues_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<ExtensibleValues_Order_By>>;
+  where?: Maybe<ExtensibleValues_Bool_Exp>;
+};
+
+
+export type Subscription_RootExtensibleValues_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -6117,6 +6360,32 @@ export type DeleteProductsByIdsMutation = (
   )> }
 );
 
+export type ArchiveProductsByIdsMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type ArchiveProductsByIdsMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Products?: Maybe<(
+    { __typename?: 'Products_mutation_response' }
+    & Pick<Products_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
+export type UnarchiveProductsByIdsMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type UnarchiveProductsByIdsMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Products?: Maybe<(
+    { __typename?: 'Products_mutation_response' }
+    & Pick<Products_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 export type InsertInventoryMutationVariables = Exact<{
   inventory: Array<Inventory_Insert_Input> | Inventory_Insert_Input;
 }>;
@@ -6144,8 +6413,22 @@ export type UpdateInventoryBreakMutation = (
   )> }
 );
 
+export type InsertExtensibleValuesMutationVariables = Exact<{
+  data: Array<ExtensibleValues_Insert_Input> | ExtensibleValues_Insert_Input;
+}>;
+
+
+export type InsertExtensibleValuesMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_ExtensibleValues?: Maybe<(
+    { __typename?: 'ExtensibleValues_mutation_response' }
+    & Pick<ExtensibleValues_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 export type GetProductsQueryVariables = Exact<{
   unitOfMeasure?: Maybe<Array<Unit_Of_Measure_Enum> | Unit_Of_Measure_Enum>;
+  input?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -6153,7 +6436,7 @@ export type GetProductsQuery = (
   { __typename?: 'query_root' }
   & { Products: Array<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'paralell' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade'>
+    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'paralell' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
     & { totalCost: (
       { __typename?: 'Inventory_aggregate' }
       & { aggregate?: Maybe<(
@@ -6197,7 +6480,7 @@ export type GetProductByIdQuery = (
   { __typename?: 'query_root' }
   & { Products_by_pk?: Maybe<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'paralell' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade'>
+    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'paralell' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
     & { Inventory: Array<(
       { __typename?: 'Inventory' }
       & Pick<Inventory, 'id' | 'location' | 'supplier' | 'purchase_date' | 'cost_basis'>
@@ -6376,6 +6659,30 @@ export type GetBreakByIdQuery = (
       { __typename?: 'BreakProductItems' }
       & Pick<BreakProductItems, 'id' | 'title' | 'price'>
     )> }
+  )> }
+);
+
+export type GetExtensibleValuesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetExtensibleValuesQuery = (
+  { __typename?: 'query_root' }
+  & { ExtensibleValues: Array<(
+    { __typename?: 'ExtensibleValues' }
+    & Pick<ExtensibleValues, 'id' | 'field' | 'value'>
+  )> }
+);
+
+export type GetFilteredExtensibleValuesQueryVariables = Exact<{
+  fields: Array<Scalars['String']> | Scalars['String'];
+}>;
+
+
+export type GetFilteredExtensibleValuesQuery = (
+  { __typename?: 'query_root' }
+  & { ExtensibleValues: Array<(
+    { __typename?: 'ExtensibleValues' }
+    & Pick<ExtensibleValues, 'id' | 'value' | 'field'>
   )> }
 );
 
@@ -6768,6 +7075,72 @@ export function useDeleteProductsByIdsMutation(baseOptions?: Apollo.MutationHook
 export type DeleteProductsByIdsMutationHookResult = ReturnType<typeof useDeleteProductsByIdsMutation>;
 export type DeleteProductsByIdsMutationResult = Apollo.MutationResult<DeleteProductsByIdsMutation>;
 export type DeleteProductsByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteProductsByIdsMutation, DeleteProductsByIdsMutationVariables>;
+export const ArchiveProductsByIdsDocument = gql`
+    mutation ArchiveProductsByIds($ids: [uuid!]) {
+  update_Products(where: {id: {_in: $ids}}, _set: {available: false}) {
+    affected_rows
+  }
+}
+    `;
+export type ArchiveProductsByIdsMutationFn = Apollo.MutationFunction<ArchiveProductsByIdsMutation, ArchiveProductsByIdsMutationVariables>;
+
+/**
+ * __useArchiveProductsByIdsMutation__
+ *
+ * To run a mutation, you first call `useArchiveProductsByIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useArchiveProductsByIdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [archiveProductsByIdsMutation, { data, loading, error }] = useArchiveProductsByIdsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useArchiveProductsByIdsMutation(baseOptions?: Apollo.MutationHookOptions<ArchiveProductsByIdsMutation, ArchiveProductsByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ArchiveProductsByIdsMutation, ArchiveProductsByIdsMutationVariables>(ArchiveProductsByIdsDocument, options);
+      }
+export type ArchiveProductsByIdsMutationHookResult = ReturnType<typeof useArchiveProductsByIdsMutation>;
+export type ArchiveProductsByIdsMutationResult = Apollo.MutationResult<ArchiveProductsByIdsMutation>;
+export type ArchiveProductsByIdsMutationOptions = Apollo.BaseMutationOptions<ArchiveProductsByIdsMutation, ArchiveProductsByIdsMutationVariables>;
+export const UnarchiveProductsByIdsDocument = gql`
+    mutation UnarchiveProductsByIds($ids: [uuid!]) {
+  update_Products(where: {id: {_in: $ids}}, _set: {available: true}) {
+    affected_rows
+  }
+}
+    `;
+export type UnarchiveProductsByIdsMutationFn = Apollo.MutationFunction<UnarchiveProductsByIdsMutation, UnarchiveProductsByIdsMutationVariables>;
+
+/**
+ * __useUnarchiveProductsByIdsMutation__
+ *
+ * To run a mutation, you first call `useUnarchiveProductsByIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnarchiveProductsByIdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unarchiveProductsByIdsMutation, { data, loading, error }] = useUnarchiveProductsByIdsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useUnarchiveProductsByIdsMutation(baseOptions?: Apollo.MutationHookOptions<UnarchiveProductsByIdsMutation, UnarchiveProductsByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnarchiveProductsByIdsMutation, UnarchiveProductsByIdsMutationVariables>(UnarchiveProductsByIdsDocument, options);
+      }
+export type UnarchiveProductsByIdsMutationHookResult = ReturnType<typeof useUnarchiveProductsByIdsMutation>;
+export type UnarchiveProductsByIdsMutationResult = Apollo.MutationResult<UnarchiveProductsByIdsMutation>;
+export type UnarchiveProductsByIdsMutationOptions = Apollo.BaseMutationOptions<UnarchiveProductsByIdsMutation, UnarchiveProductsByIdsMutationVariables>;
 export const InsertInventoryDocument = gql`
     mutation InsertInventory($inventory: [Inventory_insert_input!]!) {
   insert_Inventory(objects: $inventory) {
@@ -6835,11 +7208,44 @@ export function useUpdateInventoryBreakMutation(baseOptions?: Apollo.MutationHoo
 export type UpdateInventoryBreakMutationHookResult = ReturnType<typeof useUpdateInventoryBreakMutation>;
 export type UpdateInventoryBreakMutationResult = Apollo.MutationResult<UpdateInventoryBreakMutation>;
 export type UpdateInventoryBreakMutationOptions = Apollo.BaseMutationOptions<UpdateInventoryBreakMutation, UpdateInventoryBreakMutationVariables>;
+export const InsertExtensibleValuesDocument = gql`
+    mutation InsertExtensibleValues($data: [ExtensibleValues_insert_input!]!) {
+  insert_ExtensibleValues(objects: $data) {
+    affected_rows
+  }
+}
+    `;
+export type InsertExtensibleValuesMutationFn = Apollo.MutationFunction<InsertExtensibleValuesMutation, InsertExtensibleValuesMutationVariables>;
+
+/**
+ * __useInsertExtensibleValuesMutation__
+ *
+ * To run a mutation, you first call `useInsertExtensibleValuesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertExtensibleValuesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertExtensibleValuesMutation, { data, loading, error }] = useInsertExtensibleValuesMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useInsertExtensibleValuesMutation(baseOptions?: Apollo.MutationHookOptions<InsertExtensibleValuesMutation, InsertExtensibleValuesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertExtensibleValuesMutation, InsertExtensibleValuesMutationVariables>(InsertExtensibleValuesDocument, options);
+      }
+export type InsertExtensibleValuesMutationHookResult = ReturnType<typeof useInsertExtensibleValuesMutation>;
+export type InsertExtensibleValuesMutationResult = Apollo.MutationResult<InsertExtensibleValuesMutation>;
+export type InsertExtensibleValuesMutationOptions = Apollo.BaseMutationOptions<InsertExtensibleValuesMutation, InsertExtensibleValuesMutationVariables>;
 export const GetProductsDocument = gql`
-    query GetProducts($unitOfMeasure: [unit_of_measure_enum!]) {
+    query GetProducts($unitOfMeasure: [unit_of_measure_enum!], $input: String) {
   Products(
     order_by: {created_at: asc}
-    where: {unit_of_measure: {_in: $unitOfMeasure}}
+    where: {unit_of_measure: {_in: $unitOfMeasure}, available: {_eq: true}, description: {_ilike: $input}}
   ) {
     id
     unit_of_measure
@@ -6863,6 +7269,7 @@ export const GetProductsDocument = gql`
     numbered
     grader
     grade
+    available
     totalCost: Inventory_aggregate {
       aggregate {
         sum {
@@ -6904,6 +7311,7 @@ export const GetProductsDocument = gql`
  * const { data, loading, error } = useGetProductsQuery({
  *   variables: {
  *      unitOfMeasure: // value for 'unitOfMeasure'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -6943,6 +7351,7 @@ export const GetProductByIdDocument = gql`
     numbered
     grader
     grade
+    available
     Inventory {
       id
       location
@@ -7335,3 +7744,76 @@ export function useGetBreakByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetBreakByIdQueryHookResult = ReturnType<typeof useGetBreakByIdQuery>;
 export type GetBreakByIdLazyQueryHookResult = ReturnType<typeof useGetBreakByIdLazyQuery>;
 export type GetBreakByIdQueryResult = Apollo.QueryResult<GetBreakByIdQuery, GetBreakByIdQueryVariables>;
+export const GetExtensibleValuesDocument = gql`
+    query GetExtensibleValues {
+  ExtensibleValues(order_by: {field: asc, value: asc}) {
+    id
+    field
+    value
+  }
+}
+    `;
+
+/**
+ * __useGetExtensibleValuesQuery__
+ *
+ * To run a query within a React component, call `useGetExtensibleValuesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExtensibleValuesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExtensibleValuesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetExtensibleValuesQuery(baseOptions?: Apollo.QueryHookOptions<GetExtensibleValuesQuery, GetExtensibleValuesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetExtensibleValuesQuery, GetExtensibleValuesQueryVariables>(GetExtensibleValuesDocument, options);
+      }
+export function useGetExtensibleValuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExtensibleValuesQuery, GetExtensibleValuesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetExtensibleValuesQuery, GetExtensibleValuesQueryVariables>(GetExtensibleValuesDocument, options);
+        }
+export type GetExtensibleValuesQueryHookResult = ReturnType<typeof useGetExtensibleValuesQuery>;
+export type GetExtensibleValuesLazyQueryHookResult = ReturnType<typeof useGetExtensibleValuesLazyQuery>;
+export type GetExtensibleValuesQueryResult = Apollo.QueryResult<GetExtensibleValuesQuery, GetExtensibleValuesQueryVariables>;
+export const GetFilteredExtensibleValuesDocument = gql`
+    query GetFilteredExtensibleValues($fields: [String!]!) {
+  ExtensibleValues(where: {field: {_in: $fields}}, order_by: {value: asc}) {
+    id
+    value
+    field
+  }
+}
+    `;
+
+/**
+ * __useGetFilteredExtensibleValuesQuery__
+ *
+ * To run a query within a React component, call `useGetFilteredExtensibleValuesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFilteredExtensibleValuesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFilteredExtensibleValuesQuery({
+ *   variables: {
+ *      fields: // value for 'fields'
+ *   },
+ * });
+ */
+export function useGetFilteredExtensibleValuesQuery(baseOptions: Apollo.QueryHookOptions<GetFilteredExtensibleValuesQuery, GetFilteredExtensibleValuesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFilteredExtensibleValuesQuery, GetFilteredExtensibleValuesQueryVariables>(GetFilteredExtensibleValuesDocument, options);
+      }
+export function useGetFilteredExtensibleValuesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFilteredExtensibleValuesQuery, GetFilteredExtensibleValuesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFilteredExtensibleValuesQuery, GetFilteredExtensibleValuesQueryVariables>(GetFilteredExtensibleValuesDocument, options);
+        }
+export type GetFilteredExtensibleValuesQueryHookResult = ReturnType<typeof useGetFilteredExtensibleValuesQuery>;
+export type GetFilteredExtensibleValuesLazyQueryHookResult = ReturnType<typeof useGetFilteredExtensibleValuesLazyQuery>;
+export type GetFilteredExtensibleValuesQueryResult = Apollo.QueryResult<GetFilteredExtensibleValuesQuery, GetFilteredExtensibleValuesQueryVariables>;
