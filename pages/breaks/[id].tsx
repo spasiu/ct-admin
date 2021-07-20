@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import format from 'date-fns/format';
 import { MdEdit } from 'react-icons/md';
 import NextLink from 'next/link';
+import Imgix from 'react-imgix';
 
 import {
   Heading,
@@ -16,7 +17,6 @@ import {
   Th,
   Td,
   HStack,
-  Image,
   Link,
 } from '@chakra-ui/react';
 
@@ -74,11 +74,11 @@ const BreakPage: React.FC = () => {
                 </Heading>
 
                 <HStack spacing={10} mb={7} align="flex-start">
-                  <Image
-                    boxSize="sm"
-                    objectFit="cover"
-                    src="//cards-and-treasure-dev.imgix.net//2020-21-Topps-Chrome-Sapphire-Bundesliga-Soccer-Cards-thumb-950.jpeg?w=600&h=804&q=70"
-                    alt="Event Image"
+                  <Imgix
+                    src={`${process.env.NEXT_PUBLIC_IMG_URL}${breakQueryData.Breaks_by_pk?.image}`}
+                    width={385}
+                    height={385}
+                    imgixParams={{ fit: 'clamp' }}
                   />
                   <Box flex="1">
                     <Box mb={7}>

@@ -30,6 +30,7 @@ import {
   Textarea,
   Spinner,
   Heading,
+  Text,
 } from '@chakra-ui/react';
 
 import ImageUploader from '@components/ImageUploader';
@@ -39,6 +40,7 @@ const schema = yup.object().shape({
   description: yup.string().required('Required'),
   event_id: yup.string().required('Required'),
   break_type: yup.string().required('Required'),
+  image: yup.string().required('Image is Required'),
   spots: yup
     .number()
     .transform((cv) => (isNaN(cv) ? undefined : cv))
@@ -345,7 +347,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
         event_id: result.event_id,
         title: result.title,
         description: result.description,
-        image: '',
+        image: result.image,
         spots:
           result.break_type === Break_Type_Enum.Personal
             ? selectedInventory.length
@@ -394,8 +396,20 @@ const AddBreakForm: React.FC<TFormProps> = ({
       )}
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <Box mb={5}>
-          <ImageUploader />
+          <ImageUploader
+            imagePath={break_data?.image}
+            imageFolder="breaks"
+            callback={(url: string) => {
+              setValue('image', url);
+            }}
+          />
         </Box>
+
+        {errors.image && (
+          <Text textAlign="center" color="red" fontSize="sm" mb={5}>
+            {errors.image?.message}
+          </Text>
+        )}
 
         <FormControl isInvalid={!!errors.event_id} mb={5}>
           <FormLabel>Event ID</FormLabel>

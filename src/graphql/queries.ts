@@ -204,6 +204,7 @@ export const GET_EVENTS = gql`
       start_time
       description
       status
+      image
       User {
         id
         first_name
@@ -229,6 +230,7 @@ export const GET_EVENT_BY_ID = gql`
       start_time
       description
       status
+      image
       User {
         id
         first_name

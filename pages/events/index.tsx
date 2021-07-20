@@ -36,6 +36,7 @@ type TSelectedEvent = {
   description: string;
   start_time: string;
   status: string;
+  image: string;
 };
 
 /**

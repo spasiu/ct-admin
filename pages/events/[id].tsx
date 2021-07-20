@@ -5,11 +5,11 @@ import { AddIcon } from '@chakra-ui/icons';
 import { MdEdit, MdVisibility } from 'react-icons/md';
 import { HiArchive } from 'react-icons/hi';
 import NextLink from 'next/link';
+import Imgix from 'react-imgix';
 
 import {
   Heading,
   Box,
-  Flex,
   Button,
   Text,
   Table,
@@ -20,8 +20,6 @@ import {
   Td,
   IconButton,
   HStack,
-  Image,
-  Tooltip,
 } from '@chakra-ui/react';
 
 import Layout from '@layouts';
@@ -146,11 +144,11 @@ const EventPage: React.FC = () => {
                 </Heading>
 
                 <HStack spacing={10} mb={7} align="flex-start">
-                  <Image
-                    boxSize="sm"
-                    objectFit="cover"
-                    src="//cards-and-treasure-dev.imgix.net//2020-21-Topps-Chrome-Sapphire-Bundesliga-Soccer-Cards-thumb-950.jpeg?w=600&h=804&q=70"
-                    alt="Event Image"
+                  <Imgix
+                    src={`${process.env.NEXT_PUBLIC_IMG_URL}${eventQueryData.Events_by_pk?.image}`}
+                    width={385}
+                    height={385}
+                    imgixParams={{ fit: 'clamp' }}
                   />
                   <Box flex="1">
                     <HStack spacing={4} mb={7}>

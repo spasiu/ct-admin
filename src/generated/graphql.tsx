@@ -6583,7 +6583,7 @@ export type GetEventsQuery = (
   { __typename?: 'query_root' }
   & { Events: Array<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'first_name' | 'last_name'>
@@ -6609,7 +6609,7 @@ export type GetEventByIdQuery = (
   { __typename?: 'query_root' }
   & { Events_by_pk?: Maybe<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'first_name' | 'last_name'>
@@ -7567,6 +7567,7 @@ export const GetEventsDocument = gql`
     start_time
     description
     status
+    image
     User {
       id
       first_name
@@ -7618,6 +7619,7 @@ export const GetEventByIdDocument = gql`
     start_time
     description
     status
+    image
     User {
       id
       first_name

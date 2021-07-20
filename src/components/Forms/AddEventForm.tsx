@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -22,6 +22,7 @@ import {
   Flex,
   Box,
   Textarea,
+  Text,
 } from '@chakra-ui/react';
 
 import DatePickerDisplay from '@components/DatePickerDisplay';
@@ -30,6 +31,7 @@ import ImageUploader from '@components/ImageUploader';
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
   description: yup.string().required('Required'),
+  image: yup.string().required('Image is Required'),
   start_time: yup
     .date()
     .min(new Date(), 'The start time must be after the current time')
@@ -41,6 +43,7 @@ type TFormData = {
   title: string;
   description: string;
   start_time: Date;
+  image: string;
 };
 
 type TFormProps = {
@@ -50,6 +53,7 @@ type TFormProps = {
     description: string;
     start_time: string;
     status: string;
+    image: string;
   };
   callback: () => void;
 };
@@ -88,6 +92,7 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -105,7 +110,7 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
       const submitData = {
         title: result.title,
         description: result.description,
-        image: '',
+        image: result.image,
         start_time: format(result.start_time, "yyyy-MM-dd'T'HH:mm:ssxxx"),
       };
 
@@ -132,8 +137,20 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Box mb={5}>
-        <ImageUploader />
+        <ImageUploader
+          imagePath={event?.image}
+          imageFolder="events"
+          callback={(url: string) => {
+            setValue('image', url);
+          }}
+        />
       </Box>
+
+      {errors.image && (
+        <Text textAlign="center" color="red" fontSize="sm" mb={5}>
+          {errors.image?.message}
+        </Text>
+      )}
 
       <FormControl isInvalid={!!errors.title} mb={5}>
         <FormLabel>Title</FormLabel>
