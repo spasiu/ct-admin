@@ -24,7 +24,7 @@ export const GET_PRODUCTS = gql`
       cards_per_pack
       card_number
       player
-      paralell
+      parallel
       insert
       rookie_card
       memoribillia
@@ -82,7 +82,7 @@ export const GET_PRODUCT_BY_ID = gql`
       cards_per_pack
       card_number
       player
-      paralell
+      parallel
       insert
       rookie_card
       memoribillia
@@ -294,7 +294,7 @@ export const GET_BREAK_BY_ID = gql`
           description
         }
       }
-      BreakProductItems {
+      BreakProductItems(order_by: { title: asc }) {
         id
         title
         price
@@ -306,7 +306,6 @@ export const GET_BREAK_BY_ID = gql`
 export const GET_EXTENSIBLE_VALUES = gql`
   query GetExtensibleValues {
     ExtensibleValues(order_by: { field: asc, value: asc }) {
-      id
       field
       value
     }
@@ -319,9 +318,31 @@ export const GET_FILTERED_EXTENSIBLE_VALUES = gql`
       where: { field: { _in: $fields } }
       order_by: { value: asc }
     ) {
-      id
       value
       field
+    }
+  }
+`;
+
+export const SEARCH_EXTENSIBLE_VALUES = gql`
+  query SearchExtensibleValues($input: String!, $field: String!) {
+    ExtensibleValues(
+      where: { value: { _ilike: $input }, field: { _eq: $field } }
+      order_by: { value: asc }
+    ) {
+      field
+      value
+    }
+  }
+`;
+
+export const GET_ADMIN_MANAGER_USERS = gql`
+  query GetAdminManagerUsers {
+    Users(where: { role: { _in: [ADMIN, MANAGER] } }) {
+      id
+      email
+      role
+      is_breaker
     }
   }
 `;

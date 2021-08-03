@@ -53,7 +53,7 @@ const ExtensibleValuesPage: React.FC = () => {
             </Thead>
             <Tbody>
               {extensibleValuesQueryData.ExtensibleValues.map((item) => (
-                <Tr key={item.id} bg="white">
+                <Tr key={`value-${item.field}-${item.value}`} bg="white">
                   <Td>
                     {
                       ExtensibleValueFields.find((k) => item.field === k.value)

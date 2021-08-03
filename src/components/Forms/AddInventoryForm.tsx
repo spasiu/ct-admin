@@ -121,7 +121,10 @@ const AddInventoryForm: React.FC<TFormProps> = ({ product_id, callback }) => {
             {extensibleValueQueryData?.ExtensibleValues.filter(
               (o) => o.field === 'inventory_supplier',
             ).map((val) => (
-              <option key={`option-${val.id}`} value={val.value}>
+              <option
+                key={`option-${val.field}-${val.value}`}
+                value={val.value}
+              >
                 {val.value}
               </option>
             ))}
@@ -163,7 +166,10 @@ const AddInventoryForm: React.FC<TFormProps> = ({ product_id, callback }) => {
             {extensibleValueQueryData?.ExtensibleValues.filter(
               (o) => o.field === 'inventory_location',
             ).map((val) => (
-              <option key={`option-${val.id}`} value={val.value}>
+              <option
+                key={`option-${val.field}-${val.value}`}
+                value={val.value}
+              >
                 {val.value}
               </option>
             ))}

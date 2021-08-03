@@ -52,14 +52,14 @@ type TSelectedProduct = {
   cards_per_pack?: number | null;
   card_number?: string | null;
   player?: string | null;
-  paralell?: string | null;
+  parallel?: string | null;
   insert?: string | null;
   rookie_card?: boolean | null;
   memoribillia?: string | null;
   autograph?: boolean | null;
   numbered?: number | null;
   grader?: string | null;
-  grade?: number | null;
+  grade?: string | null;
 };
 
 const ProductsPage: React.FC = () => {

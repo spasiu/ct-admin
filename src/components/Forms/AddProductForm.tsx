@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -25,6 +25,8 @@ import {
 } from '@generated/graphql';
 import { UnitOfMeasureValues } from '@config/values';
 import { gridSpace } from '@config/chakra/constants';
+
+import Autocomplete from '@components/Autocomplete';
 
 const schema = yup.object().shape({
   unit_of_measure: yup.string().required('Required'),
@@ -102,7 +104,7 @@ const schema = yup.object().shape({
       then: yup.string().required('Required'),
     })
     .nullable(),
-  paralell: yup.string().nullable(),
+  parallel: yup.string().nullable(),
   insert: yup.string().nullable(),
   rookie_card: yup.boolean(),
   memoribillia: yup.string().nullable(),
@@ -116,14 +118,7 @@ const schema = yup.object().shape({
     .nullable()
     .typeError('Numbers only'),
   grader: yup.string().nullable(),
-  grade: yup
-    .number()
-    .max(10)
-    .transform((c, o) => {
-      return o === '' ? null : c;
-    })
-    .nullable()
-    .typeError('Numbers only'),
+  grade: yup.string().nullable(),
 });
 
 type TFormData = {
@@ -139,14 +134,14 @@ type TFormData = {
   cards_per_pack: number | null;
   card_number: string | null;
   player: string | null;
-  paralell: string | null;
+  parallel: string | null;
   insert: string | null;
   rookie_card: boolean | null;
   memoribillia: string | null;
   autograph: boolean | null;
   numbered: number | null;
   grader: string | null;
-  grade: number | null;
+  grade: string | null;
 };
 
 type TFormProps = {
@@ -164,14 +159,14 @@ type TFormProps = {
     cards_per_pack?: number | null;
     card_number?: string | null;
     player?: string | null;
-    paralell?: string | null;
+    parallel?: string | null;
     insert?: string | null;
     rookie_card?: boolean | null;
     memoribillia?: string | null;
     autograph?: boolean | null;
     numbered?: number | null;
     grader?: string | null;
-    grade?: number | null;
+    grade?: string | null;
   };
   callback: () => void;
 };
@@ -192,6 +187,7 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
     watch,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -212,10 +208,11 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
         'product_brand',
         'product_category',
         'product_grader',
+        'product_grade',
         'product_insert',
         'product_manufacturer',
         'product_memoribillia',
-        'product_paralell',
+        'product_parallel',
         'product_series',
         'product_type',
         'product_year',
@@ -314,7 +311,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_year',
                   ).map((val) => (
-                    <option key={`option-${val.id}`} value={val.value}>
+                    <option
+                      key={`option-${val.field}-${val.value}`}
+                      value={val.value}
+                    >
                       {val.value}
                     </option>
                   ))}
@@ -333,7 +333,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_category',
                   ).map((val) => (
-                    <option key={`option-${val.id}`} value={val.value}>
+                    <option
+                      key={`option-${val.field}-${val.value}`}
+                      value={val.value}
+                    >
                       {val.value}
                     </option>
                   ))}
@@ -354,7 +357,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_manufacturer',
                   ).map((val) => (
-                    <option key={`option-${val.id}`} value={val.value}>
+                    <option
+                      key={`option-${val.field}-${val.value}`}
+                      value={val.value}
+                    >
                       {val.value}
                     </option>
                   ))}
@@ -375,7 +381,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_brand',
                   ).map((val) => (
-                    <option key={`option-${val.id}`} value={val.value}>
+                    <option
+                      key={`option-${val.field}-${val.value}`}
+                      value={val.value}
+                    >
                       {val.value}
                     </option>
                   ))}
@@ -396,7 +405,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_series',
                   ).map((val) => (
-                    <option key={`option-${val.id}`} value={val.value}>
+                    <option
+                      key={`option-${val.field}-${val.value}`}
+                      value={val.value}
+                    >
                       {val.value}
                     </option>
                   ))}
@@ -416,7 +428,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                     {extensibleValueQueryData?.ExtensibleValues.filter(
                       (o) => o.field === 'product_type',
                     ).map((val) => (
-                      <option key={`option-${val.id}`} value={val.value}>
+                      <option
+                        key={`option-${val.field}-${val.value}`}
+                        value={val.value}
+                      >
                         {val.value}
                       </option>
                     ))}
@@ -501,23 +516,26 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
 
                 <Flex mx={gridSpace.parent} mb={7}>
                   <FormControl
-                    isInvalid={!!errors.paralell}
+                    isInvalid={!!errors.parallel}
                     width="50%"
                     px={gridSpace.child}
                   >
                     <FormLabel>Parallel</FormLabel>
-                    <Select {...register('paralell')}>
+                    <Select {...register('parallel')}>
                       <option value="">Select...</option>
                       {extensibleValueQueryData?.ExtensibleValues.filter(
-                        (o) => o.field === 'product_paralell',
+                        (o) => o.field === 'product_parallel',
                       ).map((val) => (
-                        <option key={`option-${val.id}`} value={val.value}>
+                        <option
+                          key={`option-${val.field}-${val.value}`}
+                          value={val.value}
+                        >
                           {val.value}
                         </option>
                       ))}
                     </Select>
                     <FormErrorMessage>
-                      {errors.paralell?.message}
+                      {errors.parallel?.message}
                     </FormErrorMessage>
                   </FormControl>
 
@@ -532,7 +550,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                       {extensibleValueQueryData?.ExtensibleValues.filter(
                         (o) => o.field === 'product_insert',
                       ).map((val) => (
-                        <option key={`option-${val.id}`} value={val.value}>
+                        <option
+                          key={`option-${val.field}-${val.value}`}
+                          value={val.value}
+                        >
                           {val.value}
                         </option>
                       ))}
@@ -572,7 +593,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                       {extensibleValueQueryData?.ExtensibleValues.filter(
                         (o) => o.field === 'product_memoribillia',
                       ).map((val) => (
-                        <option key={`option-${val.id}`} value={val.value}>
+                        <option
+                          key={`option-${val.field}-${val.value}`}
+                          value={val.value}
+                        >
                           {val.value}
                         </option>
                       ))}
@@ -607,7 +631,10 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                       {extensibleValueQueryData?.ExtensibleValues.filter(
                         (o) => o.field === 'product_grader',
                       ).map((val) => (
-                        <option key={`option-${val.id}`} value={val.value}>
+                        <option
+                          key={`option-${val.field}-${val.value}`}
+                          value={val.value}
+                        >
                           {val.value}
                         </option>
                       ))}
@@ -623,7 +650,19 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                     px={gridSpace.child}
                   >
                     <FormLabel>Grade</FormLabel>
-                    <Input {...register('grade')} />
+                    <Select {...register('grade')}>
+                      <option value="">Select...</option>
+                      {extensibleValueQueryData?.ExtensibleValues.filter(
+                        (o) => o.field === 'product_grade',
+                      ).map((val) => (
+                        <option
+                          key={`option-${val.field}-${val.value}`}
+                          value={val.value}
+                        >
+                          {val.value}
+                        </option>
+                      ))}
+                    </Select>
                     <FormErrorMessage>{errors.grade?.message}</FormErrorMessage>
                   </FormControl>
                 </Flex>
