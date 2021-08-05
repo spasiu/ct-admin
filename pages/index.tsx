@@ -8,36 +8,18 @@ import { Box, Button } from '@chakra-ui/react';
 import Layout from '@layouts';
 import SEO from '@components/SEO';
 
+/**
+ * TODO: Watch for auth state change to update claims
+ *
+ */
 const Home: React.FC = () => {
   const [user, loading] = useAuthState(auth);
   const googleProvider = new firebase.auth.GoogleAuthProvider();
-
-  const updatePermissions = functions.httpsCallable('userUpdatePermissions');
-
-  if (user) {
-    // user.getIdToken(true).then((token) => {
-    //   console.log(token);
-    // });
-    // user.getIdTokenResult().then((res) => {
-    //   console.log(res);
-    // });
-  }
 
   return (
     <>
       <SEO title="Home" />
       <Layout>
-        <Button
-          onClick={() => {
-            updatePermissions({
-              email: 'cecilia@lazertechnologies.com',
-              setAdmin: false,
-              setBreaker: false,
-            });
-          }}
-        >
-          Update User
-        </Button>
         {!loading && (
           <Box>
             {user ? (
