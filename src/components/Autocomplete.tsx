@@ -56,7 +56,7 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
           callback(selected[0].value);
         }
       }}
-      defaultInputValue={defaultValue}
+      defaultInputValue={defaultValue ? defaultValue : undefined}
       isLoading={loading}
       labelKey="value"
       minLength={1}
