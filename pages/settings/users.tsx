@@ -15,7 +15,7 @@ import {
 
 import Layout from '@layouts';
 import SEO from '@components/SEO';
-import ActionBar from '@components/ActionBar';
+import AddUserForm from '@components/Forms/AddUserForm';
 
 import { useGetAdminManagerUsersQuery } from '@generated/graphql';
 
@@ -35,6 +35,10 @@ const UserManagementPage: React.FC = () => {
           <Heading as="h1" size="md" mb={10}>
             Users
           </Heading>
+
+          <Box borderRadius={5} bg="white" p={5} maxWidth="800px" mb={10}>
+            <AddUserForm callback={refetchUsers} />
+          </Box>
         </Box>
         {usersQueryData && (
           <Table>

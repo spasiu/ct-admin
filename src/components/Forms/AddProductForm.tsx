@@ -545,19 +545,14 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                     px={gridSpace.child}
                   >
                     <FormLabel>Insert</FormLabel>
-                    <Select {...register('insert')}>
-                      <option value="">Select...</option>
-                      {extensibleValueQueryData?.ExtensibleValues.filter(
-                        (o) => o.field === 'product_insert',
-                      ).map((val) => (
-                        <option
-                          key={`option-${val.field}-${val.value}`}
-                          value={val.value}
-                        >
-                          {val.value}
-                        </option>
-                      ))}
-                    </Select>
+                    <Autocomplete
+                      isInvalid={!!errors.insert}
+                      defaultValue={product?.insert}
+                      callback={(val: string) => {
+                        setValue('insert', val);
+                      }}
+                      field="product_insert"
+                    />
                     <FormErrorMessage>
                       {errors.insert?.message}
                     </FormErrorMessage>

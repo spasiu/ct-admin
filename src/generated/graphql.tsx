@@ -8470,6 +8470,7 @@ export const SearchExtensibleValuesDocument = gql`
   ExtensibleValues(
     where: {value: {_ilike: $input}, field: {_eq: $field}}
     order_by: {value: asc}
+    limit: 20
   ) {
     field
     value
@@ -8507,7 +8508,7 @@ export type SearchExtensibleValuesLazyQueryHookResult = ReturnType<typeof useSea
 export type SearchExtensibleValuesQueryResult = Apollo.QueryResult<SearchExtensibleValuesQuery, SearchExtensibleValuesQueryVariables>;
 export const GetAdminManagerUsersDocument = gql`
     query GetAdminManagerUsers {
-  Users(where: {role: {_in: [ADMIN, MANAGER]}}) {
+  Users(where: {role: {_in: [ADMIN, MANAGER]}}, order_by: {email: asc}) {
     id
     email
     role

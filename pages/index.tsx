@@ -2,7 +2,7 @@ import React from 'react';
 import firebase from 'firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { auth } from '@config/firebase';
+import { auth, functions } from '@config/firebase';
 import { Box, Button } from '@chakra-ui/react';
 
 import Layout from '@layouts';
@@ -12,10 +12,32 @@ const Home: React.FC = () => {
   const [user, loading] = useAuthState(auth);
   const googleProvider = new firebase.auth.GoogleAuthProvider();
 
+  const updatePermissions = functions.httpsCallable('userUpdatePermissions');
+
+  if (user) {
+    // user.getIdToken(true).then((token) => {
+    //   console.log(token);
+    // });
+    // user.getIdTokenResult().then((res) => {
+    //   console.log(res);
+    // });
+  }
+
   return (
     <>
       <SEO title="Home" />
       <Layout>
+        <Button
+          onClick={() => {
+            updatePermissions({
+              email: 'cecilia@lazertechnologies.com',
+              setAdmin: false,
+              setBreaker: false,
+            });
+          }}
+        >
+          Update User
+        </Button>
         {!loading && (
           <Box>
             {user ? (

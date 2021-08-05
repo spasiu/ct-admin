@@ -8,7 +8,7 @@ import { useSearchExtensibleValuesLazyQuery } from '@generated/graphql';
 
 type TAutocompleteProps = {
   field: string;
-  defaultValue?: string;
+  defaultValue?: string | null;
   callback: (input: string) => void;
   isInvalid: boolean;
 };
@@ -59,7 +59,7 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
       defaultInputValue={defaultValue}
       isLoading={loading}
       labelKey="value"
-      minLength={3}
+      minLength={1}
       onSearch={handleSearch}
       options={data?.ExtensibleValues ? data?.ExtensibleValues : []}
       placeholder="Search..."
