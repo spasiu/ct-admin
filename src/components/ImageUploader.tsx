@@ -14,7 +14,7 @@ type TInputErrors = {
 
 type TUploadProps = {
   imageFolder: string;
-  imagePath?: string;
+  imagePath?: string | null;
   label?: string;
   callback: (url: string) => void;
 };

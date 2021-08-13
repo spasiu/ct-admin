@@ -180,14 +180,7 @@ type TFormProps = {
 const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
   const operation = product ? 'UPDATE' : 'ADD';
 
-  const {
-    id: productId,
-    totalCost,
-    averageCost,
-    unassignedCount,
-    assignedCount,
-    ...defaultValues
-  } = product || {};
+  console.log(product);
 
   const {
     register,
@@ -199,7 +192,7 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      ...(defaultValues || {}),
+      ...(product || {}),
       unit_of_measure: UnitOfMeasureValues.find(
         (s) => s.value === product?.unit_of_measure,
       )?.value,
@@ -228,7 +221,7 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
     },
     onCompleted: () => {
       reset({
-        ...(defaultValues || {}),
+        ...(product || {}),
         unit_of_measure: UnitOfMeasureValues.find(
           (s) => s.value === product?.unit_of_measure,
         )?.value,

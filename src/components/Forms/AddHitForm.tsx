@@ -39,7 +39,7 @@ type TFormData = {
   user_id: string;
   break_id: string;
   image_front: string;
-  image_back?: string;
+  image_back: string | null;
   year: string;
   manufacturer: string;
   brand: string;
@@ -63,7 +63,7 @@ type TFormProps = {
     user_id: string;
     break_id: string;
     image_front: string;
-    image_back?: string;
+    image_back?: string | null;
     year: string;
     category: string;
     manufacturer: string;
@@ -96,7 +96,7 @@ const schema = yup.object().shape({
   user_id: yup.string().required('Required'),
   break_id: yup.string().required('Required'),
   image_front: yup.string().required('Image is Required'),
-  image_back: yup.string(),
+  image_back: yup.string().nullable(),
   year: yup
     .string()
     .required('Required')

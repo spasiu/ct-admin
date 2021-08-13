@@ -305,7 +305,16 @@ const ProductsPage: React.FC = () => {
                                 aria-label="Edit"
                                 icon={<MdEdit />}
                                 onClick={() => {
-                                  setSelectedProduct(prod);
+                                  // Remove agreggate fields
+                                  const prodClone = (({
+                                    totalCost,
+                                    averageCost,
+                                    unassignedCount,
+                                    assignedCount,
+                                    ...o
+                                  }) => o)(prod);
+
+                                  setSelectedProduct(prodClone);
                                   setAddProductModalOpen(true);
                                 }}
                               />

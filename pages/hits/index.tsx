@@ -35,7 +35,7 @@ type TSelectedHit = {
   user_id: string;
   break_id: string;
   image_front: string;
-  image_back: string;
+  image_back?: string | null;
   year: string;
   category: string;
   manufacturer: string;
