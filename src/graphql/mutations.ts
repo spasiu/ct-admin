@@ -172,3 +172,22 @@ export const INSERT_EXTENSIBLE_VALUES = gql`
     }
   }
 `;
+
+/**
+ * HITS MUTATIONS
+ */
+export const INSERT_HIT = gql`
+  mutation InsertHit($data: Hits_insert_input!) {
+    insert_Hits_one(object: $data) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_HIT = gql`
+  mutation UpdateHit($id: uuid!, $data: Hits_set_input!) {
+    update_Hits_by_pk(pk_columns: { id: $id }, _set: $data) {
+      id
+    }
+  }
+`;

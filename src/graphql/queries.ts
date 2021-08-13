@@ -303,6 +303,71 @@ export const GET_BREAK_BY_ID = gql`
   }
 `;
 
+export const GET_BREAK_ORDER_USERS = gql`
+  query GetBreakOrderUsers($id: uuid!) {
+    Breaks_by_pk(id: $id) {
+      id
+      BreakProductItems {
+        Order {
+          User {
+            id
+            username
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const SEARCH_BREAKS = gql`
+  query SearchBreaks($input: String!) {
+    Breaks(where: { title: { _ilike: $input } }) {
+      id
+      title
+    }
+  }
+`;
+
+export const GET_HTIS = gql`
+  query GetHits {
+    Hits(order_by: { created_at: desc }) {
+      id
+      description
+      user_id
+      break_id
+      Break {
+        title
+      }
+      image_front
+      image_back
+      year
+      category
+      manufacturer
+      brand
+      series
+      card_number
+      player
+      parallel
+      insert
+      rookie_card
+      memoribillia
+      autograph
+      numbered
+      User {
+        id
+        username
+      }
+      Break {
+        id
+        title
+        Event {
+          start_time
+        }
+      }
+    }
+  }
+`;
+
 export const GET_EXTENSIBLE_VALUES = gql`
   query GetExtensibleValues {
     ExtensibleValues(order_by: { field: asc, value: asc }) {

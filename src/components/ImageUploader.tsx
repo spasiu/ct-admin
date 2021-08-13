@@ -15,12 +15,14 @@ type TInputErrors = {
 type TUploadProps = {
   imageFolder: string;
   imagePath?: string;
+  label?: string;
   callback: (url: string) => void;
 };
 
 const ImageUploader: React.FC<TUploadProps> = ({
   imageFolder,
   imagePath,
+  label,
   callback,
 }) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(
@@ -72,6 +74,11 @@ const ImageUploader: React.FC<TUploadProps> = ({
 
   return (
     <Flex flexDirection="column" justifyContent="center" alignItems="center">
+      {label && (
+        <Text textAlign="center" fontSize="xs" fontWeight="bold">
+          {label}
+        </Text>
+      )}
       <Flex
         bg="background"
         justifyContent="center"

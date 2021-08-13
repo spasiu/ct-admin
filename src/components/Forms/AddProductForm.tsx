@@ -174,12 +174,20 @@ type TFormProps = {
 /**
  *
  * TODO: Add auth
- * TODO: Image upload
  * TODO: Generate description
  *
  */
 const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
   const operation = product ? 'UPDATE' : 'ADD';
+
+  const {
+    id: productId,
+    totalCost,
+    averageCost,
+    unassignedCount,
+    assignedCount,
+    ...defaultValues
+  } = product || {};
 
   const {
     register,
@@ -191,7 +199,7 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
   } = useForm<TFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      ...(product || {}),
+      ...(defaultValues || {}),
       unit_of_measure: UnitOfMeasureValues.find(
         (s) => s.value === product?.unit_of_measure,
       )?.value,
@@ -220,7 +228,7 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
     },
     onCompleted: () => {
       reset({
-        ...(product || {}),
+        ...(defaultValues || {}),
         unit_of_measure: UnitOfMeasureValues.find(
           (s) => s.value === product?.unit_of_measure,
         )?.value,
@@ -251,21 +259,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
    * @param result object Validated form result
    */
   const onSubmit = (result: TFormData) => {
-    const submitData = {
-      image: '',
-      ...result,
-    };
-
     switch (operation) {
       case 'ADD':
         addProduct({
           variables: {
-            data: submitData,
+            data: result,
           },
         });
         break;
       case 'UPDATE':
-        updateProduct({ variables: { id: product?.id, data: submitData } });
+        updateProduct({ variables: { id: product?.id, data: result } });
         break;
     }
   };
@@ -310,14 +313,16 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
                   <option value="">Select...</option>
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_year',
-                  ).map((val) => (
-                    <option
-                      key={`option-${val.field}-${val.value}`}
-                      value={val.value}
-                    >
-                      {val.value}
-                    </option>
-                  ))}
+                  )
+                    .reverse()
+                    .map((val) => (
+                      <option
+                        key={`option-${val.field}-${val.value}`}
+                        value={val.value}
+                      >
+                        {val.value}
+                      </option>
+                    ))}
                 </Select>
                 <FormErrorMessage>{errors.year?.message}</FormErrorMessage>
               </FormControl>
