@@ -8782,6 +8782,25 @@ export type UpdateHitMutation = (
   )> }
 );
 
+export type UpdateBreakerProfileMutationVariables = Exact<{
+  id: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  profile: BreakerProfiles_Insert_Input;
+}>;
+
+
+export type UpdateBreakerProfileMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Users_by_pk?: Maybe<(
+    { __typename?: 'Users' }
+    & Pick<Users, 'first_name' | 'last_name' | 'image'>
+  )>, insert_BreakerProfiles_one?: Maybe<(
+    { __typename?: 'BreakerProfiles' }
+    & Pick<BreakerProfiles, 'id'>
+  )> }
+);
+
 export type GetProductsQueryVariables = Exact<{
   unitOfMeasure?: Maybe<Array<Unit_Of_Measure_Enum> | Unit_Of_Measure_Enum>;
   input?: Maybe<Scalars['String']>;
@@ -9122,6 +9141,22 @@ export type GetAdminManagerUsersQuery = (
   & { Users: Array<(
     { __typename?: 'Users' }
     & Pick<Users, 'id' | 'email' | 'role' | 'is_breaker'>
+  )> }
+);
+
+export type GetBreakerProfileQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetBreakerProfileQuery = (
+  { __typename?: 'query_root' }
+  & { Users_by_pk?: Maybe<(
+    { __typename?: 'Users' }
+    & Pick<Users, 'first_name' | 'last_name' | 'image'>
+  )>, BreakerProfiles: Array<(
+    { __typename?: 'BreakerProfiles' }
+    & Pick<BreakerProfiles, 'bio' | 'video' | 'instagram' | 'twitter' | 'facebook' | 'linkedin' | 'tiktok'>
   )> }
 );
 
@@ -9747,6 +9782,53 @@ export function useUpdateHitMutation(baseOptions?: Apollo.MutationHookOptions<Up
 export type UpdateHitMutationHookResult = ReturnType<typeof useUpdateHitMutation>;
 export type UpdateHitMutationResult = Apollo.MutationResult<UpdateHitMutation>;
 export type UpdateHitMutationOptions = Apollo.BaseMutationOptions<UpdateHitMutation, UpdateHitMutationVariables>;
+export const UpdateBreakerProfileDocument = gql`
+    mutation UpdateBreakerProfile($id: String!, $first_name: String!, $last_name: String!, $profile: BreakerProfiles_insert_input!) {
+  update_Users_by_pk(
+    pk_columns: {id: $id}
+    _set: {first_name: $first_name, last_name: $last_name}
+  ) {
+    first_name
+    last_name
+    image
+  }
+  insert_BreakerProfiles_one(
+    object: $profile
+    on_conflict: {constraint: BreakerProfiles_user_id_key, update_columns: [bio, video, instagram, twitter, facebook, linkedin, tiktok]}
+  ) {
+    id
+  }
+}
+    `;
+export type UpdateBreakerProfileMutationFn = Apollo.MutationFunction<UpdateBreakerProfileMutation, UpdateBreakerProfileMutationVariables>;
+
+/**
+ * __useUpdateBreakerProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateBreakerProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBreakerProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBreakerProfileMutation, { data, loading, error }] = useUpdateBreakerProfileMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      first_name: // value for 'first_name'
+ *      last_name: // value for 'last_name'
+ *      profile: // value for 'profile'
+ *   },
+ * });
+ */
+export function useUpdateBreakerProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBreakerProfileMutation, UpdateBreakerProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBreakerProfileMutation, UpdateBreakerProfileMutationVariables>(UpdateBreakerProfileDocument, options);
+      }
+export type UpdateBreakerProfileMutationHookResult = ReturnType<typeof useUpdateBreakerProfileMutation>;
+export type UpdateBreakerProfileMutationResult = Apollo.MutationResult<UpdateBreakerProfileMutation>;
+export type UpdateBreakerProfileMutationOptions = Apollo.BaseMutationOptions<UpdateBreakerProfileMutation, UpdateBreakerProfileMutationVariables>;
 export const GetProductsDocument = gql`
     query GetProducts($unitOfMeasure: [unit_of_measure_enum!], $input: String) {
   Products(
@@ -10550,3 +10632,49 @@ export function useGetAdminManagerUsersLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type GetAdminManagerUsersQueryHookResult = ReturnType<typeof useGetAdminManagerUsersQuery>;
 export type GetAdminManagerUsersLazyQueryHookResult = ReturnType<typeof useGetAdminManagerUsersLazyQuery>;
 export type GetAdminManagerUsersQueryResult = Apollo.QueryResult<GetAdminManagerUsersQuery, GetAdminManagerUsersQueryVariables>;
+export const GetBreakerProfileDocument = gql`
+    query GetBreakerProfile($id: String!) {
+  Users_by_pk(id: $id) {
+    first_name
+    last_name
+    image
+  }
+  BreakerProfiles(where: {user_id: {_eq: $id}}, limit: 1) {
+    bio
+    video
+    instagram
+    twitter
+    facebook
+    linkedin
+    tiktok
+  }
+}
+    `;
+
+/**
+ * __useGetBreakerProfileQuery__
+ *
+ * To run a query within a React component, call `useGetBreakerProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBreakerProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBreakerProfileQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetBreakerProfileQuery(baseOptions: Apollo.QueryHookOptions<GetBreakerProfileQuery, GetBreakerProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBreakerProfileQuery, GetBreakerProfileQueryVariables>(GetBreakerProfileDocument, options);
+      }
+export function useGetBreakerProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBreakerProfileQuery, GetBreakerProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBreakerProfileQuery, GetBreakerProfileQueryVariables>(GetBreakerProfileDocument, options);
+        }
+export type GetBreakerProfileQueryHookResult = ReturnType<typeof useGetBreakerProfileQuery>;
+export type GetBreakerProfileLazyQueryHookResult = ReturnType<typeof useGetBreakerProfileLazyQuery>;
+export type GetBreakerProfileQueryResult = Apollo.QueryResult<GetBreakerProfileQuery, GetBreakerProfileQueryVariables>;

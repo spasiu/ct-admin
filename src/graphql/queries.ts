@@ -415,3 +415,23 @@ export const GET_ADMIN_MANAGER_USERS = gql`
     }
   }
 `;
+
+export const GET_BREAKER_PROFILE = gql`
+  query GetBreakerProfile($id: String!) {
+    Users_by_pk(id: $id) {
+      first_name
+      last_name
+      image
+    }
+
+    BreakerProfiles(where: { user_id: { _eq: $id } }, limit: 1) {
+      bio
+      video
+      instagram
+      twitter
+      facebook
+      linkedin
+      tiktok
+    }
+  }
+`;

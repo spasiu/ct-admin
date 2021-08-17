@@ -191,3 +191,42 @@ export const UPDATE_HIT = gql`
     }
   }
 `;
+
+/**
+ * PROFILE MUTATIONS
+ */
+export const UPDATE_BREAKER_PROFILE = gql`
+  mutation UpdateBreakerProfile(
+    $id: String!
+    $first_name: String!
+    $last_name: String!
+    $profile: BreakerProfiles_insert_input!
+  ) {
+    update_Users_by_pk(
+      pk_columns: { id: $id }
+      _set: { first_name: $first_name, last_name: $last_name }
+    ) {
+      first_name
+      last_name
+      image
+    }
+
+    insert_BreakerProfiles_one(
+      object: $profile
+      on_conflict: {
+        constraint: BreakerProfiles_user_id_key
+        update_columns: [
+          bio
+          video
+          instagram
+          twitter
+          facebook
+          linkedin
+          tiktok
+        ]
+      }
+    ) {
+      id
+    }
+  }
+`;

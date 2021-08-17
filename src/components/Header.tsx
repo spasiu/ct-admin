@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 import { auth } from '@config/firebase';
 import navigation, { TNavData } from '@config/navigation';
+import paths from '@config/paths';
 import { HStack, Box, Flex, Link, Avatar, Button } from '@chakra-ui/react';
 
 type THeaderProps = {
@@ -58,7 +59,13 @@ const Header: React.FC<THeaderProps> = ({ pageNav }) => {
         {!loading && (
           <Flex ml="auto" alignItems={'center'}>
             {user && (
-              <Avatar size="md" src={user.photoURL || undefined}></Avatar>
+              <NextLink href={`${paths.profile}/${user.uid}`} passHref>
+                <Avatar
+                  as="a"
+                  size="md"
+                  src={user.photoURL || undefined}
+                ></Avatar>
+              </NextLink>
             )}
             {!user && (
               <Button

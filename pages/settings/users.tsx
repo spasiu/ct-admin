@@ -1,5 +1,6 @@
 import React from 'react';
 import { MdCheck } from 'react-icons/md';
+import NextLink from 'next/link';
 
 import {
   Box,
@@ -11,6 +12,7 @@ import {
   Tr,
   Th,
   Td,
+  Link,
 } from '@chakra-ui/react';
 
 import Layout from '@layouts';
@@ -18,6 +20,7 @@ import SEO from '@components/SEO';
 import AddUserForm from '@components/Forms/AddUserForm';
 
 import { useGetAdminManagerUsersQuery } from '@generated/graphql';
+import paths from '@config/paths';
 
 const UserManagementPage: React.FC = () => {
   const {
@@ -53,7 +56,11 @@ const UserManagementPage: React.FC = () => {
             <Tbody>
               {usersQueryData.Users.map((item) => (
                 <Tr key={item.id} bg="white">
-                  <Td>{item.email}</Td>
+                  <Td>
+                    <NextLink href={`${paths.profile}/${item.id}`} passHref>
+                      <Link textDecoration="underline">{item.email}</Link>
+                    </NextLink>
+                  </Td>
                   <Td>
                     {item.role === 'ADMIN' && <Icon as={MdCheck} w={6} h={6} />}
                   </Td>
