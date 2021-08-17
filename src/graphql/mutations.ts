@@ -200,11 +200,12 @@ export const UPDATE_BREAKER_PROFILE = gql`
     $id: String!
     $first_name: String!
     $last_name: String!
+    $image: String!
     $profile: BreakerProfiles_insert_input!
   ) {
     update_Users_by_pk(
       pk_columns: { id: $id }
-      _set: { first_name: $first_name, last_name: $last_name }
+      _set: { first_name: $first_name, last_name: $last_name, image: $image }
     ) {
       first_name
       last_name

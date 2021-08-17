@@ -8786,6 +8786,7 @@ export type UpdateBreakerProfileMutationVariables = Exact<{
   id: Scalars['String'];
   first_name: Scalars['String'];
   last_name: Scalars['String'];
+  image: Scalars['String'];
   profile: BreakerProfiles_Insert_Input;
 }>;
 
@@ -9783,10 +9784,10 @@ export type UpdateHitMutationHookResult = ReturnType<typeof useUpdateHitMutation
 export type UpdateHitMutationResult = Apollo.MutationResult<UpdateHitMutation>;
 export type UpdateHitMutationOptions = Apollo.BaseMutationOptions<UpdateHitMutation, UpdateHitMutationVariables>;
 export const UpdateBreakerProfileDocument = gql`
-    mutation UpdateBreakerProfile($id: String!, $first_name: String!, $last_name: String!, $profile: BreakerProfiles_insert_input!) {
+    mutation UpdateBreakerProfile($id: String!, $first_name: String!, $last_name: String!, $image: String!, $profile: BreakerProfiles_insert_input!) {
   update_Users_by_pk(
     pk_columns: {id: $id}
-    _set: {first_name: $first_name, last_name: $last_name}
+    _set: {first_name: $first_name, last_name: $last_name, image: $image}
   ) {
     first_name
     last_name
@@ -9818,6 +9819,7 @@ export type UpdateBreakerProfileMutationFn = Apollo.MutationFunction<UpdateBreak
  *      id: // value for 'id'
  *      first_name: // value for 'first_name'
  *      last_name: // value for 'last_name'
+ *      image: // value for 'image'
  *      profile: // value for 'profile'
  *   },
  * });
