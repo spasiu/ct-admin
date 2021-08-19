@@ -3,7 +3,7 @@ import Imgix from 'react-imgix';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 
-import { Heading, Box, Text, HStack, Button } from '@chakra-ui/react';
+import { Heading, Box, Text, HStack, Button, Divider } from '@chakra-ui/react';
 
 import { useGetBreakerProfileLazyQuery } from '@generated/graphql';
 import { auth } from '@config/firebase';
@@ -39,8 +39,6 @@ const ProfilePage: React.FC = () => {
     }
   }, [user]);
 
-  console.log(profileData);
-
   return (
     <>
       <SEO title="Products" />
@@ -67,7 +65,7 @@ const ProfilePage: React.FC = () => {
                     imgixParams={{ fit: 'clamp' }}
                   />
                 )}
-                <Box flex="1" maxWidth={600}>
+                <Box flex="1" maxWidth={700}>
                   {isUserProfile && (
                     <Box mb={7}>
                       <Button
@@ -86,17 +84,25 @@ const ProfilePage: React.FC = () => {
                     <Heading as="h3" size="sm" mb={1}>
                       Name:
                     </Heading>
-                    <Text>{`${profileData.Users_by_pk?.first_name} ${profileData.Users_by_pk?.last_name}`}</Text>
+                    <Text
+                      mb={7}
+                    >{`${profileData.Users_by_pk?.first_name} ${profileData.Users_by_pk?.last_name}`}</Text>
+
+                    <Divider />
                   </Box>
 
                   {profileData.BreakerProfiles.length > 0 && (
-                    <>
+                    <Box mb={7}>
+                      <Heading as="h3" size="md" mb={5}>
+                        Breaker Profile
+                      </Heading>
+
                       {profileData.BreakerProfiles[0].bio && (
                         <Box mb={7}>
                           <Heading as="h3" size="sm" mb={1}>
                             Bio:
                           </Heading>
-                          <Text>{`${profileData.BreakerProfiles[0].bio}`}</Text>
+                          <Text>{profileData.BreakerProfiles[0].bio}</Text>
                         </Box>
                       )}
 
@@ -104,7 +110,7 @@ const ProfilePage: React.FC = () => {
                         <Heading as="h3" size="sm" mb={1}>
                           Video:
                         </Heading>
-                        <Text>{`${profileData.BreakerProfiles[0].video}`}</Text>
+                        <Text>{profileData.BreakerProfiles[0].video}</Text>
                       </Box>
 
                       {profileData.BreakerProfiles[0].instagram && (
@@ -112,7 +118,9 @@ const ProfilePage: React.FC = () => {
                           <Heading as="h3" size="sm" mb={1}>
                             Instagram:
                           </Heading>
-                          <Text>{`${profileData.BreakerProfiles[0].instagram}`}</Text>
+                          <Text>
+                            {profileData.BreakerProfiles[0].instagram}
+                          </Text>
                         </Box>
                       )}
 
@@ -121,7 +129,7 @@ const ProfilePage: React.FC = () => {
                           <Heading as="h3" size="sm" mb={1}>
                             Twitter:
                           </Heading>
-                          <Text>{`${profileData.BreakerProfiles[0].twitter}`}</Text>
+                          <Text>{profileData.BreakerProfiles[0].twitter}</Text>
                         </Box>
                       )}
 
@@ -139,7 +147,7 @@ const ProfilePage: React.FC = () => {
                           <Heading as="h3" size="sm" mb={1}>
                             Linkedin:
                           </Heading>
-                          <Text>{`${profileData.BreakerProfiles[0].linkedin}`}</Text>
+                          <Text>{profileData.BreakerProfiles[0].linkedin}</Text>
                         </Box>
                       )}
 
@@ -148,10 +156,42 @@ const ProfilePage: React.FC = () => {
                           <Heading as="h3" size="sm" mb={1}>
                             Tiktok:
                           </Heading>
-                          <Text>{`${profileData.BreakerProfiles[0].tiktok}`}</Text>
+                          <Text>{profileData.BreakerProfiles[0].tiktok}</Text>
                         </Box>
                       )}
-                    </>
+
+                      <Divider />
+                    </Box>
+                  )}
+
+                  {profileData.Users_by_pk?.is_breaker && (
+                    <Box mb={10}>
+                      <Heading as="h3" size="md" mb={5}>
+                        Stream Details
+                      </Heading>
+
+                      {profileData.Users_by_pk?.Stream?.stream_key && (
+                        <Box>
+                          <Heading as="h3" size="sm" mb={1}>
+                            Stream Key:
+                          </Heading>
+                          <Text wordBreak="break-all">
+                            {profileData.Users_by_pk?.Stream?.stream_key}
+                          </Text>
+                        </Box>
+                      )}
+
+                      {profileData.Users_by_pk?.Stream?.stream_url && (
+                        <Box>
+                          <Heading as="h3" size="sm" mb={1}>
+                            Stream URL:
+                          </Heading>
+                          <Text wordBreak="break-all">
+                            {profileData.Users_by_pk?.Stream?.stream_url}
+                          </Text>
+                        </Box>
+                      )}
+                    </Box>
                   )}
                 </Box>
               </HStack>

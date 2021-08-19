@@ -9475,7 +9475,11 @@ export type GetBreakerProfileQuery = (
   { __typename?: 'query_root' }
   & { Users_by_pk?: Maybe<(
     { __typename?: 'Users' }
-    & Pick<Users, 'first_name' | 'last_name' | 'image'>
+    & Pick<Users, 'first_name' | 'last_name' | 'image' | 'is_breaker'>
+    & { Stream?: Maybe<(
+      { __typename?: 'Streams' }
+      & Pick<Streams, 'stream_key' | 'stream_url'>
+    )> }
   )>, BreakerProfiles: Array<(
     { __typename?: 'BreakerProfiles' }
     & Pick<BreakerProfiles, 'bio' | 'video' | 'instagram' | 'twitter' | 'facebook' | 'linkedin' | 'tiktok'>
@@ -10998,6 +11002,11 @@ export const GetBreakerProfileDocument = gql`
     first_name
     last_name
     image
+    is_breaker
+    Stream {
+      stream_key
+      stream_url
+    }
   }
   BreakerProfiles(where: {user_id: {_eq: $id}}, limit: 1) {
     bio

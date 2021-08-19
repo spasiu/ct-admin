@@ -432,6 +432,11 @@ export const GET_BREAKER_PROFILE = gql`
       first_name
       last_name
       image
+      is_breaker
+      Stream {
+        stream_key
+        stream_url
+      }
     }
 
     BreakerProfiles(where: { user_id: { _eq: $id } }, limit: 1) {
