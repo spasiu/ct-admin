@@ -14,6 +14,7 @@ type TFormModal = {
   children: React.ReactNode;
   title: string;
   isOpen: boolean;
+  closeOnEsc?: boolean;
   setModalOpen: (n: boolean) => void;
 };
 
@@ -21,6 +22,7 @@ const FormModal: React.FC<TFormModal> = ({
   children,
   title,
   isOpen,
+  closeOnEsc,
   setModalOpen,
 }) => {
   return (
@@ -28,6 +30,7 @@ const FormModal: React.FC<TFormModal> = ({
       size="xl"
       isOpen={isOpen}
       closeOnOverlayClick={false}
+      closeOnEsc={typeof closeOnEsc !== 'undefined' ? closeOnEsc : true}
       onClose={() => {
         setModalOpen && setModalOpen(false);
       }}

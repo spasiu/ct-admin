@@ -4627,6 +4627,199 @@ export enum SaveEvent_Update_Column {
   UserId = 'user_id'
 }
 
+/** columns and relationships of "Streams" */
+export type Streams = {
+  __typename?: 'Streams';
+  /** An object relationship */
+  User: Users;
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  playback_id: Scalars['String'];
+  stream_id: Scalars['String'];
+  stream_key: Scalars['String'];
+  stream_url: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+  user_id: Scalars['String'];
+};
+
+/** aggregated selection of "Streams" */
+export type Streams_Aggregate = {
+  __typename?: 'Streams_aggregate';
+  aggregate?: Maybe<Streams_Aggregate_Fields>;
+  nodes: Array<Streams>;
+};
+
+/** aggregate fields of "Streams" */
+export type Streams_Aggregate_Fields = {
+  __typename?: 'Streams_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Streams_Max_Fields>;
+  min?: Maybe<Streams_Min_Fields>;
+};
+
+
+/** aggregate fields of "Streams" */
+export type Streams_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Streams_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "Streams". All fields are combined with a logical 'AND'. */
+export type Streams_Bool_Exp = {
+  User?: Maybe<Users_Bool_Exp>;
+  _and?: Maybe<Array<Streams_Bool_Exp>>;
+  _not?: Maybe<Streams_Bool_Exp>;
+  _or?: Maybe<Array<Streams_Bool_Exp>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  playback_id?: Maybe<String_Comparison_Exp>;
+  stream_id?: Maybe<String_Comparison_Exp>;
+  stream_key?: Maybe<String_Comparison_Exp>;
+  stream_url?: Maybe<String_Comparison_Exp>;
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  user_id?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "Streams" */
+export enum Streams_Constraint {
+  /** unique or primary key constraint */
+  StreamsPkey = 'Streams_pkey',
+  /** unique or primary key constraint */
+  StreamsUserIdKey = 'Streams_user_id_key'
+}
+
+/** input type for inserting data into table "Streams" */
+export type Streams_Insert_Input = {
+  User?: Maybe<Users_Obj_Rel_Insert_Input>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  playback_id?: Maybe<Scalars['String']>;
+  stream_id?: Maybe<Scalars['String']>;
+  stream_key?: Maybe<Scalars['String']>;
+  stream_url?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Streams_Max_Fields = {
+  __typename?: 'Streams_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  playback_id?: Maybe<Scalars['String']>;
+  stream_id?: Maybe<Scalars['String']>;
+  stream_key?: Maybe<Scalars['String']>;
+  stream_url?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Streams_Min_Fields = {
+  __typename?: 'Streams_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  playback_id?: Maybe<Scalars['String']>;
+  stream_id?: Maybe<Scalars['String']>;
+  stream_key?: Maybe<Scalars['String']>;
+  stream_url?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "Streams" */
+export type Streams_Mutation_Response = {
+  __typename?: 'Streams_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Streams>;
+};
+
+/** input type for inserting object relation for remote table "Streams" */
+export type Streams_Obj_Rel_Insert_Input = {
+  data: Streams_Insert_Input;
+  /** on conflict condition */
+  on_conflict?: Maybe<Streams_On_Conflict>;
+};
+
+/** on conflict condition type for table "Streams" */
+export type Streams_On_Conflict = {
+  constraint: Streams_Constraint;
+  update_columns?: Array<Streams_Update_Column>;
+  where?: Maybe<Streams_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "Streams". */
+export type Streams_Order_By = {
+  User?: Maybe<Users_Order_By>;
+  created_at?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  playback_id?: Maybe<Order_By>;
+  stream_id?: Maybe<Order_By>;
+  stream_key?: Maybe<Order_By>;
+  stream_url?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: Streams */
+export type Streams_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "Streams" */
+export enum Streams_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PlaybackId = 'playback_id',
+  /** column name */
+  StreamId = 'stream_id',
+  /** column name */
+  StreamKey = 'stream_key',
+  /** column name */
+  StreamUrl = 'stream_url',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** input type for updating data in table "Streams" */
+export type Streams_Set_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  playback_id?: Maybe<Scalars['String']>;
+  stream_id?: Maybe<Scalars['String']>;
+  stream_key?: Maybe<Scalars['String']>;
+  stream_url?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "Streams" */
+export enum Streams_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PlaybackId = 'playback_id',
+  /** column name */
+  StreamId = 'stream_id',
+  /** column name */
+  StreamKey = 'stream_key',
+  /** column name */
+  StreamUrl = 'stream_url',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: Maybe<Scalars['String']>;
@@ -4887,6 +5080,8 @@ export type Users = {
   /** An aggregate relationship */
   SavedEvents_aggregate: SaveEvent_Aggregate;
   /** An object relationship */
+  Stream?: Maybe<Streams>;
+  /** An object relationship */
   UserPreference: UserPreferences;
   created_at: Scalars['timestamptz'];
   email?: Maybe<Scalars['String']>;
@@ -5110,6 +5305,7 @@ export type Users_Bool_Exp = {
   SavedBreakers?: Maybe<SaveBreaker_Bool_Exp>;
   SavedBreaks?: Maybe<SaveBreak_Bool_Exp>;
   SavedEvents?: Maybe<SaveEvent_Bool_Exp>;
+  Stream?: Maybe<Streams_Bool_Exp>;
   UserPreference?: Maybe<UserPreferences_Bool_Exp>;
   _and?: Maybe<Array<Users_Bool_Exp>>;
   _not?: Maybe<Users_Bool_Exp>;
@@ -5147,6 +5343,7 @@ export type Users_Insert_Input = {
   SavedBreakers?: Maybe<SaveBreaker_Arr_Rel_Insert_Input>;
   SavedBreaks?: Maybe<SaveBreak_Arr_Rel_Insert_Input>;
   SavedEvents?: Maybe<SaveEvent_Arr_Rel_Insert_Input>;
+  Stream?: Maybe<Streams_Obj_Rel_Insert_Input>;
   UserPreference?: Maybe<UserPreferences_Obj_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
@@ -5246,6 +5443,7 @@ export type Users_Order_By = {
   SavedBreakers_aggregate?: Maybe<SaveBreaker_Aggregate_Order_By>;
   SavedBreaks_aggregate?: Maybe<SaveBreak_Aggregate_Order_By>;
   SavedEvents_aggregate?: Maybe<SaveEvent_Aggregate_Order_By>;
+  Stream?: Maybe<Streams_Order_By>;
   UserPreference?: Maybe<UserPreferences_Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
@@ -5883,6 +6081,10 @@ export type Mutation_Root = {
   delete_SaveEvent?: Maybe<SaveEvent_Mutation_Response>;
   /** delete single row from the table: "SaveEvent" */
   delete_SaveEvent_by_pk?: Maybe<SaveEvent>;
+  /** delete data from the table: "Streams" */
+  delete_Streams?: Maybe<Streams_Mutation_Response>;
+  /** delete single row from the table: "Streams" */
+  delete_Streams_by_pk?: Maybe<Streams>;
   /** delete data from the table: "UserPreferences" */
   delete_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** delete single row from the table: "UserPreferences" */
@@ -5967,6 +6169,10 @@ export type Mutation_Root = {
   insert_SaveEvent?: Maybe<SaveEvent_Mutation_Response>;
   /** insert a single row into the table: "SaveEvent" */
   insert_SaveEvent_one?: Maybe<SaveEvent>;
+  /** insert data into the table: "Streams" */
+  insert_Streams?: Maybe<Streams_Mutation_Response>;
+  /** insert a single row into the table: "Streams" */
+  insert_Streams_one?: Maybe<Streams>;
   /** insert data into the table: "UserPreferences" */
   insert_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** insert a single row into the table: "UserPreferences" */
@@ -6051,6 +6257,10 @@ export type Mutation_Root = {
   update_SaveEvent?: Maybe<SaveEvent_Mutation_Response>;
   /** update single row of the table: "SaveEvent" */
   update_SaveEvent_by_pk?: Maybe<SaveEvent>;
+  /** update data of the table: "Streams" */
+  update_Streams?: Maybe<Streams_Mutation_Response>;
+  /** update single row of the table: "Streams" */
+  update_Streams_by_pk?: Maybe<Streams>;
   /** update data of the table: "UserPreferences" */
   update_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** update single row of the table: "UserPreferences" */
@@ -6247,6 +6457,18 @@ export type Mutation_RootDelete_SaveEventArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_SaveEvent_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_StreamsArgs = {
+  where: Streams_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Streams_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -6528,6 +6750,20 @@ export type Mutation_RootInsert_SaveEventArgs = {
 export type Mutation_RootInsert_SaveEvent_OneArgs = {
   object: SaveEvent_Insert_Input;
   on_conflict?: Maybe<SaveEvent_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_StreamsArgs = {
+  objects: Array<Streams_Insert_Input>;
+  on_conflict?: Maybe<Streams_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Streams_OneArgs = {
+  object: Streams_Insert_Input;
+  on_conflict?: Maybe<Streams_On_Conflict>;
 };
 
 
@@ -6848,6 +7084,20 @@ export type Mutation_RootUpdate_SaveEvent_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_StreamsArgs = {
+  _set?: Maybe<Streams_Set_Input>;
+  where: Streams_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Streams_By_PkArgs = {
+  _set?: Maybe<Streams_Set_Input>;
+  pk_columns: Streams_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_UserPreferencesArgs = {
   _set?: Maybe<UserPreferences_Set_Input>;
   where: UserPreferences_Bool_Exp;
@@ -7060,6 +7310,12 @@ export type Query_Root = {
   SaveEvent_aggregate: SaveEvent_Aggregate;
   /** fetch data from the table: "SaveEvent" using primary key columns */
   SaveEvent_by_pk?: Maybe<SaveEvent>;
+  /** fetch data from the table: "Streams" */
+  Streams: Array<Streams>;
+  /** fetch aggregated fields from the table: "Streams" */
+  Streams_aggregate: Streams_Aggregate;
+  /** fetch data from the table: "Streams" using primary key columns */
+  Streams_by_pk?: Maybe<Streams>;
   /** fetch data from the table: "UserPreferences" */
   UserPreferences: Array<UserPreferences>;
   /** fetch aggregated fields from the table: "UserPreferences" */
@@ -7428,6 +7684,29 @@ export type Query_RootSaveEvent_By_PkArgs = {
 };
 
 
+export type Query_RootStreamsArgs = {
+  distinct_on?: Maybe<Array<Streams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Streams_Order_By>>;
+  where?: Maybe<Streams_Bool_Exp>;
+};
+
+
+export type Query_RootStreams_AggregateArgs = {
+  distinct_on?: Maybe<Array<Streams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Streams_Order_By>>;
+  where?: Maybe<Streams_Bool_Exp>;
+};
+
+
+export type Query_RootStreams_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootUserPreferencesArgs = {
   distinct_on?: Maybe<Array<UserPreferences_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -7674,6 +7953,12 @@ export type Subscription_Root = {
   SaveEvent_aggregate: SaveEvent_Aggregate;
   /** fetch data from the table: "SaveEvent" using primary key columns */
   SaveEvent_by_pk?: Maybe<SaveEvent>;
+  /** fetch data from the table: "Streams" */
+  Streams: Array<Streams>;
+  /** fetch aggregated fields from the table: "Streams" */
+  Streams_aggregate: Streams_Aggregate;
+  /** fetch data from the table: "Streams" using primary key columns */
+  Streams_by_pk?: Maybe<Streams>;
   /** fetch data from the table: "UserPreferences" */
   UserPreferences: Array<UserPreferences>;
   /** fetch aggregated fields from the table: "UserPreferences" */
@@ -8038,6 +8323,29 @@ export type Subscription_RootSaveEvent_AggregateArgs = {
 
 
 export type Subscription_RootSaveEvent_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootStreamsArgs = {
+  distinct_on?: Maybe<Array<Streams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Streams_Order_By>>;
+  where?: Maybe<Streams_Bool_Exp>;
+};
+
+
+export type Subscription_RootStreams_AggregateArgs = {
+  distinct_on?: Maybe<Array<Streams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Streams_Order_By>>;
+  where?: Maybe<Streams_Bool_Exp>;
+};
+
+
+export type Subscription_RootStreams_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -8991,7 +9299,7 @@ export type GetEventByIdQuery = (
       & Pick<Users, 'id' | 'first_name' | 'last_name'>
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
-      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items'>
+      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status'>
       & { Inventory: Array<(
         { __typename?: 'Inventory' }
         & Pick<Inventory, 'id' | 'location'>
@@ -9004,6 +9312,19 @@ export type GetEventByIdQuery = (
         & Pick<BreakProductItems, 'id' | 'title' | 'price'>
       )> }
     )> }
+  )> }
+);
+
+export type SearchEventsQueryVariables = Exact<{
+  input: Scalars['String'];
+}>;
+
+
+export type SearchEventsQuery = (
+  { __typename?: 'query_root' }
+  & { Events: Array<(
+    { __typename?: 'Events' }
+    & Pick<Events, 'id' | 'title'>
   )> }
 );
 
@@ -10225,6 +10546,7 @@ export const GetEventByIdDocument = gql`
       teams_per_spot
       image
       line_items
+      status
       Inventory {
         id
         location
@@ -10270,6 +10592,42 @@ export function useGetEventByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetEventByIdQueryHookResult = ReturnType<typeof useGetEventByIdQuery>;
 export type GetEventByIdLazyQueryHookResult = ReturnType<typeof useGetEventByIdLazyQuery>;
 export type GetEventByIdQueryResult = Apollo.QueryResult<GetEventByIdQuery, GetEventByIdQueryVariables>;
+export const SearchEventsDocument = gql`
+    query SearchEvents($input: String!) {
+  Events(where: {title: {_ilike: $input}}) {
+    id
+    title
+  }
+}
+    `;
+
+/**
+ * __useSearchEventsQuery__
+ *
+ * To run a query within a React component, call `useSearchEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchEventsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchEventsQuery(baseOptions: Apollo.QueryHookOptions<SearchEventsQuery, SearchEventsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchEventsQuery, SearchEventsQueryVariables>(SearchEventsDocument, options);
+      }
+export function useSearchEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchEventsQuery, SearchEventsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchEventsQuery, SearchEventsQueryVariables>(SearchEventsDocument, options);
+        }
+export type SearchEventsQueryHookResult = ReturnType<typeof useSearchEventsQuery>;
+export type SearchEventsLazyQueryHookResult = ReturnType<typeof useSearchEventsLazyQuery>;
+export type SearchEventsQueryResult = Apollo.QueryResult<SearchEventsQuery, SearchEventsQueryVariables>;
 export const GetBreakByIdDocument = gql`
     query GetBreakById($id: uuid!) {
   Breaks_by_pk(id: $id) {

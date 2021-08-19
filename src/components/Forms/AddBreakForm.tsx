@@ -34,6 +34,7 @@ import {
 } from '@chakra-ui/react';
 
 import ImageUploader from '@components/ImageUploader';
+import AutocompleteEvents from '@components/AutocompleteEvents';
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -59,9 +60,8 @@ const schema = yup.object().shape({
     .when('break_type', {
       is: (val: string) =>
         val &&
-        val !== Break_Type_Enum.Personal &&
-        val !== Break_Type_Enum.PickYourTeam &&
-        val !== Break_Type_Enum.PickYourDivision,
+        (val === Break_Type_Enum.RandomTeam ||
+          val === Break_Type_Enum.RandomDivision),
       then: yup
         .number()
         .typeError('Must be a number')
@@ -133,6 +133,7 @@ type TFormData = {
 
 type TFormProps = {
   event_id?: string;
+  event_title?: string;
   break_data?: {
     id?: string;
     title: string;
@@ -143,6 +144,7 @@ type TFormProps = {
     teams_per_spot?: number | null | undefined;
     price?: number | null;
     line_items?: TBreakLineItem[];
+    status: string;
     Inventory: {
       id: string;
       location: string;
@@ -163,13 +165,12 @@ type TFormProps = {
 /**
  *
  * TODO: Handle errors
- * TODO: Add image handling
- * TODO: Add event autocomplete/dropdown
  * TODO: Validate products are chosen
  * TODO: Show selected products on edit
  */
 const AddBreakForm: React.FC<TFormProps> = ({
   event_id,
+  event_title,
   break_data,
   callback,
 }) => {
@@ -212,7 +213,6 @@ const AddBreakForm: React.FC<TFormProps> = ({
     selectedItems: TInventoryAutcomplete[] | undefined,
   ) => {
     if (selectedItems) {
-      console.log(selectedItems);
       setSelectedInventory(selectedItems);
     }
   };
@@ -352,7 +352,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
           result.break_type === Break_Type_Enum.Personal
             ? selectedInventory.length
             : result.spots,
-        teams_per_spot: result.teams_per_spot,
+        teams_per_spot: result.teams_per_spot ? result.teams_per_spot : null,
         break_type: result.break_type,
         price: result.price,
       };
@@ -413,7 +413,13 @@ const AddBreakForm: React.FC<TFormProps> = ({
 
         <FormControl isInvalid={!!errors.event_id} mb={5}>
           <FormLabel>Event ID</FormLabel>
-          <Input {...register('event_id')} />
+          <AutocompleteEvents
+            isInvalid={!!errors.event_id}
+            defaultValue={event_title}
+            callback={(val: string) => {
+              setValue('event_id', val);
+            }}
+          />
           <FormErrorMessage>{errors.event_id?.message}</FormErrorMessage>
         </FormControl>
 
@@ -494,21 +500,20 @@ const AddBreakForm: React.FC<TFormProps> = ({
             </FormControl>
           )}
 
-          {watchType !== Break_Type_Enum.Personal &&
-            watchType !== Break_Type_Enum.PickYourTeam &&
-            watchType !== Break_Type_Enum.PickYourDivision && (
-              <FormControl
-                isInvalid={!!errors.teams_per_spot}
-                width={1 / 3}
-                px={gridSpace.child}
-              >
-                <FormLabel>Teams Per Spot</FormLabel>
-                <Input {...register('teams_per_spot')} />
-                <FormErrorMessage>
-                  {errors.teams_per_spot?.message}
-                </FormErrorMessage>
-              </FormControl>
-            )}
+          {(watchType === Break_Type_Enum.RandomDivision ||
+            watchType === Break_Type_Enum.RandomTeam) && (
+            <FormControl
+              isInvalid={!!errors.teams_per_spot}
+              width={1 / 3}
+              px={gridSpace.child}
+            >
+              <FormLabel>Teams Per Spot</FormLabel>
+              <Input {...register('teams_per_spot')} />
+              <FormErrorMessage>
+                {errors.teams_per_spot?.message}
+              </FormErrorMessage>
+            </FormControl>
+          )}
         </Flex>
 
         {watchLineItems?.length > 0 && (

@@ -20,7 +20,11 @@ import {
   Link,
 } from '@chakra-ui/react';
 
-import { useGetBreakByIdQuery } from '@generated/graphql';
+import {
+  useGetBreakByIdQuery,
+  useUpdateBreakMutation,
+  Break_Status_Enum,
+} from '@generated/graphql';
 
 import Layout from '@layouts';
 import ActionBar from '@components/ActionBar';
@@ -41,7 +45,23 @@ const BreakPage: React.FC = () => {
     loading: breakQueryLoading,
     error: breakQueryError,
     data: breakQueryData,
+    refetch: refetchBreak,
   } = useGetBreakByIdQuery({ variables: { id: breakId } });
+
+  const [
+    updateBreak,
+    {
+      data: updateBreakMutationData,
+      loading: updateBreakMutationLoading,
+      error: updateBreakMutationError,
+    },
+  ] = useUpdateBreakMutation({
+    onCompleted: () => {
+      refetchBreak({
+        id: breakId,
+      });
+    },
+  });
 
   return (
     <>
@@ -81,6 +101,55 @@ const BreakPage: React.FC = () => {
                     imgixParams={{ fit: 'clamp' }}
                   />
                   <Box flex="1">
+                    <HStack spacing={4} mb={7}>
+                      {breakQueryData.Breaks_by_pk?.status ===
+                        Break_Status_Enum.Draft && (
+                        <Button
+                          colorScheme="blue"
+                          size="sm"
+                          onClick={() => {
+                            updateBreak({
+                              variables: {
+                                id: breakId,
+                                data: {
+                                  status: Break_Status_Enum.Available,
+                                },
+                              },
+                            });
+                          }}
+                        >
+                          Publish
+                        </Button>
+                      )}
+
+                      {breakQueryData.Breaks_by_pk?.status !==
+                        Break_Status_Enum.Draft && (
+                        <Button
+                          colorScheme="blue"
+                          size="sm"
+                          onClick={() => {
+                            updateBreak({
+                              variables: {
+                                id: breakId,
+                                data: {
+                                  status: Break_Status_Enum.Draft,
+                                },
+                              },
+                            });
+                          }}
+                        >
+                          Set to Draft
+                        </Button>
+                      )}
+                    </HStack>
+
+                    <Box mb={7}>
+                      <Heading as="h3" size="sm" mb={1}>
+                        Status:
+                      </Heading>
+                      <Text>{breakQueryData.Breaks_by_pk?.status}</Text>
+                    </Box>
+
                     <Box mb={7}>
                       <Heading as="h3" size="sm" mb={1}>
                         Description:

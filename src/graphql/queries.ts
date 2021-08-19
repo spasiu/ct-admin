@@ -246,6 +246,7 @@ export const GET_EVENT_BY_ID = gql`
         teams_per_spot
         image
         line_items
+        status
         Inventory {
           id
           location
@@ -260,6 +261,15 @@ export const GET_EVENT_BY_ID = gql`
           price
         }
       }
+    }
+  }
+`;
+
+export const SEARCH_EVENTS = gql`
+  query SearchEvents($input: String!) {
+    Events(where: { title: { _ilike: $input } }) {
+      id
+      title
     }
   }
 `;
