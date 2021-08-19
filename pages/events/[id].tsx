@@ -265,6 +265,24 @@ const EventPage: React.FC = () => {
                           )}
                         </>
                       )}
+
+                      {eventQueryData.Events_by_pk?.status ===
+                        Event_Status_Enum.Live && (
+                        <Button
+                          colorScheme="green"
+                          size="sm"
+                          onClick={() => {
+                            updateEvent({
+                              variables: {
+                                id: eventId,
+                                data: { status: Event_Status_Enum.Completed },
+                              },
+                            });
+                          }}
+                        >
+                          Complete Event
+                        </Button>
+                      )}
                     </HStack>
 
                     <Box mb={7}>
