@@ -103,6 +103,11 @@ const schema = yup.object().shape({
         .required('Required'),
     }),
   ),
+  datasetItems: yup.array().of(
+    yup.object().shape({
+      value: yup.string().required('Required'),
+    }),
+  ),
 });
 
 type TInventoryAutcomplete = {
@@ -128,6 +133,9 @@ type TFormData = {
   lineItems: {
     value: string;
     cost: number;
+  }[];
+  datasetItems: {
+    value: string;
   }[];
 };
 
@@ -307,31 +315,81 @@ const AddBreakForm: React.FC<TFormProps> = ({
     },
   });
 
-  const { fields } = useFieldArray({
+  const { fields: lineItemFields } = useFieldArray({
     control,
     name: 'lineItems',
   });
 
+  const { fields: datasetFields } = useFieldArray({
+    control,
+    name: 'datasetItems',
+  });
+
   const watchType = watch('break_type');
   const watchSpots = watch('spots');
+  const watchTeamsPerSpot = watch('teams_per_spot');
   const watchLineItems = watch('lineItems');
+  const watchDatasetItems = watch('datasetItems');
 
-  // Change Line Items
+  // Change Line or Data Items
   useEffect(() => {
-    const newLineItems = [];
-
+    // Set line items for pick your team or division
     if (
       !isNaN(Number(watchSpots)) &&
       (watchType === Break_Type_Enum.PickYourTeam ||
         watchType === Break_Type_Enum.PickYourDivision)
     ) {
+      const newLineItems = [];
+
       for (let i = 0; i < Number(watchSpots); i++) {
         newLineItems.push({ value: '', cost: 0 });
       }
+
+      setValue('lineItems', newLineItems);
     }
 
-    setValue('lineItems', newLineItems);
-  }, [watchSpots, watchType]);
+    // Set line items for random team or division
+    if (
+      !isNaN(Number(watchSpots)) &&
+      !isNaN(Number(watchTeamsPerSpot)) &&
+      (watchType === Break_Type_Enum.RandomDivision ||
+        watchType === Break_Type_Enum.RandomTeam)
+    ) {
+      const newDatasetItems = [];
+
+      for (let i = 0; i < Number(watchSpots) * Number(watchTeamsPerSpot); i++) {
+        newDatasetItems.push({ value: '' });
+      }
+
+      setValue('datasetItems', newDatasetItems);
+    }
+  }, [watchSpots, watchType, watchTeamsPerSpot]);
+
+  // Handle add item to dataset
+  const addDatasetRow = function () {
+    const currentDataset = getValues('datasetItems');
+
+    currentDataset.push({ value: '' });
+
+    setValue('datasetItems', currentDataset);
+  };
+
+  // Handle remove item from dataset
+  const removeDatasetRow = function () {
+    const currentSpots = getValues('spots');
+    const currentTeamsPerSpot = getValues('teams_per_spot');
+    const currentDataset = getValues('datasetItems');
+
+    if (
+      !isNaN(Number(currentSpots)) &&
+      !isNaN(Number(currentTeamsPerSpot)) &&
+      currentDataset.length > Number(currentSpots) * Number(currentTeamsPerSpot)
+    ) {
+      currentDataset.pop();
+    }
+
+    setValue('datasetItems', currentDataset);
+  };
 
   /**
    * Handle form submission
@@ -342,6 +400,8 @@ const AddBreakForm: React.FC<TFormProps> = ({
       setLoading(true);
 
       setBreakLineItems(result.lineItems);
+
+      console.log(result);
 
       const submitData = {
         event_id: result.event_id,
@@ -355,6 +415,10 @@ const AddBreakForm: React.FC<TFormProps> = ({
         teams_per_spot: result.teams_per_spot ? result.teams_per_spot : null,
         break_type: result.break_type,
         price: result.price,
+        dataset:
+          result.datasetItems.length > 0
+            ? result.datasetItems.map((item) => ({ value: item.value }))
+            : null,
       };
 
       switch (operation) {
@@ -475,20 +539,26 @@ const AddBreakForm: React.FC<TFormProps> = ({
         </Flex>
 
         <Flex mx={gridSpace.parent} mb={10}>
-          {watchType !== Break_Type_Enum.PickYourTeam &&
-            watchType !== Break_Type_Enum.PickYourDivision && (
-              <FormControl
-                isInvalid={!!errors.price}
-                width={1 / 3}
-                px={gridSpace.child}
-              >
-                <FormLabel>Price ($)</FormLabel>
-                <Input {...register('price')} />
-                <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
-              </FormControl>
-            )}
+          {(watchType === Break_Type_Enum.HitDraft ||
+            watchType === Break_Type_Enum.Personal ||
+            watchType === Break_Type_Enum.RandomDivision ||
+            watchType === Break_Type_Enum.RandomTeam) && (
+            <FormControl
+              isInvalid={!!errors.price}
+              width={1 / 3}
+              px={gridSpace.child}
+            >
+              <FormLabel>Price ($)</FormLabel>
+              <Input {...register('price')} />
+              <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
+            </FormControl>
+          )}
 
-          {watchType !== Break_Type_Enum.Personal && (
+          {(watchType === Break_Type_Enum.HitDraft ||
+            watchType === Break_Type_Enum.PickYourDivision ||
+            watchType === Break_Type_Enum.PickYourTeam ||
+            watchType === Break_Type_Enum.RandomDivision ||
+            watchType === Break_Type_Enum.RandomTeam) && (
             <FormControl
               isInvalid={!!errors.spots}
               width={1 / 3}
@@ -516,12 +586,43 @@ const AddBreakForm: React.FC<TFormProps> = ({
           )}
         </Flex>
 
+        {watchDatasetItems?.length > 0 && (
+          <Box mb={10}>
+            <Heading size="sm" mb={2}>
+              Randomization Items
+            </Heading>
+            <Box mb={4}>
+              {datasetFields.map((field, index) => (
+                <FormControl
+                  key={field.id}
+                  isInvalid={
+                    errors.datasetItems && !!errors.datasetItems[index]?.value
+                  }
+                  mb={2}
+                >
+                  <Input
+                    placeholder="Team/Division"
+                    {...register(`datasetItems.${index}.value` as const)}
+                  />
+                </FormControl>
+              ))}
+            </Box>
+
+            <Button colorScheme="green" onClick={addDatasetRow} mr={4}>
+              Add Row
+            </Button>
+            <Button colorScheme="red" onClick={removeDatasetRow}>
+              Remove Row
+            </Button>
+          </Box>
+        )}
+
         {watchLineItems?.length > 0 && (
           <Box mb={10}>
             <Heading size="sm" mb={2}>
               Line Items
             </Heading>
-            {fields.map((field, index) => (
+            {lineItemFields.map((field, index) => (
               <Flex key={field.id} mx={gridSpace.parent} mb={2}>
                 <FormControl
                   isInvalid={

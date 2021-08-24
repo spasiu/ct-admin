@@ -980,12 +980,14 @@ export type Breaks = {
   break_status: Break_Status;
   break_type: Break_Type_Enum;
   created_at: Scalars['timestamptz'];
+  dataset?: Maybe<Scalars['jsonb']>;
   description: Scalars['String'];
   event_id: Scalars['uuid'];
   id: Scalars['uuid'];
   image: Scalars['String'];
   line_items?: Maybe<Scalars['jsonb']>;
   price?: Maybe<Scalars['numeric']>;
+  result?: Maybe<Scalars['jsonb']>;
   spots: Scalars['Int'];
   status: Break_Status_Enum;
   teams_per_spot?: Maybe<Scalars['Int']>;
@@ -1077,7 +1079,19 @@ export type BreaksSaves_AggregateArgs = {
 
 
 /** columns and relationships of "Breaks" */
+export type BreaksDatasetArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "Breaks" */
 export type BreaksLine_ItemsArgs = {
+  path?: Maybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "Breaks" */
+export type BreaksResultArgs = {
   path?: Maybe<Scalars['String']>;
 };
 
@@ -1128,7 +1142,9 @@ export type Breaks_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Breaks_Append_Input = {
+  dataset?: Maybe<Scalars['jsonb']>;
   line_items?: Maybe<Scalars['jsonb']>;
+  result?: Maybe<Scalars['jsonb']>;
 };
 
 /** input type for inserting array relation for remote table "Breaks" */
@@ -1166,12 +1182,14 @@ export type Breaks_Bool_Exp = {
   break_status?: Maybe<Break_Status_Bool_Exp>;
   break_type?: Maybe<Break_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  dataset?: Maybe<Jsonb_Comparison_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   event_id?: Maybe<Uuid_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   image?: Maybe<String_Comparison_Exp>;
   line_items?: Maybe<Jsonb_Comparison_Exp>;
   price?: Maybe<Numeric_Comparison_Exp>;
+  result?: Maybe<Jsonb_Comparison_Exp>;
   spots?: Maybe<Int_Comparison_Exp>;
   status?: Maybe<Break_Status_Enum_Comparison_Exp>;
   teams_per_spot?: Maybe<Int_Comparison_Exp>;
@@ -1188,17 +1206,23 @@ export enum Breaks_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Breaks_Delete_At_Path_Input = {
+  dataset?: Maybe<Array<Scalars['String']>>;
   line_items?: Maybe<Array<Scalars['String']>>;
+  result?: Maybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Breaks_Delete_Elem_Input = {
+  dataset?: Maybe<Scalars['Int']>;
   line_items?: Maybe<Scalars['Int']>;
+  result?: Maybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Breaks_Delete_Key_Input = {
+  dataset?: Maybe<Scalars['String']>;
   line_items?: Maybe<Scalars['String']>;
+  result?: Maybe<Scalars['String']>;
 };
 
 /** input type for incrementing numeric columns in table "Breaks" */
@@ -1218,12 +1242,14 @@ export type Breaks_Insert_Input = {
   break_status?: Maybe<Break_Status_Obj_Rel_Insert_Input>;
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  dataset?: Maybe<Scalars['jsonb']>;
   description?: Maybe<Scalars['String']>;
   event_id?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
   image?: Maybe<Scalars['String']>;
   line_items?: Maybe<Scalars['jsonb']>;
   price?: Maybe<Scalars['numeric']>;
+  result?: Maybe<Scalars['jsonb']>;
   spots?: Maybe<Scalars['Int']>;
   status?: Maybe<Break_Status_Enum>;
   teams_per_spot?: Maybe<Scalars['Int']>;
@@ -1323,12 +1349,14 @@ export type Breaks_Order_By = {
   break_status?: Maybe<Break_Status_Order_By>;
   break_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
+  dataset?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   event_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image?: Maybe<Order_By>;
   line_items?: Maybe<Order_By>;
   price?: Maybe<Order_By>;
+  result?: Maybe<Order_By>;
   spots?: Maybe<Order_By>;
   status?: Maybe<Order_By>;
   teams_per_spot?: Maybe<Order_By>;
@@ -1344,7 +1372,9 @@ export type Breaks_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Breaks_Prepend_Input = {
+  dataset?: Maybe<Scalars['jsonb']>;
   line_items?: Maybe<Scalars['jsonb']>;
+  result?: Maybe<Scalars['jsonb']>;
 };
 
 /** select columns of table "Breaks" */
@@ -1353,6 +1383,8 @@ export enum Breaks_Select_Column {
   BreakType = 'break_type',
   /** column name */
   CreatedAt = 'created_at',
+  /** column name */
+  Dataset = 'dataset',
   /** column name */
   Description = 'description',
   /** column name */
@@ -1365,6 +1397,8 @@ export enum Breaks_Select_Column {
   LineItems = 'line_items',
   /** column name */
   Price = 'price',
+  /** column name */
+  Result = 'result',
   /** column name */
   Spots = 'spots',
   /** column name */
@@ -1381,12 +1415,14 @@ export enum Breaks_Select_Column {
 export type Breaks_Set_Input = {
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
+  dataset?: Maybe<Scalars['jsonb']>;
   description?: Maybe<Scalars['String']>;
   event_id?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
   image?: Maybe<Scalars['String']>;
   line_items?: Maybe<Scalars['jsonb']>;
   price?: Maybe<Scalars['numeric']>;
+  result?: Maybe<Scalars['jsonb']>;
   spots?: Maybe<Scalars['Int']>;
   status?: Maybe<Break_Status_Enum>;
   teams_per_spot?: Maybe<Scalars['Int']>;
@@ -1461,6 +1497,8 @@ export enum Breaks_Update_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
+  Dataset = 'dataset',
+  /** column name */
   Description = 'description',
   /** column name */
   EventId = 'event_id',
@@ -1472,6 +1510,8 @@ export enum Breaks_Update_Column {
   LineItems = 'line_items',
   /** column name */
   Price = 'price',
+  /** column name */
+  Result = 'result',
   /** column name */
   Spots = 'spots',
   /** column name */
@@ -9110,6 +9150,20 @@ export type UpdateBreakerProfileMutation = (
   )> }
 );
 
+export type BreakUpdateMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  result: Scalars['jsonb'];
+}>;
+
+
+export type BreakUpdateMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Breaks_by_pk?: Maybe<(
+    { __typename?: 'Breaks' }
+    & Pick<Breaks, 'id'>
+  )> }
+);
+
 export type GetProductsQueryVariables = Exact<{
   unitOfMeasure?: Maybe<Array<Unit_Of_Measure_Enum> | Unit_Of_Measure_Enum>;
   input?: Maybe<Scalars['String']>;
@@ -10156,6 +10210,43 @@ export function useUpdateBreakerProfileMutation(baseOptions?: Apollo.MutationHoo
 export type UpdateBreakerProfileMutationHookResult = ReturnType<typeof useUpdateBreakerProfileMutation>;
 export type UpdateBreakerProfileMutationResult = Apollo.MutationResult<UpdateBreakerProfileMutation>;
 export type UpdateBreakerProfileMutationOptions = Apollo.BaseMutationOptions<UpdateBreakerProfileMutation, UpdateBreakerProfileMutationVariables>;
+export const BreakUpdateDocument = gql`
+    mutation BreakUpdate($id: uuid!, $result: jsonb!) {
+  update_Breaks_by_pk(
+    pk_columns: {id: $id}
+    _set: {result: $result, status: LIVE}
+  ) {
+    id
+  }
+}
+    `;
+export type BreakUpdateMutationFn = Apollo.MutationFunction<BreakUpdateMutation, BreakUpdateMutationVariables>;
+
+/**
+ * __useBreakUpdateMutation__
+ *
+ * To run a mutation, you first call `useBreakUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBreakUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [breakUpdateMutation, { data, loading, error }] = useBreakUpdateMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      result: // value for 'result'
+ *   },
+ * });
+ */
+export function useBreakUpdateMutation(baseOptions?: Apollo.MutationHookOptions<BreakUpdateMutation, BreakUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BreakUpdateMutation, BreakUpdateMutationVariables>(BreakUpdateDocument, options);
+      }
+export type BreakUpdateMutationHookResult = ReturnType<typeof useBreakUpdateMutation>;
+export type BreakUpdateMutationResult = Apollo.MutationResult<BreakUpdateMutation>;
+export type BreakUpdateMutationOptions = Apollo.BaseMutationOptions<BreakUpdateMutation, BreakUpdateMutationVariables>;
 export const GetProductsDocument = gql`
     query GetProducts($unitOfMeasure: [unit_of_measure_enum!], $input: String) {
   Products(

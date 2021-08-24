@@ -33,7 +33,7 @@ import {
 } from '@generated/graphql';
 
 import paths from '@config/paths';
-import { auth, db } from '@config/firebase';
+import { auth, db, functions } from '@config/firebase';
 import { BreakTypeValues } from '@config/values';
 
 import Layout from '@layouts';
@@ -82,6 +82,7 @@ const EventPage: React.FC = () => {
   const { id } = router.query;
   const eventId = id as string;
   const [streamActive, setStreamActive] = useState(false);
+  const startBreak = functions.httpsCallable('startBreak');
   let watchStream: () => void;
 
   const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
@@ -242,8 +243,7 @@ const EventPage: React.FC = () => {
                             size="sm"
                             isDisabled={
                               user?.uid !==
-                                eventQueryData?.Events_by_pk?.User?.id ||
-                              !streamActive
+                              eventQueryData?.Events_by_pk?.User?.id
                             }
                             onClick={() => {
                               updateEvent({
@@ -256,9 +256,8 @@ const EventPage: React.FC = () => {
                           >
                             Go Live
                           </Button>
-                          {(user?.uid !==
-                            eventQueryData?.Events_by_pk?.User?.id ||
-                            !streamActive) && (
+                          {user?.uid !==
+                            eventQueryData?.Events_by_pk?.User?.id && (
                             <Text fontSize="sm">
                               Must be logged in as breaker and broadcasting
                             </Text>
@@ -375,6 +374,50 @@ const EventPage: React.FC = () => {
                       <Td>{brk.status}</Td>
                       <Td textAlign="right">
                         <HStack spacing={2} justify="flex-end">
+                          {brk.status === Break_Status_Enum.Live &&
+                            eventQueryData.Events_by_pk?.status ===
+                              Event_Status_Enum.Live && (
+                              <Button
+                                colorScheme="red"
+                                size="sm"
+                                height="40px"
+                                mr={4}
+                                onClick={() => {
+                                  updateBreak({
+                                    variables: {
+                                      id: brk.id,
+                                      data: {
+                                        status: Break_Status_Enum.Completed,
+                                      },
+                                    },
+                                  });
+                                }}
+                              >
+                                Stop Break
+                              </Button>
+                            )}
+
+                          {brk.status !== Break_Status_Enum.Draft &&
+                            brk.status !== Break_Status_Enum.Live &&
+                            eventQueryData.Events_by_pk?.status ===
+                              Event_Status_Enum.Live && (
+                              <Button
+                                colorScheme="green"
+                                size="sm"
+                                height="40px"
+                                mr={4}
+                                onClick={() => {
+                                  startBreak({
+                                    breakId: brk.id,
+                                  }).then(() => {
+                                    refetchEvent();
+                                  });
+                                }}
+                              >
+                                Start Break
+                              </Button>
+                            )}
+
                           {brk.status === Break_Status_Enum.Draft && (
                             <Button
                               colorScheme="blue"
