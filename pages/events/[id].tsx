@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import format from 'date-fns/format';
 import { AddIcon } from '@chakra-ui/icons';
 import { MdEdit, MdVisibility } from 'react-icons/md';
-import { HiArchive } from 'react-icons/hi';
+import { TiMediaRecord } from 'react-icons/ti';
 import NextLink from 'next/link';
 import Imgix from 'react-imgix';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -21,6 +21,15 @@ import {
   Td,
   IconButton,
   HStack,
+  Badge,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogCloseButton,
+  AlertDialogBody,
+  AlertDialogFooter,
+  useDisclosure,
 } from '@chakra-ui/react';
 
 import {
@@ -37,10 +46,10 @@ import { auth, db, functions } from '@config/firebase';
 import { BreakTypeValues } from '@config/values';
 
 import Layout from '@layouts';
-import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
 import AddBreakForm from '@components/Forms/AddBreakForm';
 import FormModal from '@components/Modals/FormModal';
+import ArchiveConfirm from '@components/ArchiveConfirm';
 
 type TSelectedBreak = {
   id?: string;
@@ -83,6 +92,12 @@ const EventPage: React.FC = () => {
   const eventId = id as string;
   const [streamActive, setStreamActive] = useState(false);
   const startBreak = functions.httpsCallable('startBreak');
+  const {
+    isOpen: isProceedAlertOpen,
+    onOpen: onOpenProceedAlert,
+    onClose: onCloseProceedAlert,
+  } = useDisclosure();
+  const proceedCancelRef = React.useRef(null);
   let watchStream: () => void;
 
   const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
@@ -246,20 +261,40 @@ const EventPage: React.FC = () => {
                               eventQueryData?.Events_by_pk?.User?.id
                             }
                             onClick={() => {
-                              updateEvent({
-                                variables: {
-                                  id: eventId,
-                                  data: { status: Event_Status_Enum.Live },
-                                },
-                              });
+                              if (streamActive) {
+                                updateEvent({
+                                  variables: {
+                                    id: eventId,
+                                    data: { status: Event_Status_Enum.Live },
+                                  },
+                                });
+                              } else {
+                                onOpenProceedAlert();
+                              }
                             }}
                           >
                             Go Live
                           </Button>
+                          {user?.uid ===
+                            eventQueryData?.Events_by_pk?.User?.id &&
+                            streamActive && (
+                              <Badge
+                                variant="outline"
+                                colorScheme="green"
+                                display="flex"
+                                alignItems="center"
+                              >
+                                <Box as="span" mr={1}>
+                                  <TiMediaRecord color="red" />
+                                </Box>
+                                Stream is live
+                              </Badge>
+                            )}
+
                           {user?.uid !==
                             eventQueryData?.Events_by_pk?.User?.id && (
                             <Text fontSize="sm">
-                              Must be logged in as breaker and broadcasting
+                              Must be logged in as event's breaker
                             </Text>
                           )}
                         </>
@@ -281,6 +316,44 @@ const EventPage: React.FC = () => {
                         >
                           Complete Event
                         </Button>
+                      )}
+
+                      {eventQueryData.Events_by_pk?.status ===
+                        Event_Status_Enum.Completed && (
+                        <>
+                          <Button
+                            colorScheme="blue"
+                            size="sm"
+                            onClick={() => {
+                              updateEvent({
+                                variables: {
+                                  id: eventId,
+                                  data: { status: Event_Status_Enum.Draft },
+                                },
+                              });
+                            }}
+                          >
+                            Set to Draft
+                          </Button>
+
+                          <Button
+                            colorScheme="green"
+                            size="sm"
+                            isDisabled={
+                              eventQueryData.Events_by_pk?.Breaks.length === 0
+                            }
+                            onClick={() => {
+                              updateEvent({
+                                variables: {
+                                  id: eventId,
+                                  data: { status: Event_Status_Enum.Scheduled },
+                                },
+                              });
+                            }}
+                          >
+                            Re-Publish
+                          </Button>
+                        </>
                       )}
                     </HStack>
 
@@ -456,10 +529,8 @@ const EventPage: React.FC = () => {
                             }}
                           />
 
-                          <IconButton
-                            aria-label="Archive"
-                            icon={<HiArchive />}
-                            onClick={() => {
+                          <ArchiveConfirm
+                            callback={() => {
                               archiveBreak({ variables: { ids: [brk.id] } });
                             }}
                           />
@@ -489,6 +560,44 @@ const EventPage: React.FC = () => {
             }}
           />
         </FormModal>
+
+        <AlertDialog
+          motionPreset="slideInBottom"
+          leastDestructiveRef={proceedCancelRef}
+          onClose={onCloseProceedAlert}
+          isOpen={isProceedAlertOpen}
+          isCentered
+        >
+          <AlertDialogOverlay />
+
+          <AlertDialogContent>
+            <AlertDialogHeader>Go Live</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              Are you sure you want to start the event without an active stream?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={proceedCancelRef} onClick={onCloseProceedAlert}>
+                No
+              </Button>
+              <Button
+                colorScheme="red"
+                ml={3}
+                onClick={() => {
+                  updateEvent({
+                    variables: {
+                      id: eventId,
+                      data: { status: Event_Status_Enum.Live },
+                    },
+                  });
+                  onCloseProceedAlert();
+                }}
+              >
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </Layout>
     </>
   );

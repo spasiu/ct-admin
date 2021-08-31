@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import format from 'date-fns/format';
 import { AddIcon } from '@chakra-ui/icons';
 import { MdVisibility, MdEdit } from 'react-icons/md';
-import { HiArchive } from 'react-icons/hi';
 import NextLink from 'next/link';
 
 import {
@@ -29,6 +28,7 @@ import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
 import FormModal from '@components/Modals/FormModal';
 import AddHitForm from '@components/Forms/AddHitForm';
+import ArchiveConfirm from '@components/ArchiveConfirm';
 
 type TSelectedHit = {
   id: string;
@@ -140,10 +140,9 @@ const HitsPage: React.FC = () => {
                             setAddHitModalOpen(true);
                           }}
                         />
-                        <IconButton
-                          aria-label="Archive"
-                          icon={<HiArchive />}
-                          onClick={() => {
+
+                        <ArchiveConfirm
+                          callback={() => {
                             console.log('archive');
                           }}
                         />

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AddIcon } from '@chakra-ui/icons';
 import { MdVisibility, MdEdit } from 'react-icons/md';
-import { HiArchive } from 'react-icons/hi';
 import format from 'date-fns/format';
 import NextLink from 'next/link';
 
@@ -25,6 +24,8 @@ import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
 import AddEventForm from '@components/Forms/AddEventForm';
 import FormModal from '@components/Modals/FormModal';
+import ArchiveConfirm from '@components/ArchiveConfirm';
+
 import {
   useGetEventsQuery,
   useDeleteEventsAndBreaksByEventIdsMutation,
@@ -138,10 +139,8 @@ const EventsPage: React.FC = () => {
                             setAddEventModalOpen(true);
                           }}
                         />
-                        <IconButton
-                          aria-label="Archive"
-                          icon={<HiArchive />}
-                          onClick={() => {
+                        <ArchiveConfirm
+                          callback={() => {
                             deleteEventsById({
                               variables: { ids: [event.id] },
                             });

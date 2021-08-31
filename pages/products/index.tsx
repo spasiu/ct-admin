@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AddIcon } from '@chakra-ui/icons';
 import { MdVisibility, MdEdit } from 'react-icons/md';
-import { HiArchive } from 'react-icons/hi';
 import NextLink from 'next/link';
 
 import {
@@ -37,6 +36,7 @@ import SEO from '@components/SEO';
 import FormModal from '@components/Modals/FormModal';
 import AddProductForm from '@components/Forms/AddProductForm';
 import FilterForm from '@components/Forms/FilterForm';
+import ArchiveConfirm from '@components/ArchiveConfirm';
 
 type TSelectedProduct = {
   id: string;
@@ -235,10 +235,8 @@ const ProductsPage: React.FC = () => {
                                   setAddProductModalOpen(true);
                                 }}
                               />
-                              <IconButton
-                                aria-label="Archive"
-                                icon={<HiArchive />}
-                                onClick={() => {
+                              <ArchiveConfirm
+                                callback={() => {
                                   archiveProducts({
                                     variables: { ids: [prod.id] },
                                   });
@@ -318,10 +316,9 @@ const ProductsPage: React.FC = () => {
                                   setAddProductModalOpen(true);
                                 }}
                               />
-                              <IconButton
-                                aria-label="Archive"
-                                icon={<HiArchive />}
-                                onClick={() => {
+
+                              <ArchiveConfirm
+                                callback={() => {
                                   archiveProducts({
                                     variables: { ids: [prod.id] },
                                   });

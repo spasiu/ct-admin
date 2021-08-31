@@ -37,6 +37,7 @@ import FormModal from '@components/Modals/FormModal';
 import AddProductForm from '@components/Forms/AddProductForm';
 import AddInventoryForm from '@components/Forms/AddInventoryForm';
 import StatDisplay from '@components/StatDisplay';
+import ArchiveConfirm from '@components/ArchiveConfirm';
 
 type TSelectedProduct = {
   id: string;
@@ -62,6 +63,10 @@ type TSelectedProduct = {
   grade?: string | null;
 };
 
+/**
+ * TODO: add archive for inventory
+ *
+ */
 const ProductDetailsPage: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -309,10 +314,8 @@ const ProductDetailsPage: React.FC = () => {
                         }}
                       />
 
-                      <IconButton
-                        aria-label="Archive"
-                        icon={<HiArchive />}
-                        onClick={() => {
+                      <ArchiveConfirm
+                        callback={() => {
                           console.log('archive');
                         }}
                       />

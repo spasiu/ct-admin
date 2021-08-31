@@ -101,8 +101,6 @@ const AddBreakerProfileForm: React.FC<TFormProps> = ({
    * @param result object Validated form result
    */
   const onSubmit = (result: TFormData) => {
-    console.log(result);
-
     const submitData = {
       id,
       first_name: result.first_name ? result.first_name : '',
