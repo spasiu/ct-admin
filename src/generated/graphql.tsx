@@ -9354,14 +9354,7 @@ export type GetEventByIdQuery = (
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset'>
-      & { Inventory: Array<(
-        { __typename?: 'Inventory' }
-        & Pick<Inventory, 'id' | 'location'>
-        & { Product: (
-          { __typename?: 'Products' }
-          & Pick<Products, 'id' | 'description'>
-        ) }
-      )>, BreakProductItems: Array<(
+      & { BreakProductItems: Array<(
         { __typename?: 'BreakProductItems' }
         & Pick<BreakProductItems, 'id' | 'title' | 'price'>
       )> }
@@ -10643,14 +10636,6 @@ export const GetEventByIdDocument = gql`
       line_items
       status
       dataset
-      Inventory {
-        id
-        location
-        Product {
-          id
-          description
-        }
-      }
       BreakProductItems(order_by: {title: asc}) {
         id
         title

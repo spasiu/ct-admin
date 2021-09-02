@@ -159,14 +159,6 @@ type TFormProps = {
     line_items?: TBreakLineItem[];
     dataset?: TDatasetLineItem[];
     status: string;
-    Inventory: {
-      id: string;
-      location: string;
-      Product: {
-        id: string;
-        description?: string | null | undefined;
-      };
-    }[];
     BreakProductItems: {
       id: string;
       title: string;

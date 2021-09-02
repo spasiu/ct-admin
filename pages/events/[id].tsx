@@ -68,14 +68,6 @@ type TSelectedBreak = {
   dataset?: {
     value: string;
   }[];
-  Inventory: {
-    id: string;
-    location: string;
-    Product: {
-      id: string;
-      description?: string | null | undefined;
-    };
-  }[];
   BreakProductItems: {
     id: string;
     title: string;

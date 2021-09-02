@@ -248,14 +248,6 @@ export const GET_EVENT_BY_ID = gql`
         line_items
         status
         dataset
-        Inventory {
-          id
-          location
-          Product {
-            id
-            description
-          }
-        }
         BreakProductItems(order_by: { title: asc }) {
           id
           title

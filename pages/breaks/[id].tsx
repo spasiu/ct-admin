@@ -266,24 +266,26 @@ const BreakPage: React.FC = () => {
           )}
         </Box>
 
-        {breakQueryData && breakQueryData.Breaks_by_pk && <FormModal
-          title="Add Break"
-          isOpen={isAddBreakModalOpen}
-          setModalOpen={setAddBreakModalOpen}
-          closeOnEsc={false}
-        >
-          <AddBreakForm
-            event_id={breakQueryData.Breaks_by_pk?.Event?.id}
-            event_title={breakQueryData.Breaks_by_pk?.Event?.title}
-            break_data={breakQueryData.Breaks_by_pk}
-            callback={() => {
-              setAddBreakModalOpen(false);
-              refetchBreak({
-                id: breakId,
-              });
-            }}
-          />}
-        </FormModal>
+        {breakQueryData && breakQueryData.Breaks_by_pk && (
+          <FormModal
+            title="Add Break"
+            isOpen={isAddBreakModalOpen}
+            setModalOpen={setAddBreakModalOpen}
+            closeOnEsc={false}
+          >
+            <AddBreakForm
+              event_id={breakQueryData.Breaks_by_pk?.Event?.id}
+              event_title={breakQueryData.Breaks_by_pk?.Event?.title}
+              break_data={breakQueryData.Breaks_by_pk}
+              callback={() => {
+                setAddBreakModalOpen(false);
+                refetchBreak({
+                  id: breakId,
+                });
+              }}
+            />
+          </FormModal>
+        )}
       </Layout>
     </>
   );
