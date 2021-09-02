@@ -2,7 +2,7 @@ import React from 'react';
 import firebase from 'firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { auth, functions } from '@config/firebase';
+import { auth } from '@config/firebase';
 import { Box, Button } from '@chakra-ui/react';
 
 import Layout from '@layouts';

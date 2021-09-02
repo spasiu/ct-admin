@@ -65,6 +65,9 @@ type TSelectedBreak = {
     value: string;
     cost: number;
   }[];
+  dataset?: {
+    value: string;
+  }[];
   Inventory: {
     id: string;
     location: string;

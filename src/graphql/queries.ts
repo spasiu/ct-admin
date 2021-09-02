@@ -247,6 +247,7 @@ export const GET_EVENT_BY_ID = gql`
         image
         line_items
         status
+        dataset
         Inventory {
           id
           location
@@ -255,7 +256,7 @@ export const GET_EVENT_BY_ID = gql`
             description
           }
         }
-        BreakProductItems {
+        BreakProductItems(order_by: { title: asc }) {
           id
           title
           price
@@ -286,6 +287,8 @@ export const GET_BREAK_BY_ID = gql`
       status
       teams_per_spot
       title
+      dataset
+      line_items
       Event {
         id
         title
@@ -299,6 +302,7 @@ export const GET_BREAK_BY_ID = gql`
       }
       Inventory {
         id
+        location
         Product {
           id
           description

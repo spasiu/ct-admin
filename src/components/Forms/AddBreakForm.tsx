@@ -8,6 +8,7 @@ import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import {
   Break_Type_Enum,
   InsertBreakMutation,
+  UpdateBreakMutation,
   useInsertBreakMutation,
   useUpdateBreakMutation,
   useGetInventoryQuery,
@@ -120,6 +121,10 @@ type TBreakLineItem = {
   cost: number;
 };
 
+type TDatasetLineItem = {
+  value: string;
+};
+
 type TFormData = {
   id?: string;
   title: string;
@@ -152,6 +157,7 @@ type TFormProps = {
     teams_per_spot?: number | null | undefined;
     price?: number | null;
     line_items?: TBreakLineItem[];
+    dataset?: TDatasetLineItem[];
     status: string;
     Inventory: {
       id: string;
@@ -212,6 +218,18 @@ const AddBreakForm: React.FC<TFormProps> = ({
     });
   };
 
+  const onUpdateComplete = (data: UpdateBreakMutation) => {
+    const breakId = data.update_Breaks_by_pk?.id;
+    const inventoryIds = selectedInventory.map((item) => item.value);
+
+    updateInventory({
+      variables: {
+        ids: inventoryIds,
+        breakId,
+      },
+    });
+  };
+
   const handleCreateItem = (item: TInventoryAutcomplete) => {
     setPickerInventory((curr) => [...curr, item]);
     setSelectedInventory((curr) => [...curr, item]);
@@ -233,12 +251,10 @@ const AddBreakForm: React.FC<TFormProps> = ({
     onCompleted: (data) => {
       const selectedItemsIndex: number[] = [];
       const pickerItems: TInventoryAutcomplete[] = [];
+      const selectedItems: TInventoryAutcomplete[] = [];
 
       for (let idx = 0; idx < data.Inventory?.length; idx++) {
-        if (
-          data.Inventory[idx].break_id === null ||
-          data.Inventory[idx].break_id === break_data?.id
-        ) {
+        if (data.Inventory[idx].break_id === null) {
           pickerItems.push({
             label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
             value: data.Inventory[idx].id,
@@ -246,11 +262,14 @@ const AddBreakForm: React.FC<TFormProps> = ({
         }
 
         if (data.Inventory[idx].break_id === break_data?.id) {
-          selectedItemsIndex.push(idx);
+          pickerItems.push({
+            label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
+            value: data.Inventory[idx].id,
+          });
+
+          selectedItems.push(pickerItems[pickerItems.length - 1]);
         }
       }
-
-      const selectedItems = selectedItemsIndex.map((pIdx) => pickerItems[pIdx]);
 
       setPickerInventory(pickerItems);
       setSelectedInventory(selectedItems);
@@ -273,7 +292,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
       loading: updateBreakMutationLoading,
       error: updateBreakMutationError,
     },
-  ] = useUpdateBreakMutation({ onCompleted: callback });
+  ] = useUpdateBreakMutation({ onCompleted: onUpdateComplete });
 
   const [
     updateInventory,
@@ -312,6 +331,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
             cost: item.price,
           }))
         : [],
+      datasetItems: break_data && break_data.dataset ? break_data.dataset : [],
     },
   });
 
@@ -346,6 +366,8 @@ const AddBreakForm: React.FC<TFormProps> = ({
       }
 
       setValue('lineItems', newLineItems);
+    } else {
+      setValue('lineItems', []);
     }
 
     // Set line items for random team or division
@@ -362,34 +384,10 @@ const AddBreakForm: React.FC<TFormProps> = ({
       }
 
       setValue('datasetItems', newDatasetItems);
+    } else {
+      setValue('datasetItems', []);
     }
   }, [watchSpots, watchType, watchTeamsPerSpot]);
-
-  // Handle add item to dataset
-  const addDatasetRow = function () {
-    const currentDataset = getValues('datasetItems');
-
-    currentDataset.push({ value: '' });
-
-    setValue('datasetItems', currentDataset);
-  };
-
-  // Handle remove item from dataset
-  const removeDatasetRow = function () {
-    const currentSpots = getValues('spots');
-    const currentTeamsPerSpot = getValues('teams_per_spot');
-    const currentDataset = getValues('datasetItems');
-
-    if (
-      !isNaN(Number(currentSpots)) &&
-      !isNaN(Number(currentTeamsPerSpot)) &&
-      currentDataset.length > Number(currentSpots) * Number(currentTeamsPerSpot)
-    ) {
-      currentDataset.pop();
-    }
-
-    setValue('datasetItems', currentDataset);
-  };
 
   /**
    * Handle form submission
@@ -400,8 +398,6 @@ const AddBreakForm: React.FC<TFormProps> = ({
       setLoading(true);
 
       setBreakLineItems(result.lineItems);
-
-      console.log(result);
 
       const submitData = {
         event_id: result.event_id,
@@ -607,13 +603,6 @@ const AddBreakForm: React.FC<TFormProps> = ({
                 </FormControl>
               ))}
             </Box>
-
-            <Button colorScheme="green" onClick={addDatasetRow} mr={4}>
-              Add Row
-            </Button>
-            <Button colorScheme="red" onClick={removeDatasetRow}>
-              Remove Row
-            </Button>
           </Box>
         )}
 

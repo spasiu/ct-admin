@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
 import { MdEdit } from 'react-icons/md';
@@ -26,12 +26,15 @@ import {
   Break_Status_Enum,
 } from '@generated/graphql';
 
+import paths from '@config/paths';
+import { BreakTypeValues } from '@config/values';
+
 import Layout from '@layouts';
 import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
 import StatDisplay from '@components/StatDisplay';
-import paths from '@config/paths';
-import { BreakTypeValues } from '@config/values';
+import AddBreakForm from '@components/Forms/AddBreakForm';
+import FormModal from '@components/Modals/FormModal';
 
 /**
  * TODO: Add edit break button
@@ -40,6 +43,7 @@ const BreakPage: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const breakId = id as string;
+  const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
 
   const {
     loading: breakQueryLoading,
@@ -73,7 +77,7 @@ const BreakPage: React.FC = () => {
             colorScheme="blue"
             size="sm"
             onClick={() => {
-              console.log('edit break');
+              setAddBreakModalOpen(true);
             }}
           >
             Edit Break
@@ -261,6 +265,25 @@ const BreakPage: React.FC = () => {
             </>
           )}
         </Box>
+
+        {breakQueryData && breakQueryData.Breaks_by_pk && <FormModal
+          title="Add Break"
+          isOpen={isAddBreakModalOpen}
+          setModalOpen={setAddBreakModalOpen}
+          closeOnEsc={false}
+        >
+          <AddBreakForm
+            event_id={breakQueryData.Breaks_by_pk?.Event?.id}
+            event_title={breakQueryData.Breaks_by_pk?.Event?.title}
+            break_data={breakQueryData.Breaks_by_pk}
+            callback={() => {
+              setAddBreakModalOpen(false);
+              refetchBreak({
+                id: breakId,
+              });
+            }}
+          />}
+        </FormModal>
       </Layout>
     </>
   );

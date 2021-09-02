@@ -35,7 +35,7 @@ export type Addresses = {
   line1: Scalars['String'];
   line2?: Maybe<Scalars['String']>;
   postal_zip_code: Scalars['String'];
-  state_provice_region: Scalars['String'];
+  state_province_region: Scalars['String'];
   updated_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
@@ -92,7 +92,7 @@ export type Addresses_Bool_Exp = {
   line1?: Maybe<String_Comparison_Exp>;
   line2?: Maybe<String_Comparison_Exp>;
   postal_zip_code?: Maybe<String_Comparison_Exp>;
-  state_provice_region?: Maybe<String_Comparison_Exp>;
+  state_province_region?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
@@ -116,7 +116,7 @@ export type Addresses_Insert_Input = {
   line1?: Maybe<Scalars['String']>;
   line2?: Maybe<Scalars['String']>;
   postal_zip_code?: Maybe<Scalars['String']>;
-  state_provice_region?: Maybe<Scalars['String']>;
+  state_province_region?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -133,7 +133,7 @@ export type Addresses_Max_Fields = {
   line1?: Maybe<Scalars['String']>;
   line2?: Maybe<Scalars['String']>;
   postal_zip_code?: Maybe<Scalars['String']>;
-  state_provice_region?: Maybe<Scalars['String']>;
+  state_province_region?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -149,7 +149,7 @@ export type Addresses_Max_Order_By = {
   line1?: Maybe<Order_By>;
   line2?: Maybe<Order_By>;
   postal_zip_code?: Maybe<Order_By>;
-  state_provice_region?: Maybe<Order_By>;
+  state_province_region?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -166,7 +166,7 @@ export type Addresses_Min_Fields = {
   line1?: Maybe<Scalars['String']>;
   line2?: Maybe<Scalars['String']>;
   postal_zip_code?: Maybe<Scalars['String']>;
-  state_provice_region?: Maybe<Scalars['String']>;
+  state_province_region?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -182,7 +182,7 @@ export type Addresses_Min_Order_By = {
   line1?: Maybe<Order_By>;
   line2?: Maybe<Order_By>;
   postal_zip_code?: Maybe<Order_By>;
-  state_provice_region?: Maybe<Order_By>;
+  state_province_region?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -216,7 +216,7 @@ export type Addresses_Order_By = {
   line1?: Maybe<Order_By>;
   line2?: Maybe<Order_By>;
   postal_zip_code?: Maybe<Order_By>;
-  state_provice_region?: Maybe<Order_By>;
+  state_province_region?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -249,7 +249,7 @@ export enum Addresses_Select_Column {
   /** column name */
   PostalZipCode = 'postal_zip_code',
   /** column name */
-  StateProviceRegion = 'state_provice_region',
+  StateProvinceRegion = 'state_province_region',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -268,7 +268,7 @@ export type Addresses_Set_Input = {
   line1?: Maybe<Scalars['String']>;
   line2?: Maybe<Scalars['String']>;
   postal_zip_code?: Maybe<Scalars['String']>;
-  state_provice_region?: Maybe<Scalars['String']>;
+  state_province_region?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -296,7 +296,7 @@ export enum Addresses_Update_Column {
   /** column name */
   PostalZipCode = 'postal_zip_code',
   /** column name */
-  StateProviceRegion = 'state_provice_region',
+  StateProvinceRegion = 'state_province_region',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -9353,7 +9353,7 @@ export type GetEventByIdQuery = (
       & Pick<Users, 'id' | 'first_name' | 'last_name'>
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
-      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status'>
+      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset'>
       & { Inventory: Array<(
         { __typename?: 'Inventory' }
         & Pick<Inventory, 'id' | 'location'>
@@ -9391,7 +9391,7 @@ export type GetBreakByIdQuery = (
   { __typename?: 'query_root' }
   & { Breaks_by_pk?: Maybe<(
     { __typename?: 'Breaks' }
-    & Pick<Breaks, 'id' | 'image' | 'break_type' | 'description' | 'price' | 'spots' | 'status' | 'teams_per_spot' | 'title'>
+    & Pick<Breaks, 'id' | 'image' | 'break_type' | 'description' | 'price' | 'spots' | 'status' | 'teams_per_spot' | 'title' | 'dataset' | 'line_items'>
     & { Event: (
       { __typename?: 'Events' }
       & Pick<Events, 'id' | 'title' | 'start_time' | 'description'>
@@ -9401,7 +9401,7 @@ export type GetBreakByIdQuery = (
       ) }
     ), Inventory: Array<(
       { __typename?: 'Inventory' }
-      & Pick<Inventory, 'id'>
+      & Pick<Inventory, 'id' | 'location'>
       & { Product: (
         { __typename?: 'Products' }
         & Pick<Products, 'id' | 'description'>
@@ -10642,6 +10642,7 @@ export const GetEventByIdDocument = gql`
       image
       line_items
       status
+      dataset
       Inventory {
         id
         location
@@ -10650,7 +10651,7 @@ export const GetEventByIdDocument = gql`
           description
         }
       }
-      BreakProductItems {
+      BreakProductItems(order_by: {title: asc}) {
         id
         title
         price
@@ -10735,6 +10736,8 @@ export const GetBreakByIdDocument = gql`
     status
     teams_per_spot
     title
+    dataset
+    line_items
     Event {
       id
       title
@@ -10748,6 +10751,7 @@ export const GetBreakByIdDocument = gql`
     }
     Inventory {
       id
+      location
       Product {
         id
         description

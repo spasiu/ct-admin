@@ -188,7 +188,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "args": [],
             "type": {
@@ -687,7 +687,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -883,7 +883,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -1037,7 +1037,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "args": [],
             "type": {
@@ -1193,7 +1193,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -1347,7 +1347,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "args": [],
             "type": {
@@ -1503,7 +1503,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -1796,7 +1796,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -1932,7 +1932,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -2079,7 +2079,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -2188,7 +2188,7 @@
             "deprecationReason": null
           },
           {
-            "name": "state_provice_region",
+            "name": "state_province_region",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
