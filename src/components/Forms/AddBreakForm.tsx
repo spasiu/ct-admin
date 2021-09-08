@@ -180,7 +180,6 @@ const AddBreakForm: React.FC<TFormProps> = ({
   break_data,
   callback,
 }) => {
-  // Get firebase function
   const createBreakProducts = functions.httpsCallable('createBreakProducts');
   const [isLoading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
@@ -327,12 +326,18 @@ const AddBreakForm: React.FC<TFormProps> = ({
     },
   });
 
-  const { fields: lineItemFields } = useFieldArray({
+  const {
+    fields: lineItemFields,
+    replace: replaceLineItemFields,
+  } = useFieldArray({
     control,
     name: 'lineItems',
   });
 
-  const { fields: datasetFields } = useFieldArray({
+  const {
+    fields: datasetFields,
+    replace: replaceDatasetFields,
+  } = useFieldArray({
     control,
     name: 'datasetItems',
   });
@@ -351,15 +356,16 @@ const AddBreakForm: React.FC<TFormProps> = ({
       (watchType === Break_Type_Enum.PickYourTeam ||
         watchType === Break_Type_Enum.PickYourDivision)
     ) {
-      const newLineItems = [];
+      const newLineItems = getValues('lineItems').slice(0, Number(watchSpots));
+      const newLinesToAdd = Number(watchSpots) - newLineItems.length;
 
-      for (let i = 0; i < Number(watchSpots); i++) {
+      for (let i = 0; i < newLinesToAdd; i++) {
         newLineItems.push({ value: '', cost: 0 });
       }
 
-      setValue('lineItems', newLineItems);
+      replaceLineItemFields(newLineItems);
     } else {
-      setValue('lineItems', []);
+      replaceLineItemFields([]);
     }
 
     // Set line items for random team or division
@@ -369,15 +375,21 @@ const AddBreakForm: React.FC<TFormProps> = ({
       (watchType === Break_Type_Enum.RandomDivision ||
         watchType === Break_Type_Enum.RandomTeam)
     ) {
-      const newDatasetItems = [];
+      const newDatasetItems = getValues('datasetItems').slice(
+        0,
+        Number(watchSpots) * Number(watchTeamsPerSpot),
+      );
 
-      for (let i = 0; i < Number(watchSpots) * Number(watchTeamsPerSpot); i++) {
+      const newDatasetLinesToAdd =
+        Number(watchSpots) * Number(watchTeamsPerSpot) - newDatasetItems.length;
+
+      for (let i = 0; i < newDatasetLinesToAdd; i++) {
         newDatasetItems.push({ value: '' });
       }
 
-      setValue('datasetItems', newDatasetItems);
+      replaceDatasetFields(newDatasetItems);
     } else {
-      setValue('datasetItems', []);
+      replaceDatasetFields([]);
     }
   }, [watchSpots, watchType, watchTeamsPerSpot]);
 
@@ -514,7 +526,10 @@ const AddBreakForm: React.FC<TFormProps> = ({
             px={gridSpace.child}
           >
             <FormLabel>Break Type</FormLabel>
-            <Select {...register('break_type')}>
+            <Select
+              {...register('break_type')}
+              isDisabled={operation === 'UPDATE'}
+            >
               <option value="">Select...</option>
               {BreakTypeValues.map((type) => (
                 <option key={`option-${type.label}`} value={type.value}>
@@ -537,7 +552,10 @@ const AddBreakForm: React.FC<TFormProps> = ({
               px={gridSpace.child}
             >
               <FormLabel>Price ($)</FormLabel>
-              <Input {...register('price')} />
+              <Input
+                {...register('price')}
+                isDisabled={operation === 'UPDATE'}
+              />
               <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
             </FormControl>
           )}
@@ -553,7 +571,10 @@ const AddBreakForm: React.FC<TFormProps> = ({
               px={gridSpace.child}
             >
               <FormLabel>Spots</FormLabel>
-              <Input {...register('spots')} />
+              <Input
+                {...register('spots')}
+                isDisabled={operation === 'UPDATE'}
+              />
               <FormErrorMessage>{errors.spots?.message}</FormErrorMessage>
             </FormControl>
           )}
@@ -566,7 +587,10 @@ const AddBreakForm: React.FC<TFormProps> = ({
               px={gridSpace.child}
             >
               <FormLabel>Teams Per Spot</FormLabel>
-              <Input {...register('teams_per_spot')} />
+              <Input
+                {...register('teams_per_spot')}
+                isDisabled={operation === 'UPDATE'}
+              />
               <FormErrorMessage>
                 {errors.teams_per_spot?.message}
               </FormErrorMessage>
@@ -591,6 +615,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
                   <Input
                     placeholder="Team/Division"
                     {...register(`datasetItems.${index}.value` as const)}
+                    isDisabled={operation === 'UPDATE'}
                   />
                 </FormControl>
               ))}
@@ -615,6 +640,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
                   <Input
                     placeholder="Team/Division"
                     {...register(`lineItems.${index}.value` as const)}
+                    isDisabled={operation === 'UPDATE'}
                   />
                 </FormControl>
                 <FormControl
@@ -628,6 +654,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
                     placeholder="Cost"
                     {...register(`lineItems.${index}.cost` as const)}
                     textAlign="right"
+                    isDisabled={operation === 'UPDATE'}
                   />
                 </FormControl>
               </Flex>

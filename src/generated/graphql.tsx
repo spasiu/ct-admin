@@ -5088,7 +5088,7 @@ export type Users = {
   /** An aggregate relationship */
   Addresses_aggregate: Addresses_Aggregate;
   /** An object relationship */
-  BreakerProfile: BreakerProfiles;
+  BreakerProfile?: Maybe<BreakerProfiles>;
   /** An array relationship */
   Events: Array<Events>;
   /** An aggregate relationship */
@@ -5102,7 +5102,7 @@ export type Users = {
   /** An aggregate relationship */
   Hits_aggregate: Hits_Aggregate;
   /** An object relationship */
-  Notification: Notifications;
+  Notification?: Maybe<Notifications>;
   /** fetch data from the table: "Orders" */
   Orders: Array<Orders>;
   /** An aggregate relationship */
@@ -5122,7 +5122,7 @@ export type Users = {
   /** An object relationship */
   Stream?: Maybe<Streams>;
   /** An object relationship */
-  UserPreference: UserPreferences;
+  UserPreference?: Maybe<UserPreferences>;
   created_at: Scalars['timestamptz'];
   email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
@@ -9076,6 +9076,33 @@ export type InsertInventoryMutation = (
   )> }
 );
 
+export type UpdateInventoryMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  data: Inventory_Set_Input;
+}>;
+
+
+export type UpdateInventoryMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Inventory_by_pk?: Maybe<(
+    { __typename?: 'Inventory' }
+    & Pick<Inventory, 'id'>
+  )> }
+);
+
+export type DeleteInventoryByIdsMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type DeleteInventoryByIdsMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_Inventory?: Maybe<(
+    { __typename?: 'Inventory_mutation_response' }
+    & Pick<Inventory_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 export type UpdateInventoryBreakMutationVariables = Exact<{
   ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
   breakId: Scalars['uuid'];
@@ -9402,6 +9429,14 @@ export type GetBreakByIdQuery = (
     )>, BreakProductItems: Array<(
       { __typename?: 'BreakProductItems' }
       & Pick<BreakProductItems, 'id' | 'title' | 'price'>
+      & { Order?: Maybe<(
+        { __typename?: 'Orders' }
+        & Pick<Orders, 'id'>
+        & { User: (
+          { __typename?: 'Users' }
+          & Pick<Users, 'id' | 'username'>
+        ) }
+      )> }
     )> }
   )> }
 );
@@ -10021,6 +10056,73 @@ export function useInsertInventoryMutation(baseOptions?: Apollo.MutationHookOpti
 export type InsertInventoryMutationHookResult = ReturnType<typeof useInsertInventoryMutation>;
 export type InsertInventoryMutationResult = Apollo.MutationResult<InsertInventoryMutation>;
 export type InsertInventoryMutationOptions = Apollo.BaseMutationOptions<InsertInventoryMutation, InsertInventoryMutationVariables>;
+export const UpdateInventoryDocument = gql`
+    mutation UpdateInventory($id: uuid!, $data: Inventory_set_input!) {
+  update_Inventory_by_pk(pk_columns: {id: $id}, _set: $data) {
+    id
+  }
+}
+    `;
+export type UpdateInventoryMutationFn = Apollo.MutationFunction<UpdateInventoryMutation, UpdateInventoryMutationVariables>;
+
+/**
+ * __useUpdateInventoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateInventoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateInventoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateInventoryMutation, { data, loading, error }] = useUpdateInventoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateInventoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateInventoryMutation, UpdateInventoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateInventoryMutation, UpdateInventoryMutationVariables>(UpdateInventoryDocument, options);
+      }
+export type UpdateInventoryMutationHookResult = ReturnType<typeof useUpdateInventoryMutation>;
+export type UpdateInventoryMutationResult = Apollo.MutationResult<UpdateInventoryMutation>;
+export type UpdateInventoryMutationOptions = Apollo.BaseMutationOptions<UpdateInventoryMutation, UpdateInventoryMutationVariables>;
+export const DeleteInventoryByIdsDocument = gql`
+    mutation DeleteInventoryByIds($ids: [uuid!]) {
+  delete_Inventory(where: {id: {_in: $ids}}) {
+    affected_rows
+  }
+}
+    `;
+export type DeleteInventoryByIdsMutationFn = Apollo.MutationFunction<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>;
+
+/**
+ * __useDeleteInventoryByIdsMutation__
+ *
+ * To run a mutation, you first call `useDeleteInventoryByIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInventoryByIdsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInventoryByIdsMutation, { data, loading, error }] = useDeleteInventoryByIdsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useDeleteInventoryByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>(DeleteInventoryByIdsDocument, options);
+      }
+export type DeleteInventoryByIdsMutationHookResult = ReturnType<typeof useDeleteInventoryByIdsMutation>;
+export type DeleteInventoryByIdsMutationResult = Apollo.MutationResult<DeleteInventoryByIdsMutation>;
+export type DeleteInventoryByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>;
 export const UpdateInventoryBreakDocument = gql`
     mutation UpdateInventoryBreak($ids: [uuid!], $breakId: uuid!) {
   update_Inventory(where: {id: {_in: $ids}}, _set: {break_id: $breakId}) {
@@ -10746,6 +10848,13 @@ export const GetBreakByIdDocument = gql`
       id
       title
       price
+      Order {
+        id
+        User {
+          id
+          username
+        }
+      }
     }
   }
 }

@@ -243,6 +243,7 @@ const BreakPage: React.FC = () => {
                 <Thead>
                   <Tr>
                     <Th>Title</Th>
+                    <Th>User</Th>
                     <Th textAlign="right">Price</Th>
                   </Tr>
                 </Thead>
@@ -251,6 +252,7 @@ const BreakPage: React.FC = () => {
                     (item) => (
                       <Tr key={item.id} bg="white">
                         <Td>{item.title}</Td>
+                        <Td>{item.Order?.User?.username}</Td>
                         <Td textAlign="right">
                           {new Intl.NumberFormat('en', {
                             style: 'currency',

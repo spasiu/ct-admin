@@ -24,6 +24,7 @@ import {
 
 import {
   useGetProductByIdQuery,
+  useDeleteInventoryByIdsMutation,
   useArchiveProductsByIdsMutation,
   useUnarchiveProductsByIdsMutation,
 } from '@generated/graphql';
@@ -63,6 +64,14 @@ type TSelectedProduct = {
   grade?: string | null;
 };
 
+type TSelectedInventory = {
+  id: string;
+  supplier: string;
+  location: string;
+  purchase_date: string;
+  cost_basis: number;
+};
+
 /**
  * TODO: add archive for inventory
  *
@@ -75,6 +84,9 @@ const ProductDetailsPage: React.FC = () => {
   const [isEditProductModalOpen, setEditProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<
     TSelectedProduct | undefined
+  >(undefined);
+  const [selectedInventory, setSelectedInventory] = useState<
+    TSelectedInventory | undefined
   >(undefined);
 
   const {
@@ -112,6 +124,19 @@ const ProductDetailsPage: React.FC = () => {
     },
   });
 
+  const [
+    deleteInventory,
+    {
+      data: deleteInventoryMutationData,
+      loading: deleteInventoryMutationLoading,
+      error: deleteInventoryMutationError,
+    },
+  ] = useDeleteInventoryByIdsMutation({
+    onCompleted: () => {
+      refetchProduct();
+    },
+  });
+
   const product = productQueryData?.Products_by_pk;
 
   return (
@@ -124,6 +149,7 @@ const ProductDetailsPage: React.FC = () => {
             leftIcon={<AddIcon />}
             colorScheme="blue"
             onClick={() => {
+              setSelectedInventory(undefined);
               setAddInventoryModalOpen(true);
             }}
           >
@@ -310,15 +336,28 @@ const ProductDetailsPage: React.FC = () => {
                         aria-label="Edit"
                         icon={<MdEdit />}
                         onClick={() => {
-                          console.log('edit');
+                          setSelectedInventory({
+                            id: item.id,
+                            location: item.location,
+                            supplier: item.supplier,
+                            purchase_date: item.purchase_date,
+                            cost_basis: item.cost_basis,
+                          });
+                          setAddInventoryModalOpen(true);
                         }}
                       />
 
-                      <ArchiveConfirm
-                        callback={() => {
-                          console.log('archive');
-                        }}
-                      />
+                      {!item.Break?.id && (
+                        <ArchiveConfirm
+                          callback={() => {
+                            deleteInventory({
+                              variables: {
+                                ids: [item.id],
+                              },
+                            });
+                          }}
+                        />
+                      )}
                     </HStack>
                   </Td>
                 </Tr>
@@ -348,6 +387,7 @@ const ProductDetailsPage: React.FC = () => {
         >
           <AddInventoryForm
             product_id={product?.id}
+            inventoryItem={selectedInventory}
             callback={() => {
               setAddInventoryModalOpen(false);
               refetchProduct();

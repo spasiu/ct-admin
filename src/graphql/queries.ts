@@ -304,6 +304,13 @@ export const GET_BREAK_BY_ID = gql`
         id
         title
         price
+        Order {
+          id
+          User {
+            id
+            username
+          }
+        }
       }
     }
   }

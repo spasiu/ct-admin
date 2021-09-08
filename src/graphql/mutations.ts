@@ -151,6 +151,22 @@ export const INSERT_INVENTORY = gql`
   }
 `;
 
+export const UPDATE_INVENTORY = gql`
+  mutation UpdateInventory($id: uuid!, $data: Inventory_set_input!) {
+    update_Inventory_by_pk(pk_columns: { id: $id }, _set: $data) {
+      id
+    }
+  }
+`;
+
+export const DELETE_INVENTORY = gql`
+  mutation DeleteInventoryByIds($ids: [uuid!]) {
+    delete_Inventory(where: { id: { _in: $ids } }) {
+      affected_rows
+    }
+  }
+`;
+
 export const UPDATE_INVENTORY_BREAK = gql`
   mutation UpdateInventoryBreak($ids: [uuid!], $breakId: uuid!) {
     update_Inventory(

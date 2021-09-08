@@ -37323,13 +37323,9 @@
             "description": "An object relationship",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "BreakerProfiles",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "BreakerProfiles",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -37921,13 +37917,9 @@
             "description": "An object relationship",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Notifications",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Notifications",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -38725,13 +38717,9 @@
             "description": "An object relationship",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "UserPreferences",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "UserPreferences",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

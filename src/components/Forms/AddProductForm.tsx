@@ -180,8 +180,6 @@ type TFormProps = {
 const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
   const operation = product ? 'UPDATE' : 'ADD';
 
-  console.log(product);
-
   const {
     register,
     handleSubmit,
