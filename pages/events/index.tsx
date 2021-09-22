@@ -18,7 +18,13 @@ import {
   HStack,
 } from '@chakra-ui/react';
 
+import {
+  useGetEventsQuery,
+  useDeleteEventsAndBreaksByEventIdsMutation,
+} from '@generated/graphql';
+
 import paths from '@config/paths';
+
 import Layout from '@layouts';
 import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
@@ -26,19 +32,7 @@ import AddEventForm from '@components/Forms/AddEventForm';
 import FormModal from '@components/Modals/FormModal';
 import ArchiveConfirm from '@components/ArchiveConfirm';
 
-import {
-  useGetEventsQuery,
-  useDeleteEventsAndBreaksByEventIdsMutation,
-} from '@generated/graphql';
-
-type TSelectedEvent = {
-  id: string;
-  title: string;
-  description: string;
-  start_time: string;
-  status: string;
-  image: string;
-};
+import { TSelectedEvent } from '@customTypes/events';
 
 /**
  *

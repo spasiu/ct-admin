@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
 import { AddIcon } from '@chakra-ui/icons';
-import { MdEdit, MdVisibility } from 'react-icons/md';
+import { MdEdit, MdVisibility, MdLiveTv } from 'react-icons/md';
 import { TiMediaRecord } from 'react-icons/ti';
 import NextLink from 'next/link';
 import Imgix from 'react-imgix';
@@ -22,13 +22,6 @@ import {
   IconButton,
   HStack,
   Badge,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogCloseButton,
-  AlertDialogBody,
-  AlertDialogFooter,
   useDisclosure,
 } from '@chakra-ui/react';
 
@@ -50,30 +43,9 @@ import SEO from '@components/SEO';
 import AddBreakForm from '@components/Forms/AddBreakForm';
 import FormModal from '@components/Modals/FormModal';
 import ArchiveConfirm from '@components/ArchiveConfirm';
+import GoLiveConfirm from '@components/GoLiveConfirm';
 
-type TSelectedBreak = {
-  id?: string;
-  title: string;
-  description: string;
-  image: string;
-  break_type: string;
-  spots: number;
-  teams_per_spot?: number | null | undefined;
-  price?: number;
-  status: string;
-  line_items?: {
-    value: string;
-    cost: number;
-  }[];
-  dataset?: {
-    value: string;
-  }[];
-  BreakProductItems: {
-    id: string;
-    title: string;
-    price: number;
-  }[];
-};
+import { TEventSelectedBreak } from '@customTypes/events';
 
 /**
  * TODO: Add remove event button
@@ -81,24 +53,28 @@ type TSelectedBreak = {
  * TODO: Fix how archiving break works
  */
 const EventPage: React.FC = () => {
-  const [user] = useAuthState(auth);
   const router = useRouter();
   const { id } = router.query;
   const eventId = id as string;
-  const [streamActive, setStreamActive] = useState(false);
+
+  const [user] = useAuthState(auth);
+
   const startBreak = functions.httpsCallable('startBreak');
+
+  const [streamActive, setStreamActive] = useState(false);
+  const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
+  const [selectedBreak, setSelectedBreak] = useState<
+    TEventSelectedBreak | undefined
+  >(undefined);
+
   const {
     isOpen: isProceedAlertOpen,
     onOpen: onOpenProceedAlert,
     onClose: onCloseProceedAlert,
   } = useDisclosure();
   const proceedCancelRef = React.useRef(null);
-  let watchStream: () => void;
 
-  const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
-  const [selectedBreak, setSelectedBreak] = useState<
-    TSelectedBreak | undefined
-  >(undefined);
+  let watchStream: () => void;
 
   const {
     loading: eventQueryLoading,
@@ -297,20 +273,33 @@ const EventPage: React.FC = () => {
 
                       {eventQueryData.Events_by_pk?.status ===
                         Event_Status_Enum.Live && (
-                        <Button
-                          colorScheme="green"
-                          size="sm"
-                          onClick={() => {
-                            updateEvent({
-                              variables: {
-                                id: eventId,
-                                data: { status: Event_Status_Enum.Completed },
-                              },
-                            });
-                          }}
-                        >
-                          Complete Event
-                        </Button>
+                        <>
+                          <NextLink href={`${paths.live}/${eventId}`} passHref>
+                            <Button
+                              as="a"
+                              colorScheme="red"
+                              size="sm"
+                              leftIcon={<MdLiveTv />}
+                              _hover={{ color: 'white', background: 'red.600' }}
+                            >
+                              Go to Live Screen
+                            </Button>
+                          </NextLink>
+                          <Button
+                            colorScheme="green"
+                            size="sm"
+                            onClick={() => {
+                              updateEvent({
+                                variables: {
+                                  id: eventId,
+                                  data: { status: Event_Status_Enum.Completed },
+                                },
+                              });
+                            }}
+                          >
+                            Complete Event
+                          </Button>
+                        </>
                       )}
 
                       {eventQueryData.Events_by_pk?.status ===
@@ -556,43 +545,19 @@ const EventPage: React.FC = () => {
           />
         </FormModal>
 
-        <AlertDialog
-          motionPreset="slideInBottom"
-          leastDestructiveRef={proceedCancelRef}
-          onClose={onCloseProceedAlert}
+        <GoLiveConfirm
           isOpen={isProceedAlertOpen}
-          isCentered
-        >
-          <AlertDialogOverlay />
-
-          <AlertDialogContent>
-            <AlertDialogHeader>Go Live</AlertDialogHeader>
-            <AlertDialogCloseButton />
-            <AlertDialogBody>
-              Are you sure you want to start the event without an active stream?
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button ref={proceedCancelRef} onClick={onCloseProceedAlert}>
-                No
-              </Button>
-              <Button
-                colorScheme="red"
-                ml={3}
-                onClick={() => {
-                  updateEvent({
-                    variables: {
-                      id: eventId,
-                      data: { status: Event_Status_Enum.Live },
-                    },
-                  });
-                  onCloseProceedAlert();
-                }}
-              >
-                Yes
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          cancelRef={proceedCancelRef}
+          onClose={onCloseProceedAlert}
+          callback={() => {
+            updateEvent({
+              variables: {
+                id: eventId,
+                data: { status: Event_Status_Enum.Live },
+              },
+            });
+          }}
+        />
       </Layout>
     </>
   );

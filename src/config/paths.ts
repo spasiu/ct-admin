@@ -1,6 +1,7 @@
 export default {
   home: '/',
   events: '/events',
+  live: '/events/live',
   products: '/products',
   skus: '/skus',
   hits: '/hits',

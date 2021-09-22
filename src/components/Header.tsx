@@ -5,14 +5,13 @@ import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Image from 'next/image';
 
+import { HStack, Box, Flex, Link, Avatar, Button } from '@chakra-ui/react';
+
 import { auth } from '@config/firebase';
 import navigation, { TNavData } from '@config/navigation';
 import paths from '@config/paths';
-import { HStack, Box, Flex, Link, Avatar, Button } from '@chakra-ui/react';
 
-type THeaderProps = {
-  pageNav?: string;
-};
+import { THeaderProps } from '@customTypes/components';
 
 const Header: React.FC<THeaderProps> = ({ pageNav }) => {
   const [user, loading] = useAuthState(auth);

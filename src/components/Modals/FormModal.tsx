@@ -10,13 +10,7 @@ import {
   Heading,
 } from '@chakra-ui/react';
 
-type TFormModal = {
-  children: React.ReactNode;
-  title: string;
-  isOpen: boolean;
-  closeOnEsc?: boolean;
-  setModalOpen: (n: boolean) => void;
-};
+import { TFormModal } from '@customTypes/components';
 
 const FormModal: React.FC<TFormModal> = ({
   children,

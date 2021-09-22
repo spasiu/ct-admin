@@ -4,11 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import * as yup from 'yup';
 
-import { auth } from '@config/firebase';
-import { ExtensibleValueFields } from '@config/values';
-
-import { useInsertExtensibleValuesMutation } from '@generated/graphql';
-
 import {
   FormLabel,
   FormControl,
@@ -18,21 +13,24 @@ import {
   HStack,
 } from '@chakra-ui/react';
 
+import { useInsertExtensibleValuesMutation } from '@generated/graphql';
+
+import { auth } from '@config/firebase';
+import { ExtensibleValueFields } from '@config/values';
+
+import {
+  TExtensibleValuesFormData,
+  TExtensibleValuesFormProps,
+} from '@customTypes/forms';
+
 const schema = yup.object().shape({
   value: yup.string().required('Required'),
   field: yup.string().required('Required'),
 });
 
-type TFormData = {
-  value: string;
-  field: string;
-};
-
-type TFormProps = {
-  callback: () => void;
-};
-
-const AddExtensibleValueForm: React.FC<TFormProps> = ({ callback }) => {
+const AddExtensibleValueForm: React.FC<TExtensibleValuesFormProps> = ({
+  callback,
+}) => {
   const [user] = useAuthState(auth);
 
   const {
@@ -41,7 +39,7 @@ const AddExtensibleValueForm: React.FC<TFormProps> = ({ callback }) => {
     formState: { errors },
     reset,
     getValues,
-  } = useForm<TFormData>({
+  } = useForm<TExtensibleValuesFormData>({
     resolver: yupResolver(schema),
   });
 
@@ -63,7 +61,7 @@ const AddExtensibleValueForm: React.FC<TFormProps> = ({ callback }) => {
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TExtensibleValuesFormData) => {
     if (user && !insertMutationLoading) {
       const submitData = {
         field: result.field,

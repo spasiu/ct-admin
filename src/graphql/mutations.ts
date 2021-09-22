@@ -247,14 +247,3 @@ export const UPDATE_BREAKER_PROFILE = gql`
     }
   }
 `;
-
-export const test = gql`
-  mutation BreakUpdate($id: uuid!, $result: jsonb!) {
-    update_Breaks_by_pk(
-      pk_columns: { id: $id }
-      _set: { result: $result, status: LIVE }
-    ) {
-      id
-    }
-  }
-`;

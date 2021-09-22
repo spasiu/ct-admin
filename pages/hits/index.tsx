@@ -30,37 +30,7 @@ import FormModal from '@components/Modals/FormModal';
 import AddHitForm from '@components/Forms/AddHitForm';
 import ArchiveConfirm from '@components/ArchiveConfirm';
 
-type TSelectedHit = {
-  id: string;
-  user_id: string;
-  break_id: string;
-  image_front: string;
-  image_back?: string | null;
-  year: string;
-  category: string;
-  manufacturer: string;
-  brand: string;
-  series?: string | null;
-  card_number: string;
-  player: string;
-  parallel?: string | null;
-  insert?: string | null;
-  rookie_card?: boolean | null;
-  memoribillia?: string | null;
-  autograph?: boolean | null;
-  numbered?: number | null;
-  User: {
-    id: string;
-    username?: string | null;
-  };
-  Break: {
-    id: string;
-    title: string;
-    Event: {
-      start_time: string;
-    };
-  };
-};
+import { TSelectedHit } from '@customTypes/hits';
 
 const HitsPage: React.FC = () => {
   const [isAddHitModalOpen, setAddHitModalOpen] = useState(false);

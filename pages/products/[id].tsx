@@ -40,37 +40,10 @@ import AddInventoryForm from '@components/Forms/AddInventoryForm';
 import StatDisplay from '@components/StatDisplay';
 import ArchiveConfirm from '@components/ArchiveConfirm';
 
-type TSelectedProduct = {
-  id: string;
-  unit_of_measure: string;
-  year: string;
-  manufacturer: string;
-  brand: string;
-  series?: string | null;
-  category: string;
-  type?: string | null;
-  boxes_per_case?: number | null;
-  packs_per_box?: number | null;
-  cards_per_pack?: number | null;
-  card_number?: string | null;
-  player?: string | null;
-  parallel?: string | null;
-  insert?: string | null;
-  rookie_card?: boolean | null;
-  memoribillia?: string | null;
-  autograph?: boolean | null;
-  numbered?: number | null;
-  grader?: string | null;
-  grade?: string | null;
-};
-
-type TSelectedInventory = {
-  id: string;
-  supplier: string;
-  location: string;
-  purchase_date: string;
-  cost_basis: number;
-};
+import {
+  TSelectedProduct,
+  TProductSelectedInventory,
+} from '@customTypes/products';
 
 /**
  * TODO: add archive for inventory
@@ -86,7 +59,7 @@ const ProductDetailsPage: React.FC = () => {
     TSelectedProduct | undefined
   >(undefined);
   const [selectedInventory, setSelectedInventory] = useState<
-    TSelectedInventory | undefined
+    TProductSelectedInventory | undefined
   >(undefined);
 
   const {

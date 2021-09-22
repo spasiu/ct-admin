@@ -258,6 +258,45 @@ export const GET_EVENT_BY_ID = gql`
   }
 `;
 
+export const GET_LIVE_EVENT_BY_ID = gql`
+  query GetLiveEventById($id: uuid!) {
+    Events_by_pk(id: $id) {
+      id
+      title
+      start_time
+      description
+      status
+      image
+      User {
+        id
+        first_name
+        last_name
+      }
+      Breaks(order_by: { created_at: asc }) {
+        id
+        title
+        break_type
+        price
+        spots
+        description
+        teams_per_spot
+        image
+        line_items
+        status
+        result
+        BreakProductItems(order_by: { title: asc }) {
+          title
+          Order {
+            User {
+              username
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const SEARCH_EVENTS = gql`
   query SearchEvents($input: String!) {
     Events(where: { title: { _ilike: $input } }) {
@@ -450,6 +489,17 @@ export const GET_BREAKER_PROFILE = gql`
       facebook
       linkedin
       tiktok
+    }
+  }
+`;
+
+export const GET_CHAT_USER = gql`
+  query GetChatUser($id: String!) {
+    Users_by_pk(id: $id) {
+      first_name
+      last_name
+      image
+      username
     }
   }
 `;

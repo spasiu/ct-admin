@@ -15,13 +15,20 @@ import {
   Select,
 } from '@chakra-ui/react';
 
-import { gridSpace } from '@config/chakra/constants';
 import {
   useInsertInventoryMutation,
   useGetFilteredExtensibleValuesQuery,
   useUpdateInventoryMutation,
 } from '@generated/graphql';
+
+import { gridSpace } from '@config/chakra/constants';
+
 import DatePickerDisplay from '@components/DatePickerDisplay';
+
+import {
+  TAddInventoryFormData,
+  TAddInventoryFormProps,
+} from '@customTypes/inventory';
 
 const schema = yup.object().shape({
   supplier: yup.string().required('Required'),
@@ -45,32 +52,10 @@ const schema = yup.object().shape({
     .required('Required'),
 });
 
-type TFormData = {
-  supplier: string;
-  location: string;
-  purchase_date: Date;
-  cost_basis: number;
-  units: number;
-};
-
-type TFormProps = {
-  product_id: string;
-  inventoryItem?: {
-    id: string;
-    supplier: string;
-    location: string;
-    purchase_date: string;
-    cost_basis: number;
-  };
-  callback: () => void;
-};
-
 /**
- *
  * TODO: Handle errors
- *
  */
-const AddInventoryForm: React.FC<TFormProps> = ({
+const AddInventoryForm: React.FC<TAddInventoryFormProps> = ({
   product_id,
   inventoryItem,
   callback,
@@ -83,7 +68,7 @@ const AddInventoryForm: React.FC<TFormProps> = ({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TFormData>({
+  } = useForm<TAddInventoryFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(inventoryItem || {}),
@@ -135,7 +120,7 @@ const AddInventoryForm: React.FC<TFormProps> = ({
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TAddInventoryFormData) => {
     if (operation === 'ADD') {
       // Generate number of products equal to number of units
       const inventory = Array(result.units).fill({

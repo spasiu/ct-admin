@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,18 +6,12 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { useSearchEventsLazyQuery } from '@generated/graphql';
 
-type TAutocompleteProps = {
-  defaultValue?: string | null;
-  isInvalid: boolean;
-  callback: (input: string) => void;
-};
+import {
+  TAutocompleteBreaksEventsProps,
+  TAutocompleteBreaksEventsSearchResult,
+} from '@customTypes/components';
 
-type TSearchResult = {
-  id: string;
-  title: string;
-};
-
-const Autocomplete: React.FC<TAutocompleteProps> = ({
+const Autocomplete: React.FC<TAutocompleteBreaksEventsProps> = ({
   defaultValue,
   callback,
   isInvalid,
@@ -36,7 +30,7 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
         return true;
       }}
       id={`autocomplete-input-events`}
-      onChange={(selected: TSearchResult[]) => {
+      onChange={(selected: TAutocompleteBreaksEventsSearchResult[]) => {
         if (selected.length > 0) {
           callback(selected[0].id);
         }
@@ -48,9 +42,10 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
       onSearch={handleSearch}
       options={data?.Events ? data?.Events : []}
       placeholder="Search..."
-      renderMenuItemChildren={(option: TSearchResult, props) => (
-        <Highlighter search={props.text || ''}>{option.title}</Highlighter>
-      )}
+      renderMenuItemChildren={(
+        option: TAutocompleteBreaksEventsSearchResult,
+        props,
+      ) => <Highlighter search={props.text || ''}>{option.title}</Highlighter>}
       isInvalid={isInvalid}
       useCache={false}
     />

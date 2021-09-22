@@ -7,19 +7,9 @@ import { Flex, Icon, Button, Box, Text } from '@chakra-ui/react';
 
 import { storage } from '@config/firebase';
 
-type TInputErrors = {
-  type?: string;
-  required?: string;
-};
+import { TImageInputErrors, TImageUploadProps } from '@customTypes/components';
 
-type TUploadProps = {
-  imageFolder: string;
-  imagePath?: string | null;
-  label?: string;
-  callback: (url: string) => void;
-};
-
-const ImageUploader: React.FC<TUploadProps> = ({
+const ImageUploader: React.FC<TImageUploadProps> = ({
   imageFolder,
   imagePath,
   label,
@@ -28,11 +18,11 @@ const ImageUploader: React.FC<TUploadProps> = ({
   const [imageUrl, setImageUrl] = useState<string | undefined>(
     imagePath ? `${process.env.NEXT_PUBLIC_IMG_URL}${imagePath}` : undefined,
   );
-  const [imageErrors, setImageErrors] = useState<TInputErrors>({});
+  const [imageErrors, setImageErrors] = useState<TImageInputErrors>({});
   const fileInput = React.createRef<HTMLInputElement>();
 
   const handleFileUpload = () => {
-    const fileErrors: TInputErrors = {};
+    const fileErrors: TImageInputErrors = {};
     let isValid = true;
     let file;
 

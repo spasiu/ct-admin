@@ -7,13 +7,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import format from 'date-fns/format';
 
 import {
-  useInsertEventMutation,
-  useUpdateEventMutation,
-} from '@generated/graphql';
-
-import { auth } from '@config/firebase';
-
-import {
   FormErrorMessage,
   FormLabel,
   FormControl,
@@ -25,8 +18,17 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+import {
+  useInsertEventMutation,
+  useUpdateEventMutation,
+} from '@generated/graphql';
+
+import { auth } from '@config/firebase';
+
 import DatePickerDisplay from '@components/DatePickerDisplay';
 import ImageUploader from '@components/ImageUploader';
+
+import { TAddEventFormData, TAddEventFormProps } from '@customTypes/events';
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -38,26 +40,6 @@ const schema = yup.object().shape({
     .required(),
 });
 
-type TFormData = {
-  id?: string;
-  title: string;
-  description: string;
-  start_time: Date;
-  image: string;
-};
-
-type TFormProps = {
-  event?: {
-    id: string;
-    title: string;
-    description: string;
-    start_time: string;
-    status: string;
-    image: string;
-  };
-  callback: () => void;
-};
-
 /**
  *
  * TODO: Handle errors
@@ -65,7 +47,7 @@ type TFormProps = {
  * TODO: Add ability to assign event
  *
  */
-const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
+const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
   const [user] = useAuthState(auth);
   const operation = event?.id ? 'UPDATE' : 'ADD';
 
@@ -93,7 +75,7 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<TFormData>({
+  } = useForm<TAddEventFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(event || {}),
@@ -105,7 +87,7 @@ const AddEventForm: React.FC<TFormProps> = ({ event, callback }) => {
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TAddEventFormData) => {
     if (user) {
       const submitData = {
         title: result.title,

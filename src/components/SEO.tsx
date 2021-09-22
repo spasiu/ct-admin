@@ -1,11 +1,9 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-type TSEO = {
-  title?: string;
-};
+import { TSeo } from '@customTypes/components';
 
-const SEO: React.FC<TSEO> = ({ title }) => {
+const SEO: React.FC<TSeo> = ({ title }) => {
   return <Helmet>{title && <title>{title}</title>}</Helmet>;
 };
 

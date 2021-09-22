@@ -2,15 +2,12 @@ import React from 'react';
 
 import { Box, Text } from '@chakra-ui/react';
 
-type TStatDisplayProps = {
-  label: string;
-  value: string | number;
-};
+import { TStatDisplay } from '@customTypes/components';
 
-const StatDisplay: React.FC<TStatDisplayProps> = ({
+const StatDisplay: React.FC<TStatDisplay> = ({
   label,
   value,
-}: TStatDisplayProps) => (
+}: TStatDisplay) => (
   <Box>
     <Text fontSize="md" mb={0}>
       {label}

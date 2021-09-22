@@ -2,9 +2,7 @@ import React from 'react';
 
 import { HStack, Box } from '@chakra-ui/react';
 
-type TActionBar = {
-  children?: React.ReactNode;
-};
+import { TActionBar } from '@customTypes/components';
 
 const ActionBar: React.FC<TActionBar> = ({ children }: TActionBar) => {
   return (

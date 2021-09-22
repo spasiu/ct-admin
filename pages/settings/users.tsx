@@ -15,12 +15,13 @@ import {
   Link,
 } from '@chakra-ui/react';
 
+import { useGetAdminManagerUsersQuery } from '@generated/graphql';
+
+import paths from '@config/paths';
+
 import Layout from '@layouts';
 import SEO from '@components/SEO';
 import AddUserForm from '@components/Forms/AddUserForm';
-
-import { useGetAdminManagerUsersQuery } from '@generated/graphql';
-import paths from '@config/paths';
 
 const UserManagementPage: React.FC = () => {
   const {

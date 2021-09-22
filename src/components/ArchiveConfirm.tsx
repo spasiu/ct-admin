@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { HiArchive } from 'react-icons/hi';
 
 import {
@@ -14,11 +14,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-type TArchiveProps = {
-  callback: () => void;
-};
+import { TArchiveConfirmProps } from '@customTypes/components';
 
-const ArchiveConfirm: React.FC<TArchiveProps> = ({ callback }) => {
+const ArchiveConfirm: React.FC<TArchiveConfirmProps> = ({ callback }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef(null);
 

@@ -1,10 +1,7 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import DatePicker from 'react-datepicker';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import format from 'date-fns/format';
 
 import {
   FormErrorMessage,
@@ -14,14 +11,18 @@ import {
   Button,
   Flex,
   Box,
-  Textarea,
 } from '@chakra-ui/react';
 
 import { useUpdateBreakerProfileMutation } from '@generated/graphql';
 
-import ImageUploader from '@components/ImageUploader';
 import { gridSpace } from '@config/chakra/constants';
-import { auth } from '@config/firebase';
+
+import ImageUploader from '@components/ImageUploader';
+
+import {
+  TBreakerProfileFormData,
+  TBreakerProfileFormProps,
+} from '@customTypes/users';
 
 const schema = yup.object().shape({
   first_name: yup.string().required('Required'),
@@ -36,42 +37,12 @@ const schema = yup.object().shape({
   tiktok: yup.string().url().nullable(),
 });
 
-type TFormData = {
-  first_name: string | null;
-  last_name: string | null;
-  image: string | null;
-  bio: string | null;
-  video: string | null;
-  instagram: string | null;
-  twitter: string | null;
-  facebook: string | null;
-  linkedin: string | null;
-  tiktok: string | null;
-};
-
-type TFormProps = {
-  id: string;
-  profile?: {
-    first_name?: string | null;
-    last_name?: string | null;
-    image?: string | null;
-    bio?: string | null;
-    video?: string | null;
-    instagram?: string | null;
-    twitter?: string | null;
-    facebook?: string | null;
-    linkedin?: string | null;
-    tiktok?: string | null;
-  };
-  callback: () => void;
-};
-
 /**
  *
  * TODO: Handle errors
  *
  */
-const AddBreakerProfileForm: React.FC<TFormProps> = ({
+const AddBreakerProfileForm: React.FC<TBreakerProfileFormProps> = ({
   id,
   profile,
   callback,
@@ -91,7 +62,7 @@ const AddBreakerProfileForm: React.FC<TFormProps> = ({
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<TFormData>({
+  } = useForm<TBreakerProfileFormData>({
     resolver: yupResolver(schema),
     defaultValues: { ...profile },
   });
@@ -100,7 +71,7 @@ const AddBreakerProfileForm: React.FC<TFormProps> = ({
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TBreakerProfileFormData) => {
     const submitData = {
       id,
       first_name: result.first_name ? result.first_name : '',

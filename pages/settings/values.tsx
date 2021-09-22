@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   Box,
-  Button,
   Heading,
   Table,
   Thead,
@@ -18,7 +17,6 @@ import { ExtensibleValueFields } from '@config/values';
 
 import Layout from '@layouts';
 import SEO from '@components/SEO';
-import ActionBar from '@components/ActionBar';
 import AddExtensibleValueForm from '@components/Forms/AddExtensibleValueForm';
 
 const ExtensibleValuesPage: React.FC = () => {

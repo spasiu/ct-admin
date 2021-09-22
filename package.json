@@ -38,6 +38,7 @@
     "firebase": "^8.3.2",
     "framer-motion": "^3.10.5",
     "graphql": "^15.5.0",
+    "lodash": "^4.17.21",
     "next": "10.0.3",
     "next-compose-plugins": "^2.2.1",
     "prettier": "^2.2.1",

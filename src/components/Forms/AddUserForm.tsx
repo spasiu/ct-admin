@@ -4,8 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import * as yup from 'yup';
 
-import { auth, functions } from '@config/firebase';
-
 import {
   FormLabel,
   FormControl,
@@ -18,23 +16,17 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+import { auth, functions } from '@config/firebase';
+
+import { TAddUserFormData, TAddUserFormProps } from '@customTypes/users';
+
 const schema = yup.object().shape({
   email: yup.string().email('Must be a valid email').required('Required'),
   isAdmin: yup.boolean(),
   isBreaker: yup.boolean(),
 });
 
-type TFormData = {
-  email: string;
-  isAdmin: boolean;
-  isBreaker: boolean;
-};
-
-type TFormProps = {
-  callback?: () => void;
-};
-
-const AddUserForm: React.FC<TFormProps> = ({ callback }) => {
+const AddUserForm: React.FC<TAddUserFormProps> = ({ callback }) => {
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -47,7 +39,7 @@ const AddUserForm: React.FC<TFormProps> = ({ callback }) => {
     reset,
     control,
     formState: { errors },
-  } = useForm<TFormData>({
+  } = useForm<TAddUserFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
       email: '',
@@ -60,7 +52,7 @@ const AddUserForm: React.FC<TFormProps> = ({ callback }) => {
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TAddUserFormData) => {
     if (user && !loading) {
       setLoading(true);
       setMessage('');
@@ -70,7 +62,7 @@ const AddUserForm: React.FC<TFormProps> = ({ callback }) => {
         setAdmin: result.isAdmin,
         setBreaker: result.isBreaker,
       })
-        .then((result) => {
+        .then(() => {
           reset();
           setLoading(false);
           callback && callback();

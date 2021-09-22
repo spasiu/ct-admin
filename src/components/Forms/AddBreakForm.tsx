@@ -6,20 +6,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 
 import {
-  Break_Type_Enum,
-  InsertBreakMutation,
-  UpdateBreakMutation,
-  useInsertBreakMutation,
-  useUpdateBreakMutation,
-  useGetInventoryQuery,
-  useUpdateInventoryBreakMutation,
-} from '@generated/graphql';
-
-import { auth, functions } from '@config/firebase';
-import { gridSpace } from '@config/chakra/constants';
-import { BreakTypeValues } from '@config/values';
-
-import {
   FormErrorMessage,
   FormLabel,
   FormControl,
@@ -34,8 +20,29 @@ import {
   Text,
 } from '@chakra-ui/react';
 
+import {
+  Break_Type_Enum,
+  InsertBreakMutation,
+  UpdateBreakMutation,
+  useInsertBreakMutation,
+  useUpdateBreakMutation,
+  useGetInventoryQuery,
+  useUpdateInventoryBreakMutation,
+} from '@generated/graphql';
+
+import { auth, functions } from '@config/firebase';
+import { gridSpace } from '@config/chakra/constants';
+import { BreakTypeValues } from '@config/values';
+
 import ImageUploader from '@components/ImageUploader';
 import AutocompleteEvents from '@components/AutocompleteEvents';
+
+import { TInventoryAutcomplete } from '@customTypes/inventory';
+import {
+  TBreakLineItem,
+  TAddBreakFormData,
+  TAddBreakFormProps,
+} from '@customTypes/breaks';
 
 const schema = yup.object().shape({
   title: yup.string().required('Required'),
@@ -111,70 +118,13 @@ const schema = yup.object().shape({
   ),
 });
 
-type TInventoryAutcomplete = {
-  label: string;
-  value: string;
-};
-
-type TBreakLineItem = {
-  value: string;
-  cost: number;
-};
-
-type TDatasetLineItem = {
-  value: string;
-};
-
-type TFormData = {
-  id?: string;
-  title: string;
-  description: string;
-  event_id: string;
-  image: string;
-  break_type: Break_Type_Enum;
-  spots: number;
-  teams_per_spot?: number | null;
-  price: number;
-  lineItems: {
-    value: string;
-    cost: number;
-  }[];
-  datasetItems: {
-    value: string;
-  }[];
-};
-
-type TFormProps = {
-  event_id?: string;
-  event_title?: string;
-  break_data?: {
-    id?: string;
-    title: string;
-    description: string;
-    image: string;
-    break_type: string;
-    spots: number;
-    teams_per_spot?: number | null | undefined;
-    price?: number | null;
-    line_items?: TBreakLineItem[];
-    dataset?: TDatasetLineItem[];
-    status: string;
-    BreakProductItems: {
-      id: string;
-      title: string;
-      price: number;
-    }[];
-  };
-  callback: () => void;
-};
-
 /**
  *
  * TODO: Handle errors
  * TODO: Validate products are chosen
  * TODO: Show selected products on edit
  */
-const AddBreakForm: React.FC<TFormProps> = ({
+const AddBreakForm: React.FC<TAddBreakFormProps> = ({
   event_id,
   event_title,
   break_data,
@@ -307,7 +257,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
     setValue,
     getValues,
     formState: { errors },
-  } = useForm<TFormData>({
+  } = useForm<TAddBreakFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
       event_id: event_id,
@@ -397,7 +347,7 @@ const AddBreakForm: React.FC<TFormProps> = ({
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TAddBreakFormData) => {
     if (user) {
       setLoading(true);
 

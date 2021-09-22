@@ -2839,6 +2839,182 @@ export type Inventory_Variance_Order_By = {
   cost_basis?: Maybe<Order_By>;
 };
 
+/** columns and relationships of "NotificationSettings" */
+export type NotificationSettings = {
+  __typename?: 'NotificationSettings';
+  /** An object relationship */
+  User: Users;
+  breakers: Scalars['Boolean'];
+  breaks: Scalars['Boolean'];
+  created_at: Scalars['timestamptz'];
+  events: Scalars['Boolean'];
+  id: Scalars['uuid'];
+  updated_at: Scalars['timestamptz'];
+  user_id: Scalars['String'];
+};
+
+/** aggregated selection of "NotificationSettings" */
+export type NotificationSettings_Aggregate = {
+  __typename?: 'NotificationSettings_aggregate';
+  aggregate?: Maybe<NotificationSettings_Aggregate_Fields>;
+  nodes: Array<NotificationSettings>;
+};
+
+/** aggregate fields of "NotificationSettings" */
+export type NotificationSettings_Aggregate_Fields = {
+  __typename?: 'NotificationSettings_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<NotificationSettings_Max_Fields>;
+  min?: Maybe<NotificationSettings_Min_Fields>;
+};
+
+
+/** aggregate fields of "NotificationSettings" */
+export type NotificationSettings_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<NotificationSettings_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "NotificationSettings". All fields are combined with a logical 'AND'. */
+export type NotificationSettings_Bool_Exp = {
+  User?: Maybe<Users_Bool_Exp>;
+  _and?: Maybe<Array<NotificationSettings_Bool_Exp>>;
+  _not?: Maybe<NotificationSettings_Bool_Exp>;
+  _or?: Maybe<Array<NotificationSettings_Bool_Exp>>;
+  breakers?: Maybe<Boolean_Comparison_Exp>;
+  breaks?: Maybe<Boolean_Comparison_Exp>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  events?: Maybe<Boolean_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  user_id?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "NotificationSettings" */
+export enum NotificationSettings_Constraint {
+  /** unique or primary key constraint */
+  NotificationSettingsPkey = 'NotificationSettings_pkey',
+  /** unique or primary key constraint */
+  NotificationSettingsUserIdUniqueKey = 'NotificationSettings_user_id_unique_key'
+}
+
+/** input type for inserting data into table "NotificationSettings" */
+export type NotificationSettings_Insert_Input = {
+  User?: Maybe<Users_Obj_Rel_Insert_Input>;
+  breakers?: Maybe<Scalars['Boolean']>;
+  breaks?: Maybe<Scalars['Boolean']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  events?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type NotificationSettings_Max_Fields = {
+  __typename?: 'NotificationSettings_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type NotificationSettings_Min_Fields = {
+  __typename?: 'NotificationSettings_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "NotificationSettings" */
+export type NotificationSettings_Mutation_Response = {
+  __typename?: 'NotificationSettings_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<NotificationSettings>;
+};
+
+/** input type for inserting object relation for remote table "NotificationSettings" */
+export type NotificationSettings_Obj_Rel_Insert_Input = {
+  data: NotificationSettings_Insert_Input;
+  /** on conflict condition */
+  on_conflict?: Maybe<NotificationSettings_On_Conflict>;
+};
+
+/** on conflict condition type for table "NotificationSettings" */
+export type NotificationSettings_On_Conflict = {
+  constraint: NotificationSettings_Constraint;
+  update_columns?: Array<NotificationSettings_Update_Column>;
+  where?: Maybe<NotificationSettings_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "NotificationSettings". */
+export type NotificationSettings_Order_By = {
+  User?: Maybe<Users_Order_By>;
+  breakers?: Maybe<Order_By>;
+  breaks?: Maybe<Order_By>;
+  created_at?: Maybe<Order_By>;
+  events?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  updated_at?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: NotificationSettings */
+export type NotificationSettings_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "NotificationSettings" */
+export enum NotificationSettings_Select_Column {
+  /** column name */
+  Breakers = 'breakers',
+  /** column name */
+  Breaks = 'breaks',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Events = 'events',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** input type for updating data in table "NotificationSettings" */
+export type NotificationSettings_Set_Input = {
+  breakers?: Maybe<Scalars['Boolean']>;
+  breaks?: Maybe<Scalars['Boolean']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  events?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "NotificationSettings" */
+export enum NotificationSettings_Update_Column {
+  /** column name */
+  Breakers = 'breakers',
+  /** column name */
+  Breaks = 'breaks',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Events = 'events',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
+}
+
 /** columns and relationships of "Notifications" */
 export type Notifications = {
   __typename?: 'Notifications';
@@ -5103,6 +5279,8 @@ export type Users = {
   Hits_aggregate: Hits_Aggregate;
   /** An object relationship */
   Notification?: Maybe<Notifications>;
+  /** An object relationship */
+  NotificationSettings?: Maybe<NotificationSettings>;
   /** fetch data from the table: "Orders" */
   Orders: Array<Orders>;
   /** An aggregate relationship */
@@ -5341,6 +5519,7 @@ export type Users_Bool_Exp = {
   Followers?: Maybe<SaveBreaker_Bool_Exp>;
   Hits?: Maybe<Hits_Bool_Exp>;
   Notification?: Maybe<Notifications_Bool_Exp>;
+  NotificationSettings?: Maybe<NotificationSettings_Bool_Exp>;
   Orders?: Maybe<Orders_Bool_Exp>;
   SavedBreakers?: Maybe<SaveBreaker_Bool_Exp>;
   SavedBreaks?: Maybe<SaveBreak_Bool_Exp>;
@@ -5379,6 +5558,7 @@ export type Users_Insert_Input = {
   Followers?: Maybe<SaveBreaker_Arr_Rel_Insert_Input>;
   Hits?: Maybe<Hits_Arr_Rel_Insert_Input>;
   Notification?: Maybe<Notifications_Obj_Rel_Insert_Input>;
+  NotificationSettings?: Maybe<NotificationSettings_Obj_Rel_Insert_Input>;
   Orders?: Maybe<Orders_Arr_Rel_Insert_Input>;
   SavedBreakers?: Maybe<SaveBreaker_Arr_Rel_Insert_Input>;
   SavedBreaks?: Maybe<SaveBreak_Arr_Rel_Insert_Input>;
@@ -5479,6 +5659,7 @@ export type Users_Order_By = {
   Followers_aggregate?: Maybe<SaveBreaker_Aggregate_Order_By>;
   Hits_aggregate?: Maybe<Hits_Aggregate_Order_By>;
   Notification?: Maybe<Notifications_Order_By>;
+  NotificationSettings?: Maybe<NotificationSettings_Order_By>;
   Orders_aggregate?: Maybe<Orders_Aggregate_Order_By>;
   SavedBreakers_aggregate?: Maybe<SaveBreaker_Aggregate_Order_By>;
   SavedBreaks_aggregate?: Maybe<SaveBreak_Aggregate_Order_By>;
@@ -6097,6 +6278,10 @@ export type Mutation_Root = {
   delete_Inventory?: Maybe<Inventory_Mutation_Response>;
   /** delete single row from the table: "Inventory" */
   delete_Inventory_by_pk?: Maybe<Inventory>;
+  /** delete data from the table: "NotificationSettings" */
+  delete_NotificationSettings?: Maybe<NotificationSettings_Mutation_Response>;
+  /** delete single row from the table: "NotificationSettings" */
+  delete_NotificationSettings_by_pk?: Maybe<NotificationSettings>;
   /** delete data from the table: "Notifications" */
   delete_Notifications?: Maybe<Notifications_Mutation_Response>;
   /** delete single row from the table: "Notifications" */
@@ -6185,6 +6370,10 @@ export type Mutation_Root = {
   insert_Inventory?: Maybe<Inventory_Mutation_Response>;
   /** insert a single row into the table: "Inventory" */
   insert_Inventory_one?: Maybe<Inventory>;
+  /** insert data into the table: "NotificationSettings" */
+  insert_NotificationSettings?: Maybe<NotificationSettings_Mutation_Response>;
+  /** insert a single row into the table: "NotificationSettings" */
+  insert_NotificationSettings_one?: Maybe<NotificationSettings>;
   /** insert data into the table: "Notifications" */
   insert_Notifications?: Maybe<Notifications_Mutation_Response>;
   /** insert a single row into the table: "Notifications" */
@@ -6273,6 +6462,10 @@ export type Mutation_Root = {
   update_Inventory?: Maybe<Inventory_Mutation_Response>;
   /** update single row of the table: "Inventory" */
   update_Inventory_by_pk?: Maybe<Inventory>;
+  /** update data of the table: "NotificationSettings" */
+  update_NotificationSettings?: Maybe<NotificationSettings_Mutation_Response>;
+  /** update single row of the table: "NotificationSettings" */
+  update_NotificationSettings_by_pk?: Maybe<NotificationSettings>;
   /** update data of the table: "Notifications" */
   update_Notifications?: Maybe<Notifications_Mutation_Response>;
   /** update single row of the table: "Notifications" */
@@ -6425,6 +6618,18 @@ export type Mutation_RootDelete_InventoryArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Inventory_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_NotificationSettingsArgs = {
+  where: NotificationSettings_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_NotificationSettings_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -6706,6 +6911,20 @@ export type Mutation_RootInsert_InventoryArgs = {
 export type Mutation_RootInsert_Inventory_OneArgs = {
   object: Inventory_Insert_Input;
   on_conflict?: Maybe<Inventory_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_NotificationSettingsArgs = {
+  objects: Array<NotificationSettings_Insert_Input>;
+  on_conflict?: Maybe<NotificationSettings_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_NotificationSettings_OneArgs = {
+  object: NotificationSettings_Insert_Input;
+  on_conflict?: Maybe<NotificationSettings_On_Conflict>;
 };
 
 
@@ -7036,6 +7255,20 @@ export type Mutation_RootUpdate_Inventory_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_NotificationSettingsArgs = {
+  _set?: Maybe<NotificationSettings_Set_Input>;
+  where: NotificationSettings_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_NotificationSettings_By_PkArgs = {
+  _set?: Maybe<NotificationSettings_Set_Input>;
+  pk_columns: NotificationSettings_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_NotificationsArgs = {
   _set?: Maybe<Notifications_Set_Input>;
   where: Notifications_Bool_Exp;
@@ -7314,6 +7547,12 @@ export type Query_Root = {
   Inventory_aggregate: Inventory_Aggregate;
   /** fetch data from the table: "Inventory" using primary key columns */
   Inventory_by_pk?: Maybe<Inventory>;
+  /** fetch data from the table: "NotificationSettings" */
+  NotificationSettings: Array<NotificationSettings>;
+  /** fetch aggregated fields from the table: "NotificationSettings" */
+  NotificationSettings_aggregate: NotificationSettings_Aggregate;
+  /** fetch data from the table: "NotificationSettings" using primary key columns */
+  NotificationSettings_by_pk?: Maybe<NotificationSettings>;
   /** fetch data from the table: "Notifications" */
   Notifications: Array<Notifications>;
   /** fetch aggregated fields from the table: "Notifications" */
@@ -7582,6 +7821,29 @@ export type Query_RootInventory_AggregateArgs = {
 
 
 export type Query_RootInventory_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootNotificationSettingsArgs = {
+  distinct_on?: Maybe<Array<NotificationSettings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<NotificationSettings_Order_By>>;
+  where?: Maybe<NotificationSettings_Bool_Exp>;
+};
+
+
+export type Query_RootNotificationSettings_AggregateArgs = {
+  distinct_on?: Maybe<Array<NotificationSettings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<NotificationSettings_Order_By>>;
+  where?: Maybe<NotificationSettings_Bool_Exp>;
+};
+
+
+export type Query_RootNotificationSettings_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -7957,6 +8219,12 @@ export type Subscription_Root = {
   Inventory_aggregate: Inventory_Aggregate;
   /** fetch data from the table: "Inventory" using primary key columns */
   Inventory_by_pk?: Maybe<Inventory>;
+  /** fetch data from the table: "NotificationSettings" */
+  NotificationSettings: Array<NotificationSettings>;
+  /** fetch aggregated fields from the table: "NotificationSettings" */
+  NotificationSettings_aggregate: NotificationSettings_Aggregate;
+  /** fetch data from the table: "NotificationSettings" using primary key columns */
+  NotificationSettings_by_pk?: Maybe<NotificationSettings>;
   /** fetch data from the table: "Notifications" */
   Notifications: Array<Notifications>;
   /** fetch aggregated fields from the table: "Notifications" */
@@ -8225,6 +8493,29 @@ export type Subscription_RootInventory_AggregateArgs = {
 
 
 export type Subscription_RootInventory_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootNotificationSettingsArgs = {
+  distinct_on?: Maybe<Array<NotificationSettings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<NotificationSettings_Order_By>>;
+  where?: Maybe<NotificationSettings_Bool_Exp>;
+};
+
+
+export type Subscription_RootNotificationSettings_AggregateArgs = {
+  distinct_on?: Maybe<Array<NotificationSettings_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<NotificationSettings_Order_By>>;
+  where?: Maybe<NotificationSettings_Bool_Exp>;
+};
+
+
+export type Subscription_RootNotificationSettings_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -9177,20 +9468,6 @@ export type UpdateBreakerProfileMutation = (
   )> }
 );
 
-export type BreakUpdateMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  result: Scalars['jsonb'];
-}>;
-
-
-export type BreakUpdateMutation = (
-  { __typename?: 'mutation_root' }
-  & { update_Breaks_by_pk?: Maybe<(
-    { __typename?: 'Breaks' }
-    & Pick<Breaks, 'id'>
-  )> }
-);
-
 export type GetProductsQueryVariables = Exact<{
   unitOfMeasure?: Maybe<Array<Unit_Of_Measure_Enum> | Unit_Of_Measure_Enum>;
   input?: Maybe<Scalars['String']>;
@@ -9389,6 +9666,37 @@ export type GetEventByIdQuery = (
   )> }
 );
 
+export type GetLiveEventByIdQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetLiveEventByIdQuery = (
+  { __typename?: 'query_root' }
+  & { Events_by_pk?: Maybe<(
+    { __typename?: 'Events' }
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
+    & { User: (
+      { __typename?: 'Users' }
+      & Pick<Users, 'id' | 'first_name' | 'last_name'>
+    ), Breaks: Array<(
+      { __typename?: 'Breaks' }
+      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'result'>
+      & { BreakProductItems: Array<(
+        { __typename?: 'BreakProductItems' }
+        & Pick<BreakProductItems, 'title'>
+        & { Order?: Maybe<(
+          { __typename?: 'Orders' }
+          & { User: (
+            { __typename?: 'Users' }
+            & Pick<Users, 'username'>
+          ) }
+        )> }
+      )> }
+    )> }
+  )> }
+);
+
 export type SearchEventsQueryVariables = Exact<{
   input: Scalars['String'];
 }>;
@@ -9565,6 +9873,19 @@ export type GetBreakerProfileQuery = (
   )>, BreakerProfiles: Array<(
     { __typename?: 'BreakerProfiles' }
     & Pick<BreakerProfiles, 'bio' | 'video' | 'instagram' | 'twitter' | 'facebook' | 'linkedin' | 'tiktok'>
+  )> }
+);
+
+export type GetChatUserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetChatUserQuery = (
+  { __typename?: 'query_root' }
+  & { Users_by_pk?: Maybe<(
+    { __typename?: 'Users' }
+    & Pick<Users, 'first_name' | 'last_name' | 'image' | 'username'>
   )> }
 );
 
@@ -10305,43 +10626,6 @@ export function useUpdateBreakerProfileMutation(baseOptions?: Apollo.MutationHoo
 export type UpdateBreakerProfileMutationHookResult = ReturnType<typeof useUpdateBreakerProfileMutation>;
 export type UpdateBreakerProfileMutationResult = Apollo.MutationResult<UpdateBreakerProfileMutation>;
 export type UpdateBreakerProfileMutationOptions = Apollo.BaseMutationOptions<UpdateBreakerProfileMutation, UpdateBreakerProfileMutationVariables>;
-export const BreakUpdateDocument = gql`
-    mutation BreakUpdate($id: uuid!, $result: jsonb!) {
-  update_Breaks_by_pk(
-    pk_columns: {id: $id}
-    _set: {result: $result, status: LIVE}
-  ) {
-    id
-  }
-}
-    `;
-export type BreakUpdateMutationFn = Apollo.MutationFunction<BreakUpdateMutation, BreakUpdateMutationVariables>;
-
-/**
- * __useBreakUpdateMutation__
- *
- * To run a mutation, you first call `useBreakUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useBreakUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [breakUpdateMutation, { data, loading, error }] = useBreakUpdateMutation({
- *   variables: {
- *      id: // value for 'id'
- *      result: // value for 'result'
- *   },
- * });
- */
-export function useBreakUpdateMutation(baseOptions?: Apollo.MutationHookOptions<BreakUpdateMutation, BreakUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<BreakUpdateMutation, BreakUpdateMutationVariables>(BreakUpdateDocument, options);
-      }
-export type BreakUpdateMutationHookResult = ReturnType<typeof useBreakUpdateMutation>;
-export type BreakUpdateMutationResult = Apollo.MutationResult<BreakUpdateMutation>;
-export type BreakUpdateMutationOptions = Apollo.BaseMutationOptions<BreakUpdateMutation, BreakUpdateMutationVariables>;
 export const GetProductsDocument = gql`
     query GetProducts($unitOfMeasure: [unit_of_measure_enum!], $input: String) {
   Products(
@@ -10775,6 +11059,72 @@ export function useGetEventByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetEventByIdQueryHookResult = ReturnType<typeof useGetEventByIdQuery>;
 export type GetEventByIdLazyQueryHookResult = ReturnType<typeof useGetEventByIdLazyQuery>;
 export type GetEventByIdQueryResult = Apollo.QueryResult<GetEventByIdQuery, GetEventByIdQueryVariables>;
+export const GetLiveEventByIdDocument = gql`
+    query GetLiveEventById($id: uuid!) {
+  Events_by_pk(id: $id) {
+    id
+    title
+    start_time
+    description
+    status
+    image
+    User {
+      id
+      first_name
+      last_name
+    }
+    Breaks(order_by: {created_at: asc}) {
+      id
+      title
+      break_type
+      price
+      spots
+      description
+      teams_per_spot
+      image
+      line_items
+      status
+      result
+      BreakProductItems(order_by: {title: asc}) {
+        title
+        Order {
+          User {
+            username
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetLiveEventByIdQuery__
+ *
+ * To run a query within a React component, call `useGetLiveEventByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLiveEventByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLiveEventByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetLiveEventByIdQuery(baseOptions: Apollo.QueryHookOptions<GetLiveEventByIdQuery, GetLiveEventByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLiveEventByIdQuery, GetLiveEventByIdQueryVariables>(GetLiveEventByIdDocument, options);
+      }
+export function useGetLiveEventByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLiveEventByIdQuery, GetLiveEventByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLiveEventByIdQuery, GetLiveEventByIdQueryVariables>(GetLiveEventByIdDocument, options);
+        }
+export type GetLiveEventByIdQueryHookResult = ReturnType<typeof useGetLiveEventByIdQuery>;
+export type GetLiveEventByIdLazyQueryHookResult = ReturnType<typeof useGetLiveEventByIdLazyQuery>;
+export type GetLiveEventByIdQueryResult = Apollo.QueryResult<GetLiveEventByIdQuery, GetLiveEventByIdQueryVariables>;
 export const SearchEventsDocument = gql`
     query SearchEvents($input: String!) {
   Events(where: {title: {_ilike: $input}}) {
@@ -11236,3 +11586,41 @@ export function useGetBreakerProfileLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetBreakerProfileQueryHookResult = ReturnType<typeof useGetBreakerProfileQuery>;
 export type GetBreakerProfileLazyQueryHookResult = ReturnType<typeof useGetBreakerProfileLazyQuery>;
 export type GetBreakerProfileQueryResult = Apollo.QueryResult<GetBreakerProfileQuery, GetBreakerProfileQueryVariables>;
+export const GetChatUserDocument = gql`
+    query GetChatUser($id: String!) {
+  Users_by_pk(id: $id) {
+    first_name
+    last_name
+    image
+    username
+  }
+}
+    `;
+
+/**
+ * __useGetChatUserQuery__
+ *
+ * To run a query within a React component, call `useGetChatUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetChatUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetChatUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetChatUserQuery(baseOptions: Apollo.QueryHookOptions<GetChatUserQuery, GetChatUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetChatUserQuery, GetChatUserQueryVariables>(GetChatUserDocument, options);
+      }
+export function useGetChatUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetChatUserQuery, GetChatUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetChatUserQuery, GetChatUserQueryVariables>(GetChatUserDocument, options);
+        }
+export type GetChatUserQueryHookResult = ReturnType<typeof useGetChatUserQuery>;
+export type GetChatUserLazyQueryHookResult = ReturnType<typeof useGetChatUserLazyQuery>;
+export type GetChatUserQueryResult = Apollo.QueryResult<GetChatUserQuery, GetChatUserQueryVariables>;

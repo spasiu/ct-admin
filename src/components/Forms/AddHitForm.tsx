@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -30,67 +30,11 @@ import Autocomplete from '@components/Autocomplete';
 import AutocompleteBreaks from '@components/AutocompleteBreaks';
 import ImageUploader from '@components/ImageUploader';
 
-type TUser = {
-  id: string;
-  username?: string | null;
-};
-
-type TFormData = {
-  user_id: string;
-  break_id: string;
-  image_front: string;
-  image_back: string | null;
-  year: string;
-  manufacturer: string;
-  brand: string;
-  series: string | null;
-  category: string;
-  card_number: string | null;
-  player: string | null;
-  parallel: string | null;
-  insert: string | null;
-  rookie_card: boolean | null;
-  memoribillia: string | null;
-  autograph: boolean | null;
-  numbered: number | null;
-  grader: string | null;
-  grade: string | null;
-};
-
-type TFormProps = {
-  hit?: {
-    id: string;
-    user_id: string;
-    break_id: string;
-    image_front: string;
-    image_back?: string | null;
-    year: string;
-    category: string;
-    manufacturer: string;
-    brand: string;
-    series?: string | null;
-    card_number: string;
-    player: string;
-    parallel?: string | null;
-    insert?: string | null;
-    rookie_card?: boolean | null;
-    memoribillia?: string | null;
-    autograph?: boolean | null;
-    numbered?: number | null;
-    User: {
-      id: string;
-      username?: string | null;
-    };
-    Break: {
-      id: string;
-      title: string;
-      Event: {
-        start_time: string;
-      };
-    };
-  };
-  callback: () => void;
-};
+import {
+  TAddHitUser,
+  TAddHitFormData,
+  TAddHitFormProps,
+} from '@customTypes/hits';
 
 const schema = yup.object().shape({
   user_id: yup.string().required('Required'),
@@ -128,9 +72,9 @@ const schema = yup.object().shape({
 /**
  * TODO: Add auth
  */
-const AddHitForm: React.FC<TFormProps> = ({ hit, callback }) => {
+const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
   const operation = hit ? 'UPDATE' : 'ADD';
-  const [userOptions, setUserOptions] = useState<TUser[]>(
+  const [userOptions, setUserOptions] = useState<TAddHitUser[]>(
     hit && hit.User.username
       ? [{ id: hit.user_id, username: hit.User.username }]
       : [],
@@ -146,8 +90,7 @@ const AddHitForm: React.FC<TFormProps> = ({ hit, callback }) => {
     formState: { errors },
     reset,
     setValue,
-    getValues,
-  } = useForm<TFormData>({
+  } = useForm<TAddHitFormData>({
     resolver: yupResolver(schema),
     defaultValues,
   });
@@ -196,12 +139,12 @@ const AddHitForm: React.FC<TFormProps> = ({ hit, callback }) => {
 
   const [
     getBreakUsers,
-    { loading, data: breakUserData },
+    { loading: breakUserLoading, data: breakUserData },
   ] = useGetBreakOrderUsersLazyQuery();
 
   useEffect(() => {
     if (breakUserData) {
-      let options: TUser[] = [];
+      let options: TAddHitUser[] = [];
 
       breakUserData?.Breaks_by_pk?.BreakProductItems.forEach((prodItem) => {
         if (prodItem.Order) {
@@ -227,7 +170,7 @@ const AddHitForm: React.FC<TFormProps> = ({ hit, callback }) => {
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TAddHitFormData) => {
     switch (operation) {
       case 'ADD':
         insertHit({ variables: { data: result } });

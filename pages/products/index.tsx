@@ -4,14 +4,6 @@ import { MdVisibility, MdEdit } from 'react-icons/md';
 import NextLink from 'next/link';
 
 import {
-  useGetProductsQuery,
-  useArchiveProductsByIdsMutation,
-  Unit_Of_Measure_Enum,
-} from '@generated/graphql';
-
-import paths from '@config/paths';
-
-import {
   Heading,
   Box,
   Button,
@@ -30,6 +22,14 @@ import {
   TabPanel,
 } from '@chakra-ui/react';
 
+import {
+  useGetProductsQuery,
+  useArchiveProductsByIdsMutation,
+  Unit_Of_Measure_Enum,
+} from '@generated/graphql';
+
+import paths from '@config/paths';
+
 import Layout from '@layouts';
 import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
@@ -38,29 +38,7 @@ import AddProductForm from '@components/Forms/AddProductForm';
 import FilterForm from '@components/Forms/FilterForm';
 import ArchiveConfirm from '@components/ArchiveConfirm';
 
-type TSelectedProduct = {
-  id: string;
-  unit_of_measure: string;
-  year: string;
-  manufacturer: string;
-  brand: string;
-  series?: string | null;
-  category: string;
-  type?: string | null;
-  boxes_per_case?: number | null;
-  packs_per_box?: number | null;
-  cards_per_pack?: number | null;
-  card_number?: string | null;
-  player?: string | null;
-  parallel?: string | null;
-  insert?: string | null;
-  rookie_card?: boolean | null;
-  memoribillia?: string | null;
-  autograph?: boolean | null;
-  numbered?: number | null;
-  grader?: string | null;
-  grade?: string | null;
-};
+import { TSelectedProduct } from '@customTypes/products';
 
 const ProductsPage: React.FC = () => {
   const [isAddProductModalOpen, setAddProductModalOpen] = useState(false);

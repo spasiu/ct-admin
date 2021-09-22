@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -23,10 +23,16 @@ import {
   Unit_Of_Measure_Enum,
   useGetFilteredExtensibleValuesQuery,
 } from '@generated/graphql';
+
 import { UnitOfMeasureValues } from '@config/values';
 import { gridSpace } from '@config/chakra/constants';
 
 import Autocomplete from '@components/Autocomplete';
+
+import {
+  TAddProductFormData,
+  TAddProductFormProps,
+} from '@customTypes/products';
 
 const schema = yup.object().shape({
   unit_of_measure: yup.string().required('Required'),
@@ -121,63 +127,15 @@ const schema = yup.object().shape({
   grade: yup.string().nullable(),
 });
 
-type TFormData = {
-  unit_of_measure: Unit_Of_Measure_Enum;
-  year: string;
-  manufacturer: string;
-  brand: string;
-  series: string | null;
-  category: string;
-  type: string | null;
-  boxes_per_case: number | null;
-  packs_per_box: number | null;
-  cards_per_pack: number | null;
-  card_number: string | null;
-  player: string | null;
-  parallel: string | null;
-  insert: string | null;
-  rookie_card: boolean | null;
-  memoribillia: string | null;
-  autograph: boolean | null;
-  numbered: number | null;
-  grader: string | null;
-  grade: string | null;
-};
-
-type TFormProps = {
-  product?: {
-    id: string;
-    unit_of_measure: string;
-    year: string;
-    manufacturer: string;
-    brand: string;
-    series?: string | null;
-    category: string;
-    type?: string | null;
-    boxes_per_case?: number | null;
-    packs_per_box?: number | null;
-    cards_per_pack?: number | null;
-    card_number?: string | null;
-    player?: string | null;
-    parallel?: string | null;
-    insert?: string | null;
-    rookie_card?: boolean | null;
-    memoribillia?: string | null;
-    autograph?: boolean | null;
-    numbered?: number | null;
-    grader?: string | null;
-    grade?: string | null;
-  };
-  callback: () => void;
-};
-
 /**
  *
  * TODO: Add auth
- * TODO: Generate description
  *
  */
-const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
+const AddProductForm: React.FC<TAddProductFormProps> = ({
+  product,
+  callback,
+}) => {
   const operation = product ? 'UPDATE' : 'ADD';
 
   const {
@@ -187,7 +145,7 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
     formState: { errors },
     reset,
     setValue,
-  } = useForm<TFormData>({
+  } = useForm<TAddProductFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(product || {}),
@@ -249,7 +207,7 @@ const AddProductForm: React.FC<TFormProps> = ({ product, callback }) => {
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TAddProductFormData) => {
     switch (operation) {
       case 'ADD':
         addProduct({

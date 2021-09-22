@@ -13,19 +13,18 @@ import {
   HStack,
 } from '@chakra-ui/react';
 
+import {
+  TFilterProductsFormData,
+  TFilterProductsFormProps,
+} from '@customTypes/products';
+
 const schema = yup.object().shape({
   search: yup.string(),
 });
 
-type TFormData = {
-  search: string;
-};
-
-type TFormProps = {
-  callback: (search: string) => void;
-};
-
-const AddExtensibleValueForm: React.FC<TFormProps> = ({ callback }) => {
+const FilterProductsForm: React.FC<TFilterProductsFormProps> = ({
+  callback,
+}) => {
   const [showReset, setShowReset] = useState(false);
 
   const {
@@ -33,7 +32,7 @@ const AddExtensibleValueForm: React.FC<TFormProps> = ({ callback }) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<TFormData>({
+  } = useForm<TFilterProductsFormData>({
     resolver: yupResolver(schema),
   });
 
@@ -41,7 +40,7 @@ const AddExtensibleValueForm: React.FC<TFormProps> = ({ callback }) => {
    * Handle form submission
    * @param result object Validated form result
    */
-  const onSubmit = (result: TFormData) => {
+  const onSubmit = (result: TFilterProductsFormData) => {
     if (result.search === '') {
       setShowReset(false);
     } else {
@@ -82,4 +81,4 @@ const AddExtensibleValueForm: React.FC<TFormProps> = ({ callback }) => {
   );
 };
 
-export default AddExtensibleValueForm;
+export default FilterProductsForm;

@@ -6,27 +6,10 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { useSearchExtensibleValuesLazyQuery } from '@generated/graphql';
 
-type TAutocompleteProps = {
-  field: string;
-  defaultValue?: string | null;
-  callback: (input: string) => void;
-  isInvalid: boolean;
-};
-
-type TSearchResult = {
-  field: string;
-  value: string;
-};
-
-// USAGE:
-// <Autocomplete
-//   isInvalid={!!errors.manufacturer}
-//   defaultValue={product?.manufacturer}
-//   callback={(val: string) => {
-//     setValue('manufacturer', val);
-//   }}
-//   field="product_manufacturer"
-// />;
+import {
+  TAutocompleteProps,
+  TAutocompleteSearchResult,
+} from '@customTypes/components';
 
 const Autocomplete: React.FC<TAutocompleteProps> = ({
   defaultValue,
@@ -51,7 +34,7 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
         return true;
       }}
       id={`autocomplete-input-${field}`}
-      onChange={(selected: TSearchResult[]) => {
+      onChange={(selected: TAutocompleteSearchResult[]) => {
         if (selected.length > 0) {
           callback(selected[0].value);
         }
@@ -63,7 +46,7 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
       onSearch={handleSearch}
       options={data?.ExtensibleValues ? data?.ExtensibleValues : []}
       placeholder="Search..."
-      renderMenuItemChildren={(option: TSearchResult, props) => (
+      renderMenuItemChildren={(option: TAutocompleteSearchResult, props) => (
         <Highlighter search={props.text || ''}>{option.value}</Highlighter>
       )}
       isInvalid={isInvalid}

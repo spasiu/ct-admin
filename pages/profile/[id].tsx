@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { Heading, Box, Text, HStack, Button, Divider } from '@chakra-ui/react';
 
 import { useGetBreakerProfileLazyQuery } from '@generated/graphql';
+
 import { auth } from '@config/firebase';
 
 import Layout from '@layouts';
