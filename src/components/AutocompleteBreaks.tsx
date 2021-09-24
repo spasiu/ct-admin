@@ -1,9 +1,6 @@
 import React from 'react';
 import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-
 import { useSearchBreaksLazyQuery } from '@generated/graphql';
 
 import {
