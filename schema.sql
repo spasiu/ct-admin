@@ -223,7 +223,8 @@ CREATE TABLE public."Hits" (
     rookie_card boolean DEFAULT false,
     memoribillia text,
     autograph boolean DEFAULT false,
-    numbered integer
+    numbered integer,
+    archived boolean DEFAULT false
 );
 
 CREATE TABLE public."NotificationSettings" (

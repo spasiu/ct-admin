@@ -2,6 +2,7 @@ export type TFormModal = {
   children: React.ReactNode;
   title: string;
   isOpen: boolean;
+  size?: string;
   closeOnEsc?: boolean;
   setModalOpen: (n: boolean) => void;
 };
@@ -67,6 +68,9 @@ export type TImageUploadProps = {
   imageFolder: string;
   imagePath?: string | null;
   label?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageFit?: string;
   callback: (url: string) => void;
 };
 

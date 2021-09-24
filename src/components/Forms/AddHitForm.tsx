@@ -210,6 +210,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
                   label="Front Image"
                   imagePath={hit?.image_front}
                   imageFolder="hits"
+                  imageWidth={250}
+                  imageHeight={350}
+                  imageFit="clip"
                   callback={(url: string) => {
                     setValue('image_front', url);
                   }}
@@ -227,6 +230,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
                   label="Back Image"
                   imagePath={hit?.image_back}
                   imageFolder="hits"
+                  imageWidth={250}
+                  imageHeight={350}
+                  imageFit="clip"
                   callback={(url: string) => {
                     setValue('image_back', url);
                   }}

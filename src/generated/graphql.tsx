@@ -1987,6 +1987,7 @@ export type Hits = {
   Break: Breaks;
   /** An object relationship */
   User: Users;
+  archived: Scalars['Boolean'];
   autograph?: Maybe<Scalars['Boolean']>;
   brand: Scalars['String'];
   break_id: Scalars['uuid'];
@@ -2080,6 +2081,7 @@ export type Hits_Bool_Exp = {
   _and?: Maybe<Array<Hits_Bool_Exp>>;
   _not?: Maybe<Hits_Bool_Exp>;
   _or?: Maybe<Array<Hits_Bool_Exp>>;
+  archived?: Maybe<Boolean_Comparison_Exp>;
   autograph?: Maybe<Boolean_Comparison_Exp>;
   brand?: Maybe<String_Comparison_Exp>;
   break_id?: Maybe<Uuid_Comparison_Exp>;
@@ -2118,6 +2120,7 @@ export type Hits_Inc_Input = {
 export type Hits_Insert_Input = {
   Break?: Maybe<Breaks_Obj_Rel_Insert_Input>;
   User?: Maybe<Users_Obj_Rel_Insert_Input>;
+  archived?: Maybe<Scalars['Boolean']>;
   autograph?: Maybe<Scalars['Boolean']>;
   brand?: Maybe<Scalars['String']>;
   break_id?: Maybe<Scalars['uuid']>;
@@ -2255,6 +2258,7 @@ export type Hits_On_Conflict = {
 export type Hits_Order_By = {
   Break?: Maybe<Breaks_Order_By>;
   User?: Maybe<Users_Order_By>;
+  archived?: Maybe<Order_By>;
   autograph?: Maybe<Order_By>;
   brand?: Maybe<Order_By>;
   break_id?: Maybe<Order_By>;
@@ -2285,6 +2289,8 @@ export type Hits_Pk_Columns_Input = {
 
 /** select columns of table "Hits" */
 export enum Hits_Select_Column {
+  /** column name */
+  Archived = 'archived',
   /** column name */
   Autograph = 'autograph',
   /** column name */
@@ -2331,6 +2337,7 @@ export enum Hits_Select_Column {
 
 /** input type for updating data in table "Hits" */
 export type Hits_Set_Input = {
+  archived?: Maybe<Scalars['Boolean']>;
   autograph?: Maybe<Scalars['Boolean']>;
   brand?: Maybe<Scalars['String']>;
   break_id?: Maybe<Scalars['uuid']>;
@@ -2400,6 +2407,8 @@ export type Hits_Sum_Order_By = {
 
 /** update columns of table "Hits" */
 export enum Hits_Update_Column {
+  /** column name */
+  Archived = 'archived',
   /** column name */
   Autograph = 'autograph',
   /** column name */
@@ -9448,6 +9457,19 @@ export type UpdateHitMutation = (
   )> }
 );
 
+export type ArchiveHitsByIdMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type ArchiveHitsByIdMutation = (
+  { __typename?: 'mutation_root' }
+  & { update_Hits?: Maybe<(
+    { __typename?: 'Hits_mutation_response' }
+    & Pick<Hits_Mutation_Response, 'affected_rows'>
+  )> }
+);
+
 export type UpdateBreakerProfileMutationVariables = Exact<{
   id: Scalars['String'];
   first_name: Scalars['String'];
@@ -10578,6 +10600,39 @@ export function useUpdateHitMutation(baseOptions?: Apollo.MutationHookOptions<Up
 export type UpdateHitMutationHookResult = ReturnType<typeof useUpdateHitMutation>;
 export type UpdateHitMutationResult = Apollo.MutationResult<UpdateHitMutation>;
 export type UpdateHitMutationOptions = Apollo.BaseMutationOptions<UpdateHitMutation, UpdateHitMutationVariables>;
+export const ArchiveHitsByIdDocument = gql`
+    mutation ArchiveHitsById($ids: [uuid!]) {
+  update_Hits(where: {id: {_in: $ids}}, _set: {archived: true}) {
+    affected_rows
+  }
+}
+    `;
+export type ArchiveHitsByIdMutationFn = Apollo.MutationFunction<ArchiveHitsByIdMutation, ArchiveHitsByIdMutationVariables>;
+
+/**
+ * __useArchiveHitsByIdMutation__
+ *
+ * To run a mutation, you first call `useArchiveHitsByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useArchiveHitsByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [archiveHitsByIdMutation, { data, loading, error }] = useArchiveHitsByIdMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useArchiveHitsByIdMutation(baseOptions?: Apollo.MutationHookOptions<ArchiveHitsByIdMutation, ArchiveHitsByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ArchiveHitsByIdMutation, ArchiveHitsByIdMutationVariables>(ArchiveHitsByIdDocument, options);
+      }
+export type ArchiveHitsByIdMutationHookResult = ReturnType<typeof useArchiveHitsByIdMutation>;
+export type ArchiveHitsByIdMutationResult = Apollo.MutationResult<ArchiveHitsByIdMutation>;
+export type ArchiveHitsByIdMutationOptions = Apollo.BaseMutationOptions<ArchiveHitsByIdMutation, ArchiveHitsByIdMutationVariables>;
 export const UpdateBreakerProfileDocument = gql`
     mutation UpdateBreakerProfile($id: String!, $first_name: String!, $last_name: String!, $image: String!, $profile: BreakerProfiles_insert_input!) {
   update_Users_by_pk(
@@ -11318,7 +11373,7 @@ export type SearchBreaksLazyQueryHookResult = ReturnType<typeof useSearchBreaksL
 export type SearchBreaksQueryResult = Apollo.QueryResult<SearchBreaksQuery, SearchBreaksQueryVariables>;
 export const GetHitsDocument = gql`
     query GetHits {
-  Hits(order_by: {created_at: desc}) {
+  Hits(order_by: {created_at: desc}, where: {archived: {_eq: false}}) {
     id
     description
     user_id

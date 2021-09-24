@@ -19,7 +19,10 @@ import {
   HStack,
 } from '@chakra-ui/react';
 
-import { useGetHitsQuery } from '@generated/graphql';
+import {
+  useGetHitsQuery,
+  useArchiveHitsByIdMutation,
+} from '@generated/graphql';
 
 import paths from '@config/paths';
 
@@ -44,6 +47,19 @@ const HitsPage: React.FC = () => {
     error: getHitsQueryError,
     refetch: refetchHits,
   } = useGetHitsQuery();
+
+  const [
+    archiveHit,
+    {
+      data: archiveHitMutationData,
+      loading: archiveHitMutationLoading,
+      error: archiveHitMutationError,
+    },
+  ] = useArchiveHitsByIdMutation({
+    onCompleted: () => {
+      refetchHits();
+    },
+  });
 
   return (
     <>
@@ -113,7 +129,11 @@ const HitsPage: React.FC = () => {
 
                         <ArchiveConfirm
                           callback={() => {
-                            console.log('archive');
+                            archiveHit({
+                              variables: {
+                                ids: [hit.id],
+                              },
+                            });
                           }}
                         />
                       </HStack>
@@ -127,8 +147,10 @@ const HitsPage: React.FC = () => {
 
         <FormModal
           title="Add Hit"
+          size="3xl"
           isOpen={isAddHitModalOpen}
           setModalOpen={setAddHitModalOpen}
+          closeOnEsc={false}
         >
           <AddHitForm
             hit={selectedHit}

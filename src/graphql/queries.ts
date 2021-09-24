@@ -380,9 +380,9 @@ export const SEARCH_BREAKS = gql`
   }
 `;
 
-export const GET_HTIS = gql`
+export const GET_HITS = gql`
   query GetHits {
-    Hits(order_by: { created_at: desc }) {
+    Hits(order_by: { created_at: desc }, where: { archived: { _eq: false } }) {
       id
       description
       user_id

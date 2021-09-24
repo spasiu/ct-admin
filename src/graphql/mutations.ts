@@ -208,6 +208,14 @@ export const UPDATE_HIT = gql`
   }
 `;
 
+export const ARCHIVE_HIT = gql`
+  mutation ArchiveHitsById($ids: [uuid!]) {
+    update_Hits(where: { id: { _in: $ids } }, _set: { archived: true }) {
+      affected_rows
+    }
+  }
+`;
+
 /**
  * PROFILE MUTATIONS
  */

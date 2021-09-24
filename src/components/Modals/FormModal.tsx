@@ -17,11 +17,12 @@ const FormModal: React.FC<TFormModal> = ({
   title,
   isOpen,
   closeOnEsc,
+  size,
   setModalOpen,
 }) => {
   return (
     <Modal
-      size="xl"
+      size={size ? size : 'xl'}
       isOpen={isOpen}
       closeOnOverlayClick={false}
       closeOnEsc={typeof closeOnEsc !== 'undefined' ? closeOnEsc : true}
