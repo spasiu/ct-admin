@@ -156,7 +156,8 @@ CREATE TABLE public."BreakProductItems" (
     order_id uuid,
     price numeric NOT NULL,
     bc_product_id integer NOT NULL,
-    bc_variant_id integer
+    bc_variant_id integer,
+    CONSTRAINT "BreakProductItems_quantity_positive" CHECK (quantity >= 0)
 );
 
 CREATE TABLE public."ExtensibleValues" (
