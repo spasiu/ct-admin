@@ -42,11 +42,9 @@ const Header: React.FC<THeaderProps> = ({ pageNav }) => {
                     px={5}
                     py={3}
                     borderRadius={5}
-                    sx={{
-                      fontWeight: 'bold',
-                      color: isCurrent ? 'white' : 'gray.800',
-                      backgroundColor: isCurrent ? 'red.600' : 'transparent',
-                    }}
+                    fontWeight="bold"
+                    color={isCurrent ? 'white' : 'gray.800'}
+                    backgroundColor={isCurrent ? 'red.600' : 'transparent'}
                   >
                     {item.label}
                   </Link>

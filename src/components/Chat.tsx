@@ -101,26 +101,23 @@ const Chat: React.FC<TChat> = ({ eventId }) => {
         ref={messagesRef}
         flexDirection="column"
         p={4}
-        css={{
-          height: 'calc(100vh - 260px)',
-          overflow: 'auto',
-          background: 'white',
-        }}
+        height="calc(100vh - 260px)"
+        overflow="auto"
+        backgroundColor="white"
       >
         {messages.map((message, idx) => (
           <HStack
             key={`chat-${eventId}-${user?.uid}-${idx}`}
             mb={2}
             alignItems="flex-start"
-            style={{
-              maxWidth: '80%',
-              minWidth: '55%',
-              padding: '6px 12px 6px 6px',
-              background: '#e1e1e1',
-              borderRadius: '5px',
-              alignSelf:
-                message.user_id === user?.uid ? 'flex-start' : 'flex-end',
-            }}
+            maxWidth="80%"
+            minWidth="55%"
+            padding="6px 12px 6px 6px"
+            backgroundColor="gray.200"
+            borderRadius="5px"
+            alignSelf={
+              message.user_id === user?.uid ? 'flex-start' : 'flex-end'
+            }
           >
             {message.image ? (
               <Box
