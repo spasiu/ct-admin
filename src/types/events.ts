@@ -26,7 +26,7 @@ export type TSelectedEvent = {
   id: string;
   title: string;
   description: string;
-  start_time: string;
+  start_time?: string | null;
   status: string;
   image: string;
 };
@@ -42,7 +42,7 @@ export type TAddEventFormData = {
   id?: string;
   title: string;
   description: string;
-  start_time: Date | null;
+  start_time?: Date | null;
   image: string;
 };
 
@@ -51,7 +51,7 @@ export type TAddEventFormProps = {
     id: string;
     title: string;
     description: string;
-    start_time: string;
+    start_time?: string | null;
     status: string;
     image: string;
   };

@@ -83,7 +83,7 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
     defaultValues: {
       ...(event || {}),
       start_time: event
-        ? event?.start_time !== null
+        ? event?.start_time !== null && event?.start_time !== undefined
           ? new Date(event?.start_time)
           : null
         : undefined,

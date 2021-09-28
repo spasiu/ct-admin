@@ -25,7 +25,7 @@ export type TSelectedHit = {
     id: string;
     title: string;
     Event: {
-      start_time: string;
+      start_time?: string | null;
     };
   };
 };
@@ -85,7 +85,7 @@ export type TAddHitFormProps = {
       id: string;
       title: string;
       Event: {
-        start_time: string;
+        start_time?: string | null;
       };
     };
   };

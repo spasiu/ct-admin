@@ -110,10 +110,12 @@ const HitsPage: React.FC = () => {
                       </NextLink>
                     </Td>
                     <Td>
-                      {format(
-                        new Date(hit.Break.Event.start_time),
-                        'LLL dd, y @ h:mm a',
-                      )}
+                      {hit.Break.Event.start_time
+                        ? format(
+                            new Date(hit.Break.Event.start_time),
+                            'LLL dd, y @ h:mm a',
+                          )
+                        : 'NO DATE'}
                     </Td>
                     <Td>{hit.description}</Td>
                     <Td textAlign="right">
