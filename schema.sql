@@ -85,7 +85,7 @@ CREATE TABLE public."Events" (
     title text NOT NULL,
     description text NOT NULL,
     status text DEFAULT 'DRAFT' NOT NULL,
-    start_time timestamp with time zone NOT NULL,
+    start_time timestamp with time zone,
     image text NOT NULL
 );
 

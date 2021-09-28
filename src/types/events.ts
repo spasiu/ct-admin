@@ -42,7 +42,7 @@ export type TAddEventFormData = {
   id?: string;
   title: string;
   description: string;
-  start_time: Date;
+  start_time: Date | null;
   image: string;
 };
 

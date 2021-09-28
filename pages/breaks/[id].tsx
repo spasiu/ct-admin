@@ -188,12 +188,15 @@ const BreakPage: React.FC = () => {
                         </NextLink>
 
                         <br />
-                        {format(
-                          new Date(
-                            breakQueryData.Breaks_by_pk?.Event?.start_time,
-                          ),
-                          'LLL dd, y @ h:mm a',
-                        )}
+
+                        {breakQueryData.Breaks_by_pk?.Event?.start_time
+                          ? format(
+                              new Date(
+                                breakQueryData.Breaks_by_pk?.Event?.start_time,
+                              ),
+                              'LLL dd, y @ h:mm a',
+                            )
+                          : 'NO DATE'}
                       </Text>
                     </Box>
 

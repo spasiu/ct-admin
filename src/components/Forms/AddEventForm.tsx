@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -16,6 +16,7 @@ import {
   Box,
   Textarea,
   Text,
+  Checkbox,
 } from '@chakra-ui/react';
 
 import {
@@ -34,16 +35,17 @@ const schema = yup.object().shape({
   title: yup.string().required('Required'),
   description: yup.string().required('Required'),
   image: yup.string().required('Image is Required'),
+  disable_date: yup.boolean(),
   start_time: yup
     .date()
-    .min(new Date(), 'The start time must be after the current time')
-    .required(),
+    .nullable()
+    .transform((curr, orig) => (orig === '' ? null : curr))
+    .min(new Date(), 'The start time must be after the current time'),
 });
 
 /**
  *
  * TODO: Handle errors
- * TODO: Add image
  * TODO: Add ability to assign event
  *
  */
@@ -72,6 +74,7 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
   const {
     control,
     register,
+    watch,
     handleSubmit,
     formState: { errors },
     setValue,
@@ -79,7 +82,11 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
     resolver: yupResolver(schema),
     defaultValues: {
       ...(event || {}),
-      start_time: event ? new Date(event?.start_time) : undefined,
+      start_time: event
+        ? event?.start_time !== null
+          ? new Date(event?.start_time)
+          : null
+        : undefined,
     },
   });
 
@@ -93,7 +100,9 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
         title: result.title,
         description: result.description,
         image: result.image,
-        start_time: format(result.start_time, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        start_time: result.start_time
+          ? format(result.start_time, "yyyy-MM-dd'T'HH:mm:ssxxx")
+          : null,
       };
 
       switch (operation) {
@@ -115,6 +124,9 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
       }
     }
   };
+
+  // Watch for start time to show/hide clear date button
+  const watchStartTime = watch('start_time');
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
@@ -144,26 +156,42 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
         <Textarea {...register('description')} />
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={!!errors.start_time} mb={10}>
+
+      <FormControl isInvalid={!!errors.start_time} mb={5}>
         <FormLabel>Start Time</FormLabel>
-        <Controller
-          name="start_time"
-          defaultValue={new Date()}
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <DatePicker
-              selected={value}
-              showTimeSelect={true}
-              dateFormat="MMMM d, yyyy h:mm aa"
-              timeIntervals={15}
-              onChange={onChange}
-              onBlur={onBlur}
-              customInput={<DatePickerDisplay />}
-            />
+        <Flex alignItems="center">
+          <Controller
+            name="start_time"
+            defaultValue={new Date()}
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <DatePicker
+                selected={value}
+                showTimeSelect={true}
+                dateFormat="MMMM d, yyyy h:mm aa"
+                timeIntervals={15}
+                onChange={onChange}
+                onBlur={onBlur}
+                customInput={<DatePickerDisplay />}
+              />
+            )}
+          />
+          {watchStartTime && (
+            <Button
+              colorScheme="red"
+              size="xs"
+              ml={5}
+              onClick={() => {
+                setValue('start_time', null);
+              }}
+            >
+              Remove Date
+            </Button>
           )}
-        />
+        </Flex>
         <FormErrorMessage>{errors.start_time?.message}</FormErrorMessage>
       </FormControl>
+
       <Flex justifyContent="center">
         <Button mb={4} px={10} colorScheme="blue" type="submit">
           {operation === 'UPDATE' ? 'Update Event' : 'Add Event'}

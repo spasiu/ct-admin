@@ -369,10 +369,12 @@ const EventPage: React.FC = () => {
                         Date:
                       </Heading>
                       <Text m={0}>
-                        {format(
-                          new Date(eventQueryData.Events_by_pk?.start_time),
-                          'LLL dd, y @ h:mm a',
-                        )}
+                        {eventQueryData.Events_by_pk?.start_time
+                          ? format(
+                              new Date(eventQueryData.Events_by_pk?.start_time),
+                              'LLL dd, y @ h:mm a',
+                            )
+                          : 'NO DATE'}
                       </Text>
                     </Box>
                   </Box>

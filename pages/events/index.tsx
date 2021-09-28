@@ -112,7 +112,12 @@ const EventsPage: React.FC = () => {
                     <Td>{event.title}</Td>
                     <Td>{`${event.User?.first_name} ${event.User?.last_name}`}</Td>
                     <Td>
-                      {format(new Date(event.start_time), 'LLL dd, y @ h:mm a')}
+                      {event.start_time
+                        ? format(
+                            new Date(event.start_time),
+                            'LLL dd, y @ h:mm a',
+                          )
+                        : 'NO DATE'}
                     </Td>
                     <Td>{event.Breaks_aggregate?.aggregate?.count}</Td>
                     <Td>{event.status}</Td>

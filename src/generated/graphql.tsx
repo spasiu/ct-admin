@@ -1588,7 +1588,7 @@ export type Events = {
   event_status: Event_Status;
   id: Scalars['uuid'];
   image: Scalars['String'];
-  start_time: Scalars['timestamptz'];
+  start_time?: Maybe<Scalars['timestamptz']>;
   status: Event_Status_Enum;
   title: Scalars['String'];
   updated_at: Scalars['timestamptz'];
