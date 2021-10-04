@@ -20,7 +20,7 @@ import {
 
 import {
   useGetEventsQuery,
-  useDeleteEventsAndBreaksByEventIdsMutation,
+  useArchiveEventsAndBreaksByEventIdsMutation,
 } from '@generated/graphql';
 
 import paths from '@config/paths';
@@ -59,13 +59,13 @@ const EventsPage: React.FC = () => {
   } = useGetEventsQuery();
 
   const [
-    deleteEventsById,
+    archiveEventsById,
     {
       data: deleteEventsMutationData,
       loading: deleteEventsMutationLoading,
       error: deleteEventsMutationError,
     },
-  ] = useDeleteEventsAndBreaksByEventIdsMutation({
+  ] = useArchiveEventsAndBreaksByEventIdsMutation({
     onCompleted: () => {
       refetchEvents();
     },
@@ -140,7 +140,7 @@ const EventsPage: React.FC = () => {
                         />
                         <ArchiveConfirm
                           callback={() => {
-                            deleteEventsById({
+                            archiveEventsById({
                               variables: { ids: [event.id] },
                             });
                           }}

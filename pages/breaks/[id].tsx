@@ -277,6 +277,7 @@ const BreakPage: React.FC = () => {
             isOpen={isAddBreakModalOpen}
             setModalOpen={setAddBreakModalOpen}
             closeOnEsc={false}
+            size="2xl"
           >
             <AddBreakForm
               event_id={breakQueryData.Breaks_by_pk?.Event?.id}

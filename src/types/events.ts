@@ -1,3 +1,5 @@
+import { TBreakLineItem, TDatasetLineItem } from '@customTypes/breaks';
+
 export type TEventSelectedBreak = {
   id?: string;
   title: string;
@@ -8,13 +10,8 @@ export type TEventSelectedBreak = {
   teams_per_spot?: number | null | undefined;
   price?: number;
   status: string;
-  line_items?: {
-    value: string;
-    cost: number;
-  }[];
-  dataset?: {
-    value: string;
-  }[];
+  line_items?: TBreakLineItem[];
+  dataset?: TDatasetLineItem[];
   BreakProductItems: {
     id: string;
     title: string;

@@ -198,7 +198,7 @@ export const GET_INVENTORY_BY_PROD_ID = gql`
 
 export const GET_EVENTS = gql`
   query GetEvents {
-    Events(order_by: { start_time: asc }) {
+    Events(where: { archived: { _eq: false } }, order_by: { start_time: asc }) {
       id
       title
       start_time
@@ -210,7 +210,7 @@ export const GET_EVENTS = gql`
         first_name
         last_name
       }
-      Breaks {
+      Breaks(where: { archived: { _eq: false } }) {
         id
       }
       Breaks_aggregate {
@@ -236,7 +236,10 @@ export const GET_EVENT_BY_ID = gql`
         first_name
         last_name
       }
-      Breaks(order_by: { created_at: asc }) {
+      Breaks(
+        where: { archived: { _eq: false } }
+        order_by: { created_at: asc }
+      ) {
         id
         title
         break_type
@@ -248,10 +251,18 @@ export const GET_EVENT_BY_ID = gql`
         line_items
         status
         dataset
+        BreakProductItems_aggregate(where: { order_id: { _is_null: true } }) {
+          aggregate {
+            count
+          }
+        }
         BreakProductItems(order_by: { title: asc }) {
           id
           title
           price
+          Order {
+            id
+          }
         }
       }
     }
@@ -272,7 +283,10 @@ export const GET_LIVE_EVENT_BY_ID = gql`
         first_name
         last_name
       }
-      Breaks(order_by: { created_at: asc }) {
+      Breaks(
+        where: { archived: { _eq: false } }
+        order_by: { created_at: asc }
+      ) {
         id
         title
         break_type
@@ -284,6 +298,11 @@ export const GET_LIVE_EVENT_BY_ID = gql`
         line_items
         status
         result
+        BreakProductItems_aggregate(where: { order_id: { _is_null: true } }) {
+          aggregate {
+            count
+          }
+        }
         BreakProductItems(order_by: { title: asc }) {
           title
           Order {
@@ -500,6 +519,29 @@ export const GET_CHAT_USER = gql`
       last_name
       image
       username
+    }
+  }
+`;
+
+export const GET_TEAM_DATA = gql`
+  query GetTeamData($year: Int!, $sport: String!) {
+    Teams(where: { year_start: { _lte: $year }, sport: { _eq: $sport } }) {
+      name
+      sport
+      color
+      color_secondary
+      year_end
+      year_start
+      short_name
+    }
+  }
+`;
+
+export const SEARCH_PLAYERS = gql`
+  query SearchPlayers($input: String!) {
+    Players(where: { name: { _ilike: $input } }) {
+      id
+      name
     }
   }
 `;

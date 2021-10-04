@@ -23,6 +23,7 @@ import {
   TBreakResultPick,
   TBreakResultDraft,
   TBreakResultList,
+  TDatasetLineItem,
 } from '@customTypes/breaks';
 
 const BreakResult: React.FC<TBreakResult> = ({
@@ -38,10 +39,10 @@ const BreakResult: React.FC<TBreakResult> = ({
     type === Break_Type_Enum.RandomTeam
   ) {
     results.map((res: TBreakResultRandom) => {
-      res.items.map((item) => {
+      res.items.map((item: TDatasetLineItem | string) => {
         list.push({
           username: res.username.trim(),
-          title: item.trim(),
+          title: typeof item === 'object' ? item.name.trim() : item.trim(),
         });
       });
     });

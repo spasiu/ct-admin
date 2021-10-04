@@ -6,7 +6,10 @@ export type TBreakLineItem = {
 };
 
 export type TDatasetLineItem = {
-  value: string;
+  name: string;
+  short_name: string;
+  color: string;
+  color_alt: string;
 };
 
 export type TAddBreakFormData = {
@@ -19,13 +22,8 @@ export type TAddBreakFormData = {
   spots: number;
   teams_per_spot?: number | null;
   price: number;
-  lineItems: {
-    value: string;
-    cost: number;
-  }[];
-  datasetItems: {
-    value: string;
-  }[];
+  lineItems: TBreakLineItem[];
+  datasetItems: TDatasetLineItem[];
 };
 
 export type TAddBreakFormProps = {
@@ -61,7 +59,7 @@ export type TBreakResult = {
 
 export type TBreakResultRandom = {
   image: string;
-  items: string[];
+  items: TDatasetLineItem[] | string[];
   user_id: string;
   username: string;
 };

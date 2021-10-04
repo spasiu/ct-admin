@@ -421,7 +421,7 @@ const EventPage: React.FC = () => {
                           )?.label
                         }
                       </Td>
-                      <Td>{`${brk.spots} / ${brk.spots}`}</Td>
+                      <Td>{`${brk?.BreakProductItems_aggregate?.aggregate?.count} / ${brk.spots}`}</Td>
                       <Td>
                         {brk.price
                           ? new Intl.NumberFormat('en', {
@@ -510,7 +510,11 @@ const EventPage: React.FC = () => {
                             aria-label="Edit"
                             icon={<MdEdit />}
                             onClick={() => {
-                              setSelectedBreak(brk);
+                              const {
+                                BreakProductItems_aggregate,
+                                ...setBreak
+                              } = brk;
+                              setSelectedBreak(setBreak);
                               setAddBreakModalOpen(true);
                             }}
                           />
@@ -535,6 +539,7 @@ const EventPage: React.FC = () => {
           isOpen={isAddBreakModalOpen}
           setModalOpen={setAddBreakModalOpen}
           closeOnEsc={false}
+          size="2xl"
         >
           <AddBreakForm
             event_id={eventId}

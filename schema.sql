@@ -86,7 +86,8 @@ CREATE TABLE public."Events" (
     description text NOT NULL,
     status text DEFAULT 'DRAFT' NOT NULL,
     start_time timestamp with time zone,
-    image text NOT NULL
+    image text NOT NULL,
+    archived boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE public."Breaks" (
@@ -103,7 +104,8 @@ CREATE TABLE public."Breaks" (
     teams_per_spot integer,
     price numeric,
     result jsonb,
-    datset jsonb
+    datset jsonb,
+    archived boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE public."Products" (
@@ -224,7 +226,7 @@ CREATE TABLE public."Hits" (
     memoribillia text,
     autograph boolean DEFAULT false,
     numbered integer,
-    archived boolean DEFAULT false
+    archived boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE public."NotificationSettings" (
@@ -235,6 +237,22 @@ CREATE TABLE public."NotificationSettings" (
     events BOOLEAN NOT NULL DEFAULT false,
     breaks BOOLEAN NOT NULL DEFAULT false,
     breakers BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE public."Teams" (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    name text NOT NULL,
+    year_start integer NOT NULL,
+    year_end integer NOT NULL,
+    color text NOT NULL,
+    color_secondary text NOT NULL,
+    sport text NOT NULL
+);
+
+CREATE TABLE public."Players" (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    name text NOT NULL,
+    sport text NOT NULL
 );
 
 --
@@ -317,6 +335,8 @@ ALTER TABLE ONLY public."SaveEvent" ADD CONSTRAINT "SaveEvent_pkey" PRIMARY KEY 
 ALTER TABLE ONLY public."SaveBreaker" ADD CONSTRAINT "SaveBreaker_pkey" PRIMARY KEY (id);
 ALTER TABLE ONLY public."Hits" ADD CONSTRAINT "Hits_pkey" PRIMARY KEY (id);
 ALTER TABLE ONLY public."NotificationSettings" ADD CONSTRAINT "NotificationSettings_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY public."Teams" ADD CONSTRAINT "Teams_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY public."Players" ADD CONSTRAINT "Players_pkey" PRIMARY KEY (id);
 ALTER TABLE ONLY public.unit_of_measure ADD CONSTRAINT unit_of_measure_pkey PRIMARY KEY (value);
 ALTER TABLE ONLY public.user_role ADD CONSTRAINT user_role_pkey PRIMARY KEY (value);
 ALTER TABLE ONLY public.event_status ADD CONSTRAINT event_status_pkey PRIMARY KEY (value);

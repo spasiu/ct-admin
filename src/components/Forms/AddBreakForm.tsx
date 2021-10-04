@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -28,6 +28,7 @@ import {
   useUpdateBreakMutation,
   useGetInventoryQuery,
   useUpdateInventoryBreakMutation,
+  useGetTeamDataLazyQuery,
 } from '@generated/graphql';
 
 import { auth, functions } from '@config/firebase';
@@ -40,6 +41,7 @@ import AutocompleteEvents from '@components/AutocompleteEvents';
 import { TInventoryAutcomplete } from '@customTypes/inventory';
 import {
   TBreakLineItem,
+  TDatasetLineItem,
   TAddBreakFormData,
   TAddBreakFormProps,
 } from '@customTypes/breaks';
@@ -113,7 +115,24 @@ const schema = yup.object().shape({
   ),
   datasetItems: yup.array().of(
     yup.object().shape({
-      value: yup.string().required('Required'),
+      name: yup.string().required('Required'),
+      short_name: yup.string().required('Required'),
+      color: yup
+        .string()
+        .test('is-color', 'Must be a valid color', (value) => {
+          const currRegex = /^#[a-fA-F0-9]{6}$/;
+
+          return value ? currRegex.test(String(value)) : false;
+        })
+        .required('Required'),
+      color_alt: yup
+        .string()
+        .test('is-color', 'Must be a valid color', (value) => {
+          const currRegex = /^#[a-fA-F0-9]{6}$/;
+
+          return value ? currRegex.test(String(value)) : false;
+        })
+        .required('Required'),
     }),
   ),
 });
@@ -122,7 +141,6 @@ const schema = yup.object().shape({
  *
  * TODO: Handle errors
  * TODO: Validate products are chosen
- * TODO: Show selected products on edit
  */
 const AddBreakForm: React.FC<TAddBreakFormProps> = ({
   event_id,
@@ -190,7 +208,6 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     data: inventoryQueryData,
   } = useGetInventoryQuery({
     onCompleted: (data) => {
-      const selectedItemsIndex: number[] = [];
       const pickerItems: TInventoryAutcomplete[] = [];
       const selectedItems: TInventoryAutcomplete[] = [];
 
@@ -199,6 +216,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
           pickerItems.push({
             label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
             value: data.Inventory[idx].id,
+            year: data.Inventory[idx].Product?.year,
+            sport: data.Inventory[idx].Product?.category,
           });
         }
 
@@ -206,6 +225,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
           pickerItems.push({
             label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
             value: data.Inventory[idx].id,
+            year: data.Inventory[idx].Product?.year,
+            sport: data.Inventory[idx].Product?.category,
           });
 
           selectedItems.push(pickerItems[pickerItems.length - 1]);
@@ -248,6 +269,11 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
       callback();
     },
   });
+
+  const [
+    getTeams,
+    { loading: teamDataLoading, data: teamData },
+  ] = useGetTeamDataLazyQuery();
 
   const {
     control,
@@ -325,23 +351,74 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
       (watchType === Break_Type_Enum.RandomDivision ||
         watchType === Break_Type_Enum.RandomTeam)
     ) {
-      const newDatasetItems = getValues('datasetItems').slice(
-        0,
-        Number(watchSpots) * Number(watchTeamsPerSpot),
-      );
+      let newDatasetItems: TDatasetLineItem[], newDatasetLinesToAdd;
 
-      const newDatasetLinesToAdd =
-        Number(watchSpots) * Number(watchTeamsPerSpot) - newDatasetItems.length;
+      // Check if team data exists and this is random team
+      if (
+        teamData?.Teams &&
+        teamData?.Teams?.length > 0 &&
+        watchType === Break_Type_Enum.RandomTeam
+      ) {
+        // Use empty array if team data exists
+        newDatasetItems = [];
+        newDatasetLinesToAdd = Number(watchSpots) * Number(watchTeamsPerSpot);
+      } else {
+        // If team data does not exist, re-use previous items
+        newDatasetItems = getValues('datasetItems').slice(
+          0,
+          Number(watchSpots) * Number(watchTeamsPerSpot),
+        );
+
+        newDatasetLinesToAdd =
+          Number(watchSpots) * Number(watchTeamsPerSpot) -
+          newDatasetItems.length;
+      }
 
       for (let i = 0; i < newDatasetLinesToAdd; i++) {
-        newDatasetItems.push({ value: '' });
+        if (
+          teamData?.Teams &&
+          !!teamData?.Teams[i] &&
+          watchType === Break_Type_Enum.RandomTeam
+        ) {
+          newDatasetItems.push({
+            name: teamData?.Teams[i].name,
+            short_name: teamData?.Teams[i].short_name,
+            color: teamData?.Teams[i].color,
+            color_alt: teamData?.Teams[i].color_secondary,
+          });
+        } else {
+          newDatasetItems.push({
+            name: '',
+            short_name: '',
+            color: '',
+            color_alt: '',
+          });
+        }
       }
 
       replaceDatasetFields(newDatasetItems);
     } else {
       replaceDatasetFields([]);
     }
-  }, [watchSpots, watchType, watchTeamsPerSpot]);
+  }, [watchSpots, watchType, watchTeamsPerSpot, teamData]);
+
+  useEffect(() => {
+    if (
+      !isNaN(Number(watchSpots)) &&
+      !isNaN(Number(watchTeamsPerSpot)) &&
+      watchType === Break_Type_Enum.RandomTeam &&
+      selectedInventory.length > 0
+    ) {
+      getTeams({
+        variables: {
+          year: parseInt(selectedInventory[selectedInventory.length - 1].year),
+          sport: selectedInventory[
+            selectedInventory.length - 1
+          ].sport.toLowerCase(),
+        },
+      });
+    }
+  }, [selectedInventory, watchType, watchSpots, watchTeamsPerSpot]);
 
   /**
    * Handle form submission
@@ -367,7 +444,12 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
         price: result.price,
         dataset:
           result.datasetItems.length > 0
-            ? result.datasetItems.map((item) => ({ value: item.value }))
+            ? result.datasetItems.map((item) => ({
+                name: item.name,
+                shortName: item.short_name,
+                color: item.color,
+                colorAlt: item.color_alt,
+              }))
             : null,
       };
 
@@ -389,6 +471,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
       }
     }
   };
+
+  console.log(teamData);
 
   return (
     <Box position="relative">
@@ -555,19 +639,75 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             </Heading>
             <Box mb={4}>
               {datasetFields.map((field, index) => (
-                <FormControl
-                  key={field.id}
-                  isInvalid={
-                    errors.datasetItems && !!errors.datasetItems[index]?.value
-                  }
-                  mb={2}
-                >
-                  <Input
-                    placeholder="Team/Division"
-                    {...register(`datasetItems.${index}.value` as const)}
-                    isDisabled={operation === 'UPDATE'}
-                  />
-                </FormControl>
+                <Flex key={field.id} mx={-1}>
+                  <Box width="110px" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.datasetItems &&
+                        !!errors.datasetItems[index]?.color
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Color 1"
+                        {...register(`datasetItems.${index}.color` as const)}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+
+                  <Box width="110px" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.datasetItems &&
+                        !!errors.datasetItems[index]?.color_alt
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Color 2"
+                        {...register(
+                          `datasetItems.${index}.color_alt` as const,
+                        )}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+
+                  <Box width="100px" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.datasetItems &&
+                        !!errors.datasetItems[index]?.short_name
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Short"
+                        {...register(
+                          `datasetItems.${index}.short_name` as const,
+                        )}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+
+                  <Box flex="1" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.datasetItems &&
+                        !!errors.datasetItems[index]?.name
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Team/Division"
+                        {...register(`datasetItems.${index}.name` as const)}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+                </Flex>
               ))}
             </Box>
           </Box>

@@ -38,6 +38,17 @@ export type TAutocompleteBreaksEventsSearchResult = {
   title: string;
 };
 
+export type TAutocompletePlayersSearchProps = {
+  defaultValue?: string | null;
+  isInvalid: boolean;
+  callback: (input: string) => void;
+};
+
+export type TAutocompletePlayersSearchResult = {
+  id: string;
+  name: string;
+};
+
 export type TChat = {
   eventId: string;
 };

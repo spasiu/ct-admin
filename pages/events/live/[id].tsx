@@ -166,7 +166,7 @@ const LiveEventPage: React.FC = () => {
                     <Tr>
                       <Th>Title</Th>
                       <Th>Type</Th>
-                      <Th>Spots</Th>
+                      <Th>Spots Available</Th>
                       <Th>Status</Th>
                       <Th></Th>
                     </Tr>
@@ -183,7 +183,7 @@ const LiveEventPage: React.FC = () => {
                               )?.label
                             }
                           </Td>
-                          <Td>{`${brk.spots} / ${brk.spots}`}</Td>
+                          <Td>{`${brk?.BreakProductItems_aggregate?.aggregate?.count} / ${brk.spots}`}</Td>
                           <Td>{brk.status}</Td>
                           <Td textAlign="right">
                             <HStack spacing={2} justify="flex-end">

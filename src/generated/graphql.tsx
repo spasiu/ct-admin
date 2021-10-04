@@ -976,6 +976,7 @@ export type Breaks = {
   Saves: Array<SaveBreak>;
   /** An aggregate relationship */
   Saves_aggregate: SaveBreak_Aggregate;
+  archived: Scalars['Boolean'];
   /** An object relationship */
   break_status: Break_Status;
   break_type: Break_Type_Enum;
@@ -1179,6 +1180,7 @@ export type Breaks_Bool_Exp = {
   _and?: Maybe<Array<Breaks_Bool_Exp>>;
   _not?: Maybe<Breaks_Bool_Exp>;
   _or?: Maybe<Array<Breaks_Bool_Exp>>;
+  archived?: Maybe<Boolean_Comparison_Exp>;
   break_status?: Maybe<Break_Status_Bool_Exp>;
   break_type?: Maybe<Break_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -1239,6 +1241,7 @@ export type Breaks_Insert_Input = {
   Hits?: Maybe<Hits_Arr_Rel_Insert_Input>;
   Inventory?: Maybe<Inventory_Arr_Rel_Insert_Input>;
   Saves?: Maybe<SaveBreak_Arr_Rel_Insert_Input>;
+  archived?: Maybe<Scalars['Boolean']>;
   break_status?: Maybe<Break_Status_Obj_Rel_Insert_Input>;
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
@@ -1346,6 +1349,7 @@ export type Breaks_Order_By = {
   Hits_aggregate?: Maybe<Hits_Aggregate_Order_By>;
   Inventory_aggregate?: Maybe<Inventory_Aggregate_Order_By>;
   Saves_aggregate?: Maybe<SaveBreak_Aggregate_Order_By>;
+  archived?: Maybe<Order_By>;
   break_status?: Maybe<Break_Status_Order_By>;
   break_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
@@ -1380,6 +1384,8 @@ export type Breaks_Prepend_Input = {
 /** select columns of table "Breaks" */
 export enum Breaks_Select_Column {
   /** column name */
+  Archived = 'archived',
+  /** column name */
   BreakType = 'break_type',
   /** column name */
   CreatedAt = 'created_at',
@@ -1413,6 +1419,7 @@ export enum Breaks_Select_Column {
 
 /** input type for updating data in table "Breaks" */
 export type Breaks_Set_Input = {
+  archived?: Maybe<Scalars['Boolean']>;
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   dataset?: Maybe<Scalars['jsonb']>;
@@ -1492,6 +1499,8 @@ export type Breaks_Sum_Order_By = {
 
 /** update columns of table "Breaks" */
 export enum Breaks_Update_Column {
+  /** column name */
+  Archived = 'archived',
   /** column name */
   BreakType = 'break_type',
   /** column name */
@@ -1582,6 +1591,7 @@ export type Events = {
   Saves_aggregate: SaveEvent_Aggregate;
   /** An object relationship */
   User: Users;
+  archived: Scalars['Boolean'];
   created_at: Scalars['timestamptz'];
   description: Scalars['String'];
   /** An object relationship */
@@ -1679,6 +1689,7 @@ export type Events_Bool_Exp = {
   _and?: Maybe<Array<Events_Bool_Exp>>;
   _not?: Maybe<Events_Bool_Exp>;
   _or?: Maybe<Array<Events_Bool_Exp>>;
+  archived?: Maybe<Boolean_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   event_status?: Maybe<Event_Status_Bool_Exp>;
@@ -1702,6 +1713,7 @@ export type Events_Insert_Input = {
   Breaks?: Maybe<Breaks_Arr_Rel_Insert_Input>;
   Saves?: Maybe<SaveEvent_Arr_Rel_Insert_Input>;
   User?: Maybe<Users_Obj_Rel_Insert_Input>;
+  archived?: Maybe<Scalars['Boolean']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   event_status?: Maybe<Event_Status_Obj_Rel_Insert_Input>;
@@ -1792,6 +1804,7 @@ export type Events_Order_By = {
   Breaks_aggregate?: Maybe<Breaks_Aggregate_Order_By>;
   Saves_aggregate?: Maybe<SaveEvent_Aggregate_Order_By>;
   User?: Maybe<Users_Order_By>;
+  archived?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   event_status?: Maybe<Event_Status_Order_By>;
@@ -1811,6 +1824,8 @@ export type Events_Pk_Columns_Input = {
 
 /** select columns of table "Events" */
 export enum Events_Select_Column {
+  /** column name */
+  Archived = 'archived',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -1833,6 +1848,7 @@ export enum Events_Select_Column {
 
 /** input type for updating data in table "Events" */
 export type Events_Set_Input = {
+  archived?: Maybe<Scalars['Boolean']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -1846,6 +1862,8 @@ export type Events_Set_Input = {
 
 /** update columns of table "Events" */
 export enum Events_Update_Column {
+  /** column name */
+  Archived = 'archived',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -3667,6 +3685,130 @@ export type Orders_Variance_Order_By = {
   tax_total?: Maybe<Order_By>;
 };
 
+/** columns and relationships of "Players" */
+export type Players = {
+  __typename?: 'Players';
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  sport: Scalars['String'];
+};
+
+/** aggregated selection of "Players" */
+export type Players_Aggregate = {
+  __typename?: 'Players_aggregate';
+  aggregate?: Maybe<Players_Aggregate_Fields>;
+  nodes: Array<Players>;
+};
+
+/** aggregate fields of "Players" */
+export type Players_Aggregate_Fields = {
+  __typename?: 'Players_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Players_Max_Fields>;
+  min?: Maybe<Players_Min_Fields>;
+};
+
+
+/** aggregate fields of "Players" */
+export type Players_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Players_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "Players". All fields are combined with a logical 'AND'. */
+export type Players_Bool_Exp = {
+  _and?: Maybe<Array<Players_Bool_Exp>>;
+  _not?: Maybe<Players_Bool_Exp>;
+  _or?: Maybe<Array<Players_Bool_Exp>>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  name?: Maybe<String_Comparison_Exp>;
+  sport?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "Players" */
+export enum Players_Constraint {
+  /** unique or primary key constraint */
+  PlayersPkey = 'Players_pkey'
+}
+
+/** input type for inserting data into table "Players" */
+export type Players_Insert_Input = {
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Players_Max_Fields = {
+  __typename?: 'Players_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Players_Min_Fields = {
+  __typename?: 'Players_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "Players" */
+export type Players_Mutation_Response = {
+  __typename?: 'Players_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Players>;
+};
+
+/** on conflict condition type for table "Players" */
+export type Players_On_Conflict = {
+  constraint: Players_Constraint;
+  update_columns?: Array<Players_Update_Column>;
+  where?: Maybe<Players_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "Players". */
+export type Players_Order_By = {
+  id?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  sport?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: Players */
+export type Players_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "Players" */
+export enum Players_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Sport = 'sport'
+}
+
+/** input type for updating data in table "Players" */
+export type Players_Set_Input = {
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "Players" */
+export enum Players_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Sport = 'sport'
+}
+
 /** columns and relationships of "Products" */
 export type Products = {
   __typename?: 'Products';
@@ -5078,6 +5220,255 @@ export type String_Comparison_Exp = {
   _similar?: Maybe<Scalars['String']>;
 };
 
+/** columns and relationships of "Teams" */
+export type Teams = {
+  __typename?: 'Teams';
+  color: Scalars['String'];
+  color_secondary: Scalars['String'];
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  short_name: Scalars['String'];
+  sport: Scalars['String'];
+  year_end: Scalars['Int'];
+  year_start: Scalars['Int'];
+};
+
+/** aggregated selection of "Teams" */
+export type Teams_Aggregate = {
+  __typename?: 'Teams_aggregate';
+  aggregate?: Maybe<Teams_Aggregate_Fields>;
+  nodes: Array<Teams>;
+};
+
+/** aggregate fields of "Teams" */
+export type Teams_Aggregate_Fields = {
+  __typename?: 'Teams_aggregate_fields';
+  avg?: Maybe<Teams_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Teams_Max_Fields>;
+  min?: Maybe<Teams_Min_Fields>;
+  stddev?: Maybe<Teams_Stddev_Fields>;
+  stddev_pop?: Maybe<Teams_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Teams_Stddev_Samp_Fields>;
+  sum?: Maybe<Teams_Sum_Fields>;
+  var_pop?: Maybe<Teams_Var_Pop_Fields>;
+  var_samp?: Maybe<Teams_Var_Samp_Fields>;
+  variance?: Maybe<Teams_Variance_Fields>;
+};
+
+
+/** aggregate fields of "Teams" */
+export type Teams_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Teams_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Teams_Avg_Fields = {
+  __typename?: 'Teams_avg_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "Teams". All fields are combined with a logical 'AND'. */
+export type Teams_Bool_Exp = {
+  _and?: Maybe<Array<Teams_Bool_Exp>>;
+  _not?: Maybe<Teams_Bool_Exp>;
+  _or?: Maybe<Array<Teams_Bool_Exp>>;
+  color?: Maybe<String_Comparison_Exp>;
+  color_secondary?: Maybe<String_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  name?: Maybe<String_Comparison_Exp>;
+  short_name?: Maybe<String_Comparison_Exp>;
+  sport?: Maybe<String_Comparison_Exp>;
+  year_end?: Maybe<Int_Comparison_Exp>;
+  year_start?: Maybe<Int_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "Teams" */
+export enum Teams_Constraint {
+  /** unique or primary key constraint */
+  TeamsPkey = 'Teams_pkey'
+}
+
+/** input type for incrementing numeric columns in table "Teams" */
+export type Teams_Inc_Input = {
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "Teams" */
+export type Teams_Insert_Input = {
+  color?: Maybe<Scalars['String']>;
+  color_secondary?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  short_name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate max on columns */
+export type Teams_Max_Fields = {
+  __typename?: 'Teams_max_fields';
+  color?: Maybe<Scalars['String']>;
+  color_secondary?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  short_name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate min on columns */
+export type Teams_Min_Fields = {
+  __typename?: 'Teams_min_fields';
+  color?: Maybe<Scalars['String']>;
+  color_secondary?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  short_name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** response of any mutation on the table "Teams" */
+export type Teams_Mutation_Response = {
+  __typename?: 'Teams_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Teams>;
+};
+
+/** on conflict condition type for table "Teams" */
+export type Teams_On_Conflict = {
+  constraint: Teams_Constraint;
+  update_columns?: Array<Teams_Update_Column>;
+  where?: Maybe<Teams_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "Teams". */
+export type Teams_Order_By = {
+  color?: Maybe<Order_By>;
+  color_secondary?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  short_name?: Maybe<Order_By>;
+  sport?: Maybe<Order_By>;
+  year_end?: Maybe<Order_By>;
+  year_start?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: Teams */
+export type Teams_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "Teams" */
+export enum Teams_Select_Column {
+  /** column name */
+  Color = 'color',
+  /** column name */
+  ColorSecondary = 'color_secondary',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  ShortName = 'short_name',
+  /** column name */
+  Sport = 'sport',
+  /** column name */
+  YearEnd = 'year_end',
+  /** column name */
+  YearStart = 'year_start'
+}
+
+/** input type for updating data in table "Teams" */
+export type Teams_Set_Input = {
+  color?: Maybe<Scalars['String']>;
+  color_secondary?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  short_name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate stddev on columns */
+export type Teams_Stddev_Fields = {
+  __typename?: 'Teams_stddev_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Teams_Stddev_Pop_Fields = {
+  __typename?: 'Teams_stddev_pop_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Teams_Stddev_Samp_Fields = {
+  __typename?: 'Teams_stddev_samp_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Teams_Sum_Fields = {
+  __typename?: 'Teams_sum_fields';
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "Teams" */
+export enum Teams_Update_Column {
+  /** column name */
+  Color = 'color',
+  /** column name */
+  ColorSecondary = 'color_secondary',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  ShortName = 'short_name',
+  /** column name */
+  Sport = 'sport',
+  /** column name */
+  YearEnd = 'year_end',
+  /** column name */
+  YearStart = 'year_start'
+}
+
+/** aggregate var_pop on columns */
+export type Teams_Var_Pop_Fields = {
+  __typename?: 'Teams_var_pop_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Teams_Var_Samp_Fields = {
+  __typename?: 'Teams_var_samp_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Teams_Variance_Fields = {
+  __typename?: 'Teams_variance_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
 /** columns and relationships of "UserPreferences" */
 export type UserPreferences = {
   __typename?: 'UserPreferences';
@@ -6299,6 +6690,10 @@ export type Mutation_Root = {
   delete_Orders?: Maybe<Orders_Mutation_Response>;
   /** delete single row from the table: "Orders" */
   delete_Orders_by_pk?: Maybe<Orders>;
+  /** delete data from the table: "Players" */
+  delete_Players?: Maybe<Players_Mutation_Response>;
+  /** delete single row from the table: "Players" */
+  delete_Players_by_pk?: Maybe<Players>;
   /** delete data from the table: "Products" */
   delete_Products?: Maybe<Products_Mutation_Response>;
   /** delete single row from the table: "Products" */
@@ -6319,6 +6714,10 @@ export type Mutation_Root = {
   delete_Streams?: Maybe<Streams_Mutation_Response>;
   /** delete single row from the table: "Streams" */
   delete_Streams_by_pk?: Maybe<Streams>;
+  /** delete data from the table: "Teams" */
+  delete_Teams?: Maybe<Teams_Mutation_Response>;
+  /** delete single row from the table: "Teams" */
+  delete_Teams_by_pk?: Maybe<Teams>;
   /** delete data from the table: "UserPreferences" */
   delete_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** delete single row from the table: "UserPreferences" */
@@ -6391,6 +6790,10 @@ export type Mutation_Root = {
   insert_Orders?: Maybe<Orders_Mutation_Response>;
   /** insert a single row into the table: "Orders" */
   insert_Orders_one?: Maybe<Orders>;
+  /** insert data into the table: "Players" */
+  insert_Players?: Maybe<Players_Mutation_Response>;
+  /** insert a single row into the table: "Players" */
+  insert_Players_one?: Maybe<Players>;
   /** insert data into the table: "Products" */
   insert_Products?: Maybe<Products_Mutation_Response>;
   /** insert a single row into the table: "Products" */
@@ -6411,6 +6814,10 @@ export type Mutation_Root = {
   insert_Streams?: Maybe<Streams_Mutation_Response>;
   /** insert a single row into the table: "Streams" */
   insert_Streams_one?: Maybe<Streams>;
+  /** insert data into the table: "Teams" */
+  insert_Teams?: Maybe<Teams_Mutation_Response>;
+  /** insert a single row into the table: "Teams" */
+  insert_Teams_one?: Maybe<Teams>;
   /** insert data into the table: "UserPreferences" */
   insert_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** insert a single row into the table: "UserPreferences" */
@@ -6483,6 +6890,10 @@ export type Mutation_Root = {
   update_Orders?: Maybe<Orders_Mutation_Response>;
   /** update single row of the table: "Orders" */
   update_Orders_by_pk?: Maybe<Orders>;
+  /** update data of the table: "Players" */
+  update_Players?: Maybe<Players_Mutation_Response>;
+  /** update single row of the table: "Players" */
+  update_Players_by_pk?: Maybe<Players>;
   /** update data of the table: "Products" */
   update_Products?: Maybe<Products_Mutation_Response>;
   /** update single row of the table: "Products" */
@@ -6503,6 +6914,10 @@ export type Mutation_Root = {
   update_Streams?: Maybe<Streams_Mutation_Response>;
   /** update single row of the table: "Streams" */
   update_Streams_by_pk?: Maybe<Streams>;
+  /** update data of the table: "Teams" */
+  update_Teams?: Maybe<Teams_Mutation_Response>;
+  /** update single row of the table: "Teams" */
+  update_Teams_by_pk?: Maybe<Teams>;
   /** update data of the table: "UserPreferences" */
   update_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** update single row of the table: "UserPreferences" */
@@ -6668,6 +7083,18 @@ export type Mutation_RootDelete_Orders_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_PlayersArgs = {
+  where: Players_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Players_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_ProductsArgs = {
   where: Products_Bool_Exp;
 };
@@ -6723,6 +7150,18 @@ export type Mutation_RootDelete_StreamsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Streams_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_TeamsArgs = {
+  where: Teams_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Teams_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -6966,6 +7405,20 @@ export type Mutation_RootInsert_Orders_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_PlayersArgs = {
+  objects: Array<Players_Insert_Input>;
+  on_conflict?: Maybe<Players_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Players_OneArgs = {
+  object: Players_Insert_Input;
+  on_conflict?: Maybe<Players_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_ProductsArgs = {
   objects: Array<Products_Insert_Input>;
   on_conflict?: Maybe<Products_On_Conflict>;
@@ -7032,6 +7485,20 @@ export type Mutation_RootInsert_StreamsArgs = {
 export type Mutation_RootInsert_Streams_OneArgs = {
   object: Streams_Insert_Input;
   on_conflict?: Maybe<Streams_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_TeamsArgs = {
+  objects: Array<Teams_Insert_Input>;
+  on_conflict?: Maybe<Teams_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Teams_OneArgs = {
+  object: Teams_Insert_Input;
+  on_conflict?: Maybe<Teams_On_Conflict>;
 };
 
 
@@ -7308,6 +7775,20 @@ export type Mutation_RootUpdate_Orders_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_PlayersArgs = {
+  _set?: Maybe<Players_Set_Input>;
+  where: Players_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Players_By_PkArgs = {
+  _set?: Maybe<Players_Set_Input>;
+  pk_columns: Players_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_ProductsArgs = {
   _inc?: Maybe<Products_Inc_Input>;
   _set?: Maybe<Products_Set_Input>;
@@ -7376,6 +7857,22 @@ export type Mutation_RootUpdate_StreamsArgs = {
 export type Mutation_RootUpdate_Streams_By_PkArgs = {
   _set?: Maybe<Streams_Set_Input>;
   pk_columns: Streams_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_TeamsArgs = {
+  _inc?: Maybe<Teams_Inc_Input>;
+  _set?: Maybe<Teams_Set_Input>;
+  where: Teams_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Teams_By_PkArgs = {
+  _inc?: Maybe<Teams_Inc_Input>;
+  _set?: Maybe<Teams_Set_Input>;
+  pk_columns: Teams_Pk_Columns_Input;
 };
 
 
@@ -7574,6 +8071,12 @@ export type Query_Root = {
   Orders_aggregate: Orders_Aggregate;
   /** fetch data from the table: "Orders" using primary key columns */
   Orders_by_pk?: Maybe<Orders>;
+  /** fetch data from the table: "Players" */
+  Players: Array<Players>;
+  /** fetch aggregated fields from the table: "Players" */
+  Players_aggregate: Players_Aggregate;
+  /** fetch data from the table: "Players" using primary key columns */
+  Players_by_pk?: Maybe<Players>;
   /** An array relationship */
   Products: Array<Products>;
   /** An aggregate relationship */
@@ -7604,6 +8107,12 @@ export type Query_Root = {
   Streams_aggregate: Streams_Aggregate;
   /** fetch data from the table: "Streams" using primary key columns */
   Streams_by_pk?: Maybe<Streams>;
+  /** fetch data from the table: "Teams" */
+  Teams: Array<Teams>;
+  /** fetch aggregated fields from the table: "Teams" */
+  Teams_aggregate: Teams_Aggregate;
+  /** fetch data from the table: "Teams" using primary key columns */
+  Teams_by_pk?: Maybe<Teams>;
   /** fetch data from the table: "UserPreferences" */
   UserPreferences: Array<UserPreferences>;
   /** fetch aggregated fields from the table: "UserPreferences" */
@@ -7903,6 +8412,29 @@ export type Query_RootOrders_By_PkArgs = {
 };
 
 
+export type Query_RootPlayersArgs = {
+  distinct_on?: Maybe<Array<Players_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Players_Order_By>>;
+  where?: Maybe<Players_Bool_Exp>;
+};
+
+
+export type Query_RootPlayers_AggregateArgs = {
+  distinct_on?: Maybe<Array<Players_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Players_Order_By>>;
+  where?: Maybe<Players_Bool_Exp>;
+};
+
+
+export type Query_RootPlayers_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootProductsArgs = {
   distinct_on?: Maybe<Array<Products_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -8014,6 +8546,29 @@ export type Query_RootStreams_AggregateArgs = {
 
 
 export type Query_RootStreams_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootTeamsArgs = {
+  distinct_on?: Maybe<Array<Teams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Order_By>>;
+  where?: Maybe<Teams_Bool_Exp>;
+};
+
+
+export type Query_RootTeams_AggregateArgs = {
+  distinct_on?: Maybe<Array<Teams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Order_By>>;
+  where?: Maybe<Teams_Bool_Exp>;
+};
+
+
+export type Query_RootTeams_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -8246,6 +8801,12 @@ export type Subscription_Root = {
   Orders_aggregate: Orders_Aggregate;
   /** fetch data from the table: "Orders" using primary key columns */
   Orders_by_pk?: Maybe<Orders>;
+  /** fetch data from the table: "Players" */
+  Players: Array<Players>;
+  /** fetch aggregated fields from the table: "Players" */
+  Players_aggregate: Players_Aggregate;
+  /** fetch data from the table: "Players" using primary key columns */
+  Players_by_pk?: Maybe<Players>;
   /** An array relationship */
   Products: Array<Products>;
   /** An aggregate relationship */
@@ -8276,6 +8837,12 @@ export type Subscription_Root = {
   Streams_aggregate: Streams_Aggregate;
   /** fetch data from the table: "Streams" using primary key columns */
   Streams_by_pk?: Maybe<Streams>;
+  /** fetch data from the table: "Teams" */
+  Teams: Array<Teams>;
+  /** fetch aggregated fields from the table: "Teams" */
+  Teams_aggregate: Teams_Aggregate;
+  /** fetch data from the table: "Teams" using primary key columns */
+  Teams_by_pk?: Maybe<Teams>;
   /** fetch data from the table: "UserPreferences" */
   UserPreferences: Array<UserPreferences>;
   /** fetch aggregated fields from the table: "UserPreferences" */
@@ -8575,6 +9142,29 @@ export type Subscription_RootOrders_By_PkArgs = {
 };
 
 
+export type Subscription_RootPlayersArgs = {
+  distinct_on?: Maybe<Array<Players_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Players_Order_By>>;
+  where?: Maybe<Players_Bool_Exp>;
+};
+
+
+export type Subscription_RootPlayers_AggregateArgs = {
+  distinct_on?: Maybe<Array<Players_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Players_Order_By>>;
+  where?: Maybe<Players_Bool_Exp>;
+};
+
+
+export type Subscription_RootPlayers_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootProductsArgs = {
   distinct_on?: Maybe<Array<Products_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -8686,6 +9276,29 @@ export type Subscription_RootStreams_AggregateArgs = {
 
 
 export type Subscription_RootStreams_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootTeamsArgs = {
+  distinct_on?: Maybe<Array<Teams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Order_By>>;
+  where?: Maybe<Teams_Bool_Exp>;
+};
+
+
+export type Subscription_RootTeams_AggregateArgs = {
+  distinct_on?: Maybe<Array<Teams_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Order_By>>;
+  where?: Maybe<Teams_Bool_Exp>;
+};
+
+
+export type Subscription_RootTeams_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -9209,32 +9822,22 @@ export type UpdateEventMutation = (
   )> }
 );
 
-export type DeleteEventByIdsMutationVariables = Exact<{
+export type ArchiveEventsAndBreaksByEventIdsMutationVariables = Exact<{
   ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
 }>;
 
 
-export type DeleteEventByIdsMutation = (
+export type ArchiveEventsAndBreaksByEventIdsMutation = (
   { __typename?: 'mutation_root' }
-  & { delete_Events?: Maybe<(
+  & { update_Events?: Maybe<(
     { __typename?: 'Events_mutation_response' }
     & Pick<Events_Mutation_Response, 'affected_rows'>
-  )> }
-);
-
-export type DeleteEventsAndBreaksByEventIdsMutationVariables = Exact<{
-  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
-}>;
-
-
-export type DeleteEventsAndBreaksByEventIdsMutation = (
-  { __typename?: 'mutation_root' }
-  & { delete_Breaks?: Maybe<(
+  )>, update_Breaks?: Maybe<(
     { __typename?: 'Breaks_mutation_response' }
     & Pick<Breaks_Mutation_Response, 'affected_rows'>
-  )>, delete_Events?: Maybe<(
-    { __typename?: 'Events_mutation_response' }
-    & Pick<Events_Mutation_Response, 'affected_rows'>
+  )>, update_Inventory?: Maybe<(
+    { __typename?: 'Inventory_mutation_response' }
+    & Pick<Inventory_Mutation_Response, 'affected_rows'>
   )> }
 );
 
@@ -9265,19 +9868,6 @@ export type UpdateBreakMutation = (
   )> }
 );
 
-export type DeleteBreakByIdsMutationVariables = Exact<{
-  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
-}>;
-
-
-export type DeleteBreakByIdsMutation = (
-  { __typename?: 'mutation_root' }
-  & { delete_Breaks?: Maybe<(
-    { __typename?: 'Breaks_mutation_response' }
-    & Pick<Breaks_Mutation_Response, 'affected_rows'>
-  )> }
-);
-
 export type ArchiveBreaksByIdMutationVariables = Exact<{
   ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
 }>;
@@ -9285,13 +9875,10 @@ export type ArchiveBreaksByIdMutationVariables = Exact<{
 
 export type ArchiveBreaksByIdMutation = (
   { __typename?: 'mutation_root' }
-  & { delete_BreakProductItems?: Maybe<(
-    { __typename?: 'BreakProductItems_mutation_response' }
-    & Pick<BreakProductItems_Mutation_Response, 'affected_rows'>
-  )>, update_Inventory?: Maybe<(
+  & { update_Inventory?: Maybe<(
     { __typename?: 'Inventory_mutation_response' }
     & Pick<Inventory_Mutation_Response, 'affected_rows'>
-  )>, delete_Breaks?: Maybe<(
+  )>, update_Breaks?: Maybe<(
     { __typename?: 'Breaks_mutation_response' }
     & Pick<Breaks_Mutation_Response, 'affected_rows'>
   )> }
@@ -9411,7 +9998,10 @@ export type UpdateInventoryBreakMutationVariables = Exact<{
 
 export type UpdateInventoryBreakMutation = (
   { __typename?: 'mutation_root' }
-  & { update_Inventory?: Maybe<(
+  & { removeInventory?: Maybe<(
+    { __typename?: 'Inventory_mutation_response' }
+    & Pick<Inventory_Mutation_Response, 'affected_rows'>
+  )>, update_Inventory?: Maybe<(
     { __typename?: 'Inventory_mutation_response' }
     & Pick<Inventory_Mutation_Response, 'affected_rows'>
   )> }
@@ -9680,9 +10270,19 @@ export type GetEventByIdQuery = (
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset'>
-      & { BreakProductItems: Array<(
+      & { BreakProductItems_aggregate: (
+        { __typename?: 'BreakProductItems_aggregate' }
+        & { aggregate?: Maybe<(
+          { __typename?: 'BreakProductItems_aggregate_fields' }
+          & Pick<BreakProductItems_Aggregate_Fields, 'count'>
+        )> }
+      ), BreakProductItems: Array<(
         { __typename?: 'BreakProductItems' }
         & Pick<BreakProductItems, 'id' | 'title' | 'price'>
+        & { Order?: Maybe<(
+          { __typename?: 'Orders' }
+          & Pick<Orders, 'id'>
+        )> }
       )> }
     )> }
   )> }
@@ -9704,7 +10304,13 @@ export type GetLiveEventByIdQuery = (
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'result'>
-      & { BreakProductItems: Array<(
+      & { BreakProductItems_aggregate: (
+        { __typename?: 'BreakProductItems_aggregate' }
+        & { aggregate?: Maybe<(
+          { __typename?: 'BreakProductItems_aggregate_fields' }
+          & Pick<BreakProductItems_Aggregate_Fields, 'count'>
+        )> }
+      ), BreakProductItems: Array<(
         { __typename?: 'BreakProductItems' }
         & Pick<BreakProductItems, 'title'>
         & { Order?: Maybe<(
@@ -9911,6 +10517,33 @@ export type GetChatUserQuery = (
   )> }
 );
 
+export type GetTeamDataQueryVariables = Exact<{
+  year: Scalars['Int'];
+  sport: Scalars['String'];
+}>;
+
+
+export type GetTeamDataQuery = (
+  { __typename?: 'query_root' }
+  & { Teams: Array<(
+    { __typename?: 'Teams' }
+    & Pick<Teams, 'name' | 'sport' | 'color' | 'color_secondary' | 'year_end' | 'year_start' | 'short_name'>
+  )> }
+);
+
+export type SearchPlayersQueryVariables = Exact<{
+  input: Scalars['String'];
+}>;
+
+
+export type SearchPlayersQuery = (
+  { __typename?: 'query_root' }
+  & { Players: Array<(
+    { __typename?: 'Players' }
+    & Pick<Players, 'id' | 'name'>
+  )> }
+);
+
 
 export const InsertEventDocument = gql`
     mutation InsertEvent($data: Events_insert_input!) {
@@ -9984,75 +10617,48 @@ export function useUpdateEventMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateEventMutationHookResult = ReturnType<typeof useUpdateEventMutation>;
 export type UpdateEventMutationResult = Apollo.MutationResult<UpdateEventMutation>;
 export type UpdateEventMutationOptions = Apollo.BaseMutationOptions<UpdateEventMutation, UpdateEventMutationVariables>;
-export const DeleteEventByIdsDocument = gql`
-    mutation DeleteEventByIds($ids: [uuid!]) {
-  delete_Events(where: {id: {_in: $ids}}) {
+export const ArchiveEventsAndBreaksByEventIdsDocument = gql`
+    mutation ArchiveEventsAndBreaksByEventIds($ids: [uuid!]) {
+  update_Events(where: {id: {_in: $ids}}, _set: {archived: true}) {
+    affected_rows
+  }
+  update_Breaks(where: {Event: {id: {_in: $ids}}}, _set: {archived: true}) {
+    affected_rows
+  }
+  update_Inventory(
+    where: {Break: {Event: {id: {_in: $ids}}}}
+    _set: {break_id: null}
+  ) {
     affected_rows
   }
 }
     `;
-export type DeleteEventByIdsMutationFn = Apollo.MutationFunction<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>;
+export type ArchiveEventsAndBreaksByEventIdsMutationFn = Apollo.MutationFunction<ArchiveEventsAndBreaksByEventIdsMutation, ArchiveEventsAndBreaksByEventIdsMutationVariables>;
 
 /**
- * __useDeleteEventByIdsMutation__
+ * __useArchiveEventsAndBreaksByEventIdsMutation__
  *
- * To run a mutation, you first call `useDeleteEventByIdsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteEventByIdsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useArchiveEventsAndBreaksByEventIdsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useArchiveEventsAndBreaksByEventIdsMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteEventByIdsMutation, { data, loading, error }] = useDeleteEventByIdsMutation({
+ * const [archiveEventsAndBreaksByEventIdsMutation, { data, loading, error }] = useArchiveEventsAndBreaksByEventIdsMutation({
  *   variables: {
  *      ids: // value for 'ids'
  *   },
  * });
  */
-export function useDeleteEventByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>) {
+export function useArchiveEventsAndBreaksByEventIdsMutation(baseOptions?: Apollo.MutationHookOptions<ArchiveEventsAndBreaksByEventIdsMutation, ArchiveEventsAndBreaksByEventIdsMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>(DeleteEventByIdsDocument, options);
+        return Apollo.useMutation<ArchiveEventsAndBreaksByEventIdsMutation, ArchiveEventsAndBreaksByEventIdsMutationVariables>(ArchiveEventsAndBreaksByEventIdsDocument, options);
       }
-export type DeleteEventByIdsMutationHookResult = ReturnType<typeof useDeleteEventByIdsMutation>;
-export type DeleteEventByIdsMutationResult = Apollo.MutationResult<DeleteEventByIdsMutation>;
-export type DeleteEventByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteEventByIdsMutation, DeleteEventByIdsMutationVariables>;
-export const DeleteEventsAndBreaksByEventIdsDocument = gql`
-    mutation DeleteEventsAndBreaksByEventIds($ids: [uuid!]) {
-  delete_Breaks(where: {Event: {id: {_in: $ids}}}) {
-    affected_rows
-  }
-  delete_Events(where: {id: {_in: $ids}}) {
-    affected_rows
-  }
-}
-    `;
-export type DeleteEventsAndBreaksByEventIdsMutationFn = Apollo.MutationFunction<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>;
-
-/**
- * __useDeleteEventsAndBreaksByEventIdsMutation__
- *
- * To run a mutation, you first call `useDeleteEventsAndBreaksByEventIdsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteEventsAndBreaksByEventIdsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteEventsAndBreaksByEventIdsMutation, { data, loading, error }] = useDeleteEventsAndBreaksByEventIdsMutation({
- *   variables: {
- *      ids: // value for 'ids'
- *   },
- * });
- */
-export function useDeleteEventsAndBreaksByEventIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>(DeleteEventsAndBreaksByEventIdsDocument, options);
-      }
-export type DeleteEventsAndBreaksByEventIdsMutationHookResult = ReturnType<typeof useDeleteEventsAndBreaksByEventIdsMutation>;
-export type DeleteEventsAndBreaksByEventIdsMutationResult = Apollo.MutationResult<DeleteEventsAndBreaksByEventIdsMutation>;
-export type DeleteEventsAndBreaksByEventIdsMutationOptions = Apollo.BaseMutationOptions<DeleteEventsAndBreaksByEventIdsMutation, DeleteEventsAndBreaksByEventIdsMutationVariables>;
+export type ArchiveEventsAndBreaksByEventIdsMutationHookResult = ReturnType<typeof useArchiveEventsAndBreaksByEventIdsMutation>;
+export type ArchiveEventsAndBreaksByEventIdsMutationResult = Apollo.MutationResult<ArchiveEventsAndBreaksByEventIdsMutation>;
+export type ArchiveEventsAndBreaksByEventIdsMutationOptions = Apollo.BaseMutationOptions<ArchiveEventsAndBreaksByEventIdsMutation, ArchiveEventsAndBreaksByEventIdsMutationVariables>;
 export const InsertBreakDocument = gql`
     mutation InsertBreak($data: Breaks_insert_input!) {
   insert_Breaks_one(object: $data) {
@@ -10128,48 +10734,12 @@ export function useUpdateBreakMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateBreakMutationHookResult = ReturnType<typeof useUpdateBreakMutation>;
 export type UpdateBreakMutationResult = Apollo.MutationResult<UpdateBreakMutation>;
 export type UpdateBreakMutationOptions = Apollo.BaseMutationOptions<UpdateBreakMutation, UpdateBreakMutationVariables>;
-export const DeleteBreakByIdsDocument = gql`
-    mutation DeleteBreakByIds($ids: [uuid!]) {
-  delete_Breaks(where: {id: {_in: $ids}}) {
-    affected_rows
-  }
-}
-    `;
-export type DeleteBreakByIdsMutationFn = Apollo.MutationFunction<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>;
-
-/**
- * __useDeleteBreakByIdsMutation__
- *
- * To run a mutation, you first call `useDeleteBreakByIdsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteBreakByIdsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteBreakByIdsMutation, { data, loading, error }] = useDeleteBreakByIdsMutation({
- *   variables: {
- *      ids: // value for 'ids'
- *   },
- * });
- */
-export function useDeleteBreakByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>(DeleteBreakByIdsDocument, options);
-      }
-export type DeleteBreakByIdsMutationHookResult = ReturnType<typeof useDeleteBreakByIdsMutation>;
-export type DeleteBreakByIdsMutationResult = Apollo.MutationResult<DeleteBreakByIdsMutation>;
-export type DeleteBreakByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteBreakByIdsMutation, DeleteBreakByIdsMutationVariables>;
 export const ArchiveBreaksByIdDocument = gql`
     mutation ArchiveBreaksById($ids: [uuid!]) {
-  delete_BreakProductItems(where: {break_id: {_in: $ids}}) {
-    affected_rows
-  }
   update_Inventory(where: {break_id: {_in: $ids}}, _set: {break_id: null}) {
     affected_rows
   }
-  delete_Breaks(where: {id: {_in: $ids}}) {
+  update_Breaks(where: {id: {_in: $ids}}, _set: {archived: true}) {
     affected_rows
   }
 }
@@ -10468,6 +11038,12 @@ export type DeleteInventoryByIdsMutationResult = Apollo.MutationResult<DeleteInv
 export type DeleteInventoryByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>;
 export const UpdateInventoryBreakDocument = gql`
     mutation UpdateInventoryBreak($ids: [uuid!], $breakId: uuid!) {
+  removeInventory: update_Inventory(
+    where: {break_id: {_eq: $breakId}}
+    _set: {break_id: null}
+  ) {
+    affected_rows
+  }
   update_Inventory(where: {id: {_in: $ids}}, _set: {break_id: $breakId}) {
     affected_rows
   }
@@ -11001,7 +11577,7 @@ export type GetInventoryByProdIdLazyQueryHookResult = ReturnType<typeof useGetIn
 export type GetInventoryByProdIdQueryResult = Apollo.QueryResult<GetInventoryByProdIdQuery, GetInventoryByProdIdQueryVariables>;
 export const GetEventsDocument = gql`
     query GetEvents {
-  Events(order_by: {start_time: asc}) {
+  Events(where: {archived: {_eq: false}}, order_by: {start_time: asc}) {
     id
     title
     start_time
@@ -11013,7 +11589,7 @@ export const GetEventsDocument = gql`
       first_name
       last_name
     }
-    Breaks {
+    Breaks(where: {archived: {_eq: false}}) {
       id
     }
     Breaks_aggregate {
@@ -11065,7 +11641,7 @@ export const GetEventByIdDocument = gql`
       first_name
       last_name
     }
-    Breaks(order_by: {created_at: asc}) {
+    Breaks(where: {archived: {_eq: false}}, order_by: {created_at: asc}) {
       id
       title
       break_type
@@ -11077,10 +11653,18 @@ export const GetEventByIdDocument = gql`
       line_items
       status
       dataset
+      BreakProductItems_aggregate(where: {order_id: {_is_null: true}}) {
+        aggregate {
+          count
+        }
+      }
       BreakProductItems(order_by: {title: asc}) {
         id
         title
         price
+        Order {
+          id
+        }
       }
     }
   }
@@ -11128,7 +11712,7 @@ export const GetLiveEventByIdDocument = gql`
       first_name
       last_name
     }
-    Breaks(order_by: {created_at: asc}) {
+    Breaks(where: {archived: {_eq: false}}, order_by: {created_at: asc}) {
       id
       title
       break_type
@@ -11140,6 +11724,11 @@ export const GetLiveEventByIdDocument = gql`
       line_items
       status
       result
+      BreakProductItems_aggregate(where: {order_id: {_is_null: true}}) {
+        aggregate {
+          count
+        }
+      }
       BreakProductItems(order_by: {title: asc}) {
         title
         Order {
@@ -11679,3 +12268,81 @@ export function useGetChatUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetChatUserQueryHookResult = ReturnType<typeof useGetChatUserQuery>;
 export type GetChatUserLazyQueryHookResult = ReturnType<typeof useGetChatUserLazyQuery>;
 export type GetChatUserQueryResult = Apollo.QueryResult<GetChatUserQuery, GetChatUserQueryVariables>;
+export const GetTeamDataDocument = gql`
+    query GetTeamData($year: Int!, $sport: String!) {
+  Teams(where: {year_start: {_lte: $year}, sport: {_eq: $sport}}) {
+    name
+    sport
+    color
+    color_secondary
+    year_end
+    year_start
+    short_name
+  }
+}
+    `;
+
+/**
+ * __useGetTeamDataQuery__
+ *
+ * To run a query within a React component, call `useGetTeamDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTeamDataQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *      sport: // value for 'sport'
+ *   },
+ * });
+ */
+export function useGetTeamDataQuery(baseOptions: Apollo.QueryHookOptions<GetTeamDataQuery, GetTeamDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTeamDataQuery, GetTeamDataQueryVariables>(GetTeamDataDocument, options);
+      }
+export function useGetTeamDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTeamDataQuery, GetTeamDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTeamDataQuery, GetTeamDataQueryVariables>(GetTeamDataDocument, options);
+        }
+export type GetTeamDataQueryHookResult = ReturnType<typeof useGetTeamDataQuery>;
+export type GetTeamDataLazyQueryHookResult = ReturnType<typeof useGetTeamDataLazyQuery>;
+export type GetTeamDataQueryResult = Apollo.QueryResult<GetTeamDataQuery, GetTeamDataQueryVariables>;
+export const SearchPlayersDocument = gql`
+    query SearchPlayers($input: String!) {
+  Players(where: {name: {_ilike: $input}}) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useSearchPlayersQuery__
+ *
+ * To run a query within a React component, call `useSearchPlayersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchPlayersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchPlayersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchPlayersQuery(baseOptions: Apollo.QueryHookOptions<SearchPlayersQuery, SearchPlayersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchPlayersQuery, SearchPlayersQueryVariables>(SearchPlayersDocument, options);
+      }
+export function useSearchPlayersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchPlayersQuery, SearchPlayersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchPlayersQuery, SearchPlayersQueryVariables>(SearchPlayersDocument, options);
+        }
+export type SearchPlayersQueryHookResult = ReturnType<typeof useSearchPlayersQuery>;
+export type SearchPlayersLazyQueryHookResult = ReturnType<typeof useSearchPlayersLazyQuery>;
+export type SearchPlayersQueryResult = Apollo.QueryResult<SearchPlayersQuery, SearchPlayersQueryVariables>;

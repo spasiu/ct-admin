@@ -24,20 +24,23 @@ export const UPDATE_EVENT = gql`
   }
 `;
 
-export const DELETE_EVENTS = gql`
-  mutation DeleteEventByIds($ids: [uuid!]) {
-    delete_Events(where: { id: { _in: $ids } }) {
+export const ARCHIVE_EVENTS_AND_BREAKS = gql`
+  mutation ArchiveEventsAndBreaksByEventIds($ids: [uuid!]) {
+    update_Events(where: { id: { _in: $ids } }, _set: { archived: true }) {
       affected_rows
     }
-  }
-`;
 
-export const DELETE_EVENTS_AND_BREAKS = gql`
-  mutation DeleteEventsAndBreaksByEventIds($ids: [uuid!]) {
-    delete_Breaks(where: { Event: { id: { _in: $ids } } }) {
+    update_Breaks(
+      where: { Event: { id: { _in: $ids } } }
+      _set: { archived: true }
+    ) {
       affected_rows
     }
-    delete_Events(where: { id: { _in: $ids } }) {
+
+    update_Inventory(
+      where: { Break: { Event: { id: { _in: $ids } } } }
+      _set: { break_id: null }
+    ) {
       affected_rows
     }
   }
@@ -70,20 +73,8 @@ export const UPDATE_BREAK = gql`
   }
 `;
 
-export const DELETE_BREAKS = gql`
-  mutation DeleteBreakByIds($ids: [uuid!]) {
-    delete_Breaks(where: { id: { _in: $ids } }) {
-      affected_rows
-    }
-  }
-`;
-
 export const ARCHIVE_BREAKS = gql`
   mutation ArchiveBreaksById($ids: [uuid!]) {
-    delete_BreakProductItems(where: { break_id: { _in: $ids } }) {
-      affected_rows
-    }
-
     update_Inventory(
       where: { break_id: { _in: $ids } }
       _set: { break_id: null }
@@ -91,7 +82,7 @@ export const ARCHIVE_BREAKS = gql`
       affected_rows
     }
 
-    delete_Breaks(where: { id: { _in: $ids } }) {
+    update_Breaks(where: { id: { _in: $ids } }, _set: { archived: true }) {
       affected_rows
     }
   }
@@ -169,6 +160,13 @@ export const DELETE_INVENTORY = gql`
 
 export const UPDATE_INVENTORY_BREAK = gql`
   mutation UpdateInventoryBreak($ids: [uuid!], $breakId: uuid!) {
+    removeInventory: update_Inventory(
+      where: { break_id: { _eq: $breakId } }
+      _set: { break_id: null }
+    ) {
+      affected_rows
+    }
+
     update_Inventory(
       where: { id: { _in: $ids } }
       _set: { break_id: $breakId }
