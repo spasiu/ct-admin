@@ -45,6 +45,11 @@ const Header: React.FC<THeaderProps> = ({ pageNav }) => {
                     fontWeight="bold"
                     color={isCurrent ? 'white' : 'gray.800'}
                     backgroundColor={isCurrent ? 'red.600' : 'transparent'}
+                    _hover={{
+                      color: isCurrent ? 'white' : 'red.600',
+                      textDecoration: isCurrent ? 'none' : 'underline',
+                      cursor: isCurrent ? 'default' : 'pointer',
+                    }}
                   >
                     {item.label}
                   </Link>
