@@ -5701,6 +5701,7 @@ export type Users = {
   Stream?: Maybe<Streams>;
   /** An object relationship */
   UserPreference?: Maybe<UserPreferences>;
+  bc_user_id?: Maybe<Scalars['Int']>;
   created_at: Scalars['timestamptz'];
   email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
@@ -5708,6 +5709,7 @@ export type Users = {
   image?: Maybe<Scalars['String']>;
   is_breaker: Scalars['Boolean'];
   last_name?: Maybe<Scalars['String']>;
+  paysafe_user_id?: Maybe<Scalars['String']>;
   role: User_Role_Enum;
   updated_at: Scalars['timestamptz'];
   /** An object relationship */
@@ -5885,9 +5887,17 @@ export type Users_Aggregate = {
 /** aggregate fields of "Users" */
 export type Users_Aggregate_Fields = {
   __typename?: 'Users_aggregate_fields';
+  avg?: Maybe<Users_Avg_Fields>;
   count: Scalars['Int'];
   max?: Maybe<Users_Max_Fields>;
   min?: Maybe<Users_Min_Fields>;
+  stddev?: Maybe<Users_Stddev_Fields>;
+  stddev_pop?: Maybe<Users_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Users_Stddev_Samp_Fields>;
+  sum?: Maybe<Users_Sum_Fields>;
+  var_pop?: Maybe<Users_Var_Pop_Fields>;
+  var_samp?: Maybe<Users_Var_Samp_Fields>;
+  variance?: Maybe<Users_Variance_Fields>;
 };
 
 
@@ -5899,9 +5909,17 @@ export type Users_Aggregate_FieldsCountArgs = {
 
 /** order by aggregate values of table "Users" */
 export type Users_Aggregate_Order_By = {
+  avg?: Maybe<Users_Avg_Order_By>;
   count?: Maybe<Order_By>;
   max?: Maybe<Users_Max_Order_By>;
   min?: Maybe<Users_Min_Order_By>;
+  stddev?: Maybe<Users_Stddev_Order_By>;
+  stddev_pop?: Maybe<Users_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Users_Stddev_Samp_Order_By>;
+  sum?: Maybe<Users_Sum_Order_By>;
+  var_pop?: Maybe<Users_Var_Pop_Order_By>;
+  var_samp?: Maybe<Users_Var_Samp_Order_By>;
+  variance?: Maybe<Users_Variance_Order_By>;
 };
 
 /** input type for inserting array relation for remote table "Users" */
@@ -5909,6 +5927,17 @@ export type Users_Arr_Rel_Insert_Input = {
   data: Array<Users_Insert_Input>;
   /** on conflict condition */
   on_conflict?: Maybe<Users_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Users_Avg_Fields = {
+  __typename?: 'Users_avg_fields';
+  bc_user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "Users" */
+export type Users_Avg_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "Users". All fields are combined with a logical 'AND'. */
@@ -5929,6 +5958,7 @@ export type Users_Bool_Exp = {
   _and?: Maybe<Array<Users_Bool_Exp>>;
   _not?: Maybe<Users_Bool_Exp>;
   _or?: Maybe<Array<Users_Bool_Exp>>;
+  bc_user_id?: Maybe<Int_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   email?: Maybe<String_Comparison_Exp>;
   first_name?: Maybe<String_Comparison_Exp>;
@@ -5936,6 +5966,7 @@ export type Users_Bool_Exp = {
   image?: Maybe<String_Comparison_Exp>;
   is_breaker?: Maybe<Boolean_Comparison_Exp>;
   last_name?: Maybe<String_Comparison_Exp>;
+  paysafe_user_id?: Maybe<String_Comparison_Exp>;
   role?: Maybe<User_Role_Enum_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_role?: Maybe<User_Role_Bool_Exp>;
@@ -5949,6 +5980,11 @@ export enum Users_Constraint {
   /** unique or primary key constraint */
   UsersUsernameKey = 'Users_username_key'
 }
+
+/** input type for incrementing numeric columns in table "Users" */
+export type Users_Inc_Input = {
+  bc_user_id?: Maybe<Scalars['Int']>;
+};
 
 /** input type for inserting data into table "Users" */
 export type Users_Insert_Input = {
@@ -5965,6 +6001,7 @@ export type Users_Insert_Input = {
   SavedEvents?: Maybe<SaveEvent_Arr_Rel_Insert_Input>;
   Stream?: Maybe<Streams_Obj_Rel_Insert_Input>;
   UserPreference?: Maybe<UserPreferences_Obj_Rel_Insert_Input>;
+  bc_user_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
@@ -5972,6 +6009,7 @@ export type Users_Insert_Input = {
   image?: Maybe<Scalars['String']>;
   is_breaker?: Maybe<Scalars['Boolean']>;
   last_name?: Maybe<Scalars['String']>;
+  paysafe_user_id?: Maybe<Scalars['String']>;
   role?: Maybe<User_Role_Enum>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_role?: Maybe<User_Role_Obj_Rel_Insert_Input>;
@@ -5981,24 +6019,28 @@ export type Users_Insert_Input = {
 /** aggregate max on columns */
 export type Users_Max_Fields = {
   __typename?: 'Users_max_fields';
+  bc_user_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['String']>;
   last_name?: Maybe<Scalars['String']>;
+  paysafe_user_id?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   username?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "Users" */
 export type Users_Max_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
   first_name?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image?: Maybe<Order_By>;
   last_name?: Maybe<Order_By>;
+  paysafe_user_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   username?: Maybe<Order_By>;
 };
@@ -6006,24 +6048,28 @@ export type Users_Max_Order_By = {
 /** aggregate min on columns */
 export type Users_Min_Fields = {
   __typename?: 'Users_min_fields';
+  bc_user_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['String']>;
   last_name?: Maybe<Scalars['String']>;
+  paysafe_user_id?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   username?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "Users" */
 export type Users_Min_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
   first_name?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image?: Maybe<Order_By>;
   last_name?: Maybe<Order_By>;
+  paysafe_user_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   username?: Maybe<Order_By>;
 };
@@ -6066,6 +6112,7 @@ export type Users_Order_By = {
   SavedEvents_aggregate?: Maybe<SaveEvent_Aggregate_Order_By>;
   Stream?: Maybe<Streams_Order_By>;
   UserPreference?: Maybe<UserPreferences_Order_By>;
+  bc_user_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   email?: Maybe<Order_By>;
   first_name?: Maybe<Order_By>;
@@ -6073,6 +6120,7 @@ export type Users_Order_By = {
   image?: Maybe<Order_By>;
   is_breaker?: Maybe<Order_By>;
   last_name?: Maybe<Order_By>;
+  paysafe_user_id?: Maybe<Order_By>;
   role?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_role?: Maybe<User_Role_Order_By>;
@@ -6087,6 +6135,8 @@ export type Users_Pk_Columns_Input = {
 /** select columns of table "Users" */
 export enum Users_Select_Column {
   /** column name */
+  BcUserId = 'bc_user_id',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Email = 'email',
@@ -6100,6 +6150,8 @@ export enum Users_Select_Column {
   IsBreaker = 'is_breaker',
   /** column name */
   LastName = 'last_name',
+  /** column name */
+  PaysafeUserId = 'paysafe_user_id',
   /** column name */
   Role = 'role',
   /** column name */
@@ -6110,6 +6162,7 @@ export enum Users_Select_Column {
 
 /** input type for updating data in table "Users" */
 export type Users_Set_Input = {
+  bc_user_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
@@ -6117,13 +6170,60 @@ export type Users_Set_Input = {
   image?: Maybe<Scalars['String']>;
   is_breaker?: Maybe<Scalars['Boolean']>;
   last_name?: Maybe<Scalars['String']>;
+  paysafe_user_id?: Maybe<Scalars['String']>;
   role?: Maybe<User_Role_Enum>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   username?: Maybe<Scalars['String']>;
 };
 
+/** aggregate stddev on columns */
+export type Users_Stddev_Fields = {
+  __typename?: 'Users_stddev_fields';
+  bc_user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "Users" */
+export type Users_Stddev_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Users_Stddev_Pop_Fields = {
+  __typename?: 'Users_stddev_pop_fields';
+  bc_user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "Users" */
+export type Users_Stddev_Pop_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Users_Stddev_Samp_Fields = {
+  __typename?: 'Users_stddev_samp_fields';
+  bc_user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "Users" */
+export type Users_Stddev_Samp_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Users_Sum_Fields = {
+  __typename?: 'Users_sum_fields';
+  bc_user_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "Users" */
+export type Users_Sum_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
+};
+
 /** update columns of table "Users" */
 export enum Users_Update_Column {
+  /** column name */
+  BcUserId = 'bc_user_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -6139,12 +6239,47 @@ export enum Users_Update_Column {
   /** column name */
   LastName = 'last_name',
   /** column name */
+  PaysafeUserId = 'paysafe_user_id',
+  /** column name */
   Role = 'role',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
   Username = 'username'
 }
+
+/** aggregate var_pop on columns */
+export type Users_Var_Pop_Fields = {
+  __typename?: 'Users_var_pop_fields';
+  bc_user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "Users" */
+export type Users_Var_Pop_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Users_Var_Samp_Fields = {
+  __typename?: 'Users_var_samp_fields';
+  bc_user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "Users" */
+export type Users_Var_Samp_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Users_Variance_Fields = {
+  __typename?: 'Users_variance_fields';
+  bc_user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "Users" */
+export type Users_Variance_Order_By = {
+  bc_user_id?: Maybe<Order_By>;
+};
 
 
 /** Boolean expression to compare columns of type "_text". All fields are combined with logical 'AND'. */
@@ -7892,6 +8027,7 @@ export type Mutation_RootUpdate_UserPreferences_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_UsersArgs = {
+  _inc?: Maybe<Users_Inc_Input>;
   _set?: Maybe<Users_Set_Input>;
   where: Users_Bool_Exp;
 };
@@ -7899,6 +8035,7 @@ export type Mutation_RootUpdate_UsersArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Users_By_PkArgs = {
+  _inc?: Maybe<Users_Inc_Input>;
   _set?: Maybe<Users_Set_Input>;
   pk_columns: Users_Pk_Columns_Input;
 };

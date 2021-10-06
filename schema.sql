@@ -13,7 +13,7 @@ CREATE TABLE public."Users" (
     email text,
     is_breaker boolean DEFAULT false NOT NULL,
     paysafe_user_id text,
-    bc_user_id text
+    bc_user_id integer
 );
 
 CREATE TABLE public."BreakerProfiles" (
