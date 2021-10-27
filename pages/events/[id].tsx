@@ -498,6 +498,27 @@ const EventPage: React.FC = () => {
                             </Button>
                           )}
 
+                          {brk.status === Break_Status_Enum.Available && (
+                            <Button
+                              colorScheme="blue"
+                              size="sm"
+                              height="40px"
+                              mr={4}
+                              onClick={() => {
+                                updateBreak({
+                                  variables: {
+                                    id: brk.id,
+                                    data: {
+                                      status: Break_Status_Enum.Draft,
+                                    },
+                                  },
+                                });
+                              }}
+                            >
+                              Set to Draft
+                            </Button>
+                          )}
+
                           <NextLink href={`${paths.breaks}/${brk.id}`} passHref>
                             <IconButton
                               as="a"

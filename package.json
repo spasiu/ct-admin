@@ -8,7 +8,7 @@
     "start": "next start -p $PORT",
     "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx}'",
-    "generate": "graphql-codegen --config codegen.js"
+    "generate": "graphql-codegen --config codegen.js -r dotenv/config ./.env"
   },
   "dependencies": {
     "@apollo/client": "^3.3.15",
