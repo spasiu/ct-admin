@@ -525,7 +525,7 @@ export const GET_CHAT_USER = gql`
 
 export const GET_TEAM_DATA = gql`
   query GetTeamData($year: smallint!, $sport: String!) {
-    teams(where: { _and: [{start_year: {_lte: $year}}, {end_year: {_gte: $year}}], sport: { _eq: $sport } }) {
+    Teams(where: { _and: [{start_year: {_lte: $year}}, {end_year: {_gte: $year}}], sport: { _eq: $sport } }) {
       name
       sport
       city
