@@ -525,15 +525,28 @@ export const GET_CHAT_USER = gql`
 
 export const GET_TEAM_DATA = gql`
   query GetTeamData($year: smallint!, $sport: String!) {
-    Teams(where: { _and: [{start_year: {_lte: $year}}, {end_year: {_gte: $year}}], sport: { _eq: $sport } }) {
+    Teams(
+      where: {
+        sport: { _eq: $sport }
+        _and: [{ start_year: { _lte: $year } }, { end_year: { _gte: $year } }]
+      }
+    ) {
       name
-      sport
       city
       color
       color_secondary
-      start_year
-      end_year
       short_code
+    }
+  }
+`;
+
+export const GET_DIVISION_DATA = gql`
+  query GetDivisionData($sport: String!) {
+    Divisions(where: { sport: { _eq: $sport } }) {
+      short_code
+      name
+      color
+      color_secondary
     }
   }
 `;

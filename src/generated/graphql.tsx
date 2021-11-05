@@ -13,8 +13,10 @@ export type Scalars = {
   Int: number;
   Float: number;
   _text: any;
+  bpchar: any;
   jsonb: any;
   numeric: any;
+  smallint: any;
   timestamptz: any;
   uuid: any;
 };
@@ -1577,6 +1579,152 @@ export type Breaks_Variance_Order_By = {
   spots?: Maybe<Order_By>;
   teams_per_spot?: Maybe<Order_By>;
 };
+
+/** columns and relationships of "Divisions" */
+export type Divisions = {
+  __typename?: 'Divisions';
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  name?: Maybe<Scalars['String']>;
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
+};
+
+/** aggregated selection of "Divisions" */
+export type Divisions_Aggregate = {
+  __typename?: 'Divisions_aggregate';
+  aggregate?: Maybe<Divisions_Aggregate_Fields>;
+  nodes: Array<Divisions>;
+};
+
+/** aggregate fields of "Divisions" */
+export type Divisions_Aggregate_Fields = {
+  __typename?: 'Divisions_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Divisions_Max_Fields>;
+  min?: Maybe<Divisions_Min_Fields>;
+};
+
+
+/** aggregate fields of "Divisions" */
+export type Divisions_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Divisions_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "Divisions". All fields are combined with a logical 'AND'. */
+export type Divisions_Bool_Exp = {
+  _and?: Maybe<Array<Divisions_Bool_Exp>>;
+  _not?: Maybe<Divisions_Bool_Exp>;
+  _or?: Maybe<Array<Divisions_Bool_Exp>>;
+  color?: Maybe<Bpchar_Comparison_Exp>;
+  color_secondary?: Maybe<Bpchar_Comparison_Exp>;
+  name?: Maybe<String_Comparison_Exp>;
+  short_code?: Maybe<String_Comparison_Exp>;
+  sport?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "Divisions" */
+export enum Divisions_Constraint {
+  /** unique or primary key constraint */
+  DivisionsPkey = 'Divisions_pkey'
+}
+
+/** input type for inserting data into table "Divisions" */
+export type Divisions_Insert_Input = {
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Divisions_Max_Fields = {
+  __typename?: 'Divisions_max_fields';
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Divisions_Min_Fields = {
+  __typename?: 'Divisions_min_fields';
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "Divisions" */
+export type Divisions_Mutation_Response = {
+  __typename?: 'Divisions_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Divisions>;
+};
+
+/** on conflict condition type for table "Divisions" */
+export type Divisions_On_Conflict = {
+  constraint: Divisions_Constraint;
+  update_columns?: Array<Divisions_Update_Column>;
+  where?: Maybe<Divisions_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "Divisions". */
+export type Divisions_Order_By = {
+  color?: Maybe<Order_By>;
+  color_secondary?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  short_code?: Maybe<Order_By>;
+  sport?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: Divisions */
+export type Divisions_Pk_Columns_Input = {
+  short_code: Scalars['String'];
+};
+
+/** select columns of table "Divisions" */
+export enum Divisions_Select_Column {
+  /** column name */
+  Color = 'color',
+  /** column name */
+  ColorSecondary = 'color_secondary',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  ShortCode = 'short_code',
+  /** column name */
+  Sport = 'sport'
+}
+
+/** input type for updating data in table "Divisions" */
+export type Divisions_Set_Input = {
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "Divisions" */
+export enum Divisions_Update_Column {
+  /** column name */
+  Color = 'color',
+  /** column name */
+  ColorSecondary = 'color_secondary',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  ShortCode = 'short_code',
+  /** column name */
+  Sport = 'sport'
+}
 
 /** columns and relationships of "Events" */
 export type Events = {
@@ -5223,14 +5371,14 @@ export type String_Comparison_Exp = {
 /** columns and relationships of "Teams" */
 export type Teams = {
   __typename?: 'Teams';
-  color: Scalars['String'];
-  color_secondary: Scalars['String'];
-  id: Scalars['uuid'];
-  name: Scalars['String'];
-  short_name: Scalars['String'];
+  city?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  end_year?: Maybe<Scalars['smallint']>;
+  name?: Maybe<Scalars['String']>;
+  short_code: Scalars['String'];
   sport: Scalars['String'];
-  year_end: Scalars['Int'];
-  year_start: Scalars['Int'];
+  start_year: Scalars['smallint'];
 };
 
 /** aggregated selection of "Teams" */
@@ -5266,8 +5414,8 @@ export type Teams_Aggregate_FieldsCountArgs = {
 /** aggregate avg on columns */
 export type Teams_Avg_Fields = {
   __typename?: 'Teams_avg_fields';
-  year_end?: Maybe<Scalars['Float']>;
-  year_start?: Maybe<Scalars['Float']>;
+  end_year?: Maybe<Scalars['Float']>;
+  start_year?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to filter rows from the table "Teams". All fields are combined with a logical 'AND'. */
@@ -5275,64 +5423,64 @@ export type Teams_Bool_Exp = {
   _and?: Maybe<Array<Teams_Bool_Exp>>;
   _not?: Maybe<Teams_Bool_Exp>;
   _or?: Maybe<Array<Teams_Bool_Exp>>;
-  color?: Maybe<String_Comparison_Exp>;
-  color_secondary?: Maybe<String_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
+  city?: Maybe<String_Comparison_Exp>;
+  color?: Maybe<Bpchar_Comparison_Exp>;
+  color_secondary?: Maybe<Bpchar_Comparison_Exp>;
+  end_year?: Maybe<Smallint_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
-  short_name?: Maybe<String_Comparison_Exp>;
+  short_code?: Maybe<String_Comparison_Exp>;
   sport?: Maybe<String_Comparison_Exp>;
-  year_end?: Maybe<Int_Comparison_Exp>;
-  year_start?: Maybe<Int_Comparison_Exp>;
+  start_year?: Maybe<Smallint_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "Teams" */
 export enum Teams_Constraint {
   /** unique or primary key constraint */
-  TeamsPkey = 'Teams_pkey'
+  TeamsPkey = 'teams_pkey'
 }
 
 /** input type for incrementing numeric columns in table "Teams" */
 export type Teams_Inc_Input = {
-  year_end?: Maybe<Scalars['Int']>;
-  year_start?: Maybe<Scalars['Int']>;
+  end_year?: Maybe<Scalars['smallint']>;
+  start_year?: Maybe<Scalars['smallint']>;
 };
 
 /** input type for inserting data into table "Teams" */
 export type Teams_Insert_Input = {
-  color?: Maybe<Scalars['String']>;
-  color_secondary?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
+  city?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  end_year?: Maybe<Scalars['smallint']>;
   name?: Maybe<Scalars['String']>;
-  short_name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
   sport?: Maybe<Scalars['String']>;
-  year_end?: Maybe<Scalars['Int']>;
-  year_start?: Maybe<Scalars['Int']>;
+  start_year?: Maybe<Scalars['smallint']>;
 };
 
 /** aggregate max on columns */
 export type Teams_Max_Fields = {
   __typename?: 'Teams_max_fields';
-  color?: Maybe<Scalars['String']>;
-  color_secondary?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
+  city?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  end_year?: Maybe<Scalars['smallint']>;
   name?: Maybe<Scalars['String']>;
-  short_name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
   sport?: Maybe<Scalars['String']>;
-  year_end?: Maybe<Scalars['Int']>;
-  year_start?: Maybe<Scalars['Int']>;
+  start_year?: Maybe<Scalars['smallint']>;
 };
 
 /** aggregate min on columns */
 export type Teams_Min_Fields = {
   __typename?: 'Teams_min_fields';
-  color?: Maybe<Scalars['String']>;
-  color_secondary?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
+  city?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  end_year?: Maybe<Scalars['smallint']>;
   name?: Maybe<Scalars['String']>;
-  short_name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
   sport?: Maybe<Scalars['String']>;
-  year_end?: Maybe<Scalars['Int']>;
-  year_start?: Maybe<Scalars['Int']>;
+  start_year?: Maybe<Scalars['smallint']>;
 };
 
 /** response of any mutation on the table "Teams" */
@@ -5344,15 +5492,139 @@ export type Teams_Mutation_Response = {
   returning: Array<Teams>;
 };
 
-/** on conflict condition type for table "Teams" */
-export type Teams_On_Conflict = {
-  constraint: Teams_Constraint;
-  update_columns?: Array<Teams_Update_Column>;
-  where?: Maybe<Teams_Bool_Exp>;
+/** columns and relationships of "Teams_old" */
+export type Teams_Old = {
+  __typename?: 'Teams_old';
+  color: Scalars['String'];
+  color_secondary: Scalars['String'];
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  short_name: Scalars['String'];
+  sport: Scalars['String'];
+  year_end: Scalars['Int'];
+  year_start: Scalars['Int'];
 };
 
-/** Ordering options when selecting data from "Teams". */
-export type Teams_Order_By = {
+/** aggregated selection of "Teams_old" */
+export type Teams_Old_Aggregate = {
+  __typename?: 'Teams_old_aggregate';
+  aggregate?: Maybe<Teams_Old_Aggregate_Fields>;
+  nodes: Array<Teams_Old>;
+};
+
+/** aggregate fields of "Teams_old" */
+export type Teams_Old_Aggregate_Fields = {
+  __typename?: 'Teams_old_aggregate_fields';
+  avg?: Maybe<Teams_Old_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Teams_Old_Max_Fields>;
+  min?: Maybe<Teams_Old_Min_Fields>;
+  stddev?: Maybe<Teams_Old_Stddev_Fields>;
+  stddev_pop?: Maybe<Teams_Old_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Teams_Old_Stddev_Samp_Fields>;
+  sum?: Maybe<Teams_Old_Sum_Fields>;
+  var_pop?: Maybe<Teams_Old_Var_Pop_Fields>;
+  var_samp?: Maybe<Teams_Old_Var_Samp_Fields>;
+  variance?: Maybe<Teams_Old_Variance_Fields>;
+};
+
+
+/** aggregate fields of "Teams_old" */
+export type Teams_Old_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Teams_Old_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Teams_Old_Avg_Fields = {
+  __typename?: 'Teams_old_avg_fields';
+  year_end?: Maybe<Scalars['Float']>;
+  year_start?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "Teams_old". All fields are combined with a logical 'AND'. */
+export type Teams_Old_Bool_Exp = {
+  _and?: Maybe<Array<Teams_Old_Bool_Exp>>;
+  _not?: Maybe<Teams_Old_Bool_Exp>;
+  _or?: Maybe<Array<Teams_Old_Bool_Exp>>;
+  color?: Maybe<String_Comparison_Exp>;
+  color_secondary?: Maybe<String_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  name?: Maybe<String_Comparison_Exp>;
+  short_name?: Maybe<String_Comparison_Exp>;
+  sport?: Maybe<String_Comparison_Exp>;
+  year_end?: Maybe<Int_Comparison_Exp>;
+  year_start?: Maybe<Int_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "Teams_old" */
+export enum Teams_Old_Constraint {
+  /** unique or primary key constraint */
+  TeamsPkey = 'Teams_pkey'
+}
+
+/** input type for incrementing numeric columns in table "Teams_old" */
+export type Teams_Old_Inc_Input = {
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "Teams_old" */
+export type Teams_Old_Insert_Input = {
+  color?: Maybe<Scalars['String']>;
+  color_secondary?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  short_name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate max on columns */
+export type Teams_Old_Max_Fields = {
+  __typename?: 'Teams_old_max_fields';
+  color?: Maybe<Scalars['String']>;
+  color_secondary?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  short_name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate min on columns */
+export type Teams_Old_Min_Fields = {
+  __typename?: 'Teams_old_min_fields';
+  color?: Maybe<Scalars['String']>;
+  color_secondary?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  short_name?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  year_end?: Maybe<Scalars['Int']>;
+  year_start?: Maybe<Scalars['Int']>;
+};
+
+/** response of any mutation on the table "Teams_old" */
+export type Teams_Old_Mutation_Response = {
+  __typename?: 'Teams_old_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Teams_Old>;
+};
+
+/** on conflict condition type for table "Teams_old" */
+export type Teams_Old_On_Conflict = {
+  constraint: Teams_Old_Constraint;
+  update_columns?: Array<Teams_Old_Update_Column>;
+  where?: Maybe<Teams_Old_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "Teams_old". */
+export type Teams_Old_Order_By = {
   color?: Maybe<Order_By>;
   color_secondary?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -5363,13 +5635,13 @@ export type Teams_Order_By = {
   year_start?: Maybe<Order_By>;
 };
 
-/** primary key columns input for table: Teams */
-export type Teams_Pk_Columns_Input = {
+/** primary key columns input for table: Teams_old */
+export type Teams_Old_Pk_Columns_Input = {
   id: Scalars['uuid'];
 };
 
-/** select columns of table "Teams" */
-export enum Teams_Select_Column {
+/** select columns of table "Teams_old" */
+export enum Teams_Old_Select_Column {
   /** column name */
   Color = 'color',
   /** column name */
@@ -5388,8 +5660,8 @@ export enum Teams_Select_Column {
   YearStart = 'year_start'
 }
 
-/** input type for updating data in table "Teams" */
-export type Teams_Set_Input = {
+/** input type for updating data in table "Teams_old" */
+export type Teams_Old_Set_Input = {
   color?: Maybe<Scalars['String']>;
   color_secondary?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
@@ -5401,35 +5673,35 @@ export type Teams_Set_Input = {
 };
 
 /** aggregate stddev on columns */
-export type Teams_Stddev_Fields = {
-  __typename?: 'Teams_stddev_fields';
+export type Teams_Old_Stddev_Fields = {
+  __typename?: 'Teams_old_stddev_fields';
   year_end?: Maybe<Scalars['Float']>;
   year_start?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
-export type Teams_Stddev_Pop_Fields = {
-  __typename?: 'Teams_stddev_pop_fields';
+export type Teams_Old_Stddev_Pop_Fields = {
+  __typename?: 'Teams_old_stddev_pop_fields';
   year_end?: Maybe<Scalars['Float']>;
   year_start?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
-export type Teams_Stddev_Samp_Fields = {
-  __typename?: 'Teams_stddev_samp_fields';
+export type Teams_Old_Stddev_Samp_Fields = {
+  __typename?: 'Teams_old_stddev_samp_fields';
   year_end?: Maybe<Scalars['Float']>;
   year_start?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate sum on columns */
-export type Teams_Sum_Fields = {
-  __typename?: 'Teams_sum_fields';
+export type Teams_Old_Sum_Fields = {
+  __typename?: 'Teams_old_sum_fields';
   year_end?: Maybe<Scalars['Int']>;
   year_start?: Maybe<Scalars['Int']>;
 };
 
-/** update columns of table "Teams" */
-export enum Teams_Update_Column {
+/** update columns of table "Teams_old" */
+export enum Teams_Old_Update_Column {
   /** column name */
   Color = 'color',
   /** column name */
@@ -5449,24 +5721,151 @@ export enum Teams_Update_Column {
 }
 
 /** aggregate var_pop on columns */
-export type Teams_Var_Pop_Fields = {
-  __typename?: 'Teams_var_pop_fields';
+export type Teams_Old_Var_Pop_Fields = {
+  __typename?: 'Teams_old_var_pop_fields';
   year_end?: Maybe<Scalars['Float']>;
   year_start?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
-export type Teams_Var_Samp_Fields = {
-  __typename?: 'Teams_var_samp_fields';
+export type Teams_Old_Var_Samp_Fields = {
+  __typename?: 'Teams_old_var_samp_fields';
   year_end?: Maybe<Scalars['Float']>;
   year_start?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
-export type Teams_Variance_Fields = {
-  __typename?: 'Teams_variance_fields';
+export type Teams_Old_Variance_Fields = {
+  __typename?: 'Teams_old_variance_fields';
   year_end?: Maybe<Scalars['Float']>;
   year_start?: Maybe<Scalars['Float']>;
+};
+
+/** on conflict condition type for table "Teams" */
+export type Teams_On_Conflict = {
+  constraint: Teams_Constraint;
+  update_columns?: Array<Teams_Update_Column>;
+  where?: Maybe<Teams_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "Teams". */
+export type Teams_Order_By = {
+  city?: Maybe<Order_By>;
+  color?: Maybe<Order_By>;
+  color_secondary?: Maybe<Order_By>;
+  end_year?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  short_code?: Maybe<Order_By>;
+  sport?: Maybe<Order_By>;
+  start_year?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: Teams */
+export type Teams_Pk_Columns_Input = {
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
+  start_year: Scalars['smallint'];
+};
+
+/** select columns of table "Teams" */
+export enum Teams_Select_Column {
+  /** column name */
+  City = 'city',
+  /** column name */
+  Color = 'color',
+  /** column name */
+  ColorSecondary = 'color_secondary',
+  /** column name */
+  EndYear = 'end_year',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  ShortCode = 'short_code',
+  /** column name */
+  Sport = 'sport',
+  /** column name */
+  StartYear = 'start_year'
+}
+
+/** input type for updating data in table "Teams" */
+export type Teams_Set_Input = {
+  city?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['bpchar']>;
+  color_secondary?: Maybe<Scalars['bpchar']>;
+  end_year?: Maybe<Scalars['smallint']>;
+  name?: Maybe<Scalars['String']>;
+  short_code?: Maybe<Scalars['String']>;
+  sport?: Maybe<Scalars['String']>;
+  start_year?: Maybe<Scalars['smallint']>;
+};
+
+/** aggregate stddev on columns */
+export type Teams_Stddev_Fields = {
+  __typename?: 'Teams_stddev_fields';
+  end_year?: Maybe<Scalars['Float']>;
+  start_year?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Teams_Stddev_Pop_Fields = {
+  __typename?: 'Teams_stddev_pop_fields';
+  end_year?: Maybe<Scalars['Float']>;
+  start_year?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Teams_Stddev_Samp_Fields = {
+  __typename?: 'Teams_stddev_samp_fields';
+  end_year?: Maybe<Scalars['Float']>;
+  start_year?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Teams_Sum_Fields = {
+  __typename?: 'Teams_sum_fields';
+  end_year?: Maybe<Scalars['smallint']>;
+  start_year?: Maybe<Scalars['smallint']>;
+};
+
+/** update columns of table "Teams" */
+export enum Teams_Update_Column {
+  /** column name */
+  City = 'city',
+  /** column name */
+  Color = 'color',
+  /** column name */
+  ColorSecondary = 'color_secondary',
+  /** column name */
+  EndYear = 'end_year',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  ShortCode = 'short_code',
+  /** column name */
+  Sport = 'sport',
+  /** column name */
+  StartYear = 'start_year'
+}
+
+/** aggregate var_pop on columns */
+export type Teams_Var_Pop_Fields = {
+  __typename?: 'Teams_var_pop_fields';
+  end_year?: Maybe<Scalars['Float']>;
+  start_year?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Teams_Var_Samp_Fields = {
+  __typename?: 'Teams_var_samp_fields';
+  end_year?: Maybe<Scalars['Float']>;
+  start_year?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Teams_Variance_Fields = {
+  __typename?: 'Teams_variance_fields';
+  end_year?: Maybe<Scalars['Float']>;
+  start_year?: Maybe<Scalars['Float']>;
 };
 
 /** columns and relationships of "UserPreferences" */
@@ -6295,6 +6694,40 @@ export type _Text_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['_text']>>;
 };
 
+
+/** Boolean expression to compare columns of type "bpchar". All fields are combined with logical 'AND'. */
+export type Bpchar_Comparison_Exp = {
+  _eq?: Maybe<Scalars['bpchar']>;
+  _gt?: Maybe<Scalars['bpchar']>;
+  _gte?: Maybe<Scalars['bpchar']>;
+  /** does the column match the given case-insensitive pattern */
+  _ilike?: Maybe<Scalars['bpchar']>;
+  _in?: Maybe<Array<Scalars['bpchar']>>;
+  /** does the column match the given POSIX regular expression, case insensitive */
+  _iregex?: Maybe<Scalars['bpchar']>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  /** does the column match the given pattern */
+  _like?: Maybe<Scalars['bpchar']>;
+  _lt?: Maybe<Scalars['bpchar']>;
+  _lte?: Maybe<Scalars['bpchar']>;
+  _neq?: Maybe<Scalars['bpchar']>;
+  /** does the column NOT match the given case-insensitive pattern */
+  _nilike?: Maybe<Scalars['bpchar']>;
+  _nin?: Maybe<Array<Scalars['bpchar']>>;
+  /** does the column NOT match the given POSIX regular expression, case insensitive */
+  _niregex?: Maybe<Scalars['bpchar']>;
+  /** does the column NOT match the given pattern */
+  _nlike?: Maybe<Scalars['bpchar']>;
+  /** does the column NOT match the given POSIX regular expression, case sensitive */
+  _nregex?: Maybe<Scalars['bpchar']>;
+  /** does the column NOT match the given SQL regular expression */
+  _nsimilar?: Maybe<Scalars['bpchar']>;
+  /** does the column match the given POSIX regular expression, case sensitive */
+  _regex?: Maybe<Scalars['bpchar']>;
+  /** does the column match the given SQL regular expression */
+  _similar?: Maybe<Scalars['bpchar']>;
+};
+
 /** columns and relationships of "break_status" */
 export type Break_Status = {
   __typename?: 'break_status';
@@ -6364,6 +6797,7 @@ export enum Break_Status_Constraint {
 
 export enum Break_Status_Enum {
   Available = 'AVAILABLE',
+  Closed = 'CLOSED',
   Completed = 'COMPLETED',
   Draft = 'DRAFT',
   Live = 'LIVE',
@@ -6797,6 +7231,10 @@ export type Mutation_Root = {
   delete_Breaks?: Maybe<Breaks_Mutation_Response>;
   /** delete single row from the table: "Breaks" */
   delete_Breaks_by_pk?: Maybe<Breaks>;
+  /** delete data from the table: "Divisions" */
+  delete_Divisions?: Maybe<Divisions_Mutation_Response>;
+  /** delete single row from the table: "Divisions" */
+  delete_Divisions_by_pk?: Maybe<Divisions>;
   /** delete data from the table: "Events" */
   delete_Events?: Maybe<Events_Mutation_Response>;
   /** delete single row from the table: "Events" */
@@ -6853,6 +7291,10 @@ export type Mutation_Root = {
   delete_Teams?: Maybe<Teams_Mutation_Response>;
   /** delete single row from the table: "Teams" */
   delete_Teams_by_pk?: Maybe<Teams>;
+  /** delete data from the table: "Teams_old" */
+  delete_Teams_old?: Maybe<Teams_Old_Mutation_Response>;
+  /** delete single row from the table: "Teams_old" */
+  delete_Teams_old_by_pk?: Maybe<Teams_Old>;
   /** delete data from the table: "UserPreferences" */
   delete_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** delete single row from the table: "UserPreferences" */
@@ -6897,6 +7339,10 @@ export type Mutation_Root = {
   insert_Breaks?: Maybe<Breaks_Mutation_Response>;
   /** insert a single row into the table: "Breaks" */
   insert_Breaks_one?: Maybe<Breaks>;
+  /** insert data into the table: "Divisions" */
+  insert_Divisions?: Maybe<Divisions_Mutation_Response>;
+  /** insert a single row into the table: "Divisions" */
+  insert_Divisions_one?: Maybe<Divisions>;
   /** insert data into the table: "Events" */
   insert_Events?: Maybe<Events_Mutation_Response>;
   /** insert a single row into the table: "Events" */
@@ -6951,6 +7397,10 @@ export type Mutation_Root = {
   insert_Streams_one?: Maybe<Streams>;
   /** insert data into the table: "Teams" */
   insert_Teams?: Maybe<Teams_Mutation_Response>;
+  /** insert data into the table: "Teams_old" */
+  insert_Teams_old?: Maybe<Teams_Old_Mutation_Response>;
+  /** insert a single row into the table: "Teams_old" */
+  insert_Teams_old_one?: Maybe<Teams_Old>;
   /** insert a single row into the table: "Teams" */
   insert_Teams_one?: Maybe<Teams>;
   /** insert data into the table: "UserPreferences" */
@@ -6997,6 +7447,10 @@ export type Mutation_Root = {
   update_Breaks?: Maybe<Breaks_Mutation_Response>;
   /** update single row of the table: "Breaks" */
   update_Breaks_by_pk?: Maybe<Breaks>;
+  /** update data of the table: "Divisions" */
+  update_Divisions?: Maybe<Divisions_Mutation_Response>;
+  /** update single row of the table: "Divisions" */
+  update_Divisions_by_pk?: Maybe<Divisions>;
   /** update data of the table: "Events" */
   update_Events?: Maybe<Events_Mutation_Response>;
   /** update single row of the table: "Events" */
@@ -7053,6 +7507,10 @@ export type Mutation_Root = {
   update_Teams?: Maybe<Teams_Mutation_Response>;
   /** update single row of the table: "Teams" */
   update_Teams_by_pk?: Maybe<Teams>;
+  /** update data of the table: "Teams_old" */
+  update_Teams_old?: Maybe<Teams_Old_Mutation_Response>;
+  /** update single row of the table: "Teams_old" */
+  update_Teams_old_by_pk?: Maybe<Teams_Old>;
   /** update data of the table: "UserPreferences" */
   update_UserPreferences?: Maybe<UserPreferences_Mutation_Response>;
   /** update single row of the table: "UserPreferences" */
@@ -7129,6 +7587,18 @@ export type Mutation_RootDelete_BreaksArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Breaks_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_DivisionsArgs = {
+  where: Divisions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Divisions_By_PkArgs = {
+  short_code: Scalars['String'];
 };
 
 
@@ -7297,6 +7767,20 @@ export type Mutation_RootDelete_TeamsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Teams_By_PkArgs = {
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
+  start_year: Scalars['smallint'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Teams_OldArgs = {
+  where: Teams_Old_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Teams_Old_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -7438,6 +7922,20 @@ export type Mutation_RootInsert_BreaksArgs = {
 export type Mutation_RootInsert_Breaks_OneArgs = {
   object: Breaks_Insert_Input;
   on_conflict?: Maybe<Breaks_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_DivisionsArgs = {
+  objects: Array<Divisions_Insert_Input>;
+  on_conflict?: Maybe<Divisions_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Divisions_OneArgs = {
+  object: Divisions_Insert_Input;
+  on_conflict?: Maybe<Divisions_On_Conflict>;
 };
 
 
@@ -7631,6 +8129,20 @@ export type Mutation_RootInsert_TeamsArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Teams_OldArgs = {
+  objects: Array<Teams_Old_Insert_Input>;
+  on_conflict?: Maybe<Teams_Old_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Teams_Old_OneArgs = {
+  object: Teams_Old_Insert_Input;
+  on_conflict?: Maybe<Teams_Old_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Teams_OneArgs = {
   object: Teams_Insert_Input;
   on_conflict?: Maybe<Teams_On_Conflict>;
@@ -7802,6 +8314,20 @@ export type Mutation_RootUpdate_Breaks_By_PkArgs = {
   _prepend?: Maybe<Breaks_Prepend_Input>;
   _set?: Maybe<Breaks_Set_Input>;
   pk_columns: Breaks_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_DivisionsArgs = {
+  _set?: Maybe<Divisions_Set_Input>;
+  where: Divisions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Divisions_By_PkArgs = {
+  _set?: Maybe<Divisions_Set_Input>;
+  pk_columns: Divisions_Pk_Columns_Input;
 };
 
 
@@ -8012,6 +8538,22 @@ export type Mutation_RootUpdate_Teams_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Teams_OldArgs = {
+  _inc?: Maybe<Teams_Old_Inc_Input>;
+  _set?: Maybe<Teams_Old_Set_Input>;
+  where: Teams_Old_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Teams_Old_By_PkArgs = {
+  _inc?: Maybe<Teams_Old_Inc_Input>;
+  _set?: Maybe<Teams_Old_Set_Input>;
+  pk_columns: Teams_Old_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_UserPreferencesArgs = {
   _set?: Maybe<UserPreferences_Set_Input>;
   where: UserPreferences_Bool_Exp;
@@ -8166,6 +8708,12 @@ export type Query_Root = {
   Breaks_aggregate: Breaks_Aggregate;
   /** fetch data from the table: "Breaks" using primary key columns */
   Breaks_by_pk?: Maybe<Breaks>;
+  /** fetch data from the table: "Divisions" */
+  Divisions: Array<Divisions>;
+  /** fetch aggregated fields from the table: "Divisions" */
+  Divisions_aggregate: Divisions_Aggregate;
+  /** fetch data from the table: "Divisions" using primary key columns */
+  Divisions_by_pk?: Maybe<Divisions>;
   /** An array relationship */
   Events: Array<Events>;
   /** An aggregate relationship */
@@ -8250,6 +8798,12 @@ export type Query_Root = {
   Teams_aggregate: Teams_Aggregate;
   /** fetch data from the table: "Teams" using primary key columns */
   Teams_by_pk?: Maybe<Teams>;
+  /** fetch data from the table: "Teams_old" */
+  Teams_old: Array<Teams_Old>;
+  /** fetch aggregated fields from the table: "Teams_old" */
+  Teams_old_aggregate: Teams_Old_Aggregate;
+  /** fetch data from the table: "Teams_old" using primary key columns */
+  Teams_old_by_pk?: Maybe<Teams_Old>;
   /** fetch data from the table: "UserPreferences" */
   UserPreferences: Array<UserPreferences>;
   /** fetch aggregated fields from the table: "UserPreferences" */
@@ -8384,6 +8938,29 @@ export type Query_RootBreaks_AggregateArgs = {
 
 export type Query_RootBreaks_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootDivisionsArgs = {
+  distinct_on?: Maybe<Array<Divisions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Divisions_Order_By>>;
+  where?: Maybe<Divisions_Bool_Exp>;
+};
+
+
+export type Query_RootDivisions_AggregateArgs = {
+  distinct_on?: Maybe<Array<Divisions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Divisions_Order_By>>;
+  where?: Maybe<Divisions_Bool_Exp>;
+};
+
+
+export type Query_RootDivisions_By_PkArgs = {
+  short_code: Scalars['String'];
 };
 
 
@@ -8706,6 +9283,31 @@ export type Query_RootTeams_AggregateArgs = {
 
 
 export type Query_RootTeams_By_PkArgs = {
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
+  start_year: Scalars['smallint'];
+};
+
+
+export type Query_RootTeams_OldArgs = {
+  distinct_on?: Maybe<Array<Teams_Old_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Old_Order_By>>;
+  where?: Maybe<Teams_Old_Bool_Exp>;
+};
+
+
+export type Query_RootTeams_Old_AggregateArgs = {
+  distinct_on?: Maybe<Array<Teams_Old_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Old_Order_By>>;
+  where?: Maybe<Teams_Old_Bool_Exp>;
+};
+
+
+export type Query_RootTeams_Old_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -8870,6 +9472,20 @@ export type Query_RootUser_Role_By_PkArgs = {
   value: Scalars['String'];
 };
 
+
+/** Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'. */
+export type Smallint_Comparison_Exp = {
+  _eq?: Maybe<Scalars['smallint']>;
+  _gt?: Maybe<Scalars['smallint']>;
+  _gte?: Maybe<Scalars['smallint']>;
+  _in?: Maybe<Array<Scalars['smallint']>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _lt?: Maybe<Scalars['smallint']>;
+  _lte?: Maybe<Scalars['smallint']>;
+  _neq?: Maybe<Scalars['smallint']>;
+  _nin?: Maybe<Array<Scalars['smallint']>>;
+};
+
 export type Subscription_Root = {
   __typename?: 'subscription_root';
   /** An array relationship */
@@ -8896,6 +9512,12 @@ export type Subscription_Root = {
   Breaks_aggregate: Breaks_Aggregate;
   /** fetch data from the table: "Breaks" using primary key columns */
   Breaks_by_pk?: Maybe<Breaks>;
+  /** fetch data from the table: "Divisions" */
+  Divisions: Array<Divisions>;
+  /** fetch aggregated fields from the table: "Divisions" */
+  Divisions_aggregate: Divisions_Aggregate;
+  /** fetch data from the table: "Divisions" using primary key columns */
+  Divisions_by_pk?: Maybe<Divisions>;
   /** An array relationship */
   Events: Array<Events>;
   /** An aggregate relationship */
@@ -8980,6 +9602,12 @@ export type Subscription_Root = {
   Teams_aggregate: Teams_Aggregate;
   /** fetch data from the table: "Teams" using primary key columns */
   Teams_by_pk?: Maybe<Teams>;
+  /** fetch data from the table: "Teams_old" */
+  Teams_old: Array<Teams_Old>;
+  /** fetch aggregated fields from the table: "Teams_old" */
+  Teams_old_aggregate: Teams_Old_Aggregate;
+  /** fetch data from the table: "Teams_old" using primary key columns */
+  Teams_old_by_pk?: Maybe<Teams_Old>;
   /** fetch data from the table: "UserPreferences" */
   UserPreferences: Array<UserPreferences>;
   /** fetch aggregated fields from the table: "UserPreferences" */
@@ -9114,6 +9742,29 @@ export type Subscription_RootBreaks_AggregateArgs = {
 
 export type Subscription_RootBreaks_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootDivisionsArgs = {
+  distinct_on?: Maybe<Array<Divisions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Divisions_Order_By>>;
+  where?: Maybe<Divisions_Bool_Exp>;
+};
+
+
+export type Subscription_RootDivisions_AggregateArgs = {
+  distinct_on?: Maybe<Array<Divisions_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Divisions_Order_By>>;
+  where?: Maybe<Divisions_Bool_Exp>;
+};
+
+
+export type Subscription_RootDivisions_By_PkArgs = {
+  short_code: Scalars['String'];
 };
 
 
@@ -9436,6 +10087,31 @@ export type Subscription_RootTeams_AggregateArgs = {
 
 
 export type Subscription_RootTeams_By_PkArgs = {
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
+  start_year: Scalars['smallint'];
+};
+
+
+export type Subscription_RootTeams_OldArgs = {
+  distinct_on?: Maybe<Array<Teams_Old_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Old_Order_By>>;
+  where?: Maybe<Teams_Old_Bool_Exp>;
+};
+
+
+export type Subscription_RootTeams_Old_AggregateArgs = {
+  distinct_on?: Maybe<Array<Teams_Old_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Teams_Old_Order_By>>;
+  where?: Maybe<Teams_Old_Bool_Exp>;
+};
+
+
+export type Subscription_RootTeams_Old_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -10655,7 +11331,7 @@ export type GetChatUserQuery = (
 );
 
 export type GetTeamDataQueryVariables = Exact<{
-  year: Scalars['Int'];
+  year: Scalars['smallint'];
   sport: Scalars['String'];
 }>;
 
@@ -10664,7 +11340,20 @@ export type GetTeamDataQuery = (
   { __typename?: 'query_root' }
   & { Teams: Array<(
     { __typename?: 'Teams' }
-    & Pick<Teams, 'name' | 'sport' | 'color' | 'color_secondary' | 'year_end' | 'year_start' | 'short_name'>
+    & Pick<Teams, 'name' | 'city' | 'color' | 'color_secondary' | 'short_code'>
+  )> }
+);
+
+export type GetDivisionDataQueryVariables = Exact<{
+  sport: Scalars['String'];
+}>;
+
+
+export type GetDivisionDataQuery = (
+  { __typename?: 'query_root' }
+  & { Divisions: Array<(
+    { __typename?: 'Divisions' }
+    & Pick<Divisions, 'short_code' | 'name' | 'color' | 'color_secondary'>
   )> }
 );
 
@@ -12406,15 +13095,15 @@ export type GetChatUserQueryHookResult = ReturnType<typeof useGetChatUserQuery>;
 export type GetChatUserLazyQueryHookResult = ReturnType<typeof useGetChatUserLazyQuery>;
 export type GetChatUserQueryResult = Apollo.QueryResult<GetChatUserQuery, GetChatUserQueryVariables>;
 export const GetTeamDataDocument = gql`
-    query GetTeamData($year: Int!, $sport: String!) {
-  Teams(where: {year_start: {_lte: $year}, sport: {_eq: $sport}}) {
+    query GetTeamData($year: smallint!, $sport: String!) {
+  Teams(
+    where: {sport: {_eq: $sport}, _and: [{start_year: {_lte: $year}}, {end_year: {_gte: $year}}]}
+  ) {
     name
-    sport
+    city
     color
     color_secondary
-    year_end
-    year_start
-    short_name
+    short_code
   }
 }
     `;
@@ -12447,6 +13136,44 @@ export function useGetTeamDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetTeamDataQueryHookResult = ReturnType<typeof useGetTeamDataQuery>;
 export type GetTeamDataLazyQueryHookResult = ReturnType<typeof useGetTeamDataLazyQuery>;
 export type GetTeamDataQueryResult = Apollo.QueryResult<GetTeamDataQuery, GetTeamDataQueryVariables>;
+export const GetDivisionDataDocument = gql`
+    query GetDivisionData($sport: String!) {
+  Divisions(where: {sport: {_eq: $sport}}) {
+    short_code
+    name
+    color
+    color_secondary
+  }
+}
+    `;
+
+/**
+ * __useGetDivisionDataQuery__
+ *
+ * To run a query within a React component, call `useGetDivisionDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDivisionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDivisionDataQuery({
+ *   variables: {
+ *      sport: // value for 'sport'
+ *   },
+ * });
+ */
+export function useGetDivisionDataQuery(baseOptions: Apollo.QueryHookOptions<GetDivisionDataQuery, GetDivisionDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDivisionDataQuery, GetDivisionDataQueryVariables>(GetDivisionDataDocument, options);
+      }
+export function useGetDivisionDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDivisionDataQuery, GetDivisionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDivisionDataQuery, GetDivisionDataQueryVariables>(GetDivisionDataDocument, options);
+        }
+export type GetDivisionDataQueryHookResult = ReturnType<typeof useGetDivisionDataQuery>;
+export type GetDivisionDataLazyQueryHookResult = ReturnType<typeof useGetDivisionDataLazyQuery>;
+export type GetDivisionDataQueryResult = Apollo.QueryResult<GetDivisionDataQuery, GetDivisionDataQueryVariables>;
 export const SearchPlayersDocument = gql`
     query SearchPlayers($input: String!) {
   Players(where: {name: {_ilike: $input}}) {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 
@@ -15,7 +14,6 @@ import {
   Box,
   Select,
   Textarea,
-  Spinner,
   Heading,
   Text,
 } from '@chakra-ui/react';
@@ -26,9 +24,9 @@ import {
   UpdateBreakMutation,
   useInsertBreakMutation,
   useUpdateBreakMutation,
-  useGetInventoryQuery,
   useUpdateInventoryBreakMutation,
   useGetTeamDataLazyQuery,
+  useGetDivisionDataLazyQuery,
 } from '@generated/graphql';
 
 import { auth, functions } from '@config/firebase';
@@ -37,6 +35,7 @@ import { BreakTypeValues } from '@config/values';
 
 import ImageUploader from '@components/ImageUploader';
 import AutocompleteEvents from '@components/AutocompleteEvents';
+import LoadingSpinner from '@components/LoadingSpinner';
 
 import { TInventoryAutcomplete } from '@customTypes/inventory';
 import {
@@ -46,96 +45,14 @@ import {
   TAddBreakFormProps,
 } from '@customTypes/breaks';
 
-const schema = yup.object().shape({
-  title: yup.string().required('Required'),
-  description: yup.string().required('Required'),
-  event_id: yup.string().required('Required'),
-  break_type: yup.string().required('Required'),
-  image: yup.string().required('Image is Required'),
-  spots: yup
-    .number()
-    .transform((cv) => (isNaN(cv) ? undefined : cv))
-    .when('break_type', {
-      is: (val: string) => val && val !== Break_Type_Enum.Personal,
-      then: yup
-        .number()
-        .typeError('Must be a number')
-        .integer('Must be an whole number')
-        .min(1, 'Must be greater than 0')
-        .required('Required'),
-    }),
-  teams_per_spot: yup
-    .number()
-    .transform((cv) => (isNaN(cv) ? undefined : cv))
-    .when('break_type', {
-      is: (val: string) =>
-        val &&
-        (val === Break_Type_Enum.RandomTeam ||
-          val === Break_Type_Enum.RandomDivision),
-      then: yup
-        .number()
-        .typeError('Must be a number')
-        .integer('Must be an whole number')
-        .min(1, 'Must be greater than 0')
-        .required('Required'),
-    }),
-  price: yup
-    .number()
-    .transform((cv) => (isNaN(cv) ? undefined : cv))
-    .when('break_type', {
-      is: (val: string) =>
-        val &&
-        val !== Break_Type_Enum.PickYourTeam &&
-        val !== Break_Type_Enum.PickYourDivision,
-      then: yup
-        .number()
-        .typeError('Must be a number')
-        .test('is-currency', 'Must be a valid price', (value) => {
-          const currRegex = /^[1-9]\d*(\.\d{1,2})?$/;
-
-          return value ? currRegex.test(String(value)) : false;
-        })
-        .min(0, 'Must be greater than 0')
-        .required('Required'),
-    }),
-  lineItems: yup.array().of(
-    yup.object().shape({
-      value: yup.string().required('Required'),
-      cost: yup
-        .number()
-        .typeError('Must be a number')
-        .test('is-currency', 'Must be a valid price', (value) => {
-          const currRegex = /^[1-9]\d*(\.\d{1,2})?$/;
-
-          return value ? currRegex.test(String(value)) : false;
-        })
-        .min(0, 'Must be greater than 0')
-        .required('Required'),
-    }),
-  ),
-  datasetItems: yup.array().of(
-    yup.object().shape({
-      name: yup.string().required('Required'),
-      short_name: yup.string().required('Required'),
-      color: yup
-        .string()
-        .test('is-color', 'Must be a valid color', (value) => {
-          const currRegex = /^#[a-fA-F0-9]{6}$/;
-
-          return value ? currRegex.test(String(value)) : false;
-        })
-        .required('Required'),
-      color_alt: yup
-        .string()
-        .test('is-color', 'Must be a valid color', (value) => {
-          const currRegex = /^#[a-fA-F0-9]{6}$/;
-
-          return value ? currRegex.test(String(value)) : false;
-        })
-        .required('Required'),
-    }),
-  ),
-});
+import { schema } from './AddBreakForm.schema';
+import useGetInventory from './use-get-inventory.hook';
+import {
+  getNewDatasetItems,
+  getNewLineItems,
+  getQueryVars,
+  getSpotOptions,
+} from './AddBreakForm.utils';
 
 /**
  *
@@ -202,41 +119,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     }
   };
 
-  const {
-    loading: inventoryQueryLoading,
-    error: inventoryQueryError,
-    data: inventoryQueryData,
-  } = useGetInventoryQuery({
-    onCompleted: (data) => {
-      const pickerItems: TInventoryAutcomplete[] = [];
-      const selectedItems: TInventoryAutcomplete[] = [];
-
-      for (let idx = 0; idx < data.Inventory?.length; idx++) {
-        if (data.Inventory[idx].break_id === null) {
-          pickerItems.push({
-            label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
-            value: data.Inventory[idx].id,
-            year: data.Inventory[idx].Product?.year,
-            sport: data.Inventory[idx].Product?.category,
-          });
-        }
-
-        if (data.Inventory[idx].break_id === break_data?.id) {
-          pickerItems.push({
-            label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
-            value: data.Inventory[idx].id,
-            year: data.Inventory[idx].Product?.year,
-            sport: data.Inventory[idx].Product?.category,
-          });
-
-          selectedItems.push(pickerItems[pickerItems.length - 1]);
-        }
-      }
-
-      setPickerInventory(pickerItems);
-      setSelectedInventory(selectedItems);
-    },
-  });
+  // custom hook to grab current inventory
+  useGetInventory(setPickerInventory, setSelectedInventory, break_data);
 
   const [
     addBreak,
@@ -274,6 +158,11 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     getTeams,
     { loading: teamDataLoading, data: teamData },
   ] = useGetTeamDataLazyQuery();
+
+  const [
+    getDivisions,
+    { loading: divisionDataLoading, data: divisionData },
+  ] = useGetDivisionDataLazyQuery();
 
   const {
     control,
@@ -326,99 +215,74 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
 
   // Change Line or Data Items
   useEffect(() => {
-    // Set line items for pick your team or division
-    if (
-      !isNaN(Number(watchSpots)) &&
-      (watchType === Break_Type_Enum.PickYourTeam ||
-        watchType === Break_Type_Enum.PickYourDivision)
-    ) {
-      const newLineItems = getValues('lineItems').slice(0, Number(watchSpots));
-      const newLinesToAdd = Number(watchSpots) - newLineItems.length;
-
-      for (let i = 0; i < newLinesToAdd; i++) {
-        newLineItems.push({ value: '', cost: 0 });
-      }
-
-      replaceLineItemFields(newLineItems);
-    } else {
-      replaceLineItemFields([]);
-    }
-
-    // Set line items for random team or division
-    if (
-      !isNaN(Number(watchSpots)) &&
-      !isNaN(Number(watchTeamsPerSpot)) &&
-      (watchType === Break_Type_Enum.RandomDivision ||
-        watchType === Break_Type_Enum.RandomTeam)
-    ) {
-      let newDatasetItems: TDatasetLineItem[], newDatasetLinesToAdd;
-
-      // Check if team data exists and this is random team
-      if (
-        teamData?.Teams &&
-        teamData?.Teams?.length > 0 &&
-        watchType === Break_Type_Enum.RandomTeam
-      ) {
-        // Use empty array if team data exists
-        newDatasetItems = [];
-        newDatasetLinesToAdd = Number(watchSpots) * Number(watchTeamsPerSpot);
-      } else {
-        // If team data does not exist, re-use previous items
-        newDatasetItems = getValues('datasetItems').slice(
-          0,
-          Number(watchSpots) * Number(watchTeamsPerSpot),
+    replaceLineItemFields([]);
+    replaceDatasetFields([]);
+    switch (watchType) {
+      case Break_Type_Enum.PickYourTeam: {
+        return replaceLineItemFields(
+          getNewLineItems(teamData?.Teams as TBreakLineItem[], [
+            'short_code',
+            'city+name',
+            'cost',
+          ]),
         );
-
-        newDatasetLinesToAdd =
-          Number(watchSpots) * Number(watchTeamsPerSpot) -
-          newDatasetItems.length;
       }
-
-      for (let i = 0; i < newDatasetLinesToAdd; i++) {
-        if (
-          teamData?.Teams &&
-          !!teamData?.Teams[i] &&
-          watchType === Break_Type_Enum.RandomTeam
-        ) {
-          newDatasetItems.push({
-            name: teamData?.Teams[i].name,
-            short_name: teamData?.Teams[i].short_name,
-            color: teamData?.Teams[i].color,
-            color_alt: teamData?.Teams[i].color_secondary,
-          });
-        } else {
-          newDatasetItems.push({
-            name: '',
-            short_name: '',
-            color: '',
-            color_alt: '',
-          });
-        }
+      case Break_Type_Enum.PickYourDivision: {
+        return replaceLineItemFields(
+          getNewLineItems(divisionData?.Divisions as TBreakLineItem[], [
+            'name',
+            'cost',
+          ]),
+        );
       }
+      case Break_Type_Enum.RandomTeam: {
+        teamData &&
+          watchSpots &&
+          setValue(
+            'teams_per_spot',
+            Number(teamData?.Teams.length / watchSpots),
+          );
+        console.log('1', teamData?.Teams?.length);
+        return replaceDatasetFields(
+          getNewDatasetItems(
+            teamData?.Teams as TDatasetLineItem[],
+            (Number(watchSpots) * Number(watchTeamsPerSpot)) as number,
+            ['short_code', 'city', 'name', 'color', 'color_secondary'],
+          ),
+        );
+      }
+      case Break_Type_Enum.RandomDivision: {
+        divisionData &&
+          watchSpots &&
+          setValue(
+            'teams_per_spot',
+            Number(divisionData?.Divisions.length / watchSpots),
+          );
 
-      replaceDatasetFields(newDatasetItems);
-    } else {
-      replaceDatasetFields([]);
+        return replaceDatasetFields(
+          getNewDatasetItems(
+            divisionData?.Divisions as TDatasetLineItem[],
+            divisionData?.Divisions.length as number,
+            ['short_code', 'name', 'color', 'color_secondary'],
+          ),
+        );
+      }
+      default: {
+        replaceLineItemFields([]);
+        replaceDatasetFields([]);
+      }
     }
-  }, [watchSpots, watchType, watchTeamsPerSpot, teamData]);
+  }, [watchSpots, watchType, watchTeamsPerSpot, teamData, divisionData]);
 
   useEffect(() => {
-    if (
-      !isNaN(Number(watchSpots)) &&
-      !isNaN(Number(watchTeamsPerSpot)) &&
-      watchType === Break_Type_Enum.RandomTeam &&
-      selectedInventory.length > 0
-    ) {
-      getTeams({
-        variables: {
-          year: parseInt(selectedInventory[selectedInventory.length - 1].year),
-          sport: selectedInventory[
-            selectedInventory.length - 1
-          ].sport.toLowerCase(),
-        },
-      });
+    setValue('spots', null);
+    setValue('teams_per_spot', null);
+    if (selectedInventory.length > 0) {
+      const { sport, year } = getQueryVars(selectedInventory);
+      getTeams({ variables: { year, sport } });
+      getDivisions({ variables: { sport } });
     }
-  }, [selectedInventory, watchType, watchSpots, watchTeamsPerSpot]);
+  }, [selectedInventory, watchType]);
 
   /**
    * Handle form submission
@@ -429,7 +293,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
       setLoading(true);
 
       setBreakLineItems(result.lineItems);
-
+      console.log(result);
       const submitData = {
         event_id: result.event_id,
         title: result.title,
@@ -445,10 +309,11 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
         dataset:
           result.datasetItems.length > 0
             ? result.datasetItems.map((item) => ({
+                city: item.city || '',
                 name: item.name,
-                shortName: item.short_name,
+                short_code: item.short_code,
                 color: item.color,
-                colorAlt: item.color_alt,
+                color_secondary: item.color_secondary,
               }))
             : null,
       };
@@ -472,26 +337,9 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     }
   };
 
-  console.log(teamData);
-
   return (
     <Box position="relative">
-      {isLoading && (
-        <Flex
-          position="absolute"
-          bg="white"
-          top="0"
-          left="0"
-          width="100%"
-          height="100%"
-          opacity="0.7"
-          zIndex="1"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Spinner size="lg" />
-        </Flex>
-      )}
+      {isLoading && <LoadingSpinner />}
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
         <Box mb={5}>
           <ImageUploader
@@ -576,42 +424,55 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
         </Flex>
 
         <Flex mx={gridSpace.parent} mb={10}>
-          {(watchType === Break_Type_Enum.HitDraft ||
-            watchType === Break_Type_Enum.Personal ||
-            watchType === Break_Type_Enum.RandomDivision ||
-            watchType === Break_Type_Enum.RandomTeam) && (
-            <FormControl
-              isInvalid={!!errors.price}
-              width={1 / 3}
-              px={gridSpace.child}
-            >
-              <FormLabel>Price ($)</FormLabel>
-              <Input
-                {...register('price')}
-                isDisabled={operation === 'UPDATE'}
-              />
-              <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
-            </FormControl>
-          )}
+          {/* PRICE INPUT (GLOBAL) */}
+          {watchType &&
+            watchType !== Break_Type_Enum.PickYourTeam &&
+            watchType !== Break_Type_Enum.PickYourDivision && (
+              <FormControl
+                isInvalid={!!errors.price}
+                width={1 / 3}
+                px={gridSpace.child}
+              >
+                <FormLabel>Price ($)</FormLabel>
+                <Input
+                  {...register('price')}
+                  isDisabled={operation === 'UPDATE'}
+                />
+                <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
+              </FormControl>
+            )}
 
-          {(watchType === Break_Type_Enum.HitDraft ||
-            watchType === Break_Type_Enum.PickYourDivision ||
-            watchType === Break_Type_Enum.PickYourTeam ||
-            watchType === Break_Type_Enum.RandomDivision ||
-            watchType === Break_Type_Enum.RandomTeam) && (
-            <FormControl
-              isInvalid={!!errors.spots}
-              width={1 / 3}
-              px={gridSpace.child}
-            >
-              <FormLabel>Spots</FormLabel>
-              <Input
-                {...register('spots')}
-                isDisabled={operation === 'UPDATE'}
-              />
-              <FormErrorMessage>{errors.spots?.message}</FormErrorMessage>
-            </FormControl>
-          )}
+          {/* SPOTS INPUT */}
+          {watchType &&
+            watchType !== Break_Type_Enum.Personal &&
+            watchType !== Break_Type_Enum.PickYourTeam &&
+            watchType !== Break_Type_Enum.PickYourDivision && (
+              <FormControl
+                isInvalid={!!errors.spots}
+                width={1 / 3}
+                px={gridSpace.child}
+              >
+                <FormLabel>Spots</FormLabel>
+                <Select
+                  {...register('spots')}
+                  value={watchSpots ? watchSpots : ''}
+                  isDisabled={operation === 'UPDATE'}
+                >
+                  <option value="">Select...</option>
+                  {getSpotOptions(
+                    watchType,
+                    watchType === Break_Type_Enum.RandomTeam
+                      ? (teamData?.Teams.length as number)
+                      : (divisionData?.Divisions.length as number),
+                  ).map((num) => (
+                    <option key={`spots-${num}`} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </Select>
+                <FormErrorMessage>{errors.spots?.message}</FormErrorMessage>
+              </FormControl>
+            )}
 
           {(watchType === Break_Type_Enum.RandomDivision ||
             watchType === Break_Type_Enum.RandomTeam) && (
@@ -620,11 +481,15 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
               width={1 / 3}
               px={gridSpace.child}
             >
-              <FormLabel>Teams Per Spot</FormLabel>
-              <Input
-                {...register('teams_per_spot')}
-                isDisabled={operation === 'UPDATE'}
-              />
+              <FormLabel>
+                {`${
+                  watchType === Break_Type_Enum.RandomTeam
+                    ? 'Teams'
+                    : 'Divisions'
+                }`}{' '}
+                per spot
+              </FormLabel>
+              <Input {...register('teams_per_spot')} isDisabled />
               <FormErrorMessage>
                 {errors.teams_per_spot?.message}
               </FormErrorMessage>
@@ -632,14 +497,67 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
           )}
         </Flex>
 
+        {/* RANDOM TEAMS / RANDOM DIVISION */}
         {watchDatasetItems?.length > 0 && (
           <Box mb={10}>
             <Heading size="sm" mb={2}>
-              Randomization Items
+              Teams/Divisions List
             </Heading>
             <Box mb={4}>
               {datasetFields.map((field, index) => (
                 <Flex key={field.id} mx={-1}>
+                  <Box width="75px" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.datasetItems &&
+                        !!errors.datasetItems[index]?.short_code
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Short"
+                        {...register(
+                          `datasetItems.${index}.short_code` as const,
+                        )}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+
+                  {watchType === Break_Type_Enum.RandomTeam && (
+                    <Box flex="1" px={1}>
+                      <FormControl
+                        isInvalid={
+                          errors.datasetItems &&
+                          !!errors.datasetItems[index]?.city
+                        }
+                        mb={2}
+                      >
+                        <Input
+                          placeholder="City"
+                          {...register(`datasetItems.${index}.city` as const)}
+                          isDisabled={operation === 'UPDATE'}
+                        />
+                      </FormControl>
+                    </Box>
+                  )}
+
+                  <Box flex="1" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.datasetItems &&
+                        !!errors.datasetItems[index]?.name
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Team/Division"
+                        {...register(`datasetItems.${index}.name` as const)}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+
                   <Box width="110px" px={1}>
                     <FormControl
                       isInvalid={
@@ -660,49 +578,15 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                     <FormControl
                       isInvalid={
                         errors.datasetItems &&
-                        !!errors.datasetItems[index]?.color_alt
+                        !!errors.datasetItems[index]?.color_secondary
                       }
                       mb={2}
                     >
                       <Input
                         placeholder="Color 2"
                         {...register(
-                          `datasetItems.${index}.color_alt` as const,
+                          `datasetItems.${index}.color_secondary` as const,
                         )}
-                        isDisabled={operation === 'UPDATE'}
-                      />
-                    </FormControl>
-                  </Box>
-
-                  <Box width="100px" px={1}>
-                    <FormControl
-                      isInvalid={
-                        errors.datasetItems &&
-                        !!errors.datasetItems[index]?.short_name
-                      }
-                      mb={2}
-                    >
-                      <Input
-                        placeholder="Short"
-                        {...register(
-                          `datasetItems.${index}.short_name` as const,
-                        )}
-                        isDisabled={operation === 'UPDATE'}
-                      />
-                    </FormControl>
-                  </Box>
-
-                  <Box flex="1" px={1}>
-                    <FormControl
-                      isInvalid={
-                        errors.datasetItems &&
-                        !!errors.datasetItems[index]?.name
-                      }
-                      mb={2}
-                    >
-                      <Input
-                        placeholder="Team/Division"
-                        {...register(`datasetItems.${index}.name` as const)}
                         isDisabled={operation === 'UPDATE'}
                       />
                     </FormControl>
@@ -718,37 +602,56 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             <Heading size="sm" mb={2}>
               Line Items
             </Heading>
-            {lineItemFields.map((field, index) => (
-              <Flex key={field.id} mx={gridSpace.parent} mb={2}>
-                <FormControl
-                  isInvalid={
-                    errors.lineItems && !!errors.lineItems[index]?.value
-                  }
-                  width="70%"
-                  px={gridSpace.child}
-                >
-                  <Input
-                    placeholder="Team/Division"
-                    {...register(`lineItems.${index}.value` as const)}
-                    isDisabled={operation === 'UPDATE'}
-                  />
-                </FormControl>
-                <FormControl
-                  isInvalid={
-                    errors.lineItems && !!errors.lineItems[index]?.cost
-                  }
-                  width="30%"
-                  px={gridSpace.child}
-                >
-                  <Input
-                    placeholder="Cost"
-                    {...register(`lineItems.${index}.cost` as const)}
-                    textAlign="right"
-                    isDisabled={operation === 'UPDATE'}
-                  />
-                </FormControl>
-              </Flex>
-            ))}
+            <Box mb={4}>
+              {lineItemFields.map((field, index) => (
+                <Flex key={field.id} mx={-1}>
+                  <Box width="85px" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.lineItems &&
+                        !!errors.lineItems[index]?.short_code
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Short"
+                        {...register(`lineItems.${index}.short_code` as const)}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+                  <Box flex="1" px={1}>
+                    <FormControl
+                      isInvalid={
+                        errors.lineItems && !!errors.lineItems[index]?.name
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Team/Division"
+                        {...register(`lineItems.${index}.name` as const)}
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+                  <Box width="120px">
+                    <FormControl
+                      isInvalid={
+                        errors.lineItems && !!errors.lineItems[index]?.cost
+                      }
+                      mb={2}
+                    >
+                      <Input
+                        placeholder="Cost"
+                        {...register(`lineItems.${index}.cost` as const)}
+                        textAlign="right"
+                        isDisabled={operation === 'UPDATE'}
+                      />
+                    </FormControl>
+                  </Box>
+                </Flex>
+              ))}
+            </Box>
           </Box>
         )}
 

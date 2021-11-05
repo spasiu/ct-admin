@@ -1,15 +1,19 @@
 import { Break_Type_Enum, Scalars } from '@generated/graphql';
 
 export type TBreakLineItem = {
-  value: string;
+  name: string;
+  short_code: string;
   cost: number;
+  city?: string;
 };
 
 export type TDatasetLineItem = {
   name: string;
-  short_name: string;
+  short_code: string;
   color: string;
-  color_alt: string;
+  color_secondary: string;
+  city?: string;
+  cost?: number;
 };
 
 export type TAddBreakFormData = {
@@ -19,34 +23,36 @@ export type TAddBreakFormData = {
   event_id: string;
   image: string;
   break_type: Break_Type_Enum;
-  spots: number;
+  spots: number | null;
   teams_per_spot?: number | null;
   price: number;
   lineItems: TBreakLineItem[];
   datasetItems: TDatasetLineItem[];
 };
 
+export type TBreakData = {
+  id?: string;
+  title: string;
+  description: string;
+  image: string;
+  break_type: string;
+  spots: number;
+  teams_per_spot?: number | null | undefined;
+  price?: number | null;
+  line_items?: TBreakLineItem[];
+  dataset?: TDatasetLineItem[];
+  status: string;
+  BreakProductItems: {
+    id: string;
+    title: string;
+    price: number;
+  }[];
+};
+
 export type TAddBreakFormProps = {
   event_id?: string;
   event_title?: string;
-  break_data?: {
-    id?: string;
-    title: string;
-    description: string;
-    image: string;
-    break_type: string;
-    spots: number;
-    teams_per_spot?: number | null | undefined;
-    price?: number | null;
-    line_items?: TBreakLineItem[];
-    dataset?: TDatasetLineItem[];
-    status: string;
-    BreakProductItems: {
-      id: string;
-      title: string;
-      price: number;
-    }[];
-  };
+  break_data?: TBreakData;
   callback: () => void;
 };
 
