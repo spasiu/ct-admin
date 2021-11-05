@@ -71,7 +71,7 @@ export const schema = yup.object().shape({
   datasetItems: yup.array().of(
     yup.object().shape({
       name: yup.string().required('Required'),
-      city: yup.string().required('Required'),
+      city: yup.string(),
       short_code: yup.string().required('Required'),
       color: yup
         .string()

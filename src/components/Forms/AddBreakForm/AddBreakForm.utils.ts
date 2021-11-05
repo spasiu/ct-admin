@@ -2,26 +2,12 @@ import { TBreakLineItem, TDatasetLineItem } from '@customTypes/breaks';
 import { TInventoryAutcomplete } from '@customTypes/inventory';
 import { Break_Type_Enum } from '@generated/graphql';
 
-export const getSpotOptions = (
-  watchType: string,
-  numOfElements: number,
-): number[] => {
-  if (watchType === Break_Type_Enum.HitDraft) {
-    return [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
-  } else {
-    const factorsArr = [];
-    for (let i = numOfElements; i > 1; i--) {
-      if (numOfElements % i === 0) factorsArr.push(i);
-    }
-    return factorsArr;
+const getValidFactors = (num: number, maxTeams: number): number[] => {
+  const factors = [] as number[];
+  for (let i = num; i > 0; i--) {
+    if (num % i === 0) factors.push(i);
   }
-};
-
-export const getQueryVars = (selectedInventory: TInventoryAutcomplete[]) => {
-  return {
-    sport: selectedInventory[selectedInventory.length - 1].sport.toLowerCase(),
-    year: parseInt(selectedInventory[selectedInventory.length - 1].year),
-  };
+  return factors.filter((val) => num / val < maxTeams);
 };
 
 const buildDataObj = (dataItem: any, keys: string[]) => {
@@ -41,14 +27,41 @@ const buildDataObj = (dataItem: any, keys: string[]) => {
   return item;
 };
 
+export const getSpotOptions = (
+  watchType: string,
+  numOfElements: number,
+): number[] => {
+  let factorsArr = [] as number[];
+  switch (watchType) {
+    case Break_Type_Enum.HitDraft: {
+      factorsArr = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+      break;
+    }
+    case Break_Type_Enum.RandomDivision: {
+      factorsArr = [numOfElements];
+      break;
+    }
+    case Break_Type_Enum.RandomTeam: {
+      factorsArr = getValidFactors(numOfElements, 4);
+      break;
+    }
+  }
+  return factorsArr;
+};
+
+export const getQueryVars = (selectedInventory: TInventoryAutcomplete[]) => {
+  return {
+    sport: selectedInventory[selectedInventory.length - 1].sport.toLowerCase(),
+    year: parseInt(selectedInventory[selectedInventory.length - 1].year),
+  };
+};
+
 export const getNewLineItems = (data: TBreakLineItem[], keys: string[]) => {
   const newLineItems = [];
-
   for (let i = 0; i < data?.length || 0; i++) {
     const dataItem = buildDataObj(data?.[i], keys) as TBreakLineItem;
     newLineItems.push(dataItem);
   }
-
   return newLineItems || [];
 };
 
