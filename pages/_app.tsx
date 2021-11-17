@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 import { auth } from '@config/firebase';
+import { getClient } from 'src/graphql/client';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const [token, setToken] = useState('');
@@ -37,22 +38,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     }
   }, [router]);
 
-  const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-    cache: new InMemoryCache({ addTypename: false }),
-    defaultOptions: {
-      query: {
-        fetchPolicy: 'no-cache',
-      },
-      watchQuery: {
-        fetchPolicy: 'no-cache',
-      },
-    },
-  });
-
+  const client = getClient(token);
+  
   return (
     <ChakraProvider theme={theme}>
       <ApolloProvider client={client}>

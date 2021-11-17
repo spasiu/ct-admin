@@ -1687,6 +1687,7 @@ export type Divisions_Order_By = {
 /** primary key columns input for table: Divisions */
 export type Divisions_Pk_Columns_Input = {
   short_code: Scalars['String'];
+  sport: Scalars['String'];
 };
 
 /** select columns of table "Divisions" */
@@ -7599,6 +7600,7 @@ export type Mutation_RootDelete_DivisionsArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Divisions_By_PkArgs = {
   short_code: Scalars['String'];
+  sport: Scalars['String'];
 };
 
 
@@ -8961,6 +8963,7 @@ export type Query_RootDivisions_AggregateArgs = {
 
 export type Query_RootDivisions_By_PkArgs = {
   short_code: Scalars['String'];
+  sport: Scalars['String'];
 };
 
 
@@ -9765,6 +9768,7 @@ export type Subscription_RootDivisions_AggregateArgs = {
 
 export type Subscription_RootDivisions_By_PkArgs = {
   short_code: Scalars['String'];
+  sport: Scalars['String'];
 };
 
 
@@ -11067,40 +11071,6 @@ export type GetEventsQuery = (
   )> }
 );
 
-export type GetEventByIdQueryVariables = Exact<{
-  id: Scalars['uuid'];
-}>;
-
-
-export type GetEventByIdQuery = (
-  { __typename?: 'query_root' }
-  & { Events_by_pk?: Maybe<(
-    { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
-    & { User: (
-      { __typename?: 'Users' }
-      & Pick<Users, 'id' | 'first_name' | 'last_name'>
-    ), Breaks: Array<(
-      { __typename?: 'Breaks' }
-      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset'>
-      & { BreakProductItems_aggregate: (
-        { __typename?: 'BreakProductItems_aggregate' }
-        & { aggregate?: Maybe<(
-          { __typename?: 'BreakProductItems_aggregate_fields' }
-          & Pick<BreakProductItems_Aggregate_Fields, 'count'>
-        )> }
-      ), BreakProductItems: Array<(
-        { __typename?: 'BreakProductItems' }
-        & Pick<BreakProductItems, 'id' | 'title' | 'price'>
-        & { Order?: Maybe<(
-          { __typename?: 'Orders' }
-          & Pick<Orders, 'id'>
-        )> }
-      )> }
-    )> }
-  )> }
-);
-
 export type GetLiveEventByIdQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -11367,6 +11337,40 @@ export type SearchPlayersQuery = (
   & { Players: Array<(
     { __typename?: 'Players' }
     & Pick<Players, 'id' | 'name'>
+  )> }
+);
+
+export type GetEventByIdSubscriptionVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetEventByIdSubscription = (
+  { __typename?: 'subscription_root' }
+  & { Events_by_pk?: Maybe<(
+    { __typename?: 'Events' }
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
+    & { User: (
+      { __typename?: 'Users' }
+      & Pick<Users, 'id' | 'first_name' | 'last_name' | 'username'>
+    ), Breaks: Array<(
+      { __typename?: 'Breaks' }
+      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset'>
+      & { BreakProductItems_aggregate: (
+        { __typename?: 'BreakProductItems_aggregate' }
+        & { aggregate?: Maybe<(
+          { __typename?: 'BreakProductItems_aggregate_fields' }
+          & Pick<BreakProductItems_Aggregate_Fields, 'count'>
+        )> }
+      ), BreakProductItems: Array<(
+        { __typename?: 'BreakProductItems' }
+        & Pick<BreakProductItems, 'id' | 'title' | 'price'>
+        & { Order?: Maybe<(
+          { __typename?: 'Orders' }
+          & Pick<Orders, 'id'>
+        )> }
+      )> }
+    )> }
   )> }
 );
 
@@ -12453,77 +12457,6 @@ export function useGetEventsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetEventsQueryHookResult = ReturnType<typeof useGetEventsQuery>;
 export type GetEventsLazyQueryHookResult = ReturnType<typeof useGetEventsLazyQuery>;
 export type GetEventsQueryResult = Apollo.QueryResult<GetEventsQuery, GetEventsQueryVariables>;
-export const GetEventByIdDocument = gql`
-    query GetEventById($id: uuid!) {
-  Events_by_pk(id: $id) {
-    id
-    title
-    start_time
-    description
-    status
-    image
-    User {
-      id
-      first_name
-      last_name
-    }
-    Breaks(where: {archived: {_eq: false}}, order_by: {created_at: asc}) {
-      id
-      title
-      break_type
-      price
-      spots
-      description
-      teams_per_spot
-      image
-      line_items
-      status
-      dataset
-      BreakProductItems_aggregate(where: {order_id: {_is_null: true}}) {
-        aggregate {
-          count
-        }
-      }
-      BreakProductItems(order_by: {title: asc}) {
-        id
-        title
-        price
-        Order {
-          id
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetEventByIdQuery__
- *
- * To run a query within a React component, call `useGetEventByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEventByIdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetEventByIdQuery(baseOptions: Apollo.QueryHookOptions<GetEventByIdQuery, GetEventByIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetEventByIdQuery, GetEventByIdQueryVariables>(GetEventByIdDocument, options);
-      }
-export function useGetEventByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventByIdQuery, GetEventByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetEventByIdQuery, GetEventByIdQueryVariables>(GetEventByIdDocument, options);
-        }
-export type GetEventByIdQueryHookResult = ReturnType<typeof useGetEventByIdQuery>;
-export type GetEventByIdLazyQueryHookResult = ReturnType<typeof useGetEventByIdLazyQuery>;
-export type GetEventByIdQueryResult = Apollo.QueryResult<GetEventByIdQuery, GetEventByIdQueryVariables>;
 export const GetLiveEventByIdDocument = gql`
     query GetLiveEventById($id: uuid!) {
   Events_by_pk(id: $id) {
@@ -13210,3 +13143,70 @@ export function useSearchPlayersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type SearchPlayersQueryHookResult = ReturnType<typeof useSearchPlayersQuery>;
 export type SearchPlayersLazyQueryHookResult = ReturnType<typeof useSearchPlayersLazyQuery>;
 export type SearchPlayersQueryResult = Apollo.QueryResult<SearchPlayersQuery, SearchPlayersQueryVariables>;
+export const GetEventByIdDocument = gql`
+    subscription GetEventById($id: uuid!) {
+  Events_by_pk(id: $id) {
+    id
+    title
+    start_time
+    description
+    status
+    image
+    User {
+      id
+      first_name
+      last_name
+      username
+    }
+    Breaks(where: {archived: {_eq: false}}, order_by: {created_at: asc}) {
+      id
+      title
+      break_type
+      price
+      spots
+      description
+      teams_per_spot
+      image
+      line_items
+      status
+      dataset
+      BreakProductItems_aggregate(where: {order_id: {_is_null: true}}) {
+        aggregate {
+          count
+        }
+      }
+      BreakProductItems(order_by: {title: asc}) {
+        id
+        title
+        price
+        Order {
+          id
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetEventByIdSubscription__
+ *
+ * To run a query within a React component, call `useGetEventByIdSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventByIdSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventByIdSubscription({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEventByIdSubscription(baseOptions: Apollo.SubscriptionHookOptions<GetEventByIdSubscription, GetEventByIdSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GetEventByIdSubscription, GetEventByIdSubscriptionVariables>(GetEventByIdDocument, options);
+      }
+export type GetEventByIdSubscriptionHookResult = ReturnType<typeof useGetEventByIdSubscription>;
+export type GetEventByIdSubscriptionResult = Apollo.SubscriptionResult<GetEventByIdSubscription>;

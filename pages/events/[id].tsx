@@ -26,12 +26,12 @@ import {
 } from '@chakra-ui/react';
 
 import {
-  useGetEventByIdQuery,
   useArchiveBreaksByIdMutation,
   useUpdateEventMutation,
   useUpdateBreakMutation,
   Event_Status_Enum,
   Break_Status_Enum,
+  useGetEventByIdSubscription,
 } from '@generated/graphql';
 
 import paths from '@config/paths';
@@ -80,8 +80,7 @@ const EventPage: React.FC = () => {
     loading: eventQueryLoading,
     error: eventQueryError,
     data: eventQueryData,
-    refetch: refetchEvent,
-  } = useGetEventByIdQuery({ variables: { id: eventId } });
+  } = useGetEventByIdSubscription({ variables: { id: eventId } });
 
   const [
     archiveBreak,
@@ -90,11 +89,7 @@ const EventPage: React.FC = () => {
       loading: archiveBreakMutationLoading,
       error: archiveBreakMutationError,
     },
-  ] = useArchiveBreaksByIdMutation({
-    onCompleted: () => {
-      refetchEvent();
-    },
-  });
+  ] = useArchiveBreaksByIdMutation();
 
   const [
     updateEvent,
@@ -103,11 +98,7 @@ const EventPage: React.FC = () => {
       loading: updateMutationLoading,
       error: updateMutationError,
     },
-  ] = useUpdateEventMutation({
-    onCompleted: () => {
-      refetchEvent();
-    },
-  });
+  ] = useUpdateEventMutation();
 
   const [
     updateBreak,
@@ -116,11 +107,7 @@ const EventPage: React.FC = () => {
       loading: updateBreakMutationLoading,
       error: updateBreakMutationError,
     },
-  ] = useUpdateBreakMutation({
-    onCompleted: () => {
-      refetchEvent();
-    },
-  });
+  ] = useUpdateBreakMutation();
 
   // Watch for user changes
   useEffect(() => {
@@ -461,6 +448,7 @@ const EventPage: React.FC = () => {
                             eventQueryData.Events_by_pk?.status ===
                               Event_Status_Enum.Live && (
                               <Button
+                                disabled={brk?.BreakProductItems_aggregate?.aggregate?.count != 0}
                                 colorScheme="green"
                                 size="sm"
                                 height="40px"
@@ -468,9 +456,7 @@ const EventPage: React.FC = () => {
                                 onClick={() => {
                                   startBreak({
                                     breakId: brk.id,
-                                  }).then(() => {
-                                    refetchEvent();
-                                  });
+                                  })
                                 }}
                               >
                                 Start Break
@@ -568,7 +554,6 @@ const EventPage: React.FC = () => {
             break_data={selectedBreak}
             callback={() => {
               setAddBreakModalOpen(false);
-              refetchEvent();
             }}
           />
         </FormModal>
