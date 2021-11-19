@@ -49091,6 +49091,12 @@
             "deprecationReason": null
           },
           {
+            "name": "NOTIFIED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SOLDOUT",
             "description": null,
             "isDeprecated": false,

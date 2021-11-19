@@ -35,6 +35,7 @@ import {
   TAddHitFormData,
   TAddHitFormProps,
 } from '@customTypes/hits';
+import { functions } from '@config/firebase';
 
 const schema = yup.object().shape({
   user_id: yup.string().required('Required'),
@@ -119,6 +120,8 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
     },
   });
 
+  const sendHitNotification = functions.httpsCallable('sendHitNotification');
+
   const [
     insertHit,
     {
@@ -174,6 +177,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
     switch (operation) {
       case 'ADD':
         insertHit({ variables: { data: result } });
+        sendHitNotification({userId: result.user_id, playerName: result.player});
         break;
       case 'UPDATE':
         updateHit({ variables: { id: hit?.id, data: result } });

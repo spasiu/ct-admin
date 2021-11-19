@@ -6802,6 +6802,7 @@ export enum Break_Status_Enum {
   Completed = 'COMPLETED',
   Draft = 'DRAFT',
   Live = 'LIVE',
+  Notified = 'NOTIFIED',
   Soldout = 'SOLDOUT'
 }
 
