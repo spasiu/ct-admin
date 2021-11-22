@@ -480,6 +480,8 @@ const EventPage: React.FC = () => {
                                     onClick={() => {
                                       sendBreakLiveNotification({
                                         breakId: brk.id,
+                                        breakName: brk.title,
+                                        breakerName: eventQueryData.Events_by_pk?.User.username
                                       }).then(() =>
                                         updateBreak({
                                           variables: {
