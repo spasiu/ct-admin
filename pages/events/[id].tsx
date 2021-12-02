@@ -23,7 +23,6 @@ import {
   HStack,
   Badge,
   useDisclosure,
-  Code,
 } from '@chakra-ui/react';
 
 import {
@@ -352,7 +351,7 @@ const EventPage: React.FC = () => {
                       <Text>{eventQueryData.Events_by_pk?.description}</Text>
                     </Box>
 
-                    <Box mb={7}>
+                    <Box>
                       <Heading as="h3" size="sm" mb={1}>
                         Date:
                       </Heading>
@@ -364,31 +363,6 @@ const EventPage: React.FC = () => {
                             )
                           : 'NO DATE'}
                       </Text>
-                    </Box>
-
-                    <Box>
-                      <Heading as="h4" size="sm" mb={1}>
-                        Stream info:
-                      </Heading>
-                      <script></script>
-                      {eventQueryData.Events_by_pk?.stream_name ? (
-                        <Box>
-                          <Text>
-                            Publishing Token:
-                            <Code>
-                              {eventQueryData.Events_by_pk?.publishing_token}
-                            </Code>
-                          </Text>
-                          <Text>
-                            Stream Name:
-                            <Code>
-                              {eventQueryData.Events_by_pk?.stream_name}
-                            </Code>
-                          </Text>
-                        </Box>
-                      ) : (
-                        <Text>No stream info.</Text>
-                      )}
                     </Box>
                   </Box>
                 </HStack>
@@ -474,10 +448,7 @@ const EventPage: React.FC = () => {
                             eventQueryData.Events_by_pk?.status ===
                               Event_Status_Enum.Live && (
                               <Button
-                                disabled={
-                                  brk?.BreakProductItems_aggregate?.aggregate
-                                    ?.count != 0
-                                }
+                                disabled={brk?.BreakProductItems_aggregate?.aggregate?.count != 0}
                                 colorScheme="green"
                                 size="sm"
                                 height="40px"
@@ -485,7 +456,7 @@ const EventPage: React.FC = () => {
                                 onClick={() => {
                                   startBreak({
                                     breakId: brk.id,
-                                  });
+                                  })
                                 }}
                               >
                                 Start Break
