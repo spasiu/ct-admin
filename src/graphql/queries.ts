@@ -202,6 +202,8 @@ export const GET_EVENTS = gql`
       id
       title
       start_time
+      publishing_token
+      stream_name
       description
       status
       image
@@ -228,6 +230,8 @@ export const GET_LIVE_EVENT_BY_ID = gql`
       id
       title
       start_time
+      publishing_token
+      stream_name
       description
       status
       image

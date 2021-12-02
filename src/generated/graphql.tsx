@@ -1747,8 +1747,10 @@ export type Events = {
   event_status: Event_Status;
   id: Scalars['uuid'];
   image: Scalars['String'];
+  publishing_token?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['timestamptz']>;
   status: Event_Status_Enum;
+  stream_name?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   updated_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
@@ -1844,8 +1846,10 @@ export type Events_Bool_Exp = {
   event_status?: Maybe<Event_Status_Bool_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   image?: Maybe<String_Comparison_Exp>;
+  publishing_token?: Maybe<String_Comparison_Exp>;
   start_time?: Maybe<Timestamptz_Comparison_Exp>;
   status?: Maybe<Event_Status_Enum_Comparison_Exp>;
+  stream_name?: Maybe<String_Comparison_Exp>;
   title?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
@@ -1868,8 +1872,10 @@ export type Events_Insert_Input = {
   event_status?: Maybe<Event_Status_Obj_Rel_Insert_Input>;
   id?: Maybe<Scalars['uuid']>;
   image?: Maybe<Scalars['String']>;
+  publishing_token?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['timestamptz']>;
   status?: Maybe<Event_Status_Enum>;
+  stream_name?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
@@ -1882,7 +1888,9 @@ export type Events_Max_Fields = {
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   image?: Maybe<Scalars['String']>;
+  publishing_token?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['timestamptz']>;
+  stream_name?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
@@ -1894,7 +1902,9 @@ export type Events_Max_Order_By = {
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image?: Maybe<Order_By>;
+  publishing_token?: Maybe<Order_By>;
   start_time?: Maybe<Order_By>;
+  stream_name?: Maybe<Order_By>;
   title?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
@@ -1907,7 +1917,9 @@ export type Events_Min_Fields = {
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   image?: Maybe<Scalars['String']>;
+  publishing_token?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['timestamptz']>;
+  stream_name?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
@@ -1919,7 +1931,9 @@ export type Events_Min_Order_By = {
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image?: Maybe<Order_By>;
+  publishing_token?: Maybe<Order_By>;
   start_time?: Maybe<Order_By>;
+  stream_name?: Maybe<Order_By>;
   title?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
@@ -1959,8 +1973,10 @@ export type Events_Order_By = {
   event_status?: Maybe<Event_Status_Order_By>;
   id?: Maybe<Order_By>;
   image?: Maybe<Order_By>;
+  publishing_token?: Maybe<Order_By>;
   start_time?: Maybe<Order_By>;
   status?: Maybe<Order_By>;
+  stream_name?: Maybe<Order_By>;
   title?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
@@ -1984,9 +2000,13 @@ export enum Events_Select_Column {
   /** column name */
   Image = 'image',
   /** column name */
+  PublishingToken = 'publishing_token',
+  /** column name */
   StartTime = 'start_time',
   /** column name */
   Status = 'status',
+  /** column name */
+  StreamName = 'stream_name',
   /** column name */
   Title = 'title',
   /** column name */
@@ -2002,8 +2022,10 @@ export type Events_Set_Input = {
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   image?: Maybe<Scalars['String']>;
+  publishing_token?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['timestamptz']>;
   status?: Maybe<Event_Status_Enum>;
+  stream_name?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
@@ -2022,9 +2044,13 @@ export enum Events_Update_Column {
   /** column name */
   Image = 'image',
   /** column name */
+  PublishingToken = 'publishing_token',
+  /** column name */
   StartTime = 'start_time',
   /** column name */
   Status = 'status',
+  /** column name */
+  StreamName = 'stream_name',
   /** column name */
   Title = 'title',
   /** column name */
@@ -6802,6 +6828,7 @@ export enum Break_Status_Enum {
   Completed = 'COMPLETED',
   Draft = 'DRAFT',
   Live = 'LIVE',
+  Notified = 'NOTIFIED',
   Soldout = 'SOLDOUT'
 }
 
@@ -11054,7 +11081,7 @@ export type GetEventsQuery = (
   { __typename?: 'query_root' }
   & { Events: Array<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'publishing_token' | 'stream_name' | 'description' | 'status' | 'image'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'first_name' | 'last_name'>
@@ -11080,7 +11107,7 @@ export type GetLiveEventByIdQuery = (
   { __typename?: 'query_root' }
   & { Events_by_pk?: Maybe<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'publishing_token' | 'stream_name' | 'description' | 'status' | 'image'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'first_name' | 'last_name'>
@@ -11349,10 +11376,10 @@ export type GetEventByIdSubscription = (
   { __typename?: 'subscription_root' }
   & { Events_by_pk?: Maybe<(
     { __typename?: 'Events' }
-    & Pick<Events, 'id' | 'title' | 'start_time' | 'description' | 'status' | 'image'>
+    & Pick<Events, 'id' | 'title' | 'start_time' | 'stream_name' | 'publishing_token' | 'description' | 'status' | 'image'>
     & { User: (
       { __typename?: 'Users' }
-      & Pick<Users, 'id' | 'first_name' | 'last_name' | 'username'>
+      & Pick<Users, 'id' | 'first_name' | 'last_name'>
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset'>
@@ -12411,6 +12438,8 @@ export const GetEventsDocument = gql`
     id
     title
     start_time
+    publishing_token
+    stream_name
     description
     status
     image
@@ -12463,6 +12492,8 @@ export const GetLiveEventByIdDocument = gql`
     id
     title
     start_time
+    publishing_token
+    stream_name
     description
     status
     image
@@ -13149,6 +13180,8 @@ export const GetEventByIdDocument = gql`
     id
     title
     start_time
+    stream_name
+    publishing_token
     description
     status
     image

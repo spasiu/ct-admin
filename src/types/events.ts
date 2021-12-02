@@ -26,6 +26,8 @@ export type TSelectedEvent = {
   start_time?: string | null;
   status: string;
   image: string;
+  publishing_token: string | null;
+  stream_name: string | null;
 };
 
 export type TGoLiveConfirm = {
