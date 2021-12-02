@@ -28,6 +28,8 @@ const getWsLink = (token: string) => {
       'wss://' + process.env.NEXT_PUBLIC_GRAPHQL_API,
       {
         reconnect: true,
+        lazy: true,
+        minTimeout: 3000,
         connectionParams: () => {
           return getHeaders(token);
         },

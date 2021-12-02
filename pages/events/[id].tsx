@@ -60,6 +60,12 @@ const EventPage: React.FC = () => {
   const [user] = useAuthState(auth);
 
   const startBreak = functions.httpsCallable('startBreak');
+  const sendEventLiveNotification = functions.httpsCallable(
+    'sendEventLiveNotification',
+  );
+  const sendBreakLiveNotification = functions.httpsCallable(
+    'sendBreakLiveNotification',
+  );
 
   const [streamActive, setStreamActive] = useState(false);
   const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
@@ -137,6 +143,8 @@ const EventPage: React.FC = () => {
       }
     };
   }, [user]);
+
+  const breakNotificationsSent: string[] = [];
 
   return (
     <>
@@ -225,7 +233,18 @@ const EventPage: React.FC = () => {
                                     id: eventId,
                                     data: { status: Event_Status_Enum.Live },
                                   },
-                                });
+                                }).then(() =>
+                                  sendEventLiveNotification({
+                                    eventId: eventQueryData?.Events_by_pk?.id,
+                                    eventName:
+                                      eventQueryData?.Events_by_pk?.title,
+                                    breakerId:
+                                      eventQueryData?.Events_by_pk?.User?.id,
+                                    breakerName:
+                                      eventQueryData?.Events_by_pk?.User
+                                        ?.username,
+                                  }),
+                                );
                               } else {
                                 onOpenProceedAlert();
                               }
@@ -445,22 +464,54 @@ const EventPage: React.FC = () => {
 
                           {brk.status !== Break_Status_Enum.Draft &&
                             brk.status !== Break_Status_Enum.Live &&
+                            brk.status !== Break_Status_Enum.Completed &&
                             eventQueryData.Events_by_pk?.status ===
                               Event_Status_Enum.Live && (
-                              <Button
-                                disabled={brk?.BreakProductItems_aggregate?.aggregate?.count != 0}
-                                colorScheme="green"
-                                size="sm"
-                                height="40px"
-                                mr={4}
-                                onClick={() => {
-                                  startBreak({
-                                    breakId: brk.id,
-                                  })
-                                }}
-                              >
-                                Start Break
-                              </Button>
+                              <>
+                                {brk.status !== Break_Status_Enum.Notified && (
+                                  <Button
+                                    disabled={
+                                      brk?.BreakProductItems_aggregate
+                                        ?.aggregate?.count != 0
+                                    }
+                                    colorScheme="green"
+                                    size="sm"
+                                    height="40px"
+                                    onClick={() => {
+                                      sendBreakLiveNotification({
+                                        breakId: brk.id,
+                                        breakName: brk.title,
+                                        breakerName: eventQueryData.Events_by_pk?.User.username
+                                      }).then(() =>
+                                        updateBreak({
+                                          variables: {
+                                            id: brk.id,
+                                            data: {
+                                              status: Break_Status_Enum.Notified,
+                                            },
+                                          },
+                                        }),
+                                      );
+                                    }}
+                                  >
+                                    Notify of Start
+                                  </Button>
+                                )}
+                                <Button
+                                  disabled={brk.status !== Break_Status_Enum.Notified}
+                                  colorScheme="green"
+                                  size="sm"
+                                  height="40px"
+                                  mr={4}
+                                  onClick={() => {
+                                    startBreak({
+                                      breakId: brk.id,
+                                    });
+                                  }}
+                                >
+                                  Start Break
+                                </Button>
+                              </>
                             )}
 
                           {brk.status === Break_Status_Enum.Draft && (
@@ -568,7 +619,14 @@ const EventPage: React.FC = () => {
                 id: eventId,
                 data: { status: Event_Status_Enum.Live },
               },
-            });
+            }).then(() =>
+              sendEventLiveNotification({
+                eventId: eventQueryData?.Events_by_pk?.id,
+                eventName: eventQueryData?.Events_by_pk?.title,
+                breakerId: eventQueryData?.Events_by_pk?.User?.id,
+                breakerName: eventQueryData?.Events_by_pk?.User?.username,
+              }),
+            );
           }}
         />
       </Layout>

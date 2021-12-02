@@ -41,7 +41,7 @@ const BreakResult: React.FC<TBreakResult> = ({
     results.map((res: TBreakResultRandom) => {
       res.items.map((item: TDatasetLineItem | string) => {
         list.push({
-          username: res.username.trim(),
+          username: res.username !== null ? res.username.trim(): '',
           title: typeof item === 'object' ? item.name.trim() : item.trim(),
         });
       });
@@ -49,7 +49,7 @@ const BreakResult: React.FC<TBreakResult> = ({
   } else if (type === Break_Type_Enum.HitDraft) {
     results.map((res: TBreakResultDraft) => {
       list.push({
-        username: res.username.trim(),
+        username: res.username !== null ? res.username.trim(): '',
       });
     });
   } else if (

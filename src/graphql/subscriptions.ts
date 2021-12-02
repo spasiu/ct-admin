@@ -13,6 +13,7 @@ export const GET_EVENT_BY_ID = gql`
         id
         first_name
         last_name
+        username
       }
       Breaks(
         where: { archived: { _eq: false } }
