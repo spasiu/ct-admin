@@ -6,6 +6,8 @@ export const GET_EVENT_BY_ID = gql`
       id
       title
       start_time
+      publishing_token
+      stream_name
       description
       status
       image

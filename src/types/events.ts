@@ -23,6 +23,8 @@ export type TSelectedEvent = {
   id: string;
   title: string;
   description: string;
+  publishing_token?: string | null;
+  stream_name?: string | null;
   start_time?: string | null;
   status: string;
   image: string;

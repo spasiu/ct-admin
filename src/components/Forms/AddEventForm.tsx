@@ -24,7 +24,7 @@ import {
   useUpdateEventMutation,
 } from '@generated/graphql';
 
-import { auth } from '@config/firebase';
+import { auth, functions } from '@config/firebase';
 
 import DatePickerDisplay from '@components/DatePickerDisplay';
 import ImageUploader from '@components/ImageUploader';
@@ -52,6 +52,7 @@ const schema = yup.object().shape({
 const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
   const [user] = useAuthState(auth);
   const operation = event?.id ? 'UPDATE' : 'ADD';
+  const createEvent = functions.httpsCallable('createEvent');
 
   const [
     insertEvent,
@@ -107,11 +108,9 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
 
       switch (operation) {
         case 'ADD':
-          insertEvent({
-            variables: {
-              data: { user_id: user.uid, ...submitData },
-            },
-          });
+          createEvent({ user_id: user.uid, ...submitData }).then((data) =>
+            callback(),
+          );
           break;
         case 'UPDATE':
           updateEvent({
