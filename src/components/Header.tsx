@@ -69,20 +69,6 @@ const Header: React.FC<THeaderProps> = ({ pageNav }) => {
                 ></Avatar>
               </NextLink>
             )}
-            {!user && (
-              <Button
-                onClick={(): Promise<void> =>
-                  firebase
-                    .auth()
-                    .signInWithPopup(googleProvider)
-                    .then((result) => {
-                      console.log(result);
-                    })
-                }
-              >
-                Sign In
-              </Button>
-            )}
           </Flex>
         )}
       </Flex>
