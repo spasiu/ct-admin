@@ -50,11 +50,12 @@ To make developing with GraphQL easier, you can generate all of the GraphQL type
 
 ### Admin
 
-All code pushed to the repository will automatically be deployed to Heroku.
+We should look into Github hooks for the Firebase deploy, which are available, but for now, the manual deployment process is as follows:
 
-- Heroku will build all Pull Requests into a preview build
-- Any changes to the _develop_ branch are deployed to the **staging** environment
-- Any changes to the _master_ branch are deployed to the **production** environment
+1. (Optional, but good to avoid ambiguity with previous builds) `rm -rf .next out`
+2. `yarn build`
+3. `yarn next export`
+4. `firebase deploy --only hosting` (you must already be logged into firebase for this)
 
 ### Hasura changes
 

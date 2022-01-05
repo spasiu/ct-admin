@@ -64,7 +64,7 @@ export default class FirebaseAuth extends React.Component<Props, State> {
     firebaseUiWidget: undefined;
     userSignedIn: false;
     unregisterAuthObserver: undefined;
-  };
+  } | undefined;
 
   /**
    * @inheritDoc
