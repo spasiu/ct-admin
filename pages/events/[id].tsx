@@ -496,10 +496,6 @@ const EventPage: React.FC = () => {
                               <>
                                 {brk.status !== Break_Status_Enum.Notified && (
                                   <Button
-                                    disabled={
-                                      brk?.BreakProductItems_aggregate
-                                        ?.aggregate?.count != 0
-                                    }
                                     colorScheme="green"
                                     size="sm"
                                     height="40px"

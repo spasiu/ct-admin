@@ -13,13 +13,8 @@
 
 1. Clone the repo and run `yarn install` in the project directory.
 2. Copy _.env.example_ into a new _.env_ file and fill in missing environment variables.
-3. Run `yarn dev`.
-
-### GraphQL Codegen
-
-To make developing with GraphQL easier, you can generate all of the GraphQL types in Hasura and the queries/mutations from the repository. It will automatically find all queries and mutations inside of the _src_ folder. This will output everything as as React Hooks which are stored inside of _src/generated/graphql.tsx_ file.
-
-1. Run `NEXT_PUBLIC_GRAPHQL_API="<HASURA API URL>" HASURA_ADMIN_SECRET="<HASURA ADMIN SECRET>" yarn generate --watch;` in the project root.
+3. Generate GraphQL `NEXT_PUBLIC_GRAPHQL_API="<HASURA API URL>" HASURA_ADMIN_SECRET="<HASURA ADMIN SECRET>" yarn generate` in the project root.
+4. Run `yarn dev`.
 
 ### Interact with local Firebase functions (optional - can use functions already deployed to Firebase project)
 
