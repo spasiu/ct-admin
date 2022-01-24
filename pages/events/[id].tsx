@@ -163,19 +163,19 @@ const EventPage: React.FC = () => {
       variables:{ eventId: eventId }
     });
 
-    const results = [];
+    const results:any = [];
 
-    data.Breaks.forEach(b => {
+    data.Breaks.forEach((b:any) => {
       if (b.result) {
         
-        const orders = b.result.reduce((orders, result) => {
+        const orders = b.result.reduce((orders:any, result:any) => {
           const orderId = result.bc_order_id;
-          (orders[orderId] = orders[orderId] || []).push(...result.items.map(item => item.name));
+          (orders[orderId] = orders[orderId] || []).push(...result.items.map((item:any) => item.name));
           return orders;
         },{});
         
         const res = Object.keys(orders).map(orderId => {
-          const item = b.BreakProductItems.find(item => item.Order.bc_order_id === Number(orderId));
+          const item = b.BreakProductItems.find((item:any) => item.Order.bc_order_id === Number(orderId));
           return {
             breakId: b.id,
             breakName: b.title,
