@@ -512,3 +512,24 @@ export const SEARCH_PLAYERS = gql`
     }
   }
 `;
+
+export const GET_EVENT_RESULTS = gql`
+  query GetResults($eventId: uuid!) {
+    Breaks(where: { event_id: { _eq: $eventId } }) {
+      id
+      title
+      result
+      BreakProductItems {
+        Order {
+          user_id
+          bc_order_id
+          User {
+            username
+            first_name
+            last_name
+          }
+        }
+      }
+    }
+  }
+`;

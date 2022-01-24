@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
 import { AddIcon } from '@chakra-ui/icons';
@@ -7,6 +7,8 @@ import { TiMediaRecord } from 'react-icons/ti';
 import NextLink from 'next/link';
 import Imgix from 'react-imgix';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import {parse} from 'json2csv';
+
 
 import {
   Heading,
@@ -24,6 +26,7 @@ import {
   Badge,
   useDisclosure,
   Code,
+  Alert,
 } from '@chakra-ui/react';
 
 import {
@@ -47,6 +50,8 @@ import ArchiveConfirm from '@components/ArchiveConfirm';
 import GoLiveConfirm from '@components/GoLiveConfirm';
 
 import { TEventSelectedBreak } from '@customTypes/events';
+import { useApolloClient } from '@apollo/client';
+import { GET_EVENT_RESULTS } from 'src/graphql/queries';
 
 /**
  * TODO: Add remove event button
@@ -146,6 +151,50 @@ const EventPage: React.FC = () => {
   }, [user]);
 
   const breakNotificationsSent: string[] = [];
+
+  /**
+   * Generate Results CSV for Completed Events
+   */
+  const client = useApolloClient();
+  const generateCsv = async () => {
+
+    const { data } = await client.query({
+      query: GET_EVENT_RESULTS,
+      variables:{ eventId: eventId }
+    });
+
+    const results = [];
+
+    data.Breaks.forEach(b => {
+      if (b.result) {
+        
+        const orders = b.result.reduce((orders, result) => {
+          const orderId = result.bc_order_id;
+          (orders[orderId] = orders[orderId] || []).push(...result.items.map(item => item.name));
+          return orders;
+        },{});
+        
+        const res = Object.keys(orders).map(orderId => {
+          const item = b.BreakProductItems.find(item => item.Order.bc_order_id === Number(orderId));
+          return {
+            breakId: b.id,
+            breakName: b.title,
+            orderId: orderId,
+            teams: orders[orderId],
+            userId: item.Order.user_id,
+            username: item.Order.User.username,
+            first_name: item.Order.User.first_name,
+            last_name: item.Order.User.last_name
+          }
+        });
+
+        results.push(...res);
+      }
+    });
+    return parse(results);
+  }
+
+  
 
   return (
     <>
@@ -344,6 +393,28 @@ const EventPage: React.FC = () => {
                           >
                             Re-Publish
                           </Button>
+
+                          <Button
+                            colorScheme="red"
+                            size="sm"
+                            isDisabled={
+                              eventQueryData.Events_by_pk?.Breaks.length === 0
+                            }
+                            onClick={() => {
+                              generateCsv().then(data => {
+                                const downloadUrl = window.URL.createObjectURL(new Blob([data]))
+                                const link = document.createElement('a')
+                                link.href = downloadUrl
+                                link.setAttribute('download', `results-${eventId}.csv`)
+                                document.body.appendChild(link)
+                                link.click()
+                                link.remove()
+                              });
+                            }}
+                          >
+                           Results CSV
+                          </Button>
+
                         </>
                       )}
                     </HStack>
