@@ -11411,16 +11411,16 @@ export type GetBreakByIdQuery = (
   )> }
 );
 
-export type GetBreakOrderUsersQueryVariables = Exact<{
+export type GetBreakDataQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type GetBreakOrderUsersQuery = (
+export type GetBreakDataQuery = (
   { __typename?: 'query_root' }
   & { Breaks_by_pk?: Maybe<(
     { __typename?: 'Breaks' }
-    & Pick<Breaks, 'id'>
+    & Pick<Breaks, 'id' | 'break_type' | 'result'>
     & { BreakProductItems: Array<(
       { __typename?: 'BreakProductItems' }
       & { Order?: Maybe<(
@@ -11430,6 +11430,12 @@ export type GetBreakOrderUsersQuery = (
           & Pick<Users, 'id' | 'username'>
         ) }
       )> }
+    )>, Inventory: Array<(
+      { __typename?: 'Inventory' }
+      & { Product: (
+        { __typename?: 'Products' }
+        & Pick<Products, 'id' | 'description' | 'category' | 'year' | 'manufacturer' | 'brand' | 'series'>
+      ) }
     )> }
   )> }
 );
@@ -11588,6 +11594,30 @@ export type SearchPlayersQuery = (
   & { Players: Array<(
     { __typename?: 'Players' }
     & Pick<Players, 'id' | 'name'>
+  )> }
+);
+
+export type GetResultsQueryVariables = Exact<{
+  eventId: Scalars['uuid'];
+}>;
+
+
+export type GetResultsQuery = (
+  { __typename?: 'query_root' }
+  & { Breaks: Array<(
+    { __typename?: 'Breaks' }
+    & Pick<Breaks, 'id' | 'title' | 'result'>
+    & { BreakProductItems: Array<(
+      { __typename?: 'BreakProductItems' }
+      & { Order?: Maybe<(
+        { __typename?: 'Orders' }
+        & Pick<Orders, 'user_id' | 'bc_order_id'>
+        & { User: (
+          { __typename?: 'Users' }
+          & Pick<Users, 'username' | 'first_name' | 'last_name'>
+        ) }
+      )> }
+    )> }
   )> }
 );
 
@@ -12891,10 +12921,12 @@ export function useGetBreakByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetBreakByIdQueryHookResult = ReturnType<typeof useGetBreakByIdQuery>;
 export type GetBreakByIdLazyQueryHookResult = ReturnType<typeof useGetBreakByIdLazyQuery>;
 export type GetBreakByIdQueryResult = Apollo.QueryResult<GetBreakByIdQuery, GetBreakByIdQueryVariables>;
-export const GetBreakOrderUsersDocument = gql`
-    query GetBreakOrderUsers($id: uuid!) {
+export const GetBreakDataDocument = gql`
+    query GetBreakData($id: uuid!) {
   Breaks_by_pk(id: $id) {
     id
+    break_type
+    result
     BreakProductItems {
       Order {
         User {
@@ -12903,37 +12935,48 @@ export const GetBreakOrderUsersDocument = gql`
         }
       }
     }
+    Inventory {
+      Product {
+        id
+        description
+        category
+        year
+        manufacturer
+        brand
+        series
+      }
+    }
   }
 }
     `;
 
 /**
- * __useGetBreakOrderUsersQuery__
+ * __useGetBreakDataQuery__
  *
- * To run a query within a React component, call `useGetBreakOrderUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBreakOrderUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBreakDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBreakDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBreakOrderUsersQuery({
+ * const { data, loading, error } = useGetBreakDataQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetBreakOrderUsersQuery(baseOptions: Apollo.QueryHookOptions<GetBreakOrderUsersQuery, GetBreakOrderUsersQueryVariables>) {
+export function useGetBreakDataQuery(baseOptions: Apollo.QueryHookOptions<GetBreakDataQuery, GetBreakDataQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBreakOrderUsersQuery, GetBreakOrderUsersQueryVariables>(GetBreakOrderUsersDocument, options);
+        return Apollo.useQuery<GetBreakDataQuery, GetBreakDataQueryVariables>(GetBreakDataDocument, options);
       }
-export function useGetBreakOrderUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBreakOrderUsersQuery, GetBreakOrderUsersQueryVariables>) {
+export function useGetBreakDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBreakDataQuery, GetBreakDataQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBreakOrderUsersQuery, GetBreakOrderUsersQueryVariables>(GetBreakOrderUsersDocument, options);
+          return Apollo.useLazyQuery<GetBreakDataQuery, GetBreakDataQueryVariables>(GetBreakDataDocument, options);
         }
-export type GetBreakOrderUsersQueryHookResult = ReturnType<typeof useGetBreakOrderUsersQuery>;
-export type GetBreakOrderUsersLazyQueryHookResult = ReturnType<typeof useGetBreakOrderUsersLazyQuery>;
-export type GetBreakOrderUsersQueryResult = Apollo.QueryResult<GetBreakOrderUsersQuery, GetBreakOrderUsersQueryVariables>;
+export type GetBreakDataQueryHookResult = ReturnType<typeof useGetBreakDataQuery>;
+export type GetBreakDataLazyQueryHookResult = ReturnType<typeof useGetBreakDataLazyQuery>;
+export type GetBreakDataQueryResult = Apollo.QueryResult<GetBreakDataQuery, GetBreakDataQueryVariables>;
 export const SearchBreaksDocument = gql`
     query SearchBreaks($input: String!) {
   Breaks(where: {title: {_ilike: $input}}) {
@@ -13394,6 +13437,54 @@ export function useSearchPlayersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type SearchPlayersQueryHookResult = ReturnType<typeof useSearchPlayersQuery>;
 export type SearchPlayersLazyQueryHookResult = ReturnType<typeof useSearchPlayersLazyQuery>;
 export type SearchPlayersQueryResult = Apollo.QueryResult<SearchPlayersQuery, SearchPlayersQueryVariables>;
+export const GetResultsDocument = gql`
+    query GetResults($eventId: uuid!) {
+  Breaks(where: {event_id: {_eq: $eventId}}) {
+    id
+    title
+    result
+    BreakProductItems {
+      Order {
+        user_id
+        bc_order_id
+        User {
+          username
+          first_name
+          last_name
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetResultsQuery__
+ *
+ * To run a query within a React component, call `useGetResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResultsQuery({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useGetResultsQuery(baseOptions: Apollo.QueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, options);
+      }
+export function useGetResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetResultsQuery, GetResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetResultsQuery, GetResultsQueryVariables>(GetResultsDocument, options);
+        }
+export type GetResultsQueryHookResult = ReturnType<typeof useGetResultsQuery>;
+export type GetResultsLazyQueryHookResult = ReturnType<typeof useGetResultsLazyQuery>;
+export type GetResultsQueryResult = Apollo.QueryResult<GetResultsQuery, GetResultsQueryVariables>;
 export const GetEventByIdDocument = gql`
     subscription GetEventById($id: uuid!) {
   Events_by_pk(id: $id) {

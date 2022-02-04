@@ -1,3 +1,5 @@
+import { Maybe } from "graphql/jsutils/Maybe";
+
 export type TSelectedHit = {
   id: string;
   user_id: string;
@@ -35,7 +37,18 @@ export type TAddHitUser = {
   username?: string | null;
 };
 
+export type TAddHitProduct = {
+  id: string;
+  description?: Maybe<string>;
+  year: string;
+  manufacturer: string;
+  brand: string;
+  series?: Maybe<string>;
+  category: string;
+};
+
 export type TAddHitFormData = {
+  username?: string;
   user_id: string;
   break_id: string;
   image_front: string;

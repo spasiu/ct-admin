@@ -327,16 +327,29 @@ export const GET_BREAK_BY_ID = gql`
   }
 `;
 
-export const GET_BREAK_ORDER_USERS = gql`
-  query GetBreakOrderUsers($id: uuid!) {
+export const GET_BREAK_DATA = gql`
+  query GetBreakData($id: uuid!) {
     Breaks_by_pk(id: $id) {
       id
+      break_type
+      result
       BreakProductItems {
         Order {
           User {
             id
             username
           }
+        }
+      }
+      Inventory {
+        Product {
+          id
+          description
+          category
+          year
+          manufacturer
+          brand
+          series
         }
       }
     }

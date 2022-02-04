@@ -21,7 +21,7 @@ import {
   useInsertHitMutation,
   useUpdateHitMutation,
   useGetFilteredExtensibleValuesQuery,
-  useGetBreakOrderUsersLazyQuery,
+  useGetBreakDataLazyQuery,
 } from '@generated/graphql';
 
 import { gridSpace } from '@config/chakra/constants';
@@ -31,9 +31,10 @@ import AutocompleteBreaks from '@components/AutocompleteBreaks';
 import ImageUploader from '@components/ImageUploader';
 
 import {
-  TAddHitUser,
   TAddHitFormData,
   TAddHitFormProps,
+  TAddHitProduct,
+  TAddHitUser,
 } from '@customTypes/hits';
 import { functions } from '@config/firebase';
 
@@ -75,11 +76,17 @@ const schema = yup.object().shape({
  */
 const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
   const operation = hit ? 'UPDATE' : 'ADD';
-  const [userOptions, setUserOptions] = useState<TAddHitUser[]>(
-    hit && hit.User.username
-      ? [{ id: hit.user_id, username: hit.User.username }]
-      : [],
+  const [breakId, setBreakId] = useState<string|null>(
+    hit && hit.break_id ? hit.break_id : null
   );
+  const [user, setUser] = useState<TAddHitUser|null>(
+    hit && hit.User.username
+      ? { id: hit.user_id, username: hit.User.username } 
+      : null
+  );
+  const [productOptions, setProductOptions] = useState<TAddHitProduct[]>([]);
+  const [breakType, setBreakType] = useState('Team');
+  const [resultMap, setResultMap] = useState<Map<string,TAddHitUser>>();
 
   // Remove id, Break and User objects from hit input when editing
   const { id: hitId, User, Break, ...defaultValues } = hit || {};
@@ -87,7 +94,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
   const {
     register,
     handleSubmit,
-    watch,
+    setError,
     formState: { errors },
     reset,
     setValue,
@@ -141,43 +148,83 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
   ] = useUpdateHitMutation({ onCompleted: callback });
 
   const [
-    getBreakUsers,
-    { loading: breakUserLoading, data: breakUserData },
-  ] = useGetBreakOrderUsersLazyQuery();
+    getBreakData,
+    { loading: breakDataLoading, data: breakData },
+  ] = useGetBreakDataLazyQuery();
 
   useEffect(() => {
-    if (breakUserData) {
-      let options: TAddHitUser[] = [];
-
-      breakUserData?.Breaks_by_pk?.BreakProductItems.forEach((prodItem) => {
-        if (prodItem.Order) {
-          options.push({
-            id: prodItem.Order.User.id,
-            username: prodItem.Order.User.username,
-          });
-        }
-      });
-
-      // Remove duplicate users (in case they bought multiple spots in break)
-      options = options.filter(
-        (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
-      );
-
-      setUserOptions(options);
+    if (breakId) {
+      setValue('break_id', breakId);
+      getBreakData({ variables: { id: breakId } });
     }
-  }, [breakUserData]);
+  },[breakId]);
 
-  const watchBreak = watch('break_id');
+  useEffect(() => {
+    if (breakData && breakData.Breaks_by_pk) {
+      const products = breakData.Breaks_by_pk.Inventory.filter(
+        (inv) => inv.Product,
+      ).map((inv) => inv.Product!);
+
+      if (products.length > 0)
+        setProductOptions(products);
+      else 
+        setError('break_id', {type:'manual',message:'We have no products for this break'})
+
+      setBreakType(breakData.Breaks_by_pk.break_type.toLowerCase().includes('division') ? 'Division' : 'Team');
+
+      if (!breakData.Breaks_by_pk.result) {
+        setError('break_id', {type:'manual',message:'We have no randomization results for this break'})
+      } else {
+      const rMap = new Map<string, TAddHitUser>();
+      breakData.Breaks_by_pk.result.forEach((r:any) => {
+          r.items.forEach((i:any) => {
+            rMap.set(i.name,{username:r.username,id:r.user_id});
+          });
+        });
+        setResultMap(rMap);
+      }
+    }
+  }, [breakData]);
+
+
+  /**
+   *
+   * @param result
+   */
+  const populateFromProduct = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const product = productOptions.filter(
+      (p) => p.id === event.target.value,
+    )[0];
+    setValue('year', product.year);
+    setValue('category', product.category);
+    setValue('manufacturer', product.manufacturer);
+    setValue('brand', product.brand);
+    setValue('series', product.series || null);
+  };
+
+  const populateUser = (event:React.ChangeEvent<HTMLSelectElement>) => {
+    const user = resultMap?.get(event.target.value);
+    if (user) {
+      setValue('user_id',user.id);
+      setValue('username', user.username!);
+    } else {
+      setError('username',{type:'manual',message:`We have no user registered with this ${breakType}`});
+    }
+  };
 
   /**
    * Handle form submission
    * @param result object Validated form result
    */
   const onSubmit = (result: TAddHitFormData) => {
+    delete result.username;
     switch (operation) {
       case 'ADD':
         insertHit({ variables: { data: result } });
-        sendHitNotification({userId: result.user_id, playerName: result.player});
+        sendHitNotification({
+          userId: result.user_id,
+          playerName: result.player,
+        });
         break;
       case 'UPDATE':
         updateHit({ variables: { id: hit?.id, data: result } });
@@ -193,15 +240,12 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
           <AutocompleteBreaks
             isInvalid={!!errors.break_id}
             defaultValue={hit?.Break.title}
-            callback={(val: string) => {
-              setValue('break_id', val);
-              getBreakUsers({ variables: { id: val } });
-            }}
+            callback={(val: string) => setBreakId(val)}
           />
           <FormErrorMessage>{errors.break_id?.message}</FormErrorMessage>
         </FormControl>
 
-        {watchBreak && (
+        {breakId && (
           <>
             <HStack
               justifyContent="center"
@@ -250,18 +294,19 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
               </Box>
             </HStack>
 
-            <FormControl isInvalid={!!errors.user_id} mb={8}>
-              <FormLabel>User</FormLabel>
-              <Select {...register('user_id')}>
-                <option value="">Select...</option>
-                {userOptions.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.username}
-                  </option>
-                ))}
-              </Select>
-              <FormErrorMessage>{errors.user_id?.message}</FormErrorMessage>
-            </FormControl>
+            {productOptions.length > 0 && (
+              <FormControl mb={8}>
+                <FormLabel>Product</FormLabel>
+                <Select onChange={populateFromProduct}>
+                  <option value="">Select...</option>
+                  {productOptions.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.description}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
 
             <Box mb={10}>
               <Flex mx={gridSpace.parent} mb={5}>
@@ -383,6 +428,33 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
                     ))}
                   </Select>
                   <FormErrorMessage>{errors.series?.message}</FormErrorMessage>
+                </FormControl>
+              </Flex>
+
+              <Flex mx={gridSpace.parent} mb={5}>
+                <FormControl
+                  isInvalid={!!errors.manufacturer}
+                  width="50%"
+                  px={gridSpace.child}
+                >
+                  <FormLabel>{breakType}</FormLabel>
+                  <Select onChange={populateUser}>
+                    <option value="">Select...</option>
+                    {resultMap && Array.from(resultMap!.keys()).map((k) => (
+                      <option value={k}>{k}</option>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl
+                  isInvalid={!!errors.brand}
+                  width="50%"
+                  px={gridSpace.child}
+                >
+              <FormLabel>User*</FormLabel>
+                  <Input {...register('user_id')} value={user ? user.id!: ''} hidden />
+                  <Input {...register('username')} value={ user ? user.username!: ''} disabled />
+                  <span style={{fontSize:10}}>* Derrived from {breakType.toLowerCase()} selection</span>
                 </FormControl>
               </Flex>
 
