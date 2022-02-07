@@ -14,7 +14,8 @@
 1. Clone the repo and run `yarn install` in the project directory.
 2. Copy _.env.example_ into a new _.env_ file and fill in missing environment variables.
 3. Generate GraphQL `NEXT_PUBLIC_GRAPHQL_API="<HASURA API URL>" HASURA_ADMIN_SECRET="<HASURA ADMIN SECRET>" yarn generate` in the project root.
-4. Run `yarn dev`.
+4. Run `yarn global add concurrently` to install the _concurrently_ package, which is used during `yarn dev`.
+5. Run `yarn dev`.
 
 ### Interact with local Firebase functions (optional - can use functions already deployed to Firebase project)
 
