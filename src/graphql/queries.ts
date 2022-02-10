@@ -1,5 +1,13 @@
 import { gql } from '@apollo/client';
 
+export const GET_PRODUCT_ITEMS_WITH_ORDER_ID_BY_BREAK_ID = gql`
+  query GetProductIitemsWithOrderIdByBreakId($id: uuid!) {
+    BreakProductItems(where: {order_id: {_is_null: false}, Break: {id: {_eq: $id}}}) {
+      id
+    }
+  }
+`;
+
 export const GET_PRODUCTS = gql`
   query GetProducts($unitOfMeasure: [unit_of_measure_enum!], $input: String) {
     Products(

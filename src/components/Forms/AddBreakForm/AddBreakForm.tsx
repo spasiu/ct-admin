@@ -27,6 +27,8 @@ import {
   useUpdateInventoryBreakMutation,
   useGetTeamDataLazyQuery,
   useGetDivisionDataLazyQuery,
+  useGetProductIitemsWithOrderIdByBreakIdQuery,
+  useGetProductIitemsWithOrderIdByBreakIdLazyQuery
 } from '@generated/graphql';
 
 import { auth, functions } from '@config/firebase';
@@ -164,6 +166,15 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     { loading: divisionDataLoading, data: divisionData },
   ] = useGetDivisionDataLazyQuery();
 
+  const [getItemsWithOrderByBreak, {data: itemsWithOrderData }] = useGetProductIitemsWithOrderIdByBreakIdLazyQuery();
+  const [isPurchased, setIsPurchased] = useState(false);
+
+  useEffect(() => {
+    if (break_data?.id && operation === 'UPDATE') getItemsWithOrderByBreak({ variables: { id: break_data.id } });
+  }, [break_data, operation]);
+
+  useEffect(() => setIsPurchased((itemsWithOrderData?.BreakProductItems.length || 0) > 0), [itemsWithOrderData]);
+
   const {
     control,
     register,
@@ -275,8 +286,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
   }, [watchSpots, watchType, watchTeamsPerSpot, teamData, divisionData]);
 
   useEffect(() => {
-    setValue('spots', null);
-    setValue('teams_per_spot', null);
+    setValue('spots', operation === 'UPDATE' ? watchSpots : null);
+    setValue('teams_per_spot', operation === 'UPDATE' ? (teamData?.Teams.length || null) : null);
     if (selectedInventory.length > 0) {
       const { sport, year } = getQueryVars(selectedInventory);
       getTeams({ variables: { year, sport } });
@@ -410,7 +421,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             <FormLabel>Break Type</FormLabel>
             <Select
               {...register('break_type')}
-              isDisabled={operation === 'UPDATE'}
+              isDisabled={isPurchased}
             >
               <option value="">Select...</option>
               {BreakTypeValues.map((type) => (
@@ -436,7 +447,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                 <FormLabel>Price ($)</FormLabel>
                 <Input
                   {...register('price')}
-                  isDisabled={operation === 'UPDATE'}
+                  isDisabled={isPurchased}
                 />
                 <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
               </FormControl>
@@ -456,7 +467,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                 <Select
                   {...register('spots')}
                   value={watchSpots ? watchSpots : ''}
-                  isDisabled={operation === 'UPDATE'}
+                  isDisabled={isPurchased}
                 >
                   <option value="">Select...</option>
                   {getSpotOptions(
@@ -519,7 +530,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                         {...register(
                           `datasetItems.${index}.short_code` as const,
                         )}
-                        isDisabled={operation === 'UPDATE'}
+                        isDisabled={isPurchased}
                       />
                     </FormControl>
                   </Box>
@@ -536,7 +547,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                         <Input
                           placeholder="City"
                           {...register(`datasetItems.${index}.city` as const)}
-                          isDisabled={operation === 'UPDATE'}
+                          isDisabled={isPurchased}
                         />
                       </FormControl>
                     </Box>
@@ -553,7 +564,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Team/Division"
                         {...register(`datasetItems.${index}.name` as const)}
-                        isDisabled={operation === 'UPDATE'}
+                        isDisabled={isPurchased}
                       />
                     </FormControl>
                   </Box>
@@ -569,7 +580,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Color 1"
                         {...register(`datasetItems.${index}.color` as const)}
-                        isDisabled={operation === 'UPDATE'}
+                        isDisabled={isPurchased}
                       />
                     </FormControl>
                   </Box>
@@ -587,7 +598,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                         {...register(
                           `datasetItems.${index}.color_secondary` as const,
                         )}
-                        isDisabled={operation === 'UPDATE'}
+                        isDisabled={isPurchased}
                       />
                     </FormControl>
                   </Box>
@@ -616,7 +627,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Short"
                         {...register(`lineItems.${index}.short_code` as const)}
-                        isDisabled={operation === 'UPDATE'}
+                        isDisabled={isPurchased}
                       />
                     </FormControl>
                   </Box>
@@ -630,7 +641,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Team/Division"
                         {...register(`lineItems.${index}.name` as const)}
-                        isDisabled={operation === 'UPDATE'}
+                        isDisabled={isPurchased}
                       />
                     </FormControl>
                   </Box>
@@ -645,7 +656,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                         placeholder="Cost"
                         {...register(`lineItems.${index}.cost` as const)}
                         textAlign="right"
-                        isDisabled={operation === 'UPDATE'}
+                        isDisabled={isPurchased}
                       />
                     </FormControl>
                   </Box>
