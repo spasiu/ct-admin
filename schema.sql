@@ -437,6 +437,9 @@ ALTER TABLE ONLY public."Hits"
 ALTER TABLE ONLY public."Hits"
     ADD CONSTRAINT "Hits_break_id_fkey" FOREIGN KEY (break_id) REFERENCES public."Breaks"(id);
 
+ALTER TABLE ONLY public."Hits"
+    ADD CONSTRAINT "Hits_product_id_fkey" FOREIGN KEY (product_id) REFERENCES public."Products"(id);
+
 ALTER TABLE ONLY public."NotificationSettings"
     ADD CONSTRAINT "NotificationSettings_user_id_fkey" FOREIGN KEY (user_id) REFERENCES public."Users"(id);    
 

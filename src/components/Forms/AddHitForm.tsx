@@ -33,27 +33,20 @@ import ImageUploader from '@components/ImageUploader';
 import {
   TAddHitFormData,
   TAddHitFormProps,
+  TAddHitPreviewData,
   TAddHitProduct,
   TAddHitUser,
 } from '@customTypes/hits';
 import { functions } from '@config/firebase';
+import FormModal from '@components/Modals/FormModal';
+import Imgix from 'react-imgix';
 
 const schema = yup.object().shape({
   user_id: yup.string().required('Required'),
   break_id: yup.string().required('Required'),
+  product_id: yup.string().required('Required'),
   image_front: yup.string().required('Image is Required'),
   image_back: yup.string().nullable(),
-  year: yup
-    .string()
-    .required('Required')
-    .matches(
-      /^\d{4}(?:-(\d{2}|\d{4})){0,1}$/,
-      'Enter a valid year or year range',
-    ),
-  category: yup.string().required('Required'),
-  manufacturer: yup.string().required('Required'),
-  brand: yup.string().required('Required'),
-  series: yup.string().nullable(),
   card_number: yup.string().required('Required'),
   player: yup.string().required('Required'),
   parallel: yup.string().nullable(),
@@ -69,27 +62,33 @@ const schema = yup.object().shape({
     })
     .nullable()
     .typeError('Numbers only'),
+  published: yup.boolean()
 });
 
 /**
  * TODO: Add auth
  */
 const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
-  const operation = hit ? 'UPDATE' : 'ADD';
-  const [breakId, setBreakId] = useState<string|null>(
-    hit && hit.break_id ? hit.break_id : null
+  const isUpdate = hit !== undefined;
+  const [breakId, setBreakId] = useState<string | null>(
+    hit && hit.break_id ? hit.break_id : null,
   );
-  const [user, setUser] = useState<TAddHitUser|null>(
+  const [user, setUser] = useState<TAddHitUser | null>(
     hit && hit.User.username
-      ? { id: hit.user_id, username: hit.User.username } 
-      : null
+      ? { id: hit.user_id, username: hit.User.username }
+      : null,
   );
   const [productOptions, setProductOptions] = useState<TAddHitProduct[]>([]);
   const [breakType, setBreakType] = useState('Team');
-  const [resultMap, setResultMap] = useState<Map<string,TAddHitUser>>();
+  const [resultMap, setResultMap] = useState<Map<string, TAddHitUser>>();
 
-  // Remove id, Break and User objects from hit input when editing
-  const { id: hitId, User, Break, ...defaultValues } = hit || {};
+  const [isPreviewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
+  const [previewData, setPreviewData] = useState<TAddHitPreviewData | null>(
+    null,
+  );
+
+  // Remove id, Break, User and Product objects from hit input when editing
+  const { id: hitId, User, Break, Product, ...defaultValues } = hit || {};
 
   const {
     register,
@@ -98,6 +97,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
     formState: { errors },
     reset,
     setValue,
+    getValues,
   } = useForm<TAddHitFormData>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -109,16 +109,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
     data: extensibleValueQueryData,
   } = useGetFilteredExtensibleValuesQuery({
     variables: {
-      fields: [
-        'product_brand',
-        'product_category',
-        'product_insert',
-        'product_manufacturer',
-        'product_memoribillia',
-        'product_parallel',
-        'product_series',
-        'product_year',
-      ],
+      fields: ['product_insert', 'product_memoribillia', 'product_parallel'],
     },
     onCompleted: () => {
       reset({
@@ -157,7 +148,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
       setValue('break_id', breakId);
       getBreakData({ variables: { id: breakId } });
     }
-  },[breakId]);
+  }, [breakId]);
 
   useEffect(() => {
     if (breakData && breakData.Breaks_by_pk) {
@@ -165,20 +156,31 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
         (inv) => inv.Product,
       ).map((inv) => inv.Product!);
 
-      if (products.length > 0)
+      if (products.length > 0) {
         setProductOptions(products);
-      else 
-        setError('break_id', {type:'manual',message:'We have no products for this break'})
+        if (hit && hit.product_id) setValue('product_id', hit.product_id);
+      } else
+        setError('product_id', {
+          type: 'manual',
+          message: 'We have no products for this break',
+        });
 
-      setBreakType(breakData.Breaks_by_pk.break_type.toLowerCase().includes('division') ? 'Division' : 'Team');
+      setBreakType(
+        breakData.Breaks_by_pk.break_type.toLowerCase().includes('division')
+          ? 'Division'
+          : 'Team',
+      );
 
       if (!breakData.Breaks_by_pk.result) {
-        setError('break_id', {type:'manual',message:'We have no randomization results for this break'})
+        setError('break_id', {
+          type: 'manual',
+          message: 'We have no randomization results for this break',
+        });
       } else {
-      const rMap = new Map<string, TAddHitUser>();
-      breakData.Breaks_by_pk.result.forEach((r:any) => {
-          r.items.forEach((i:any) => {
-            rMap.set(i.name,{username:r.username,id:r.user_id});
+        const rMap = new Map<string, TAddHitUser>();
+        breakData.Breaks_by_pk.result.forEach((r: any) => {
+          r.items.forEach((i: any) => {
+            rMap.set(i.name, { username: r.username, id: r.user_id });
           });
         });
         setResultMap(rMap);
@@ -186,29 +188,16 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
     }
   }, [breakData]);
 
-
-  /**
-   *
-   * @param result
-   */
-  const populateFromProduct = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const product = productOptions.filter(
-      (p) => p.id === event.target.value,
-    )[0];
-    setValue('year', product.year);
-    setValue('category', product.category);
-    setValue('manufacturer', product.manufacturer);
-    setValue('brand', product.brand);
-    setValue('series', product.series || null);
-  };
-
-  const populateUser = (event:React.ChangeEvent<HTMLSelectElement>) => {
+  const populateUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const user = resultMap?.get(event.target.value);
     if (user) {
-      setValue('user_id',user.id);
+      setValue('user_id', user.id);
       setValue('username', user.username!);
     } else {
-      setError('username',{type:'manual',message:`We have no user registered with this ${breakType}`});
+      setError('username', {
+        type: 'manual',
+        message: `We have no user registered with this ${breakType}`,
+      });
     }
   };
 
@@ -218,19 +207,23 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
    */
   const onSubmit = (result: TAddHitFormData) => {
     delete result.username;
-    switch (operation) {
-      case 'ADD':
-        insertHit({ variables: { data: result } });
-        sendHitNotification({
-          userId: result.user_id,
-          playerName: result.player,
-        });
-        break;
-      case 'UPDATE':
-        updateHit({ variables: { id: hit?.id, data: result } });
-        break;
+    if (isUpdate) {
+      updateHit({ variables: { id: hit?.id, data: result } });
+    } else {
+      insertHit({ variables: { data: result } });
+      sendHitNotification({
+        userId: result.user_id,
+        playerName: result.player,
+      });
     }
   };
+
+  const prepPreview = () => {
+    const formData = getValues();
+    const product = productOptions.filter(p => p.id === formData.product_id)[0];
+    setPreviewData({ Product: product, ...formData });
+    setPreviewModalOpen(true);
+  }
 
   return (
     <>
@@ -294,167 +287,50 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
               </Box>
             </HStack>
 
-            {productOptions.length > 0 && (
-              <FormControl mb={8}>
-                <FormLabel>Product</FormLabel>
-                <Select onChange={populateFromProduct}>
-                  <option value="">Select...</option>
-                  {productOptions.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.description}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
+            <FormControl mb={8} isInvalid={!!errors.product_id}>
+              <FormLabel>Product</FormLabel>
+              <Select {...register('product_id')}>
+                <option value="">Select...</option>
+                {productOptions.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.description}
+                  </option>
+                ))}
+              </Select>
+              <FormErrorMessage>{errors.product_id?.message}</FormErrorMessage>
+            </FormControl>
 
             <Box mb={10}>
               <Flex mx={gridSpace.parent} mb={5}>
-                <FormControl
-                  isInvalid={!!errors.year}
-                  width="50%"
-                  px={gridSpace.child}
-                >
-                  <FormLabel>Year</FormLabel>
-                  <Select {...register('year')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_year',
-                    )
-                      .reverse()
-                      .map((val) => (
-                        <option
-                          key={`option-${val.field}-${val.value}`}
-                          value={val.value}
-                        >
-                          {val.value}
-                        </option>
-                      ))}
-                  </Select>
-                  <FormErrorMessage>{errors.year?.message}</FormErrorMessage>
-                </FormControl>
-
-                <FormControl
-                  isInvalid={!!errors.category}
-                  width="50%"
-                  px={gridSpace.child}
-                >
-                  <FormLabel>Sport/Category</FormLabel>
-                  <Select {...register('category')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_category',
-                    ).map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>
-                    {errors.category?.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </Flex>
-
-              <Flex mx={gridSpace.parent} mb={5}>
-                <FormControl
-                  isInvalid={!!errors.manufacturer}
-                  width="50%"
-                  px={gridSpace.child}
-                >
-                  <FormLabel>Manufacturer</FormLabel>
-                  <Select {...register('manufacturer')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_manufacturer',
-                    ).map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>
-                    {errors.manufacturer?.message}
-                  </FormErrorMessage>
-                </FormControl>
-
-                <FormControl
-                  isInvalid={!!errors.brand}
-                  width="50%"
-                  px={gridSpace.child}
-                >
-                  <FormLabel>Brand</FormLabel>
-                  <Select {...register('brand')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_brand',
-                    ).map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>{errors.brand?.message}</FormErrorMessage>
-                </FormControl>
-              </Flex>
-
-              <Flex mx={gridSpace.parent} mb={5}>
-                <FormControl
-                  isInvalid={!!errors.series}
-                  width="50%"
-                  px={gridSpace.child}
-                >
-                  <FormLabel>Series</FormLabel>
-                  <Select {...register('series')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_series',
-                    ).map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>{errors.series?.message}</FormErrorMessage>
-                </FormControl>
-              </Flex>
-
-              <Flex mx={gridSpace.parent} mb={5}>
-                <FormControl
-                  isInvalid={!!errors.manufacturer}
-                  width="50%"
-                  px={gridSpace.child}
-                >
+                <FormControl width="50%" px={gridSpace.child}>
                   <FormLabel>{breakType}</FormLabel>
                   <Select onChange={populateUser}>
                     <option value="">Select...</option>
-                    {resultMap && Array.from(resultMap!.keys()).map((k) => (
-                      <option value={k}>{k}</option>
-                    ))}
+                    {resultMap &&
+                      Array.from(resultMap!.keys()).map((k) => (
+                        <option value={k}>{k}</option>
+                      ))}
                   </Select>
                 </FormControl>
-
                 <FormControl
-                  isInvalid={!!errors.brand}
+                  isInvalid={!!errors.user_id}
                   width="50%"
                   px={gridSpace.child}
                 >
-              <FormLabel>User*</FormLabel>
-                  <Input {...register('user_id')} value={user ? user.id!: ''} hidden />
-                  <Input {...register('username')} value={ user ? user.username!: ''} disabled />
-                  <span style={{fontSize:10}}>* Derrived from {breakType.toLowerCase()} selection</span>
+                  <FormLabel>User*</FormLabel>
+                  <Input
+                    {...register('user_id')}
+                    value={user ? user.id! : ''}
+                    hidden
+                  />
+                  <Input
+                    {...register('username')}
+                    value={user ? user.username! : ''}
+                    disabled
+                  />
+                  <span style={{ fontSize: 10 }}>
+                    * Derrived from {breakType.toLowerCase()} selection
+                  </span>
                 </FormControl>
               </Flex>
 
@@ -583,14 +459,82 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
               </Flex>
             </Box>
 
+            <Checkbox {...register('published')} hidden />
+
             <Flex justifyContent="center">
-              <Button mb={4} px={10} colorScheme="blue" type="submit">
-                {operation === 'UPDATE' ? 'Update Hit' : 'Add Hit'}
+              <Button
+                mb={4}
+                mr={4}
+                colorScheme="green"
+                onClick={prepPreview}
+              >
+                Preview
               </Button>
+              <Button mb={4} mr={4} colorScheme="blue" type="submit">
+                {isUpdate ? 'Update Hit' : 'Add Draft'}
+              </Button>
+              {isUpdate && !hit?.published ?
+              (
+                <Button
+                  mb={4}
+                  colorScheme="red"
+                  onClick={() => {setValue('published',true)}}
+                  type="submit"
+                >
+                  Publish
+                </Button>
+              ) : (
+                <Button
+                mb={4}
+                colorScheme="red"
+                onClick={() => {setValue('published',false)}}
+                type="submit"
+              >
+                Unpublish
+              </Button>
+              )
+
+            }
             </Flex>
           </>
         )}
       </form>
+
+      <FormModal
+        title="Preview"
+        size="xl"
+        isOpen={isPreviewModalOpen}
+        setModalOpen={setPreviewModalOpen}
+        closeOnEsc={true}
+      >
+        <Flex
+          justifyContent="center"
+          direction={'column'}
+          alignItems={'center'}
+        >
+          <Imgix
+            src={`${process.env.NEXT_PUBLIC_IMG_URL}/${previewData?.image_front}`}
+            width={285}
+            height={285}
+          />
+          <Text width={285}>
+            {[
+              previewData?.Product?.year,
+              previewData?.Product?.manufacturer,
+              previewData?.Product?.brand,
+              previewData?.Product?.series,
+              previewData?.card_number,
+              previewData?.player,
+              previewData?.parallel,
+              previewData?.insert,
+              previewData?.autograph ? 'Autograph' : '',
+              previewData?.memoribillia ? previewData.memoribillia : '',
+              previewData?.rookie_card ? 'Rookie' : '',
+              previewData?.numbered ? '/' + previewData.numbered : '',
+            ].join(' ')}
+          </Text>
+        </Flex>
+      </FormModal>
     </>
   );
 };

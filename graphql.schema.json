@@ -15889,6 +15889,22 @@
             "deprecationReason": null
           },
           {
+            "name": "Product",
+            "description": "An object relationship",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Products",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "User",
             "description": "An object relationship",
             "args": [],
@@ -15933,22 +15949,6 @@
             "deprecationReason": null
           },
           {
-            "name": "brand",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "args": [],
@@ -15966,22 +15966,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "args": [],
             "type": {
@@ -16081,22 +16065,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": null,
             "args": [],
@@ -16149,24 +16117,44 @@
             "deprecationReason": null
           },
           {
+            "name": "product_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "uuid",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "published",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "rookie_card",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "series",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -16190,22 +16178,6 @@
           },
           {
             "name": "user_id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": null,
             "args": [],
             "type": {
@@ -16708,6 +16680,18 @@
             "deprecationReason": null
           },
           {
+            "name": "Product",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_bool_exp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "User",
             "description": null,
             "type": {
@@ -16796,18 +16780,6 @@
             "deprecationReason": null
           },
           {
-            "name": "brand",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "String_comparison_exp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "type": {
@@ -16821,18 +16793,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "String_comparison_exp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -16916,18 +16876,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "String_comparison_exp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": null,
             "type": {
@@ -16976,7 +16924,19 @@
             "deprecationReason": null
           },
           {
-            "name": "rookie_card",
+            "name": "product_id",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "uuid_comparison_exp",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "published",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -16988,11 +16948,11 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "rookie_card",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "String_comparison_exp",
+              "name": "Boolean_comparison_exp",
               "ofType": null
             },
             "defaultValue": null,
@@ -17013,18 +16973,6 @@
           },
           {
             "name": "user_id",
-            "description": null,
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "String_comparison_exp",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -17099,6 +17047,18 @@
             "deprecationReason": null
           },
           {
+            "name": "Product",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_obj_rel_insert_input",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "User",
             "description": null,
             "type": {
@@ -17135,18 +17095,6 @@
             "deprecationReason": null
           },
           {
-            "name": "brand",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "type": {
@@ -17160,18 +17108,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -17255,18 +17191,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": null,
             "type": {
@@ -17315,7 +17239,19 @@
             "deprecationReason": null
           },
           {
-            "name": "rookie_card",
+            "name": "product_id",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "uuid",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "published",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -17327,11 +17263,11 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "rookie_card",
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "Boolean",
               "ofType": null
             },
             "defaultValue": null,
@@ -17352,18 +17288,6 @@
           },
           {
             "name": "user_id",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -17385,18 +17309,6 @@
         "description": "aggregate max on columns",
         "fields": [
           {
-            "name": "brand",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "args": [],
@@ -17410,18 +17322,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "args": [],
             "type": {
@@ -17505,18 +17405,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": null,
             "args": [],
@@ -17565,12 +17453,12 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "product_id",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "uuid",
               "ofType": null
             },
             "isDeprecated": false,
@@ -17590,18 +17478,6 @@
           },
           {
             "name": "user_id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": null,
             "args": [],
             "type": {
@@ -17625,18 +17501,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "brand",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "type": {
@@ -17650,18 +17514,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -17745,18 +17597,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": null,
             "type": {
@@ -17805,7 +17645,7 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "product_id",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -17839,18 +17679,6 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "year",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
           }
         ],
         "interfaces": null,
@@ -17862,18 +17690,6 @@
         "name": "Hits_min_fields",
         "description": "aggregate min on columns",
         "fields": [
-          {
-            "name": "brand",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "break_id",
             "description": null,
@@ -17888,18 +17704,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "args": [],
             "type": {
@@ -17972,18 +17776,6 @@
           },
           {
             "name": "insert",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "manufacturer",
             "description": null,
             "args": [],
             "type": {
@@ -18043,12 +17835,12 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "product_id",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "uuid",
               "ofType": null
             },
             "isDeprecated": false,
@@ -18077,18 +17869,6 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "year",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -18103,18 +17883,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "brand",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "type": {
@@ -18128,18 +17896,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18223,18 +17979,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": null,
             "type": {
@@ -18283,7 +18027,7 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "product_id",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18308,18 +18052,6 @@
           },
           {
             "name": "user_id",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18468,6 +18200,18 @@
             "deprecationReason": null
           },
           {
+            "name": "Product",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "Products_order_by",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "User",
             "description": null,
             "type": {
@@ -18504,18 +18248,6 @@
             "deprecationReason": null
           },
           {
-            "name": "brand",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "type": {
@@ -18529,18 +18261,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18624,18 +18344,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": null,
             "type": {
@@ -18684,7 +18392,7 @@
             "deprecationReason": null
           },
           {
-            "name": "rookie_card",
+            "name": "product_id",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18696,7 +18404,19 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "published",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "rookie_card",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18721,18 +18441,6 @@
           },
           {
             "name": "user_id",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "order_by",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18796,12 +18504,6 @@
             "deprecationReason": null
           },
           {
-            "name": "brand",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": "column name",
             "isDeprecated": false,
@@ -18809,12 +18511,6 @@
           },
           {
             "name": "card_number",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -18856,12 +18552,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": "column name",
             "isDeprecated": false,
@@ -18886,13 +18576,19 @@
             "deprecationReason": null
           },
           {
-            "name": "rookie_card",
+            "name": "product_id",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "published",
+            "description": "column name",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "rookie_card",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -18905,12 +18601,6 @@
           },
           {
             "name": "user_id",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -18949,18 +18639,6 @@
             "deprecationReason": null
           },
           {
-            "name": "brand",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": null,
             "type": {
@@ -18974,18 +18652,6 @@
           },
           {
             "name": "card_number",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -19058,18 +18724,6 @@
           },
           {
             "name": "insert",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "manufacturer",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -19129,7 +18783,19 @@
             "deprecationReason": null
           },
           {
-            "name": "rookie_card",
+            "name": "product_id",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "uuid",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "published",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -19141,11 +18807,11 @@
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "rookie_card",
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "Boolean",
               "ofType": null
             },
             "defaultValue": null,
@@ -19166,18 +18832,6 @@
           },
           {
             "name": "user_id",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -19398,12 +19052,6 @@
             "deprecationReason": null
           },
           {
-            "name": "brand",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "break_id",
             "description": "column name",
             "isDeprecated": false,
@@ -19411,12 +19059,6 @@
           },
           {
             "name": "card_number",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "category",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -19458,12 +19100,6 @@
             "deprecationReason": null
           },
           {
-            "name": "manufacturer",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "memoribillia",
             "description": "column name",
             "isDeprecated": false,
@@ -19488,13 +19124,19 @@
             "deprecationReason": null
           },
           {
-            "name": "rookie_card",
+            "name": "product_id",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "series",
+            "name": "published",
+            "description": "column name",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "rookie_card",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -19507,12 +19149,6 @@
           },
           {
             "name": "user_id",
-            "description": "column name",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "year",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null

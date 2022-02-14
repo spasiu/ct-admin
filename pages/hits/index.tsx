@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import format from 'date-fns/format';
 import { AddIcon } from '@chakra-ui/icons';
-import { MdVisibility, MdEdit } from 'react-icons/md';
+import { MdVisibility, MdVisibilityOff, MdEdit } from 'react-icons/md';
 import NextLink from 'next/link';
 
 import {
@@ -32,7 +32,6 @@ import SEO from '@components/SEO';
 import FormModal from '@components/Modals/FormModal';
 import AddHitForm from '@components/Forms/AddHitForm';
 import ArchiveConfirm from '@components/ArchiveConfirm';
-
 import { TSelectedHit } from '@customTypes/hits';
 
 const HitsPage: React.FC = () => {
@@ -117,12 +116,38 @@ const HitsPage: React.FC = () => {
                           )
                         : 'NO DATE'}
                     </Td>
-                    <Td>{hit.description}</Td>
+                    <Td>
+                      {
+                        [
+                          hit.Product?.year,
+                          hit.Product?.manufacturer,
+                          hit.Product?.brand,
+                          hit.Product?.series,
+                          hit.card_number,
+                          hit.player,
+                          hit.parallel,
+                          hit.insert,
+                          (hit.autograph)? 'Autograph' : '',
+                          (hit.memoribillia)? hit.memoribillia : '',
+                          (hit.rookie_card)? 'Rookie' : '',
+                          (hit.numbered)? '/' + hit.numbered : ''
+                        ].join(' ')
+                      }
+                    </Td>
                     <Td textAlign="right">
                       <HStack spacing={2} justify="flex-end">
                         <IconButton
                           aria-label="Edit"
                           icon={<MdEdit />}
+                          onClick={() => {
+                            setSelectedHit(hit);
+                            setAddHitModalOpen(true);
+                          }}
+                        />
+
+                        <IconButton
+                          aria-label="Edit"
+                          icon={hit.published ? <MdVisibility /> : <MdVisibilityOff />}
                           onClick={() => {
                             setSelectedHit(hit);
                             setAddHitModalOpen(true);

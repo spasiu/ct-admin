@@ -352,12 +352,11 @@ export const GET_BREAK_DATA = gql`
       Inventory {
         Product {
           id
-          description
-          category
-          year
-          manufacturer
+          description,
+          year,
+          category,
+          manufacturer,
           brand
-          series
         }
       }
     }
@@ -380,16 +379,9 @@ export const GET_HITS = gql`
       description
       user_id
       break_id
-      Break {
-        title
-      }
+      product_id
       image_front
       image_back
-      year
-      category
-      manufacturer
-      brand
-      series
       card_number
       player
       parallel
@@ -398,6 +390,7 @@ export const GET_HITS = gql`
       memoribillia
       autograph
       numbered
+      published
       User {
         id
         username
@@ -408,6 +401,15 @@ export const GET_HITS = gql`
         Event {
           start_time
         }
+      }
+      Product {
+        id
+        description
+        year
+        category
+        manufacturer
+        brand
+        series
       }
     }
   }

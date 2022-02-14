@@ -2186,29 +2186,28 @@ export type Hits = {
   /** An object relationship */
   Break: Breaks;
   /** An object relationship */
+  Product: Products;
+  /** An object relationship */
   User: Users;
   archived: Scalars['Boolean'];
   autograph?: Maybe<Scalars['Boolean']>;
-  brand: Scalars['String'];
   break_id: Scalars['uuid'];
   card_number: Scalars['String'];
-  category: Scalars['String'];
   created_at: Scalars['timestamptz'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
   image_back?: Maybe<Scalars['String']>;
   image_front: Scalars['String'];
   insert?: Maybe<Scalars['String']>;
-  manufacturer: Scalars['String'];
   memoribillia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player: Scalars['String'];
+  product_id: Scalars['uuid'];
+  published: Scalars['Boolean'];
   rookie_card?: Maybe<Scalars['Boolean']>;
-  series?: Maybe<Scalars['String']>;
   updated_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
-  year: Scalars['String'];
 };
 
 /** aggregated selection of "Hits" */
@@ -2277,32 +2276,30 @@ export type Hits_Avg_Order_By = {
 /** Boolean expression to filter rows from the table "Hits". All fields are combined with a logical 'AND'. */
 export type Hits_Bool_Exp = {
   Break?: Maybe<Breaks_Bool_Exp>;
+  Product?: Maybe<Products_Bool_Exp>;
   User?: Maybe<Users_Bool_Exp>;
   _and?: Maybe<Array<Hits_Bool_Exp>>;
   _not?: Maybe<Hits_Bool_Exp>;
   _or?: Maybe<Array<Hits_Bool_Exp>>;
   archived?: Maybe<Boolean_Comparison_Exp>;
   autograph?: Maybe<Boolean_Comparison_Exp>;
-  brand?: Maybe<String_Comparison_Exp>;
   break_id?: Maybe<Uuid_Comparison_Exp>;
   card_number?: Maybe<String_Comparison_Exp>;
-  category?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   image_back?: Maybe<String_Comparison_Exp>;
   image_front?: Maybe<String_Comparison_Exp>;
   insert?: Maybe<String_Comparison_Exp>;
-  manufacturer?: Maybe<String_Comparison_Exp>;
   memoribillia?: Maybe<String_Comparison_Exp>;
   numbered?: Maybe<Int_Comparison_Exp>;
   parallel?: Maybe<String_Comparison_Exp>;
   player?: Maybe<String_Comparison_Exp>;
+  product_id?: Maybe<Uuid_Comparison_Exp>;
+  published?: Maybe<Boolean_Comparison_Exp>;
   rookie_card?: Maybe<Boolean_Comparison_Exp>;
-  series?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
-  year?: Maybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "Hits" */
@@ -2319,123 +2316,105 @@ export type Hits_Inc_Input = {
 /** input type for inserting data into table "Hits" */
 export type Hits_Insert_Input = {
   Break?: Maybe<Breaks_Obj_Rel_Insert_Input>;
+  Product?: Maybe<Products_Obj_Rel_Insert_Input>;
   User?: Maybe<Users_Obj_Rel_Insert_Input>;
   archived?: Maybe<Scalars['Boolean']>;
   autograph?: Maybe<Scalars['Boolean']>;
-  brand?: Maybe<Scalars['String']>;
   break_id?: Maybe<Scalars['uuid']>;
   card_number?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  manufacturer?: Maybe<Scalars['String']>;
   memoribillia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
+  product_id?: Maybe<Scalars['uuid']>;
+  published?: Maybe<Scalars['Boolean']>;
   rookie_card?: Maybe<Scalars['Boolean']>;
-  series?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
-  year?: Maybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
 export type Hits_Max_Fields = {
   __typename?: 'Hits_max_fields';
-  brand?: Maybe<Scalars['String']>;
   break_id?: Maybe<Scalars['uuid']>;
   card_number?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  manufacturer?: Maybe<Scalars['String']>;
   memoribillia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
-  series?: Maybe<Scalars['String']>;
+  product_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
-  year?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "Hits" */
 export type Hits_Max_Order_By = {
-  brand?: Maybe<Order_By>;
   break_id?: Maybe<Order_By>;
   card_number?: Maybe<Order_By>;
-  category?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image_back?: Maybe<Order_By>;
   image_front?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
-  manufacturer?: Maybe<Order_By>;
   memoribillia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
-  series?: Maybe<Order_By>;
+  product_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
-  year?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Hits_Min_Fields = {
   __typename?: 'Hits_min_fields';
-  brand?: Maybe<Scalars['String']>;
   break_id?: Maybe<Scalars['uuid']>;
   card_number?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  manufacturer?: Maybe<Scalars['String']>;
   memoribillia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
-  series?: Maybe<Scalars['String']>;
+  product_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
-  year?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "Hits" */
 export type Hits_Min_Order_By = {
-  brand?: Maybe<Order_By>;
   break_id?: Maybe<Order_By>;
   card_number?: Maybe<Order_By>;
-  category?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image_back?: Maybe<Order_By>;
   image_front?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
-  manufacturer?: Maybe<Order_By>;
   memoribillia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
-  series?: Maybe<Order_By>;
+  product_id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
-  year?: Maybe<Order_By>;
 };
 
 /** response of any mutation on the table "Hits" */
@@ -2457,29 +2436,27 @@ export type Hits_On_Conflict = {
 /** Ordering options when selecting data from "Hits". */
 export type Hits_Order_By = {
   Break?: Maybe<Breaks_Order_By>;
+  Product?: Maybe<Products_Order_By>;
   User?: Maybe<Users_Order_By>;
   archived?: Maybe<Order_By>;
   autograph?: Maybe<Order_By>;
-  brand?: Maybe<Order_By>;
   break_id?: Maybe<Order_By>;
   card_number?: Maybe<Order_By>;
-  category?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   image_back?: Maybe<Order_By>;
   image_front?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
-  manufacturer?: Maybe<Order_By>;
   memoribillia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
+  product_id?: Maybe<Order_By>;
+  published?: Maybe<Order_By>;
   rookie_card?: Maybe<Order_By>;
-  series?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
-  year?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: Hits */
@@ -2494,13 +2471,9 @@ export enum Hits_Select_Column {
   /** column name */
   Autograph = 'autograph',
   /** column name */
-  Brand = 'brand',
-  /** column name */
   BreakId = 'break_id',
   /** column name */
   CardNumber = 'card_number',
-  /** column name */
-  Category = 'category',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -2514,8 +2487,6 @@ export enum Hits_Select_Column {
   /** column name */
   Insert = 'insert',
   /** column name */
-  Manufacturer = 'manufacturer',
-  /** column name */
   Memoribillia = 'memoribillia',
   /** column name */
   Numbered = 'numbered',
@@ -2524,41 +2495,38 @@ export enum Hits_Select_Column {
   /** column name */
   Player = 'player',
   /** column name */
-  RookieCard = 'rookie_card',
+  ProductId = 'product_id',
   /** column name */
-  Series = 'series',
+  Published = 'published',
+  /** column name */
+  RookieCard = 'rookie_card',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
-  UserId = 'user_id',
-  /** column name */
-  Year = 'year'
+  UserId = 'user_id'
 }
 
 /** input type for updating data in table "Hits" */
 export type Hits_Set_Input = {
   archived?: Maybe<Scalars['Boolean']>;
   autograph?: Maybe<Scalars['Boolean']>;
-  brand?: Maybe<Scalars['String']>;
   break_id?: Maybe<Scalars['uuid']>;
   card_number?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  manufacturer?: Maybe<Scalars['String']>;
   memoribillia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
+  product_id?: Maybe<Scalars['uuid']>;
+  published?: Maybe<Scalars['Boolean']>;
   rookie_card?: Maybe<Scalars['Boolean']>;
-  series?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
-  year?: Maybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -2612,13 +2580,9 @@ export enum Hits_Update_Column {
   /** column name */
   Autograph = 'autograph',
   /** column name */
-  Brand = 'brand',
-  /** column name */
   BreakId = 'break_id',
   /** column name */
   CardNumber = 'card_number',
-  /** column name */
-  Category = 'category',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -2632,8 +2596,6 @@ export enum Hits_Update_Column {
   /** column name */
   Insert = 'insert',
   /** column name */
-  Manufacturer = 'manufacturer',
-  /** column name */
   Memoribillia = 'memoribillia',
   /** column name */
   Numbered = 'numbered',
@@ -2642,15 +2604,15 @@ export enum Hits_Update_Column {
   /** column name */
   Player = 'player',
   /** column name */
-  RookieCard = 'rookie_card',
+  ProductId = 'product_id',
   /** column name */
-  Series = 'series',
+  Published = 'published',
+  /** column name */
+  RookieCard = 'rookie_card',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
-  UserId = 'user_id',
-  /** column name */
-  Year = 'year'
+  UserId = 'user_id'
 }
 
 /** aggregate var_pop on columns */
@@ -11434,7 +11396,7 @@ export type GetBreakDataQuery = (
       { __typename?: 'Inventory' }
       & { Product: (
         { __typename?: 'Products' }
-        & Pick<Products, 'id' | 'description' | 'category' | 'year' | 'manufacturer' | 'brand' | 'series'>
+        & Pick<Products, 'id' | 'description' | 'year' | 'category' | 'manufacturer' | 'brand'>
       ) }
     )> }
   )> }
@@ -11460,17 +11422,20 @@ export type GetHitsQuery = (
   { __typename?: 'query_root' }
   & { Hits: Array<(
     { __typename?: 'Hits' }
-    & Pick<Hits, 'id' | 'description' | 'user_id' | 'break_id' | 'image_front' | 'image_back' | 'year' | 'category' | 'manufacturer' | 'brand' | 'series' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered'>
-    & { Break: (
+    & Pick<Hits, 'id' | 'description' | 'user_id' | 'break_id' | 'product_id' | 'image_front' | 'image_back' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'published'>
+    & { User: (
+      { __typename?: 'Users' }
+      & Pick<Users, 'id' | 'username'>
+    ), Break: (
       { __typename?: 'Breaks' }
-      & Pick<Breaks, 'title' | 'id'>
+      & Pick<Breaks, 'id' | 'title'>
       & { Event: (
         { __typename?: 'Events' }
         & Pick<Events, 'start_time'>
       ) }
-    ), User: (
-      { __typename?: 'Users' }
-      & Pick<Users, 'id' | 'username'>
+    ), Product: (
+      { __typename?: 'Products' }
+      & Pick<Products, 'id' | 'description' | 'year' | 'category' | 'manufacturer' | 'brand' | 'series'>
     ) }
   )> }
 );
@@ -12939,11 +12904,10 @@ export const GetBreakDataDocument = gql`
       Product {
         id
         description
-        category
         year
+        category
         manufacturer
         brand
-        series
       }
     }
   }
@@ -13020,20 +12984,9 @@ export const GetHitsDocument = gql`
     description
     user_id
     break_id
-    Break {
-      title
-      id
-      Event {
-        start_time
-      }
-    }
+    product_id
     image_front
     image_back
-    year
-    category
-    manufacturer
-    brand
-    series
     card_number
     player
     parallel
@@ -13042,6 +12995,7 @@ export const GetHitsDocument = gql`
     memoribillia
     autograph
     numbered
+    published
     User {
       id
       username
@@ -13052,6 +13006,15 @@ export const GetHitsDocument = gql`
       Event {
         start_time
       }
+    }
+    Product {
+      id
+      description
+      year
+      category
+      manufacturer
+      brand
+      series
     }
   }
 }
