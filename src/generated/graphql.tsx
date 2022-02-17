@@ -2184,30 +2184,30 @@ export enum ExtensibleValues_Update_Column {
 export type Hits = {
   __typename?: 'Hits';
   /** An object relationship */
-  Break: Breaks;
+  Break?: Maybe<Breaks>;
   /** An object relationship */
   Product: Products;
   /** An object relationship */
-  User: Users;
-  archived: Scalars['Boolean'];
+  User?: Maybe<Users>;
+  archived?: Maybe<Scalars['Boolean']>;
   autograph?: Maybe<Scalars['Boolean']>;
-  break_id: Scalars['uuid'];
-  card_number: Scalars['String'];
-  created_at: Scalars['timestamptz'];
+  break_id?: Maybe<Scalars['uuid']>;
+  card_number?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
   image_back?: Maybe<Scalars['String']>;
-  image_front: Scalars['String'];
+  image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
   memoribillia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
-  player: Scalars['String'];
+  player?: Maybe<Scalars['String']>;
   product_id: Scalars['uuid'];
   published: Scalars['Boolean'];
   rookie_card?: Maybe<Scalars['Boolean']>;
-  updated_at: Scalars['timestamptz'];
-  user_id: Scalars['String'];
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['String']>;
 };
 
 /** aggregated selection of "Hits" */
@@ -5371,7 +5371,7 @@ export type Teams = {
   color?: Maybe<Scalars['bpchar']>;
   color_secondary?: Maybe<Scalars['bpchar']>;
   end_year?: Maybe<Scalars['smallint']>;
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   short_code: Scalars['String'];
   sport: Scalars['String'];
   start_year: Scalars['smallint'];
@@ -5432,7 +5432,7 @@ export type Teams_Bool_Exp = {
 /** unique or primary key constraints on table "Teams" */
 export enum Teams_Constraint {
   /** unique or primary key constraint */
-  TeamsPkey = 'teams_pkey'
+  TeamsPkey1 = 'Teams_pkey1'
 }
 
 /** input type for incrementing numeric columns in table "Teams" */
@@ -5758,8 +5758,7 @@ export type Teams_Order_By = {
 
 /** primary key columns input for table: Teams */
 export type Teams_Pk_Columns_Input = {
-  short_code: Scalars['String'];
-  sport: Scalars['String'];
+  name: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -7777,8 +7776,7 @@ export type Mutation_RootDelete_TeamsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Teams_By_PkArgs = {
-  short_code: Scalars['String'];
-  sport: Scalars['String'];
+  name: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -9447,8 +9445,7 @@ export type Query_RootTeams_AggregateArgs = {
 
 
 export type Query_RootTeams_By_PkArgs = {
-  short_code: Scalars['String'];
-  sport: Scalars['String'];
+  name: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -10281,8 +10278,7 @@ export type Subscription_RootTeams_AggregateArgs = {
 
 
 export type Subscription_RootTeams_By_PkArgs = {
-  short_code: Scalars['String'];
-  sport: Scalars['String'];
+  name: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -11110,6 +11106,19 @@ export type UpdateBreakerProfileMutation = (
   )> }
 );
 
+export type GetProductIitemsWithOrderIdByBreakIdQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetProductIitemsWithOrderIdByBreakIdQuery = (
+  { __typename?: 'query_root' }
+  & { BreakProductItems: Array<(
+    { __typename?: 'BreakProductItems' }
+    & Pick<BreakProductItems, 'id'>
+  )> }
+);
+
 export type GetProductsQueryVariables = Exact<{
   unitOfMeasure?: Maybe<Array<Unit_Of_Measure_Enum> | Unit_Of_Measure_Enum>;
   input?: Maybe<Scalars['String']>;
@@ -11423,17 +11432,17 @@ export type GetHitsQuery = (
   & { Hits: Array<(
     { __typename?: 'Hits' }
     & Pick<Hits, 'id' | 'description' | 'user_id' | 'break_id' | 'product_id' | 'image_front' | 'image_back' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'published'>
-    & { User: (
+    & { User?: Maybe<(
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'username'>
-    ), Break: (
+    )>, Break?: Maybe<(
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id' | 'title'>
       & { Event: (
         { __typename?: 'Events' }
         & Pick<Events, 'start_time'>
       ) }
-    ), Product: (
+    )>, Product: (
       { __typename?: 'Products' }
       & Pick<Products, 'id' | 'description' | 'year' | 'category' | 'manufacturer' | 'brand' | 'series'>
     ) }
@@ -12333,6 +12342,41 @@ export function useUpdateBreakerProfileMutation(baseOptions?: Apollo.MutationHoo
 export type UpdateBreakerProfileMutationHookResult = ReturnType<typeof useUpdateBreakerProfileMutation>;
 export type UpdateBreakerProfileMutationResult = Apollo.MutationResult<UpdateBreakerProfileMutation>;
 export type UpdateBreakerProfileMutationOptions = Apollo.BaseMutationOptions<UpdateBreakerProfileMutation, UpdateBreakerProfileMutationVariables>;
+export const GetProductIitemsWithOrderIdByBreakIdDocument = gql`
+    query GetProductIitemsWithOrderIdByBreakId($id: uuid!) {
+  BreakProductItems(where: {order_id: {_is_null: false}, Break: {id: {_eq: $id}}}) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useGetProductIitemsWithOrderIdByBreakIdQuery__
+ *
+ * To run a query within a React component, call `useGetProductIitemsWithOrderIdByBreakIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductIitemsWithOrderIdByBreakIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductIitemsWithOrderIdByBreakIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProductIitemsWithOrderIdByBreakIdQuery(baseOptions: Apollo.QueryHookOptions<GetProductIitemsWithOrderIdByBreakIdQuery, GetProductIitemsWithOrderIdByBreakIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProductIitemsWithOrderIdByBreakIdQuery, GetProductIitemsWithOrderIdByBreakIdQueryVariables>(GetProductIitemsWithOrderIdByBreakIdDocument, options);
+      }
+export function useGetProductIitemsWithOrderIdByBreakIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductIitemsWithOrderIdByBreakIdQuery, GetProductIitemsWithOrderIdByBreakIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProductIitemsWithOrderIdByBreakIdQuery, GetProductIitemsWithOrderIdByBreakIdQueryVariables>(GetProductIitemsWithOrderIdByBreakIdDocument, options);
+        }
+export type GetProductIitemsWithOrderIdByBreakIdQueryHookResult = ReturnType<typeof useGetProductIitemsWithOrderIdByBreakIdQuery>;
+export type GetProductIitemsWithOrderIdByBreakIdLazyQueryHookResult = ReturnType<typeof useGetProductIitemsWithOrderIdByBreakIdLazyQuery>;
+export type GetProductIitemsWithOrderIdByBreakIdQueryResult = Apollo.QueryResult<GetProductIitemsWithOrderIdByBreakIdQuery, GetProductIitemsWithOrderIdByBreakIdQueryVariables>;
 export const GetProductsDocument = gql`
     query GetProducts($unitOfMeasure: [unit_of_measure_enum!], $input: String) {
   Products(
