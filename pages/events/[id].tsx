@@ -180,7 +180,7 @@ const EventPage: React.FC = () => {
             breakId: b.id,
             breakName: b.title,
             orderId: orderId,
-            teams: orders[orderId],
+            teams: orders[orderId].join('; '),
             userId: item.Order.user_id,
             username: item.Order.User.username,
             first_name: item.Order.User.first_name,
