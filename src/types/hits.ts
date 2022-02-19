@@ -60,8 +60,6 @@ export type TAddHitFormData = {
   memoribillia: string | null;
   autograph: boolean | null;
   numbered: number | null;
-  grader: string | null;
-  grade: string | null;
   published:boolean;
 };
 

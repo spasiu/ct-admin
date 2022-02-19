@@ -3,6 +3,7 @@ import format from 'date-fns/format';
 import { AddIcon } from '@chakra-ui/icons';
 import { MdVisibility, MdVisibilityOff, MdEdit } from 'react-icons/md';
 import NextLink from 'next/link';
+import { functions } from '@config/firebase';
 
 import {
   Heading,
@@ -22,6 +23,7 @@ import {
 import {
   useGetHitsQuery,
   useArchiveHitsByIdMutation,
+  useUpdateHitMutation,
 } from '@generated/graphql';
 
 import paths from '@config/paths';
@@ -32,7 +34,7 @@ import SEO from '@components/SEO';
 import FormModal from '@components/Modals/FormModal';
 import AddHitForm from '@components/Forms/AddHitForm';
 import ArchiveConfirm from '@components/ArchiveConfirm';
-import { TSelectedHit } from '@customTypes/hits';
+import { TAddHitFormData, TSelectedHit } from '@customTypes/hits';
 
 const HitsPage: React.FC = () => {
   const [isAddHitModalOpen, setAddHitModalOpen] = useState(false);
@@ -59,6 +61,21 @@ const HitsPage: React.FC = () => {
       refetchHits();
     },
   });
+
+  const [ updateHit ] = useUpdateHitMutation({
+    onCompleted: (updated) => {
+      refetchHits();
+      // send notification if this was the result of publication
+      if (updated.update_Hits_by_pk && updated.update_Hits_by_pk.published) {
+        sendHitNotification({
+          userId: updated.update_Hits_by_pk.user_id,
+          playerName: updated.update_Hits_by_pk.player
+        });
+      }
+    },
+  });
+
+  const sendHitNotification = functions.httpsCallable('sendHitNotification');
 
   return (
     <>
@@ -149,8 +166,11 @@ const HitsPage: React.FC = () => {
                           aria-label="Edit"
                           icon={hit.published ? <MdVisibility /> : <MdVisibilityOff />}
                           onClick={() => {
-                            setSelectedHit(hit);
-                            setAddHitModalOpen(true);
+                            hit.published = !hit.published;
+                            // not an ideal approach for stripping out extraneous types,
+                            // but ok for this temporary use-case
+                            const {Break, User, Product, ...updateData} = hit; 
+                            updateHit({variables: {id: hit.id, data: updateData}});
                           }}
                         />
 

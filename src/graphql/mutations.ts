@@ -202,6 +202,9 @@ export const UPDATE_HIT = gql`
   mutation UpdateHit($id: uuid!, $data: Hits_set_input!) {
     update_Hits_by_pk(pk_columns: { id: $id }, _set: $data) {
       id
+      user_id
+      player
+      published
     }
   }
 `;

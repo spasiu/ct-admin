@@ -2184,30 +2184,30 @@ export enum ExtensibleValues_Update_Column {
 export type Hits = {
   __typename?: 'Hits';
   /** An object relationship */
-  Break?: Maybe<Breaks>;
+  Break: Breaks;
   /** An object relationship */
   Product: Products;
   /** An object relationship */
-  User?: Maybe<Users>;
-  archived?: Maybe<Scalars['Boolean']>;
+  User: Users;
+  archived: Scalars['Boolean'];
   autograph?: Maybe<Scalars['Boolean']>;
-  break_id?: Maybe<Scalars['uuid']>;
-  card_number?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
+  break_id: Scalars['uuid'];
+  card_number: Scalars['String'];
+  created_at: Scalars['timestamptz'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
   image_back?: Maybe<Scalars['String']>;
-  image_front?: Maybe<Scalars['String']>;
+  image_front: Scalars['String'];
   insert?: Maybe<Scalars['String']>;
   memoribillia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
-  player?: Maybe<Scalars['String']>;
+  player: Scalars['String'];
   product_id: Scalars['uuid'];
   published: Scalars['Boolean'];
   rookie_card?: Maybe<Scalars['Boolean']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-  user_id?: Maybe<Scalars['String']>;
+  updated_at: Scalars['timestamptz'];
+  user_id: Scalars['String'];
 };
 
 /** aggregated selection of "Hits" */
@@ -3367,6 +3367,7 @@ export type Orders = {
   discount_total: Scalars['numeric'];
   grand_total: Scalars['numeric'];
   id: Scalars['uuid'];
+  payment_id?: Maybe<Scalars['uuid']>;
   shipping_total: Scalars['numeric'];
   subtotal: Scalars['numeric'];
   tax_total: Scalars['numeric'];
@@ -3479,6 +3480,7 @@ export type Orders_Bool_Exp = {
   discount_total?: Maybe<Numeric_Comparison_Exp>;
   grand_total?: Maybe<Numeric_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
+  payment_id?: Maybe<Uuid_Comparison_Exp>;
   shipping_total?: Maybe<Numeric_Comparison_Exp>;
   subtotal?: Maybe<Numeric_Comparison_Exp>;
   tax_total?: Maybe<Numeric_Comparison_Exp>;
@@ -3511,6 +3513,7 @@ export type Orders_Insert_Input = {
   discount_total?: Maybe<Scalars['numeric']>;
   grand_total?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
+  payment_id?: Maybe<Scalars['uuid']>;
   shipping_total?: Maybe<Scalars['numeric']>;
   subtotal?: Maybe<Scalars['numeric']>;
   tax_total?: Maybe<Scalars['numeric']>;
@@ -3526,6 +3529,7 @@ export type Orders_Max_Fields = {
   discount_total?: Maybe<Scalars['numeric']>;
   grand_total?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
+  payment_id?: Maybe<Scalars['uuid']>;
   shipping_total?: Maybe<Scalars['numeric']>;
   subtotal?: Maybe<Scalars['numeric']>;
   tax_total?: Maybe<Scalars['numeric']>;
@@ -3540,6 +3544,7 @@ export type Orders_Max_Order_By = {
   discount_total?: Maybe<Order_By>;
   grand_total?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  payment_id?: Maybe<Order_By>;
   shipping_total?: Maybe<Order_By>;
   subtotal?: Maybe<Order_By>;
   tax_total?: Maybe<Order_By>;
@@ -3555,6 +3560,7 @@ export type Orders_Min_Fields = {
   discount_total?: Maybe<Scalars['numeric']>;
   grand_total?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
+  payment_id?: Maybe<Scalars['uuid']>;
   shipping_total?: Maybe<Scalars['numeric']>;
   subtotal?: Maybe<Scalars['numeric']>;
   tax_total?: Maybe<Scalars['numeric']>;
@@ -3569,6 +3575,7 @@ export type Orders_Min_Order_By = {
   discount_total?: Maybe<Order_By>;
   grand_total?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  payment_id?: Maybe<Order_By>;
   shipping_total?: Maybe<Order_By>;
   subtotal?: Maybe<Order_By>;
   tax_total?: Maybe<Order_By>;
@@ -3608,6 +3615,7 @@ export type Orders_Order_By = {
   discount_total?: Maybe<Order_By>;
   grand_total?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  payment_id?: Maybe<Order_By>;
   shipping_total?: Maybe<Order_By>;
   subtotal?: Maybe<Order_By>;
   tax_total?: Maybe<Order_By>;
@@ -3633,6 +3641,8 @@ export enum Orders_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  PaymentId = 'payment_id',
+  /** column name */
   ShippingTotal = 'shipping_total',
   /** column name */
   Subtotal = 'subtotal',
@@ -3651,6 +3661,7 @@ export type Orders_Set_Input = {
   discount_total?: Maybe<Scalars['numeric']>;
   grand_total?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
+  payment_id?: Maybe<Scalars['uuid']>;
   shipping_total?: Maybe<Scalars['numeric']>;
   subtotal?: Maybe<Scalars['numeric']>;
   tax_total?: Maybe<Scalars['numeric']>;
@@ -3754,6 +3765,8 @@ export enum Orders_Update_Column {
   GrandTotal = 'grand_total',
   /** column name */
   Id = 'id',
+  /** column name */
+  PaymentId = 'payment_id',
   /** column name */
   ShippingTotal = 'shipping_total',
   /** column name */
@@ -5371,7 +5384,7 @@ export type Teams = {
   color?: Maybe<Scalars['bpchar']>;
   color_secondary?: Maybe<Scalars['bpchar']>;
   end_year?: Maybe<Scalars['smallint']>;
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   short_code: Scalars['String'];
   sport: Scalars['String'];
   start_year: Scalars['smallint'];
@@ -5432,7 +5445,7 @@ export type Teams_Bool_Exp = {
 /** unique or primary key constraints on table "Teams" */
 export enum Teams_Constraint {
   /** unique or primary key constraint */
-  TeamsPkey1 = 'Teams_pkey1'
+  TeamsPkey = 'teams_pkey'
 }
 
 /** input type for incrementing numeric columns in table "Teams" */
@@ -5758,7 +5771,8 @@ export type Teams_Order_By = {
 
 /** primary key columns input for table: Teams */
 export type Teams_Pk_Columns_Input = {
-  name: Scalars['String'];
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -7776,7 +7790,8 @@ export type Mutation_RootDelete_TeamsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Teams_By_PkArgs = {
-  name: Scalars['String'];
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -9445,7 +9460,8 @@ export type Query_RootTeams_AggregateArgs = {
 
 
 export type Query_RootTeams_By_PkArgs = {
-  name: Scalars['String'];
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -10278,7 +10294,8 @@ export type Subscription_RootTeams_AggregateArgs = {
 
 
 export type Subscription_RootTeams_By_PkArgs = {
-  name: Scalars['String'];
+  short_code: Scalars['String'];
+  sport: Scalars['String'];
   start_year: Scalars['smallint'];
 };
 
@@ -11069,7 +11086,7 @@ export type UpdateHitMutation = (
   { __typename?: 'mutation_root' }
   & { update_Hits_by_pk?: Maybe<(
     { __typename?: 'Hits' }
-    & Pick<Hits, 'id'>
+    & Pick<Hits, 'id' | 'user_id' | 'player' | 'published'>
   )> }
 );
 
@@ -11432,17 +11449,17 @@ export type GetHitsQuery = (
   & { Hits: Array<(
     { __typename?: 'Hits' }
     & Pick<Hits, 'id' | 'description' | 'user_id' | 'break_id' | 'product_id' | 'image_front' | 'image_back' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'published'>
-    & { User?: Maybe<(
+    & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'username'>
-    )>, Break?: Maybe<(
+    ), Break: (
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id' | 'title'>
       & { Event: (
         { __typename?: 'Events' }
         & Pick<Events, 'start_time'>
       ) }
-    )>, Product: (
+    ), Product: (
       { __typename?: 'Products' }
       & Pick<Products, 'id' | 'description' | 'year' | 'category' | 'manufacturer' | 'brand' | 'series'>
     ) }
@@ -12231,6 +12248,9 @@ export const UpdateHitDocument = gql`
     mutation UpdateHit($id: uuid!, $data: Hits_set_input!) {
   update_Hits_by_pk(pk_columns: {id: $id}, _set: $data) {
     id
+    user_id
+    player
+    published
   }
 }
     `;
