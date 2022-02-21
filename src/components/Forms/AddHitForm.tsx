@@ -210,7 +210,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
     if (isUpdate) {
       updateHit({ variables: { id: hit?.id, data: result } });
       // only send a notification if this is the first publication
-      if (!hit.published && result.published) {
+      if (!hit?.published && result.published) {
         sendHitNotification({
           userId: result.user_id,
           playerName: result.player,
