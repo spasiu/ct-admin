@@ -10,6 +10,7 @@ import {
   Input,
   Button,
   HStack,
+  Textarea,
 } from '@chakra-ui/react';
 
 import { TChatFormData, TChatFormProps } from '@customTypes/forms';
@@ -36,17 +37,11 @@ const ChatForm: React.FC<TChatFormProps> = ({ callback }) => {
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-      <HStack spacing={8} p={0} alignItems="flex-end">
-        <FormControl>
-          <InputGroup size="lg">
-            <Input {...register('text')} />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" type="submit">
-                Send
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </FormControl>
+      <HStack spacing={3} p={0} >
+        <Textarea size="md" {...register('text')} />
+        <Button size="md" type="submit">
+          Send
+        </Button>
       </HStack>
     </form>
   );
