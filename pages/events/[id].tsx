@@ -73,7 +73,6 @@ const EventPage: React.FC = () => {
     'sendBreakLiveNotification',
   );
 
-  const [streamActive, setStreamActive] = useState(false);
   const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
   const [selectedBreak, setSelectedBreak] = useState<
     TEventSelectedBreak | undefined
@@ -120,35 +119,6 @@ const EventPage: React.FC = () => {
       error: updateBreakMutationError,
     },
   ] = useUpdateBreakMutation();
-
-  // Watch for user changes
-  useEffect(() => {
-    if (user) {
-      watchStream = db
-        .collection('Breakers')
-        .doc(user.uid)
-        .onSnapshot((doc) => {
-          if (doc.exists) {
-            const streamData = doc.data();
-
-            if (
-              streamData?.streamState === 'active' ||
-              streamData?.streamState === 'connected'
-            ) {
-              setStreamActive(true);
-            } else {
-              setStreamActive(false);
-            }
-          }
-        });
-    }
-
-    return () => {
-      if (watchStream) {
-        watchStream();
-      }
-    };
-  }, [user]);
 
   const breakNotificationsSent: string[] = [];
 
@@ -276,47 +246,10 @@ const EventPage: React.FC = () => {
                               user?.uid !==
                               eventQueryData?.Events_by_pk?.User?.id
                             }
-                            onClick={() => {
-                              if (streamActive) {
-                                updateEvent({
-                                  variables: {
-                                    id: eventId,
-                                    data: { status: Event_Status_Enum.Live },
-                                  },
-                                }).then(() =>
-                                  sendEventLiveNotification({
-                                    eventId: eventQueryData?.Events_by_pk?.id,
-                                    eventName:
-                                      eventQueryData?.Events_by_pk?.title,
-                                    breakerId:
-                                      eventQueryData?.Events_by_pk?.User?.id,
-                                    breakerName:
-                                      eventQueryData?.Events_by_pk?.User
-                                        ?.username,
-                                  }),
-                                );
-                              } else {
-                                onOpenProceedAlert();
-                              }
-                            }}
+                            onClick={ onOpenProceedAlert }
                           >
                             Go Live
                           </Button>
-                          {user?.uid ===
-                            eventQueryData?.Events_by_pk?.User?.id &&
-                            streamActive && (
-                              <Badge
-                                variant="outline"
-                                colorScheme="green"
-                                display="flex"
-                                alignItems="center"
-                              >
-                                <Box as="span" mr={1}>
-                                  <TiMediaRecord color="red" />
-                                </Box>
-                                Stream is live
-                              </Badge>
-                            )}
 
                           {user?.uid !==
                             eventQueryData?.Events_by_pk?.User?.id && (
@@ -464,15 +397,17 @@ const EventPage: React.FC = () => {
                       {eventQueryData.Events_by_pk?.stream_name ? (
                         <Box>
                           <Text>
-                            Publishing Token:
+                            Stream Name:
+                            <span> </span>
                             <Code>
-                              {eventQueryData.Events_by_pk?.publishing_token}
+                              {eventQueryData.Events_by_pk?.stream_name}
                             </Code>
                           </Text>
                           <Text>
-                            Stream Name:
+                            Publishing Token:
+                            <span> </span>
                             <Code>
-                              {eventQueryData.Events_by_pk?.stream_name}
+                              {eventQueryData.Events_by_pk?.publishing_token}
                             </Code>
                           </Text>
                         </Box>
