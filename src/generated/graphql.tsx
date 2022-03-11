@@ -4596,7 +4596,6 @@ export type SaveBreak = {
   User: Users;
   break_id: Scalars['uuid'];
   created_at: Scalars['timestamptz'];
-  id: Scalars['uuid'];
   updated_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
@@ -4646,7 +4645,6 @@ export type SaveBreak_Bool_Exp = {
   _or?: Maybe<Array<SaveBreak_Bool_Exp>>;
   break_id?: Maybe<Uuid_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
@@ -4663,7 +4661,6 @@ export type SaveBreak_Insert_Input = {
   User?: Maybe<Users_Obj_Rel_Insert_Input>;
   break_id?: Maybe<Scalars['uuid']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4673,7 +4670,6 @@ export type SaveBreak_Max_Fields = {
   __typename?: 'SaveBreak_max_fields';
   break_id?: Maybe<Scalars['uuid']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4682,7 +4678,6 @@ export type SaveBreak_Max_Fields = {
 export type SaveBreak_Max_Order_By = {
   break_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -4692,7 +4687,6 @@ export type SaveBreak_Min_Fields = {
   __typename?: 'SaveBreak_min_fields';
   break_id?: Maybe<Scalars['uuid']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4701,7 +4695,6 @@ export type SaveBreak_Min_Fields = {
 export type SaveBreak_Min_Order_By = {
   break_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -4728,14 +4721,14 @@ export type SaveBreak_Order_By = {
   User?: Maybe<Users_Order_By>;
   break_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: SaveBreak */
 export type SaveBreak_Pk_Columns_Input = {
-  id: Scalars['uuid'];
+  break_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 /** select columns of table "SaveBreak" */
@@ -4744,8 +4737,6 @@ export enum SaveBreak_Select_Column {
   BreakId = 'break_id',
   /** column name */
   CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -4756,7 +4747,6 @@ export enum SaveBreak_Select_Column {
 export type SaveBreak_Set_Input = {
   break_id?: Maybe<Scalars['uuid']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4767,8 +4757,6 @@ export enum SaveBreak_Update_Column {
   BreakId = 'break_id',
   /** column name */
   CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -4784,7 +4772,6 @@ export type SaveBreaker = {
   User: Users;
   breaker_id: Scalars['String'];
   created_at: Scalars['timestamptz'];
-  id: Scalars['uuid'];
   updated_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
@@ -4834,7 +4821,6 @@ export type SaveBreaker_Bool_Exp = {
   _or?: Maybe<Array<SaveBreaker_Bool_Exp>>;
   breaker_id?: Maybe<String_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
@@ -4851,7 +4837,6 @@ export type SaveBreaker_Insert_Input = {
   User?: Maybe<Users_Obj_Rel_Insert_Input>;
   breaker_id?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4861,7 +4846,6 @@ export type SaveBreaker_Max_Fields = {
   __typename?: 'SaveBreaker_max_fields';
   breaker_id?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4870,7 +4854,6 @@ export type SaveBreaker_Max_Fields = {
 export type SaveBreaker_Max_Order_By = {
   breaker_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -4880,7 +4863,6 @@ export type SaveBreaker_Min_Fields = {
   __typename?: 'SaveBreaker_min_fields';
   breaker_id?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4889,7 +4871,6 @@ export type SaveBreaker_Min_Fields = {
 export type SaveBreaker_Min_Order_By = {
   breaker_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -4916,14 +4897,14 @@ export type SaveBreaker_Order_By = {
   User?: Maybe<Users_Order_By>;
   breaker_id?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: SaveBreaker */
 export type SaveBreaker_Pk_Columns_Input = {
-  id: Scalars['uuid'];
+  breaker_id: Scalars['String'];
+  user_id: Scalars['String'];
 };
 
 /** select columns of table "SaveBreaker" */
@@ -4932,8 +4913,6 @@ export enum SaveBreaker_Select_Column {
   BreakerId = 'breaker_id',
   /** column name */
   CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -4944,7 +4923,6 @@ export enum SaveBreaker_Select_Column {
 export type SaveBreaker_Set_Input = {
   breaker_id?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -4955,8 +4933,6 @@ export enum SaveBreaker_Update_Column {
   BreakerId = 'breaker_id',
   /** column name */
   CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -4972,7 +4948,6 @@ export type SaveEvent = {
   User: Users;
   created_at: Scalars['timestamptz'];
   event_id: Scalars['uuid'];
-  id: Scalars['uuid'];
   updated_at: Scalars['timestamptz'];
   user_id: Scalars['String'];
 };
@@ -5022,7 +4997,6 @@ export type SaveEvent_Bool_Exp = {
   _or?: Maybe<Array<SaveEvent_Bool_Exp>>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   event_id?: Maybe<Uuid_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<String_Comparison_Exp>;
 };
@@ -5039,7 +5013,6 @@ export type SaveEvent_Insert_Input = {
   User?: Maybe<Users_Obj_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   event_id?: Maybe<Scalars['uuid']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -5049,7 +5022,6 @@ export type SaveEvent_Max_Fields = {
   __typename?: 'SaveEvent_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   event_id?: Maybe<Scalars['uuid']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -5058,7 +5030,6 @@ export type SaveEvent_Max_Fields = {
 export type SaveEvent_Max_Order_By = {
   created_at?: Maybe<Order_By>;
   event_id?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -5068,7 +5039,6 @@ export type SaveEvent_Min_Fields = {
   __typename?: 'SaveEvent_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   event_id?: Maybe<Scalars['uuid']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -5077,7 +5047,6 @@ export type SaveEvent_Min_Fields = {
 export type SaveEvent_Min_Order_By = {
   created_at?: Maybe<Order_By>;
   event_id?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
@@ -5104,14 +5073,14 @@ export type SaveEvent_Order_By = {
   User?: Maybe<Users_Order_By>;
   created_at?: Maybe<Order_By>;
   event_id?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: SaveEvent */
 export type SaveEvent_Pk_Columns_Input = {
-  id: Scalars['uuid'];
+  event_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 /** select columns of table "SaveEvent" */
@@ -5120,8 +5089,6 @@ export enum SaveEvent_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   EventId = 'event_id',
-  /** column name */
-  Id = 'id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -5132,7 +5099,6 @@ export enum SaveEvent_Select_Column {
 export type SaveEvent_Set_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
   event_id?: Maybe<Scalars['uuid']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -5143,8 +5109,6 @@ export enum SaveEvent_Update_Column {
   CreatedAt = 'created_at',
   /** column name */
   EventId = 'event_id',
-  /** column name */
-  Id = 'id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -5885,7 +5849,6 @@ export type UserPreferences = {
   break_type: Scalars['_text'];
   created_at: Scalars['timestamptz'];
   frequency: Scalars['String'];
-  id: Scalars['uuid'];
   pricing: Scalars['_text'];
   sports: Scalars['_text'];
   updated_at: Scalars['timestamptz'];
@@ -5923,7 +5886,6 @@ export type UserPreferences_Bool_Exp = {
   break_type?: Maybe<_Text_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   frequency?: Maybe<String_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
   pricing?: Maybe<_Text_Comparison_Exp>;
   sports?: Maybe<_Text_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -5933,9 +5895,7 @@ export type UserPreferences_Bool_Exp = {
 /** unique or primary key constraints on table "UserPreferences" */
 export enum UserPreferences_Constraint {
   /** unique or primary key constraint */
-  UserPreferencesPkey = 'UserPreferences_pkey',
-  /** unique or primary key constraint */
-  UserPreferencesUserIdKey = 'UserPreferences_user_id_key'
+  UserPreferencesPkey = 'UserPreferences_pkey'
 }
 
 /** input type for inserting data into table "UserPreferences" */
@@ -5944,7 +5904,6 @@ export type UserPreferences_Insert_Input = {
   break_type?: Maybe<Scalars['_text']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   frequency?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
   pricing?: Maybe<Scalars['_text']>;
   sports?: Maybe<Scalars['_text']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -5956,7 +5915,6 @@ export type UserPreferences_Max_Fields = {
   __typename?: 'UserPreferences_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   frequency?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -5966,7 +5924,6 @@ export type UserPreferences_Min_Fields = {
   __typename?: 'UserPreferences_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   frequency?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['String']>;
 };
@@ -6000,7 +5957,6 @@ export type UserPreferences_Order_By = {
   break_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   frequency?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
   pricing?: Maybe<Order_By>;
   sports?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -6009,7 +5965,7 @@ export type UserPreferences_Order_By = {
 
 /** primary key columns input for table: UserPreferences */
 export type UserPreferences_Pk_Columns_Input = {
-  id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 /** select columns of table "UserPreferences" */
@@ -6020,8 +5976,6 @@ export enum UserPreferences_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   Frequency = 'frequency',
-  /** column name */
-  Id = 'id',
   /** column name */
   Pricing = 'pricing',
   /** column name */
@@ -6037,7 +5991,6 @@ export type UserPreferences_Set_Input = {
   break_type?: Maybe<Scalars['_text']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   frequency?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
   pricing?: Maybe<Scalars['_text']>;
   sports?: Maybe<Scalars['_text']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -6052,8 +6005,6 @@ export enum UserPreferences_Update_Column {
   CreatedAt = 'created_at',
   /** column name */
   Frequency = 'frequency',
-  /** column name */
-  Id = 'id',
   /** column name */
   Pricing = 'pricing',
   /** column name */
@@ -7742,7 +7693,8 @@ export type Mutation_RootDelete_SaveBreakArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_SaveBreak_By_PkArgs = {
-  id: Scalars['uuid'];
+  break_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -7754,7 +7706,8 @@ export type Mutation_RootDelete_SaveBreakerArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_SaveBreaker_By_PkArgs = {
-  id: Scalars['uuid'];
+  breaker_id: Scalars['String'];
+  user_id: Scalars['String'];
 };
 
 
@@ -7766,7 +7719,8 @@ export type Mutation_RootDelete_SaveEventArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_SaveEvent_By_PkArgs = {
-  id: Scalars['uuid'];
+  event_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -7816,7 +7770,7 @@ export type Mutation_RootDelete_UserPreferencesArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_UserPreferences_By_PkArgs = {
-  id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -9368,7 +9322,8 @@ export type Query_RootSaveBreak_AggregateArgs = {
 
 
 export type Query_RootSaveBreak_By_PkArgs = {
-  id: Scalars['uuid'];
+  break_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -9391,7 +9346,8 @@ export type Query_RootSaveBreaker_AggregateArgs = {
 
 
 export type Query_RootSaveBreaker_By_PkArgs = {
-  id: Scalars['uuid'];
+  breaker_id: Scalars['String'];
+  user_id: Scalars['String'];
 };
 
 
@@ -9414,7 +9370,8 @@ export type Query_RootSaveEvent_AggregateArgs = {
 
 
 export type Query_RootSaveEvent_By_PkArgs = {
-  id: Scalars['uuid'];
+  event_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -9508,7 +9465,7 @@ export type Query_RootUserPreferences_AggregateArgs = {
 
 
 export type Query_RootUserPreferences_By_PkArgs = {
-  id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -10202,7 +10159,8 @@ export type Subscription_RootSaveBreak_AggregateArgs = {
 
 
 export type Subscription_RootSaveBreak_By_PkArgs = {
-  id: Scalars['uuid'];
+  break_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -10225,7 +10183,8 @@ export type Subscription_RootSaveBreaker_AggregateArgs = {
 
 
 export type Subscription_RootSaveBreaker_By_PkArgs = {
-  id: Scalars['uuid'];
+  breaker_id: Scalars['String'];
+  user_id: Scalars['String'];
 };
 
 
@@ -10248,7 +10207,8 @@ export type Subscription_RootSaveEvent_AggregateArgs = {
 
 
 export type Subscription_RootSaveEvent_By_PkArgs = {
-  id: Scalars['uuid'];
+  event_id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -10342,7 +10302,7 @@ export type Subscription_RootUserPreferences_AggregateArgs = {
 
 
 export type Subscription_RootUserPreferences_By_PkArgs = {
-  id: Scalars['uuid'];
+  user_id: Scalars['String'];
 };
 
 
@@ -11627,7 +11587,7 @@ export type GetEventByIdSubscription = (
       & Pick<Users, 'id' | 'first_name' | 'last_name' | 'username'>
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
-      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset'>
+      & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset' | 'result'>
       & { BreakProductItems_aggregate: (
         { __typename?: 'BreakProductItems_aggregate' }
         & { aggregate?: Maybe<(
@@ -13541,6 +13501,7 @@ export const GetEventByIdDocument = gql`
       line_items
       status
       dataset
+      result
       BreakProductItems_aggregate(where: {order_id: {_is_null: true}}) {
         aggregate {
           count

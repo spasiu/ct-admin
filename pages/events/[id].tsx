@@ -69,9 +69,6 @@ const EventPage: React.FC = () => {
   const sendEventLiveNotification = functions.httpsCallable(
     'sendEventLiveNotification',
   );
-  const sendBreakLiveNotification = functions.httpsCallable(
-    'sendBreakLiveNotification',
-  );
 
   const [isAddBreakModalOpen, setAddBreakModalOpen] = useState(false);
   const [selectedBreak, setSelectedBreak] = useState<
@@ -471,76 +468,6 @@ const EventPage: React.FC = () => {
                       <Td>{brk.status}</Td>
                       <Td textAlign="right">
                         <HStack spacing={2} justify="flex-end">
-                          {brk.status === Break_Status_Enum.Live &&
-                            eventQueryData.Events_by_pk?.status ===
-                              Event_Status_Enum.Live && (
-                              <Button
-                                colorScheme="red"
-                                size="sm"
-                                height="40px"
-                                mr={4}
-                                onClick={() => {
-                                  updateBreak({
-                                    variables: {
-                                      id: brk.id,
-                                      data: {
-                                        status: Break_Status_Enum.Completed,
-                                      },
-                                    },
-                                  });
-                                }}
-                              >
-                                Stop Break
-                              </Button>
-                            )}
-
-                          {brk.status !== Break_Status_Enum.Draft &&
-                            brk.status !== Break_Status_Enum.Live &&
-                            brk.status !== Break_Status_Enum.Completed &&
-                            eventQueryData.Events_by_pk?.status ===
-                              Event_Status_Enum.Live && (
-                              <>
-                                {brk.status !== Break_Status_Enum.Notified && (
-                                  <Button
-                                    colorScheme="green"
-                                    size="sm"
-                                    height="40px"
-                                    onClick={() => {
-                                      sendBreakLiveNotification({
-                                        breakId: brk.id,
-                                        breakName: brk.title,
-                                        breakerName: eventQueryData.Events_by_pk?.User.username
-                                      }).then(() =>
-                                        updateBreak({
-                                          variables: {
-                                            id: brk.id,
-                                            data: {
-                                              status: Break_Status_Enum.Notified,
-                                            },
-                                          },
-                                        }),
-                                      );
-                                    }}
-                                  >
-                                    Notify of Start
-                                  </Button>
-                                )}
-                                <Button
-                                  disabled={brk.status !== Break_Status_Enum.Notified}
-                                  colorScheme="green"
-                                  size="sm"
-                                  height="40px"
-                                  mr={4}
-                                  onClick={() => {
-                                    startBreak({
-                                      breakId: brk.id,
-                                    });
-                                  }}
-                                >
-                                  Start Break
-                                </Button>
-                              </>
-                            )}
 
                           {brk.status === Break_Status_Enum.Draft && (
                             <Button

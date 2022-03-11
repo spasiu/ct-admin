@@ -28,6 +28,7 @@ import {
   Event_Status_Enum,
   Break_Status_Enum,
   Break_Type_Enum,
+  useGetEventByIdSubscription,
 } from '@generated/graphql';
 
 import paths from '@config/paths';
@@ -53,8 +54,7 @@ const LiveEventPage: React.FC = () => {
     loading: eventQueryLoading,
     error: eventQueryError,
     data: eventQueryData,
-    refetch: refetchEvent,
-  } = useGetLiveEventByIdQuery({ variables: { id: eventId } });
+  } = useGetEventByIdSubscription({ variables: { id: eventId } });
 
   const [
     updateEvent,
@@ -63,11 +63,7 @@ const LiveEventPage: React.FC = () => {
       loading: updateMutationLoading,
       error: updateMutationError,
     },
-  ] = useUpdateEventMutation({
-    onCompleted: () => {
-      refetchEvent({ id: eventId });
-    },
-  });
+  ] = useUpdateEventMutation();
 
   const [
     updateBreak,
@@ -76,11 +72,11 @@ const LiveEventPage: React.FC = () => {
       loading: updateBreakMutationLoading,
       error: updateBreakMutationError,
     },
-  ] = useUpdateBreakMutation({
-    onCompleted: () => {
-      refetchEvent({ id: eventId });
-    },
-  });
+  ] = useUpdateBreakMutation();
+
+  const sendBreakLiveNotification = functions.httpsCallable(
+    'sendBreakLiveNotification',
+  );
 
   console.log(eventQueryData);
 
@@ -187,6 +183,56 @@ const LiveEventPage: React.FC = () => {
                           <Td>{brk.status}</Td>
                           <Td textAlign="right">
                             <HStack spacing={2} justify="flex-end">
+
+                            {brk.status !== Break_Status_Enum.Draft &&
+                            brk.status !== Break_Status_Enum.Live &&
+                            brk.status !== Break_Status_Enum.Completed &&
+                            eventQueryData.Events_by_pk?.status ===
+                              Event_Status_Enum.Live && (
+                              <>
+                                {brk.status !== Break_Status_Enum.Notified && (
+                                  <Button
+                                    colorScheme="green"
+                                    size="sm"
+                                    height="40px"
+                                    onClick={() => {
+                                      sendBreakLiveNotification({
+                                        breakId: brk.id,
+                                        breakName: brk.title,
+                                        breakerName: eventQueryData.Events_by_pk?.User.username
+                                      }).then(() =>
+                                        updateBreak({
+                                          variables: {
+                                            id: brk.id,
+                                            data: {
+                                              status: Break_Status_Enum.Notified,
+                                            },
+                                          },
+                                        }),
+                                      );
+                                    }}
+                                  >
+                                    Notify of Start
+                                  </Button>
+                                )}
+                                <Button
+                                  disabled={brk.status !== Break_Status_Enum.Notified}
+                                  colorScheme="green"
+                                  size="sm"
+                                  height="40px"
+                                  mr={4}
+                                  onClick={() => {
+                                    startBreak({
+                                      breakId: brk.id,
+                                    });
+                                  }}
+                                >
+                                  Start Break
+                                </Button>
+                              </>
+                            )}
+                            
+                                
                               {brk.status === Break_Status_Enum.Live &&
                                 eventQueryData.Events_by_pk?.status ===
                                   Event_Status_Enum.Live && (
@@ -210,26 +256,6 @@ const LiveEventPage: React.FC = () => {
                                   </Button>
                                 )}
 
-                              {brk.status !== Break_Status_Enum.Draft &&
-                                brk.status !== Break_Status_Enum.Live &&
-                                eventQueryData.Events_by_pk?.status ===
-                                  Event_Status_Enum.Live && (
-                                  <Button
-                                    colorScheme="green"
-                                    size="sm"
-                                    height="40px"
-                                    mr={4}
-                                    onClick={() => {
-                                      startBreak({
-                                        breakId: brk.id,
-                                      }).then(() => {
-                                        refetchEvent({ id: eventId });
-                                      });
-                                    }}
-                                  >
-                                    Start Break
-                                  </Button>
-                                )}
 
                               <NextLink
                                 href={`${paths.breaks}/${brk.id}`}

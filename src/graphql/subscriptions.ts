@@ -32,6 +32,7 @@ export const GET_EVENT_BY_ID = gql`
         line_items
         status
         dataset
+        result
         BreakProductItems_aggregate(where: { order_id: { _is_null: true } }) {
           aggregate {
             count
