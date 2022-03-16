@@ -73,13 +73,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
   const [breakId, setBreakId] = useState<string | null>(
     hit && hit.break_id ? hit.break_id : null,
   );
-  const [user, setUser] = useState<TAddHitUser | null>(
-    hit && hit.User.username
-      ? { id: hit.user_id, username: hit.User.username }
-      : null,
-  );
+
+  const user = hit?.User;
   const [productOptions, setProductOptions] = useState<TAddHitProduct[]>([]);
-  const [breakType, setBreakType] = useState('Team');
   const [resultMap, setResultMap] = useState<Map<string, TAddHitUser>>();
 
   const [isPreviewModalOpen, setPreviewModalOpen] = useState<boolean>(false);
@@ -180,17 +176,20 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
           message: 'We have no products for this break',
         });
 
-      setBreakType(
-        breakData.Breaks_by_pk.break_type.toLowerCase().includes('division')
-          ? 'Division'
-          : 'Team',
-      );
-
       if (!breakData.Breaks_by_pk.result) {
         setError('break_id', {
           type: 'manual',
           message: 'We have no randomization results for this break',
         });
+      } else if (
+        breakData.Breaks_by_pk.break_type === 'PERSONAL' ||
+        breakData.Breaks_by_pk.break_type === 'HIT_DRAFT'
+      ) {
+        const rMap = new Map<string, TAddHitUser>();
+        breakData.Breaks_by_pk.result.forEach((r: any) => {
+          rMap.set(r.username, { username: r.username, id: r.user_id });
+        });
+        setResultMap(rMap);
       } else {
         const rMap = new Map<string, TAddHitUser>();
         breakData.Breaks_by_pk.result.forEach((r: any) => {
@@ -211,7 +210,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
     } else {
       setError('username', {
         type: 'manual',
-        message: `We have no user registered with this ${breakType}`,
+        message: `We have no user registered with this ${breakData?.Breaks_by_pk?.break_type}`,
       });
     }
   };
@@ -323,7 +322,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
             <Box mb={10}>
               <Flex mx={gridSpace.parent} mb={5}>
                 <FormControl width="50%" px={gridSpace.child}>
-                  <FormLabel>{breakType}</FormLabel>
+                  <FormLabel>{breakData?.Breaks_by_pk?.break_type}</FormLabel>
                   <Select onChange={populateUser}>
                     <option value="">Select...</option>
                     {resultMap &&
@@ -349,7 +348,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                     disabled
                   />
                   <span style={{ fontSize: 10 }}>
-                    * Derrived from {breakType.toLowerCase()} selection
+                    * Derrived from{' '}
+                    {breakData?.Breaks_by_pk?.break_type?.toLowerCase()}{' '}
+                    selection
                   </span>
                 </FormControl>
               </Flex>
@@ -482,12 +483,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
             <Checkbox {...register('published')} hidden />
 
             <Flex justifyContent="center">
-              <Button
-                mb={4}
-                mr={4}
-                colorScheme="green"
-                onClick={prepPreview}
-              >
+              <Button mb={4} mr={4} colorScheme="green" onClick={prepPreview}>
                 Preview
               </Button>
               <Button
@@ -507,28 +503,25 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                   type="submit" >
                   Add Draft and continue
                 </Button> : null}
-              {isUpdate && !hit?.published ?
-                (
-                  <Button
-                    mb={4}
-                    colorScheme="red"
-                    onClick={() => { setValue('published', true) }}
-                    type="submit"
-                  >
-                    Publish
-                  </Button>
-                ) : (
-                  <Button
-                    mb={4}
-                    colorScheme="red"
-                    onClick={() => { setValue('published', false) }}
-                    type="submit"
-                  >
-                    Unpublish
-                  </Button>
-                )
-
-              }
+              {isUpdate && !hit?.published ? (
+                <Button
+                  mb={4}
+                  colorScheme="red"
+                  onClick={() => { setValue('published', true) }}
+                  type="submit"
+                >
+                  Publish
+                </Button>
+              ) : (
+                <Button
+                  mb={4}
+                  colorScheme="red"
+                  onClick={() => { setValue('published', false) }}
+                  type="submit"
+                >
+                  Unpublish
+                </Button>
+              )}
             </Flex>
           </>
         )}
