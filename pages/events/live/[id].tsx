@@ -183,56 +183,54 @@ const LiveEventPage: React.FC = () => {
                           <Td>{brk.status}</Td>
                           <Td textAlign="right">
                             <HStack spacing={2} justify="flex-end">
-
-                            {brk.status !== Break_Status_Enum.Draft &&
-                            brk.status !== Break_Status_Enum.Live &&
-                            brk.status !== Break_Status_Enum.Completed &&
-                            eventQueryData.Events_by_pk?.status ===
-                              Event_Status_Enum.Live && (
-                              <>
-                                {brk.status !== Break_Status_Enum.Notified && (
-                                  <Button
-                                    colorScheme="green"
-                                    size="sm"
-                                    height="40px"
-                                    onClick={() => {
-                                      sendBreakLiveNotification({
-                                        breakId: brk.id,
-                                        breakName: brk.title,
-                                        breakerName: eventQueryData.Events_by_pk?.User.username
-                                      }).then(() =>
-                                        updateBreak({
-                                          variables: {
-                                            id: brk.id,
-                                            data: {
-                                              status: Break_Status_Enum.Notified,
-                                            },
-                                          },
-                                        }),
-                                      );
-                                    }}
-                                  >
-                                    Notify of Start
-                                  </Button>
+                              {brk.status !== Break_Status_Enum.Draft &&
+                                brk.status !== Break_Status_Enum.Live &&
+                                brk.status !== Break_Status_Enum.Completed &&
+                                eventQueryData.Events_by_pk?.status ===
+                                Event_Status_Enum.Live && (
+                                  <>
+                                    {brk.break_type === Break_Type_Enum.Personal ||
+                                      brk.status !== Break_Status_Enum.Notified && (
+                                        <Button
+                                          colorScheme="green"
+                                          size="sm"
+                                          height="40px"
+                                          onClick={() => {
+                                            sendBreakLiveNotification({
+                                              breakId: brk.id,
+                                              breakName: brk.title,
+                                              breakerName: eventQueryData.Events_by_pk?.User.username
+                                            }).then(() =>
+                                              updateBreak({
+                                                variables: {
+                                                  id: brk.id,
+                                                  data: {
+                                                    status: Break_Status_Enum.Notified,
+                                                  },
+                                                },
+                                              }),
+                                            );
+                                          }}
+                                        >
+                                          Notify of Start
+                                        </Button>
+                                      )}
+                                    <Button
+                                      disabled={brk.status !== Break_Status_Enum.Notified && brk.break_type !== Break_Type_Enum.Personal}
+                                      colorScheme="green"
+                                      size="sm"
+                                      height="40px"
+                                      mr={4}
+                                      onClick={() => {
+                                        startBreak({
+                                          breakId: brk.id,
+                                        });
+                                      }}
+                                    >
+                                      Start Break
+                                    </Button>
+                                  </>
                                 )}
-                                <Button
-                                  disabled={brk.status !== Break_Status_Enum.Notified}
-                                  colorScheme="green"
-                                  size="sm"
-                                  height="40px"
-                                  mr={4}
-                                  onClick={() => {
-                                    startBreak({
-                                      breakId: brk.id,
-                                    });
-                                  }}
-                                >
-                                  Start Break
-                                </Button>
-                              </>
-                            )}
-                            
-                                
                               {brk.status === Break_Status_Enum.Live &&
                                 eventQueryData.Events_by_pk?.status ===
                                   Event_Status_Enum.Live && (
@@ -255,8 +253,6 @@ const LiveEventPage: React.FC = () => {
                                     Stop Break
                                   </Button>
                                 )}
-
-
                               <NextLink
                                 href={`${paths.breaks}/${brk.id}`}
                                 passHref
