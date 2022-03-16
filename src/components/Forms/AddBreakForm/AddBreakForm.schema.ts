@@ -11,7 +11,10 @@ export const schema = yup.object().shape({
     .number()
     .transform((cv) => (isNaN(cv) ? undefined : cv))
     .when('break_type', {
-      is: (val: string) => val && val !== Break_Type_Enum.Personal,
+      is: (val: string) => val && 
+        (val !== Break_Type_Enum.Personal &&
+          val !== Break_Type_Enum.PickYourDivision &&
+          val !== Break_Type_Enum.PickYourTeam),
       then: yup
         .number()
         .typeError('Must be a number')
@@ -55,7 +58,8 @@ export const schema = yup.object().shape({
     }),
   lineItems: yup.array().of(
     yup.object().shape({
-      value: yup.string().required('Required'),
+      short_code: yup.string().required('Required'),
+      name: yup.string().required('Required'),
       cost: yup
         .number()
         .typeError('Must be a number')

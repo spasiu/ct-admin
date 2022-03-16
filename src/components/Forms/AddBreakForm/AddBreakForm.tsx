@@ -108,11 +108,6 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     });
   };
 
-  const handleCreateItem = (item: TInventoryAutcomplete) => {
-    setPickerInventory((curr) => [...curr, item]);
-    setSelectedInventory((curr) => [...curr, item]);
-  };
-
   const handleSelectedItemsChange = (
     selectedItems: TInventoryAutcomplete[] | undefined,
   ) => {
@@ -241,6 +236,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
       case Break_Type_Enum.PickYourDivision: {
         return replaceLineItemFields(
           getNewLineItems(divisionData?.Divisions as TBreakLineItem[], [
+            'short_code',
             'name',
             'cost',
           ]),
@@ -311,9 +307,11 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
         description: result.description,
         image: result.image,
         spots:
-          result.break_type === Break_Type_Enum.Personal
-            ? selectedInventory.length
-            : result.spots,
+          result.spots
+            ? result.spots
+            : result.break_type === Break_Type_Enum.Personal
+              ? selectedInventory.length
+              : result.lineItems.length,
         teams_per_spot: result.teams_per_spot ? result.teams_per_spot : null,
         break_type: result.break_type,
         price: result.price,
@@ -401,7 +399,6 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             }}
             label="Select products"
             placeholder="Type a product description"
-            onCreateItem={handleCreateItem}
             items={pickerInventory}
             selectedItems={selectedInventory}
             onSelectedItemsChange={(changes) => {
