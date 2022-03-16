@@ -58,7 +58,7 @@ const BreakResult: React.FC<TBreakResult> = ({
     type === Break_Type_Enum.Personal
   ) {
     results.map((res: TBreakResultPick) => {
-      if (res.Order && res.Order.User) {
+      if (res.Order?.User) {
         list.push({
           username: res.Order.User.username,
           title: res.title,

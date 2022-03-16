@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RiImageAddFill } from 'react-icons/ri';
 import { v4 as uuidv4 } from 'uuid';
 import Lightbox from 'react-image-lightbox';
@@ -30,6 +30,10 @@ const ImageUploader: React.FC<TImageUploadProps> = ({
   const width = imageWidth ? imageWidth : 130;
   const height = imageHeight ? imageHeight : 150;
   const fit = imageFit ? imageFit : 'crop';
+
+  useEffect(() => {
+    setImageUrl(imagePath ? `${process.env.NEXT_PUBLIC_IMG_URL}${imagePath}` : undefined);
+  }, [imagePath]);
 
   const handleFileUpload = () => {
     const fileErrors: TImageInputErrors = {};

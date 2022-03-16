@@ -60,7 +60,7 @@ export type TAddHitFormData = {
   memoribillia: string | null;
   autograph: boolean | null;
   numbered: number | null;
-  published:boolean;
+  published: boolean;
 };
 
 export type TAddHitPreviewData = TAddHitFormData & {Product: TAddHitProduct}
@@ -68,4 +68,5 @@ export type TAddHitPreviewData = TAddHitFormData & {Product: TAddHitProduct}
 export type TAddHitFormProps = {
   hit?: TSelectedHit;
   callback: () => void;
+  refetch: () => void;
 };

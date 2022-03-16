@@ -205,6 +205,7 @@ const HitsPage: React.FC = () => {
               setAddHitModalOpen(false);
               refetchHits();
             }}
+            refetch={refetchHits}
           />
         </FormModal>
       </Layout>

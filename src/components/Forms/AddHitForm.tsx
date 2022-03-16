@@ -62,13 +62,13 @@ const schema = yup.object().shape({
     })
     .nullable()
     .typeError('Numbers only'),
-  published: yup.boolean()
+  published: yup.boolean(),
 });
 
 /**
  * TODO: Add auth
  */
-const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
+const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
   const isUpdate = hit !== undefined;
   const [breakId, setBreakId] = useState<string | null>(
     hit && hit.break_id ? hit.break_id : null,
@@ -86,6 +86,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
   const [previewData, setPreviewData] = useState<TAddHitPreviewData | null>(
     null,
   );
+  const [finished, setFinished] = useState(true);
+  const [imageFront, setImageFront] = useState<string | undefined>(hit?.image_front);
+  const [imageBack, setImageBack] = useState<string | undefined>(hit?.image_back);
 
   // Remove id, Break, User and Product objects from hit input when editing
   const { id: hitId, User, Break, Product, ...defaultValues } = hit || {};
@@ -127,7 +130,19 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
       loading: insertHitMutationLoading,
       error: insertHitMutationError,
     },
-  ] = useInsertHitMutation({ onCompleted: callback });
+  ] = useInsertHitMutation({
+    onCompleted: () => {
+      if (finished) {
+        callback();
+      } else {
+        reset({});
+        setValue('break_id', breakId || '');
+        refetch();
+        setImageBack(undefined);
+        setImageFront(undefined);
+      }
+    },
+  });
 
   const [
     updateHit,
@@ -226,7 +241,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
     const product = productOptions.filter(p => p.id === formData.product_id)[0];
     setPreviewData({ Product: product, ...formData });
     setPreviewModalOpen(true);
-  }
+  };
 
   return (
     <>
@@ -252,13 +267,14 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
               <Box>
                 <ImageUploader
                   label="Front Image"
-                  imagePath={hit?.image_front}
+                  imagePath={imageFront}
                   imageFolder="hits"
                   imageWidth={250}
                   imageHeight={350}
                   imageFit="clip"
                   callback={(url: string) => {
                     setValue('image_front', url);
+                    setImageFront(url);
                   }}
                 />
 
@@ -272,13 +288,14 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
               <Box>
                 <ImageUploader
                   label="Back Image"
-                  imagePath={hit?.image_back}
+                  imagePath={imageBack}
                   imageFolder="hits"
                   imageWidth={250}
                   imageHeight={350}
                   imageFit="clip"
                   callback={(url: string) => {
                     setValue('image_back', url);
+                    setImageBack(url);
                   }}
                 />
 
@@ -473,31 +490,45 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback }) => {
               >
                 Preview
               </Button>
-              <Button mb={4} mr={4} colorScheme="blue" type="submit">
-                {isUpdate ? 'Update Hit' : 'Add Draft'}
+              <Button
+                mb={4}
+                mr={4}
+                colorScheme="blue"
+                onClick={() => setFinished(true)}
+                type="submit">
+                {isUpdate ? 'Update Hit' : 'Add Draft and finish'}
               </Button>
-              {isUpdate && !hit?.published ?
-              (
+              {!isUpdate ?
                 <Button
                   mb={4}
-                  colorScheme="red"
-                  onClick={() => {setValue('published',true)}}
-                  type="submit"
-                >
-                  Publish
-                </Button>
-              ) : (
-                <Button
-                mb={4}
-                colorScheme="red"
-                onClick={() => {setValue('published',false)}}
-                type="submit"
-              >
-                Unpublish
-              </Button>
-              )
+                  mr={4}
+                  colorScheme="blue"
+                  onClick={() => setFinished(false)}
+                  type="submit" >
+                  Add Draft and continue
+                </Button> : null}
+              {isUpdate && !hit?.published ?
+                (
+                  <Button
+                    mb={4}
+                    colorScheme="red"
+                    onClick={() => { setValue('published', true) }}
+                    type="submit"
+                  >
+                    Publish
+                  </Button>
+                ) : (
+                  <Button
+                    mb={4}
+                    colorScheme="red"
+                    onClick={() => { setValue('published', false) }}
+                    type="submit"
+                  >
+                    Unpublish
+                  </Button>
+                )
 
-            }
+              }
             </Flex>
           </>
         )}
