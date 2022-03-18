@@ -388,28 +388,33 @@ const EventPage: React.FC = () => {
 
                     <Box>
                       <Heading as="h4" size="sm" mb={1}>
-                        Stream info:
+                        Stream config:
                       </Heading>
-                      <script></script>
                       {eventQueryData.Events_by_pk?.stream_name ? (
                         <Box>
                           <Text>
-                            Stream Name:
+                            OBS Server:
                             <span> </span>
-                            <Code>
-                              {eventQueryData.Events_by_pk?.stream_name}
-                            </Code>
+                            <Code>rtmp://live-rtmp-pub.millicast.com:1935/v2/pub/</Code>
                           </Text>
                           <Text>
-                            Publishing Token:
+                            OBS Stream Key:
                             <span> </span>
-                            <Code>
-                              {eventQueryData.Events_by_pk?.publishing_token}
-                            </Code>
+                            <Code>{`${eventQueryData.Events_by_pk?.stream_name}?token=${eventQueryData.Events_by_pk?.publishing_token}`}</Code>
+                          </Text>
+                          <Text>
+                            OBS-WebRTC Stream Name:
+                            <span> </span>
+                            <Code>{eventQueryData.Events_by_pk?.stream_name}</Code>
+                          </Text>
+                          <Text>
+                            OBS-WebRTC Publishing Token:
+                            <span> </span>
+                            <Code>{eventQueryData.Events_by_pk?.publishing_token}</Code>
                           </Text>
                         </Box>
                       ) : (
-                        <Text>No stream info.</Text>
+                        <Heading>No stream info.</Heading>
                       )}
                     </Box>
                   </Box>
