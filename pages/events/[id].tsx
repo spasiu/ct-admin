@@ -393,22 +393,22 @@ const EventPage: React.FC = () => {
                       {eventQueryData.Events_by_pk?.stream_name ? (
                         <Box>
                           <Text>
-                            OBS Server:
+                            RTMP Server:
                             <span> </span>
                             <Code>rtmp://live-rtmp-pub.millicast.com:1935/v2/pub/</Code>
                           </Text>
                           <Text>
-                            OBS Stream Key:
+                            RTMP Stream Key:
                             <span> </span>
                             <Code>{`${eventQueryData.Events_by_pk?.stream_name}?token=${eventQueryData.Events_by_pk?.publishing_token}`}</Code>
                           </Text>
                           <Text>
-                            OBS-WebRTC Stream Name:
+                            WebRTC Stream Name:
                             <span> </span>
                             <Code>{eventQueryData.Events_by_pk?.stream_name}</Code>
                           </Text>
                           <Text>
-                            OBS-WebRTC Publishing Token:
+                            WebRTC Publishing Token:
                             <span> </span>
                             <Code>{eventQueryData.Events_by_pk?.publishing_token}</Code>
                           </Text>
