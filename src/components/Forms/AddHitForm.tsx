@@ -83,8 +83,8 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
     null,
   );
   const [finished, setFinished] = useState(true);
-  const [imageFront, setImageFront] = useState<string | undefined>(hit?.image_front);
-  const [imageBack, setImageBack] = useState<string | undefined>(hit?.image_back);
+  const [imageFront, setImageFront] = useState<string | undefined | null>(hit?.image_front);
+  const [imageBack, setImageBack] = useState<string | undefined | null>(hit?.image_back);
   const [clearInsert, setClearInsert] = useState(false);
   const [rookie, setRookie] = useState(false);
   const [autograph, setAutograph] = useState(false);

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead';
-
-import { useSearchExtensibleValuesLazyQuery } from '@generated/graphql';
+import {
+  ExtensibleValues,
+  useSearchExtensibleValuesLazyQuery,
+} from '@generated/graphql';
 
 import {
   TAutocompleteProps,
@@ -25,10 +27,10 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
       variables: { input: `%${query}%`, field },
     });
   };
-  const ref = React.createRef();
+  const ref = React.createRef<AsyncTypeahead<ExtensibleValues>>();
 
   useEffect(() => {
-    if (clear) ref.current.clear();
+    if (clear) ref?.current?.clear();
   }, [clear]);
 
   return (

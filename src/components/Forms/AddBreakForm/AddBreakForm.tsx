@@ -27,8 +27,7 @@ import {
   useUpdateInventoryBreakMutation,
   useGetTeamDataLazyQuery,
   useGetDivisionDataLazyQuery,
-  useGetProductIitemsWithOrderIdByBreakIdQuery,
-  useGetProductIitemsWithOrderIdByBreakIdLazyQuery
+  useGetProductIitemsWithOrderIdByBreakIdLazyQuery,
 } from '@generated/graphql';
 
 import { auth, functions } from '@config/firebase';
@@ -249,7 +248,6 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             'teams_per_spot',
             Number(teamData?.Teams.length / watchSpots),
           );
-        console.log('1', teamData?.Teams?.length);
         return replaceDatasetFields(
           getNewDatasetItems(
             teamData?.Teams as TDatasetLineItem[],
