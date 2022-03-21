@@ -13,6 +13,7 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
   field,
   callback,
   isInvalid,
+  clear,
 }) => {
   const [
     getSearchResults,
@@ -24,19 +25,23 @@ const Autocomplete: React.FC<TAutocompleteProps> = ({
       variables: { input: `%${query}%`, field },
     });
   };
+  const ref = React.createRef();
+
+  useEffect(() => {
+    if (clear) ref.current.clear();
+  }, [clear]);
 
   return (
     <AsyncTypeahead
-      filterBy={() => {
-        return true;
-      }}
+      ref={ref}
+      filterBy={() => true}
       id={`autocomplete-input-${field}`}
       onChange={(selected: TAutocompleteSearchResult[]) => {
         if (selected.length > 0) {
           callback(selected[0].value);
         }
       }}
-      defaultInputValue={defaultValue ? defaultValue : undefined}
+      defaultInputValue={defaultValue || undefined}
       isLoading={loading}
       labelKey="value"
       minLength={1}

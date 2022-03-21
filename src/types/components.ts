@@ -20,6 +20,7 @@ export type TAutocompleteProps = {
   defaultValue?: string | null;
   callback: (input: string) => void;
   isInvalid: boolean;
+  clear?: boolean;
 };
 
 export type TAutocompleteSearchResult = {

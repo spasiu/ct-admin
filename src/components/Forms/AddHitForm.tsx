@@ -85,7 +85,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
   const [finished, setFinished] = useState(true);
   const [imageFront, setImageFront] = useState<string | undefined>(hit?.image_front);
   const [imageBack, setImageBack] = useState<string | undefined>(hit?.image_back);
-
+  const [clearInsert, setClearInsert] = useState(false);
+  const [rookie, setRookie] = useState(false);
+  const [autograph, setAutograph] = useState(false);
   // Remove id, Break, User and Product objects from hit input when editing
   const { id: hitId, User, Break, Product, ...defaultValues } = hit || {};
 
@@ -132,10 +134,14 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
         callback();
       } else {
         reset({});
+        setClearInsert(true);
         setValue('break_id', breakId || '');
         refetch();
         setImageBack(undefined);
         setImageFront(undefined);
+        setClearInsert(false);
+        setRookie(false);
+        setAutograph(false);
       }
     },
   });
@@ -413,10 +419,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                   <Autocomplete
                     isInvalid={!!errors.insert}
                     defaultValue={hit?.insert}
-                    callback={(val: string) => {
-                      setValue('insert', val);
-                    }}
+                    callback={(val: string) => setValue('insert', val)}
                     field="product_insert"
+                    clear={clearInsert}
                   />
                   <FormErrorMessage>{errors.insert?.message}</FormErrorMessage>
                 </FormControl>
@@ -428,6 +433,8 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                     size="lg"
                     borderColor="gray.300"
                     {...register('rookie_card')}
+                    onChange={() => setRookie(!rookie)}
+                    isChecked={rookie}
                   >
                     Rookie
                   </Checkbox>
@@ -435,6 +442,8 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                     size="lg"
                     borderColor="gray.300"
                     {...register('autograph')}
+                    onChange={() => setAutograph(!autograph)}
+                    isChecked={autograph}
                   >
                     Autograph
                   </Checkbox>
