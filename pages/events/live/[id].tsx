@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { MdVisibility } from 'react-icons/md';
 import NextLink from 'next/link';
 import Imgix from 'react-imgix';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 import {
   Heading,
@@ -19,10 +18,16 @@ import {
   IconButton,
   HStack,
   Flex,
+  useDisclosure,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
 } from '@chakra-ui/react';
 
 import {
-  useGetLiveEventByIdQuery,
   useUpdateEventMutation,
   useUpdateBreakMutation,
   Event_Status_Enum,
@@ -44,11 +49,13 @@ import BreakResult from '@components/BreakResult';
  * TODO: Add auth
  */
 const LiveEventPage: React.FC = () => {
-  const [user] = useAuthState(auth);
   const router = useRouter();
   const { id } = router.query;
   const eventId = id as string;
   const startBreak = functions.httpsCallable('startBreak');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef(null);
 
   const {
     loading: eventQueryLoading,
@@ -79,6 +86,14 @@ const LiveEventPage: React.FC = () => {
   );
 
   console.log(eventQueryData);
+
+  const effectStartBreak = (brk:any, override:boolean=false) => {
+    if (brk?.BreakProductItems_aggregate?.aggregate?.count === 0 || override) {
+      startBreak({breakId: brk.id}).then(onClose);
+    } else {
+      onOpen();
+    }
+  }
 
   return (
     <>
@@ -187,10 +202,12 @@ const LiveEventPage: React.FC = () => {
                                 brk.status !== Break_Status_Enum.Live &&
                                 brk.status !== Break_Status_Enum.Completed &&
                                 eventQueryData.Events_by_pk?.status ===
-                                Event_Status_Enum.Live && (
+                                  Event_Status_Enum.Live && (
                                   <>
-                                    {brk.break_type === Break_Type_Enum.Personal ||
-                                      brk.status !== Break_Status_Enum.Notified && (
+                                    {brk.break_type ===
+                                      Break_Type_Enum.Personal ||
+                                      (brk.status !==
+                                        Break_Status_Enum.Notified && (
                                         <Button
                                           colorScheme="green"
                                           size="sm"
@@ -199,13 +216,16 @@ const LiveEventPage: React.FC = () => {
                                             sendBreakLiveNotification({
                                               breakId: brk.id,
                                               breakName: brk.title,
-                                              breakerName: eventQueryData.Events_by_pk?.User.username
+                                              breakerName:
+                                                eventQueryData.Events_by_pk
+                                                  ?.User.username,
                                             }).then(() =>
                                               updateBreak({
                                                 variables: {
                                                   id: brk.id,
                                                   data: {
-                                                    status: Break_Status_Enum.Notified,
+                                                    status:
+                                                      Break_Status_Enum.Notified,
                                                   },
                                                 },
                                               }),
@@ -214,18 +234,19 @@ const LiveEventPage: React.FC = () => {
                                         >
                                           Notify of Start
                                         </Button>
-                                      )}
+                                      ))}
                                     <Button
-                                      disabled={brk.status !== Break_Status_Enum.Notified && brk.break_type !== Break_Type_Enum.Personal}
+                                      disabled={
+                                        brk.status !==
+                                          Break_Status_Enum.Notified &&
+                                        brk.break_type !==
+                                          Break_Type_Enum.Personal
+                                      }
                                       colorScheme="green"
                                       size="sm"
                                       height="40px"
                                       mr={4}
-                                      onClick={() => {
-                                        startBreak({
-                                          breakId: brk.id,
-                                        });
-                                      }}
+                                      onClick={() => effectStartBreak(brk)}
                                     >
                                       Start Break
                                     </Button>
@@ -297,6 +318,41 @@ const LiveEventPage: React.FC = () => {
                             </Td>
                           </Tr>
                         )}
+
+                        <AlertDialog
+                          isOpen={isOpen}
+                          leastDestructiveRef={cancelRef}
+                          onClose={onClose}
+                        >
+                          <AlertDialogOverlay>
+                            <AlertDialogContent>
+                              <AlertDialogHeader
+                                fontSize="lg"
+                                fontWeight="bold"
+                              >
+                                Start Break
+                              </AlertDialogHeader>
+
+                              <AlertDialogBody>
+                                There are unsold spots, are you sure that you
+                                want to start the break?
+                              </AlertDialogBody>
+
+                              <AlertDialogFooter>
+                                <Button ref={cancelRef} onClick={onClose}>
+                                  Cancel
+                                </Button>
+                                <Button
+                                  colorScheme="red"
+                                  onClick={() => effectStartBreak(brk, true)}
+                                  ml={3}
+                                >
+                                  Start Break
+                                </Button>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialogOverlay>
+                        </AlertDialog>
                       </React.Fragment>
                     ))}
                   </Tbody>
