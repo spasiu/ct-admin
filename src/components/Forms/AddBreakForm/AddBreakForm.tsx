@@ -229,6 +229,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             'short_code',
             'city+name',
             'cost',
+            'color',
+            'color_secondary',
           ]),
         );
       }
@@ -238,6 +240,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             'short_code',
             'name',
             'cost',
+            'color',
+            'color_secondary',
           ]),
         );
       }
@@ -314,7 +318,9 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
         break_type: result.break_type,
         price: result.price,
         dataset:
-          result.datasetItems.length > 0
+          result.lineItems.length > 0
+            ? result.lineItems
+            : result.datasetItems.length > 0
             ? result.datasetItems.map((item) => ({
                 city: item.city || '',
                 name: item.name,
