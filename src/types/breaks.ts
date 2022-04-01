@@ -89,3 +89,8 @@ export type TBreakResultList = {
   username: string;
   title?: string;
 }[];
+
+export type TStartBreakData = {
+  breakId?: string;
+  unsoldCount?: number;
+};

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { MdVisibility } from 'react-icons/md';
 import NextLink from 'next/link';
@@ -37,13 +37,14 @@ import {
 } from '@generated/graphql';
 
 import paths from '@config/paths';
-import { auth, functions } from '@config/firebase';
+import { functions } from '@config/firebase';
 import { BreakTypeValues } from '@config/values';
 
 import Layout from '@layouts';
 import SEO from '@components/SEO';
 import Chat from '@components/Chat';
 import BreakResult from '@components/BreakResult';
+import { TStartBreakData } from '@customTypes/breaks';
 
 /**
  * TODO: Add auth
@@ -55,7 +56,13 @@ const LiveEventPage: React.FC = () => {
   const startBreak = functions.httpsCallable('startBreak');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [startBreakData, setStartBreakData] = useState<TStartBreakData>();
   const cancelRef = React.useRef(null);
+
+  useEffect(() => {
+    if (startBreakData) effectStartBreak();
+  },
+  [startBreakData])
 
   const {
     loading: eventQueryLoading,
@@ -85,15 +92,14 @@ const LiveEventPage: React.FC = () => {
     'sendBreakLiveNotification',
   );
 
-  console.log(eventQueryData);
-
-  const effectStartBreak = (brk:any, override:boolean=false) => {
-    if (brk?.BreakProductItems_aggregate?.aggregate?.count === 0 || override) {
-      startBreak({breakId: brk.id}).then(onClose);
+  const effectStartBreak = (override = false) => {
+    if (startBreakData?.unsoldCount === 0 || override) {
+      startBreak({ breakId: startBreakData?.breakId }).then(onClose);
+      setStartBreakData(undefined);
     } else {
       onOpen();
     }
-  }
+  };
 
   return (
     <>
@@ -246,7 +252,14 @@ const LiveEventPage: React.FC = () => {
                                       size="sm"
                                       height="40px"
                                       mr={4}
-                                      onClick={() => effectStartBreak(brk)}
+                                      onClick={() => {
+                                        setStartBreakData({
+                                          breakId: brk.id,
+                                          unsoldCount:
+                                            brk?.BreakProductItems_aggregate
+                                              ?.aggregate?.count,
+                                        });
+                                      }}
                                     >
                                       Start Break
                                     </Button>
@@ -318,41 +331,6 @@ const LiveEventPage: React.FC = () => {
                             </Td>
                           </Tr>
                         )}
-
-                        <AlertDialog
-                          isOpen={isOpen}
-                          leastDestructiveRef={cancelRef}
-                          onClose={onClose}
-                        >
-                          <AlertDialogOverlay>
-                            <AlertDialogContent>
-                              <AlertDialogHeader
-                                fontSize="lg"
-                                fontWeight="bold"
-                              >
-                                Start Break
-                              </AlertDialogHeader>
-
-                              <AlertDialogBody>
-                                There are unsold spots, are you sure that you
-                                want to start the break?
-                              </AlertDialogBody>
-
-                              <AlertDialogFooter>
-                                <Button ref={cancelRef} onClick={onClose}>
-                                  Cancel
-                                </Button>
-                                <Button
-                                  colorScheme="red"
-                                  onClick={() => effectStartBreak(brk, true)}
-                                  ml={3}
-                                >
-                                  Start Break
-                                </Button>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialogOverlay>
-                        </AlertDialog>
                       </React.Fragment>
                     ))}
                   </Tbody>
@@ -365,6 +343,43 @@ const LiveEventPage: React.FC = () => {
           </Box>
         </Flex>
       </Layout>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Start Break
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              There are unsold spots, are you sure that you want to start the
+              break?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button
+                ref={cancelRef}
+                onClick={() => {
+                  setStartBreakData(undefined);
+                  onClose();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={() => effectStartBreak(true)}
+                ml={3}
+              >
+                Start Break
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   );
 };
