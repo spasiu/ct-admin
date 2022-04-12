@@ -43,6 +43,7 @@ export type TAddEventFormData = {
   description: string;
   start_time?: Date | null;
   image: string;
+  video_url: string;
 };
 
 export type TAddEventFormProps = {

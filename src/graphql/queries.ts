@@ -213,6 +213,7 @@ export const GET_EVENTS = gql`
       description
       status
       image
+      video_url
       User {
         id
         first_name

@@ -39,8 +39,8 @@ const schema = yup.object().shape({
   start_time: yup
     .date()
     .nullable()
-    .transform((curr, orig) => (orig === '' ? null : curr))
-    .min(new Date(), 'The start time must be after the current time'),
+    .transform((curr, orig) => (orig === '' ? null : curr)),
+  video_url: yup.string().nullable(),
 });
 
 /**
@@ -104,6 +104,7 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
         start_time: result.start_time
           ? format(result.start_time, "yyyy-MM-dd'T'HH:mm:ssxxx")
           : null,
+        video_url: result.video_url,
       };
 
       switch (operation) {
@@ -155,7 +156,13 @@ const AddEventForm: React.FC<TAddEventFormProps> = ({ event, callback }) => {
         <Textarea {...register('description')} />
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
-
+      {operation === 'UPDATE' ? (
+        <FormControl isInvalid={!!errors.video_url} mb={5}>
+          <FormLabel>videoUrl</FormLabel>
+          <Input {...register('video_url')} />
+          <FormErrorMessage>{errors.video_url?.message}</FormErrorMessage>
+        </FormControl>
+      ) : null}
       <FormControl isInvalid={!!errors.start_time} mb={5}>
         <FormLabel>Start Time</FormLabel>
         <Flex alignItems="center">

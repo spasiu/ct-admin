@@ -86,7 +86,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
   const [imageFront, setImageFront] = useState<string | undefined | null>(hit?.image_front);
   const [imageBack, setImageBack] = useState<string | undefined | null>(hit?.image_back);
   const [clearInsert, setClearInsert] = useState(false);
-  const [rookie, setRookie] = useState(false);
+  const [rookie, setRookie] = useState(hit?.rookie_card);
   const [autograph, setAutograph] = useState(false);
   // Remove id, Break, User and Product objects from hit input when editing
   const { id: hitId, User, Break, Product, ...defaultValues } = hit || {};
