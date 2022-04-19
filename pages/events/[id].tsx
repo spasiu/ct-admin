@@ -137,12 +137,13 @@ const EventPage: React.FC = () => {
         
         const orders = b.result.reduce((orders:any, result:any) => {
           const orderId = result.bc_order_id;
+          if (!orderId) return orders;
           (orders[orderId] = orders[orderId] || []).push(...result.items.map((item:any) => item.name));
           return orders;
         },{});
         
         const res = Object.keys(orders).map(orderId => {
-          const item = b.BreakProductItems.find((item:any) => item.Order.bc_order_id === Number(orderId));
+          const item = b.BreakProductItems.find((item:any) => item.Order?.bc_order_id === Number(orderId));
           return {
             breakId: b.id,
             breakName: b.title,
