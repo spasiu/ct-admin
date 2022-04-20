@@ -169,7 +169,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
 
   useEffect(() => {
     if (breakData && breakData.Breaks_by_pk) {
-      const products = breakData.Breaks_by_pk.Inventory.filter(
+      const products = breakData.Breaks_by_pk.break_products.filter(
         (inv) => inv.Product,
       ).map((inv) => inv.Product!);
 

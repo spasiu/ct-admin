@@ -995,6 +995,9 @@ export type Breaks = {
   break_type: Break_Type_Enum;
   created_at: Scalars['timestamptz'];
   dataset?: Maybe<Scalars['jsonb']>;
+  dataset_id?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  datasets?: Maybe<Datasets>;
   description: Scalars['String'];
   event_id: Scalars['uuid'];
   id: Scalars['uuid'];
@@ -1219,6 +1222,8 @@ export type Breaks_Bool_Exp = {
   break_type?: Maybe<Break_Type_Enum_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   dataset?: Maybe<Jsonb_Comparison_Exp>;
+  dataset_id?: Maybe<Uuid_Comparison_Exp>;
+  datasets?: Maybe<Datasets_Bool_Exp>;
   description?: Maybe<String_Comparison_Exp>;
   event_id?: Maybe<Uuid_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
@@ -1281,6 +1286,8 @@ export type Breaks_Insert_Input = {
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   dataset?: Maybe<Scalars['jsonb']>;
+  dataset_id?: Maybe<Scalars['uuid']>;
+  datasets?: Maybe<Datasets_Obj_Rel_Insert_Input>;
   description?: Maybe<Scalars['String']>;
   event_id?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
@@ -1300,6 +1307,7 @@ export type Breaks_Insert_Input = {
 export type Breaks_Max_Fields = {
   __typename?: 'Breaks_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
+  dataset_id?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   event_id?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
@@ -1314,6 +1322,7 @@ export type Breaks_Max_Fields = {
 /** order by max() on columns of table "Breaks" */
 export type Breaks_Max_Order_By = {
   created_at?: Maybe<Order_By>;
+  dataset_id?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   event_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -1329,6 +1338,7 @@ export type Breaks_Max_Order_By = {
 export type Breaks_Min_Fields = {
   __typename?: 'Breaks_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
+  dataset_id?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   event_id?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
@@ -1343,6 +1353,7 @@ export type Breaks_Min_Fields = {
 /** order by min() on columns of table "Breaks" */
 export type Breaks_Min_Order_By = {
   created_at?: Maybe<Order_By>;
+  dataset_id?: Maybe<Order_By>;
   description?: Maybe<Order_By>;
   event_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -1390,6 +1401,8 @@ export type Breaks_Order_By = {
   break_type?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   dataset?: Maybe<Order_By>;
+  dataset_id?: Maybe<Order_By>;
+  datasets?: Maybe<Datasets_Order_By>;
   description?: Maybe<Order_By>;
   event_id?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
@@ -1428,6 +1441,8 @@ export enum Breaks_Select_Column {
   /** column name */
   Dataset = 'dataset',
   /** column name */
+  DatasetId = 'dataset_id',
+  /** column name */
   Description = 'description',
   /** column name */
   EventId = 'event_id',
@@ -1459,6 +1474,7 @@ export type Breaks_Set_Input = {
   break_type?: Maybe<Break_Type_Enum>;
   created_at?: Maybe<Scalars['timestamptz']>;
   dataset?: Maybe<Scalars['jsonb']>;
+  dataset_id?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   event_id?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
@@ -1543,6 +1559,8 @@ export enum Breaks_Update_Column {
   CreatedAt = 'created_at',
   /** column name */
   Dataset = 'dataset',
+  /** column name */
+  DatasetId = 'dataset_id',
   /** column name */
   Description = 'description',
   /** column name */
@@ -7227,6 +7245,13 @@ export type Datasets_Mutation_Response = {
   returning: Array<Datasets>;
 };
 
+/** input type for inserting object relation for remote table "datasets" */
+export type Datasets_Obj_Rel_Insert_Input = {
+  data: Datasets_Insert_Input;
+  /** upsert condition */
+  on_conflict?: Maybe<Datasets_On_Conflict>;
+};
+
 /** on_conflict condition type for table "datasets" */
 export type Datasets_On_Conflict = {
   constraint: Datasets_Constraint;
@@ -11386,15 +11411,18 @@ export type ArchiveEventsAndBreaksByEventIdsMutation = (
 );
 
 export type InsertBreakMutationVariables = Exact<{
-  data: Breaks_Insert_Input;
+  data: Array<Breaks_Insert_Input> | Breaks_Insert_Input;
 }>;
 
 
 export type InsertBreakMutation = (
   { __typename?: 'mutation_root' }
-  & { insert_Breaks_one?: Maybe<(
-    { __typename?: 'Breaks' }
-    & Pick<Breaks, 'id' | 'event_id' | 'title' | 'description' | 'spots' | 'teams_per_spot' | 'break_type' | 'price' | 'image'>
+  & { insert_Breaks?: Maybe<(
+    { __typename?: 'Breaks_mutation_response' }
+    & { returning: Array<(
+      { __typename?: 'Breaks' }
+      & Pick<Breaks, 'id' | 'event_id' | 'title' | 'description' | 'spots' | 'teams_per_spot' | 'break_type' | 'price' | 'image'>
+    )> }
   )> }
 );
 
@@ -11409,6 +11437,26 @@ export type UpdateBreakMutation = (
   & { update_Breaks_by_pk?: Maybe<(
     { __typename?: 'Breaks' }
     & Pick<Breaks, 'id'>
+  )> }
+);
+
+export type FullBreakUpdateMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  data: Array<Breaks_Insert_Input> | Breaks_Insert_Input;
+}>;
+
+
+export type FullBreakUpdateMutation = (
+  { __typename?: 'mutation_root' }
+  & { delete_break_product?: Maybe<(
+    { __typename?: 'break_product_mutation_response' }
+    & Pick<Break_Product_Mutation_Response, 'affected_rows'>
+  )>, insert_Breaks?: Maybe<(
+    { __typename?: 'Breaks_mutation_response' }
+    & { returning: Array<(
+      { __typename?: 'Breaks' }
+      & Pick<Breaks, 'id' | 'event_id' | 'title' | 'description' | 'spots' | 'teams_per_spot' | 'break_type' | 'price' | 'image'>
+    )> }
   )> }
 );
 
@@ -11437,7 +11485,7 @@ export type InsertProductMutation = (
   { __typename?: 'mutation_root' }
   & { insert_Products_one?: Maybe<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id'>
+    & Pick<Products, 'year' | 'category'>
   )> }
 );
 
@@ -11451,7 +11499,7 @@ export type UpdateProductMutation = (
   { __typename?: 'mutation_root' }
   & { update_Products_by_pk?: Maybe<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id'>
+    & Pick<Products, 'year' | 'category'>
   )> }
 );
 
@@ -11494,60 +11542,16 @@ export type UnarchiveProductsByIdsMutation = (
   )> }
 );
 
-export type InsertInventoryMutationVariables = Exact<{
-  inventory: Array<Inventory_Insert_Input> | Inventory_Insert_Input;
+export type InsertDatasetMutationVariables = Exact<{
+  data: Datasets_Insert_Input;
 }>;
 
 
-export type InsertInventoryMutation = (
+export type InsertDatasetMutation = (
   { __typename?: 'mutation_root' }
-  & { insert_Inventory?: Maybe<(
-    { __typename?: 'Inventory_mutation_response' }
-    & Pick<Inventory_Mutation_Response, 'affected_rows'>
-  )> }
-);
-
-export type UpdateInventoryMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  data: Inventory_Set_Input;
-}>;
-
-
-export type UpdateInventoryMutation = (
-  { __typename?: 'mutation_root' }
-  & { update_Inventory_by_pk?: Maybe<(
-    { __typename?: 'Inventory' }
-    & Pick<Inventory, 'id'>
-  )> }
-);
-
-export type DeleteInventoryByIdsMutationVariables = Exact<{
-  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
-}>;
-
-
-export type DeleteInventoryByIdsMutation = (
-  { __typename?: 'mutation_root' }
-  & { delete_Inventory?: Maybe<(
-    { __typename?: 'Inventory_mutation_response' }
-    & Pick<Inventory_Mutation_Response, 'affected_rows'>
-  )> }
-);
-
-export type UpdateInventoryBreakMutationVariables = Exact<{
-  ids?: Maybe<Array<Scalars['uuid']> | Scalars['uuid']>;
-  breakId: Scalars['uuid'];
-}>;
-
-
-export type UpdateInventoryBreakMutation = (
-  { __typename?: 'mutation_root' }
-  & { removeInventory?: Maybe<(
-    { __typename?: 'Inventory_mutation_response' }
-    & Pick<Inventory_Mutation_Response, 'affected_rows'>
-  )>, update_Inventory?: Maybe<(
-    { __typename?: 'Inventory_mutation_response' }
-    & Pick<Inventory_Mutation_Response, 'affected_rows'>
+  & { insert_datasets_one?: Maybe<(
+    { __typename?: 'datasets' }
+    & Pick<Datasets, 'id'>
   )> }
 );
 
@@ -11647,38 +11651,14 @@ export type GetProductsQuery = (
   { __typename?: 'query_root' }
   & { Products: Array<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
-    & { totalCost: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & { sum?: Maybe<(
-          { __typename?: 'Inventory_sum_fields' }
-          & Pick<Inventory_Sum_Fields, 'cost_basis'>
-        )> }
-      )> }
-    ), averageCost: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & { avg?: Maybe<(
-          { __typename?: 'Inventory_avg_fields' }
-          & Pick<Inventory_Avg_Fields, 'cost_basis'>
-        )> }
-      )> }
-    ), unassignedCount: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & Pick<Inventory_Aggregate_Fields, 'count'>
-      )> }
-    ), assignedCount: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & Pick<Inventory_Aggregate_Fields, 'count'>
-      )> }
-    ) }
+    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'subcategory' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
+    & { break_products: Array<(
+      { __typename?: 'break_product' }
+      & { Break: (
+        { __typename?: 'Breaks' }
+        & Pick<Breaks, 'id'>
+      ) }
+    )> }
   )> }
 );
 
@@ -11691,99 +11671,14 @@ export type GetProductByIdQuery = (
   { __typename?: 'query_root' }
   & { Products_by_pk?: Maybe<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
-    & { Inventory: Array<(
-      { __typename?: 'Inventory' }
-      & Pick<Inventory, 'id' | 'location' | 'supplier' | 'purchase_date' | 'cost_basis'>
-      & { Break?: Maybe<(
+    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'subcategory' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
+    & { break_products: Array<(
+      { __typename?: 'break_product' }
+      & { Break: (
         { __typename?: 'Breaks' }
         & Pick<Breaks, 'id' | 'title'>
-      )> }
-    )>, totalCost: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & { sum?: Maybe<(
-          { __typename?: 'Inventory_sum_fields' }
-          & Pick<Inventory_Sum_Fields, 'cost_basis'>
-        )> }
-      )> }
-    ), averageCost: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & { avg?: Maybe<(
-          { __typename?: 'Inventory_avg_fields' }
-          & Pick<Inventory_Avg_Fields, 'cost_basis'>
-        )> }
-      )> }
-    ), unassignedCount: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & Pick<Inventory_Aggregate_Fields, 'count'>
-      )> }
-    ), assignedCount: (
-      { __typename?: 'Inventory_aggregate' }
-      & { aggregate?: Maybe<(
-        { __typename?: 'Inventory_aggregate_fields' }
-        & Pick<Inventory_Aggregate_Fields, 'count'>
-      )> }
-    ) }
-  )> }
-);
-
-export type GetInventoryQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetInventoryQuery = (
-  { __typename?: 'query_root' }
-  & { Inventory: Array<(
-    { __typename?: 'Inventory' }
-    & Pick<Inventory, 'id' | 'location' | 'break_id'>
-    & { Product: (
-      { __typename?: 'Products' }
-      & Pick<Products, 'id' | 'description' | 'category' | 'manufacturer' | 'brand' | 'type' | 'year'>
-    ) }
-  )> }
-);
-
-export type GetUnassignedInventoryQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUnassignedInventoryQuery = (
-  { __typename?: 'query_root' }
-  & { Inventory: Array<(
-    { __typename?: 'Inventory' }
-    & Pick<Inventory, 'id' | 'location' | 'break_id'>
-    & { Product: (
-      { __typename?: 'Products' }
-      & Pick<Products, 'id' | 'description' | 'category' | 'manufacturer' | 'brand' | 'type' | 'year'>
-    ) }
-  )> }
-);
-
-export type GetInventoryByProdIdQueryVariables = Exact<{
-  prod_id: Scalars['uuid'];
-}>;
-
-
-export type GetInventoryByProdIdQuery = (
-  { __typename?: 'query_root' }
-  & { Inventory: Array<(
-    { __typename?: 'Inventory' }
-    & Pick<Inventory, 'id' | 'cost_basis'>
-    & { Break?: Maybe<(
-      { __typename?: 'Breaks' }
-      & Pick<Breaks, 'id'>
-      & { Event: (
-        { __typename?: 'Events' }
-        & Pick<Events, 'id'>
       ) }
-    )>, Product: (
-      { __typename?: 'Products' }
-      & Pick<Products, 'id' | 'unit_of_measure' | 'category' | 'manufacturer' | 'brand' | 'type' | 'year'>
-    ) }
+    )> }
   )> }
 );
 
@@ -11871,23 +11766,25 @@ export type GetBreakByIdQuery = (
   & { Breaks_by_pk?: Maybe<(
     { __typename?: 'Breaks' }
     & Pick<Breaks, 'id' | 'image' | 'break_type' | 'description' | 'price' | 'spots' | 'status' | 'teams_per_spot' | 'title' | 'dataset' | 'line_items'>
-    & { Event: (
+    & { datasets?: Maybe<(
+      { __typename?: 'datasets' }
+      & Pick<Datasets, 'data'>
+    )>, Event: (
       { __typename?: 'Events' }
       & Pick<Events, 'id' | 'title' | 'start_time' | 'description'>
       & { User: (
         { __typename?: 'Users' }
         & Pick<Users, 'id' | 'first_name' | 'last_name'>
       ) }
-    ), Inventory: Array<(
-      { __typename?: 'Inventory' }
-      & Pick<Inventory, 'id' | 'location'>
+    ), break_products: Array<(
+      { __typename?: 'break_product' }
       & { Product: (
         { __typename?: 'Products' }
         & Pick<Products, 'id' | 'description'>
       ) }
     )>, BreakProductItems: Array<(
       { __typename?: 'BreakProductItems' }
-      & Pick<BreakProductItems, 'id' | 'title' | 'price'>
+      & Pick<BreakProductItems, 'id' | 'title' | 'price' | 'bc_product_id'>
       & { Order?: Maybe<(
         { __typename?: 'Orders' }
         & Pick<Orders, 'id'>
@@ -11919,8 +11816,8 @@ export type GetBreakDataQuery = (
           & Pick<Users, 'id' | 'username'>
         ) }
       )> }
-    )>, Inventory: Array<(
-      { __typename?: 'Inventory' }
+    )>, break_products: Array<(
+      { __typename?: 'break_product' }
       & { Product: (
         { __typename?: 'Products' }
         & Pick<Products, 'id' | 'description' | 'year' | 'category' | 'manufacturer' | 'brand'>
@@ -12113,6 +12010,22 @@ export type GetResultsQuery = (
   )> }
 );
 
+export type GetDatasetsQueryVariables = Exact<{
+  year: Scalars['smallint'];
+  category: Scalars['String'];
+  subcategory?: Maybe<String_Comparison_Exp>;
+  type?: Maybe<String_Comparison_Exp>;
+}>;
+
+
+export type GetDatasetsQuery = (
+  { __typename?: 'query_root' }
+  & { datasets: Array<(
+    { __typename?: 'datasets' }
+    & Pick<Datasets, 'id' | 'data'>
+  )> }
+);
+
 export type GetEventByIdSubscriptionVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -12129,7 +12042,10 @@ export type GetEventByIdSubscription = (
     ), Breaks: Array<(
       { __typename?: 'Breaks' }
       & Pick<Breaks, 'id' | 'title' | 'break_type' | 'price' | 'spots' | 'description' | 'teams_per_spot' | 'image' | 'line_items' | 'status' | 'dataset' | 'result'>
-      & { BreakProductItems_aggregate: (
+      & { datasets?: Maybe<(
+        { __typename?: 'datasets' }
+        & Pick<Datasets, 'data'>
+      )>, BreakProductItems_aggregate: (
         { __typename?: 'BreakProductItems_aggregate' }
         & { aggregate?: Maybe<(
           { __typename?: 'BreakProductItems_aggregate_fields' }
@@ -12137,7 +12053,7 @@ export type GetEventByIdSubscription = (
         )> }
       ), BreakProductItems: Array<(
         { __typename?: 'BreakProductItems' }
-        & Pick<BreakProductItems, 'id' | 'title' | 'price'>
+        & Pick<BreakProductItems, 'id' | 'title' | 'price' | 'bc_product_id'>
         & { Order?: Maybe<(
           { __typename?: 'Orders' }
           & Pick<Orders, 'id'>
@@ -12263,17 +12179,19 @@ export type ArchiveEventsAndBreaksByEventIdsMutationHookResult = ReturnType<type
 export type ArchiveEventsAndBreaksByEventIdsMutationResult = Apollo.MutationResult<ArchiveEventsAndBreaksByEventIdsMutation>;
 export type ArchiveEventsAndBreaksByEventIdsMutationOptions = Apollo.BaseMutationOptions<ArchiveEventsAndBreaksByEventIdsMutation, ArchiveEventsAndBreaksByEventIdsMutationVariables>;
 export const InsertBreakDocument = gql`
-    mutation InsertBreak($data: Breaks_insert_input!) {
-  insert_Breaks_one(object: $data) {
-    id
-    event_id
-    title
-    description
-    spots
-    teams_per_spot
-    break_type
-    price
-    image
+    mutation InsertBreak($data: [Breaks_insert_input!]!) {
+  insert_Breaks(objects: $data) {
+    returning {
+      id
+      event_id
+      title
+      description
+      spots
+      teams_per_spot
+      break_type
+      price
+      image
+    }
   }
 }
     `;
@@ -12337,6 +12255,56 @@ export function useUpdateBreakMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateBreakMutationHookResult = ReturnType<typeof useUpdateBreakMutation>;
 export type UpdateBreakMutationResult = Apollo.MutationResult<UpdateBreakMutation>;
 export type UpdateBreakMutationOptions = Apollo.BaseMutationOptions<UpdateBreakMutation, UpdateBreakMutationVariables>;
+export const FullBreakUpdateDocument = gql`
+    mutation FullBreakUpdate($id: uuid!, $data: [Breaks_insert_input!]!) {
+  delete_break_product(where: {break_id: {_eq: $id}}) {
+    affected_rows
+  }
+  insert_Breaks(
+    objects: $data
+    on_conflict: {constraint: Breaks_pkey, update_columns: [event_id, title, description, image, spots, teams_per_spot, price, break_type, dataset_id]}
+  ) {
+    returning {
+      id
+      event_id
+      title
+      description
+      spots
+      teams_per_spot
+      break_type
+      price
+      image
+    }
+  }
+}
+    `;
+export type FullBreakUpdateMutationFn = Apollo.MutationFunction<FullBreakUpdateMutation, FullBreakUpdateMutationVariables>;
+
+/**
+ * __useFullBreakUpdateMutation__
+ *
+ * To run a mutation, you first call `useFullBreakUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFullBreakUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fullBreakUpdateMutation, { data, loading, error }] = useFullBreakUpdateMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useFullBreakUpdateMutation(baseOptions?: Apollo.MutationHookOptions<FullBreakUpdateMutation, FullBreakUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FullBreakUpdateMutation, FullBreakUpdateMutationVariables>(FullBreakUpdateDocument, options);
+      }
+export type FullBreakUpdateMutationHookResult = ReturnType<typeof useFullBreakUpdateMutation>;
+export type FullBreakUpdateMutationResult = Apollo.MutationResult<FullBreakUpdateMutation>;
+export type FullBreakUpdateMutationOptions = Apollo.BaseMutationOptions<FullBreakUpdateMutation, FullBreakUpdateMutationVariables>;
 export const ArchiveBreaksByIdDocument = gql`
     mutation ArchiveBreaksById($ids: [uuid!]) {
   update_Inventory(where: {break_id: {_in: $ids}}, _set: {break_id: null}) {
@@ -12376,7 +12344,8 @@ export type ArchiveBreaksByIdMutationOptions = Apollo.BaseMutationOptions<Archiv
 export const InsertProductDocument = gql`
     mutation InsertProduct($data: Products_insert_input!) {
   insert_Products_one(object: $data) {
-    id
+    year
+    category
   }
 }
     `;
@@ -12409,7 +12378,8 @@ export type InsertProductMutationOptions = Apollo.BaseMutationOptions<InsertProd
 export const UpdateProductDocument = gql`
     mutation UpdateProduct($id: uuid!, $data: Products_set_input!) {
   update_Products_by_pk(pk_columns: {id: $id}, _set: $data) {
-    id
+    year
+    category
   }
 }
     `;
@@ -12539,146 +12509,39 @@ export function useUnarchiveProductsByIdsMutation(baseOptions?: Apollo.MutationH
 export type UnarchiveProductsByIdsMutationHookResult = ReturnType<typeof useUnarchiveProductsByIdsMutation>;
 export type UnarchiveProductsByIdsMutationResult = Apollo.MutationResult<UnarchiveProductsByIdsMutation>;
 export type UnarchiveProductsByIdsMutationOptions = Apollo.BaseMutationOptions<UnarchiveProductsByIdsMutation, UnarchiveProductsByIdsMutationVariables>;
-export const InsertInventoryDocument = gql`
-    mutation InsertInventory($inventory: [Inventory_insert_input!]!) {
-  insert_Inventory(objects: $inventory) {
-    affected_rows
-  }
-}
-    `;
-export type InsertInventoryMutationFn = Apollo.MutationFunction<InsertInventoryMutation, InsertInventoryMutationVariables>;
-
-/**
- * __useInsertInventoryMutation__
- *
- * To run a mutation, you first call `useInsertInventoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInsertInventoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [insertInventoryMutation, { data, loading, error }] = useInsertInventoryMutation({
- *   variables: {
- *      inventory: // value for 'inventory'
- *   },
- * });
- */
-export function useInsertInventoryMutation(baseOptions?: Apollo.MutationHookOptions<InsertInventoryMutation, InsertInventoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InsertInventoryMutation, InsertInventoryMutationVariables>(InsertInventoryDocument, options);
-      }
-export type InsertInventoryMutationHookResult = ReturnType<typeof useInsertInventoryMutation>;
-export type InsertInventoryMutationResult = Apollo.MutationResult<InsertInventoryMutation>;
-export type InsertInventoryMutationOptions = Apollo.BaseMutationOptions<InsertInventoryMutation, InsertInventoryMutationVariables>;
-export const UpdateInventoryDocument = gql`
-    mutation UpdateInventory($id: uuid!, $data: Inventory_set_input!) {
-  update_Inventory_by_pk(pk_columns: {id: $id}, _set: $data) {
+export const InsertDatasetDocument = gql`
+    mutation InsertDataset($data: datasets_insert_input!) {
+  insert_datasets_one(object: $data) {
     id
   }
 }
     `;
-export type UpdateInventoryMutationFn = Apollo.MutationFunction<UpdateInventoryMutation, UpdateInventoryMutationVariables>;
+export type InsertDatasetMutationFn = Apollo.MutationFunction<InsertDatasetMutation, InsertDatasetMutationVariables>;
 
 /**
- * __useUpdateInventoryMutation__
+ * __useInsertDatasetMutation__
  *
- * To run a mutation, you first call `useUpdateInventoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateInventoryMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useInsertDatasetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertDatasetMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateInventoryMutation, { data, loading, error }] = useUpdateInventoryMutation({
+ * const [insertDatasetMutation, { data, loading, error }] = useInsertDatasetMutation({
  *   variables: {
- *      id: // value for 'id'
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useUpdateInventoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateInventoryMutation, UpdateInventoryMutationVariables>) {
+export function useInsertDatasetMutation(baseOptions?: Apollo.MutationHookOptions<InsertDatasetMutation, InsertDatasetMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateInventoryMutation, UpdateInventoryMutationVariables>(UpdateInventoryDocument, options);
+        return Apollo.useMutation<InsertDatasetMutation, InsertDatasetMutationVariables>(InsertDatasetDocument, options);
       }
-export type UpdateInventoryMutationHookResult = ReturnType<typeof useUpdateInventoryMutation>;
-export type UpdateInventoryMutationResult = Apollo.MutationResult<UpdateInventoryMutation>;
-export type UpdateInventoryMutationOptions = Apollo.BaseMutationOptions<UpdateInventoryMutation, UpdateInventoryMutationVariables>;
-export const DeleteInventoryByIdsDocument = gql`
-    mutation DeleteInventoryByIds($ids: [uuid!]) {
-  delete_Inventory(where: {id: {_in: $ids}}) {
-    affected_rows
-  }
-}
-    `;
-export type DeleteInventoryByIdsMutationFn = Apollo.MutationFunction<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>;
-
-/**
- * __useDeleteInventoryByIdsMutation__
- *
- * To run a mutation, you first call `useDeleteInventoryByIdsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteInventoryByIdsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteInventoryByIdsMutation, { data, loading, error }] = useDeleteInventoryByIdsMutation({
- *   variables: {
- *      ids: // value for 'ids'
- *   },
- * });
- */
-export function useDeleteInventoryByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>(DeleteInventoryByIdsDocument, options);
-      }
-export type DeleteInventoryByIdsMutationHookResult = ReturnType<typeof useDeleteInventoryByIdsMutation>;
-export type DeleteInventoryByIdsMutationResult = Apollo.MutationResult<DeleteInventoryByIdsMutation>;
-export type DeleteInventoryByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteInventoryByIdsMutation, DeleteInventoryByIdsMutationVariables>;
-export const UpdateInventoryBreakDocument = gql`
-    mutation UpdateInventoryBreak($ids: [uuid!], $breakId: uuid!) {
-  removeInventory: update_Inventory(
-    where: {break_id: {_eq: $breakId}}
-    _set: {break_id: null}
-  ) {
-    affected_rows
-  }
-  update_Inventory(where: {id: {_in: $ids}}, _set: {break_id: $breakId}) {
-    affected_rows
-  }
-}
-    `;
-export type UpdateInventoryBreakMutationFn = Apollo.MutationFunction<UpdateInventoryBreakMutation, UpdateInventoryBreakMutationVariables>;
-
-/**
- * __useUpdateInventoryBreakMutation__
- *
- * To run a mutation, you first call `useUpdateInventoryBreakMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateInventoryBreakMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateInventoryBreakMutation, { data, loading, error }] = useUpdateInventoryBreakMutation({
- *   variables: {
- *      ids: // value for 'ids'
- *      breakId: // value for 'breakId'
- *   },
- * });
- */
-export function useUpdateInventoryBreakMutation(baseOptions?: Apollo.MutationHookOptions<UpdateInventoryBreakMutation, UpdateInventoryBreakMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateInventoryBreakMutation, UpdateInventoryBreakMutationVariables>(UpdateInventoryBreakDocument, options);
-      }
-export type UpdateInventoryBreakMutationHookResult = ReturnType<typeof useUpdateInventoryBreakMutation>;
-export type UpdateInventoryBreakMutationResult = Apollo.MutationResult<UpdateInventoryBreakMutation>;
-export type UpdateInventoryBreakMutationOptions = Apollo.BaseMutationOptions<UpdateInventoryBreakMutation, UpdateInventoryBreakMutationVariables>;
+export type InsertDatasetMutationHookResult = ReturnType<typeof useInsertDatasetMutation>;
+export type InsertDatasetMutationResult = Apollo.MutationResult<InsertDatasetMutation>;
+export type InsertDatasetMutationOptions = Apollo.BaseMutationOptions<InsertDatasetMutation, InsertDatasetMutationVariables>;
 export const InsertExtensibleValuesDocument = gql`
     mutation InsertExtensibleValues($data: [ExtensibleValues_insert_input!]!) {
   insert_ExtensibleValues(objects: $data) {
@@ -12912,6 +12775,7 @@ export const GetProductsDocument = gql`
     brand
     series
     category
+    subcategory
     type
     boxes_per_case
     packs_per_box
@@ -12927,28 +12791,9 @@ export const GetProductsDocument = gql`
     grader
     grade
     available
-    totalCost: Inventory_aggregate {
-      aggregate {
-        sum {
-          cost_basis
-        }
-      }
-    }
-    averageCost: Inventory_aggregate {
-      aggregate {
-        avg {
-          cost_basis
-        }
-      }
-    }
-    unassignedCount: Inventory_aggregate(where: {break_id: {_is_null: true}}) {
-      aggregate {
-        count
-      }
-    }
-    assignedCount: Inventory_aggregate(where: {break_id: {_is_null: false}}) {
-      aggregate {
-        count
+    break_products {
+      Break {
+        id
       }
     }
   }
@@ -12994,6 +12839,7 @@ export const GetProductByIdDocument = gql`
     brand
     series
     category
+    subcategory
     type
     boxes_per_case
     packs_per_box
@@ -13009,39 +12855,10 @@ export const GetProductByIdDocument = gql`
     grader
     grade
     available
-    Inventory {
-      id
-      location
-      supplier
-      purchase_date
-      cost_basis
+    break_products {
       Break {
         id
         title
-      }
-    }
-    totalCost: Inventory_aggregate {
-      aggregate {
-        sum {
-          cost_basis
-        }
-      }
-    }
-    averageCost: Inventory_aggregate {
-      aggregate {
-        avg {
-          cost_basis
-        }
-      }
-    }
-    unassignedCount: Inventory_aggregate(where: {break_id: {_is_null: true}}) {
-      aggregate {
-        count
-      }
-    }
-    assignedCount: Inventory_aggregate(where: {break_id: {_is_null: false}}) {
-      aggregate {
-        count
       }
     }
   }
@@ -13075,147 +12892,6 @@ export function useGetProductByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetProductByIdQueryHookResult = ReturnType<typeof useGetProductByIdQuery>;
 export type GetProductByIdLazyQueryHookResult = ReturnType<typeof useGetProductByIdLazyQuery>;
 export type GetProductByIdQueryResult = Apollo.QueryResult<GetProductByIdQuery, GetProductByIdQueryVariables>;
-export const GetInventoryDocument = gql`
-    query GetInventory {
-  Inventory {
-    id
-    location
-    break_id
-    Product {
-      id
-      description
-      category
-      manufacturer
-      brand
-      type
-      year
-    }
-  }
-}
-    `;
-
-/**
- * __useGetInventoryQuery__
- *
- * To run a query within a React component, call `useGetInventoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetInventoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetInventoryQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetInventoryQuery(baseOptions?: Apollo.QueryHookOptions<GetInventoryQuery, GetInventoryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetInventoryQuery, GetInventoryQueryVariables>(GetInventoryDocument, options);
-      }
-export function useGetInventoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInventoryQuery, GetInventoryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetInventoryQuery, GetInventoryQueryVariables>(GetInventoryDocument, options);
-        }
-export type GetInventoryQueryHookResult = ReturnType<typeof useGetInventoryQuery>;
-export type GetInventoryLazyQueryHookResult = ReturnType<typeof useGetInventoryLazyQuery>;
-export type GetInventoryQueryResult = Apollo.QueryResult<GetInventoryQuery, GetInventoryQueryVariables>;
-export const GetUnassignedInventoryDocument = gql`
-    query GetUnassignedInventory {
-  Inventory(where: {break_id: {_is_null: true}}) {
-    id
-    location
-    break_id
-    Product {
-      id
-      description
-      category
-      manufacturer
-      brand
-      type
-      year
-    }
-  }
-}
-    `;
-
-/**
- * __useGetUnassignedInventoryQuery__
- *
- * To run a query within a React component, call `useGetUnassignedInventoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUnassignedInventoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUnassignedInventoryQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetUnassignedInventoryQuery(baseOptions?: Apollo.QueryHookOptions<GetUnassignedInventoryQuery, GetUnassignedInventoryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUnassignedInventoryQuery, GetUnassignedInventoryQueryVariables>(GetUnassignedInventoryDocument, options);
-      }
-export function useGetUnassignedInventoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUnassignedInventoryQuery, GetUnassignedInventoryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUnassignedInventoryQuery, GetUnassignedInventoryQueryVariables>(GetUnassignedInventoryDocument, options);
-        }
-export type GetUnassignedInventoryQueryHookResult = ReturnType<typeof useGetUnassignedInventoryQuery>;
-export type GetUnassignedInventoryLazyQueryHookResult = ReturnType<typeof useGetUnassignedInventoryLazyQuery>;
-export type GetUnassignedInventoryQueryResult = Apollo.QueryResult<GetUnassignedInventoryQuery, GetUnassignedInventoryQueryVariables>;
-export const GetInventoryByProdIdDocument = gql`
-    query GetInventoryByProdId($prod_id: uuid!) {
-  Inventory(where: {product_id: {_eq: $prod_id}}) {
-    id
-    cost_basis
-    Break {
-      id
-      Event {
-        id
-      }
-    }
-    Product {
-      id
-      unit_of_measure
-      category
-      manufacturer
-      brand
-      type
-      year
-    }
-  }
-}
-    `;
-
-/**
- * __useGetInventoryByProdIdQuery__
- *
- * To run a query within a React component, call `useGetInventoryByProdIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetInventoryByProdIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetInventoryByProdIdQuery({
- *   variables: {
- *      prod_id: // value for 'prod_id'
- *   },
- * });
- */
-export function useGetInventoryByProdIdQuery(baseOptions: Apollo.QueryHookOptions<GetInventoryByProdIdQuery, GetInventoryByProdIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetInventoryByProdIdQuery, GetInventoryByProdIdQueryVariables>(GetInventoryByProdIdDocument, options);
-      }
-export function useGetInventoryByProdIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInventoryByProdIdQuery, GetInventoryByProdIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetInventoryByProdIdQuery, GetInventoryByProdIdQueryVariables>(GetInventoryByProdIdDocument, options);
-        }
-export type GetInventoryByProdIdQueryHookResult = ReturnType<typeof useGetInventoryByProdIdQuery>;
-export type GetInventoryByProdIdLazyQueryHookResult = ReturnType<typeof useGetInventoryByProdIdLazyQuery>;
-export type GetInventoryByProdIdQueryResult = Apollo.QueryResult<GetInventoryByProdIdQuery, GetInventoryByProdIdQueryVariables>;
 export const GetEventsDocument = gql`
     query GetEvents {
   Events(where: {archived: {_eq: false}}, order_by: {start_time: asc}) {
@@ -13390,6 +13066,9 @@ export const GetBreakByIdDocument = gql`
     title
     dataset
     line_items
+    datasets {
+      data
+    }
     Event {
       id
       title
@@ -13401,9 +13080,7 @@ export const GetBreakByIdDocument = gql`
         last_name
       }
     }
-    Inventory {
-      id
-      location
+    break_products {
       Product {
         id
         description
@@ -13413,6 +13090,7 @@ export const GetBreakByIdDocument = gql`
       id
       title
       price
+      bc_product_id
       Order {
         id
         User {
@@ -13466,7 +13144,7 @@ export const GetBreakDataDocument = gql`
         }
       }
     }
-    Inventory {
+    break_products {
       Product {
         id
         description
@@ -14014,6 +13692,47 @@ export function useGetResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetResultsQueryHookResult = ReturnType<typeof useGetResultsQuery>;
 export type GetResultsLazyQueryHookResult = ReturnType<typeof useGetResultsLazyQuery>;
 export type GetResultsQueryResult = Apollo.QueryResult<GetResultsQuery, GetResultsQueryVariables>;
+export const GetDatasetsDocument = gql`
+    query GetDatasets($year: smallint!, $category: String!, $subcategory: String_comparison_exp, $type: String_comparison_exp) {
+  datasets(
+    where: {_and: [{year: {_eq: $year}}, {category: {_eq: $category}}, {subcategory: $subcategory}, {type: $type}]}
+  ) {
+    id
+    data
+  }
+}
+    `;
+
+/**
+ * __useGetDatasetsQuery__
+ *
+ * To run a query within a React component, call `useGetDatasetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDatasetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDatasetsQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *      category: // value for 'category'
+ *      subcategory: // value for 'subcategory'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useGetDatasetsQuery(baseOptions: Apollo.QueryHookOptions<GetDatasetsQuery, GetDatasetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDatasetsQuery, GetDatasetsQueryVariables>(GetDatasetsDocument, options);
+      }
+export function useGetDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDatasetsQuery, GetDatasetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDatasetsQuery, GetDatasetsQueryVariables>(GetDatasetsDocument, options);
+        }
+export type GetDatasetsQueryHookResult = ReturnType<typeof useGetDatasetsQuery>;
+export type GetDatasetsLazyQueryHookResult = ReturnType<typeof useGetDatasetsLazyQuery>;
+export type GetDatasetsQueryResult = Apollo.QueryResult<GetDatasetsQuery, GetDatasetsQueryVariables>;
 export const GetEventByIdDocument = gql`
     subscription GetEventById($id: uuid!) {
   Events_by_pk(id: $id) {
@@ -14044,6 +13763,9 @@ export const GetEventByIdDocument = gql`
       status
       dataset
       result
+      datasets {
+        data
+      }
       BreakProductItems_aggregate(where: {order_id: {_is_null: true}}) {
         aggregate {
           count
@@ -14053,6 +13775,7 @@ export const GetEventByIdDocument = gql`
         id
         title
         price
+        bc_product_id
         Order {
           id
         }

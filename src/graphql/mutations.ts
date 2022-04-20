@@ -50,17 +50,19 @@ export const ARCHIVE_EVENTS_AND_BREAKS = gql`
  * BREAK MUTATIONS
  */
 export const INSERT_BREAK = gql`
-  mutation InsertBreak($data: Breaks_insert_input!) {
-    insert_Breaks_one(object: $data) {
-      id
-      event_id
-      title
-      description
-      spots
-      teams_per_spot
-      break_type
-      price
-      image
+  mutation InsertBreak($data: [Breaks_insert_input!]!) {
+    insert_Breaks(objects: $data) {
+      returning {
+        id
+        event_id
+        title
+        description
+        spots
+        teams_per_spot
+        break_type
+        price
+        image
+      }
     }
   }
 `;
@@ -69,6 +71,31 @@ export const UPDATE_BREAK = gql`
   mutation UpdateBreak($id: uuid!, $data: Breaks_set_input!) {
     update_Breaks_by_pk(pk_columns: { id: $id }, _set: $data) {
       id
+    }
+  }
+`;
+
+export const FULL_BREAK_UPDATE = gql`
+  mutation FullBreakUpdate($id: uuid!, $data: [Breaks_insert_input!]!) {
+    delete_break_product (where: {break_id: {_eq: $id}}){
+      affected_rows
+    }
+
+    insert_Breaks(objects: $data, on_conflict:{
+      constraint: Breaks_pkey,
+      update_columns: [event_id, title, description, image, spots, teams_per_spot, price, break_type, dataset_id]
+    }) {
+      returning {
+        id
+        event_id
+        title
+        description
+        spots
+        teams_per_spot
+        break_type
+        price
+        image
+      }
     }
   }
 `;
@@ -94,7 +121,8 @@ export const ARCHIVE_BREAKS = gql`
 export const INSERT_PRODUCT = gql`
   mutation InsertProduct($data: Products_insert_input!) {
     insert_Products_one(object: $data) {
-      id
+      year
+      category
     }
   }
 `;
@@ -102,7 +130,8 @@ export const INSERT_PRODUCT = gql`
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct($id: uuid!, $data: Products_set_input!) {
     update_Products_by_pk(pk_columns: { id: $id }, _set: $data) {
-      id
+      year
+      category
     }
   }
 `;
@@ -131,50 +160,14 @@ export const UNARCHIVE_PRODUCTS = gql`
   }
 `;
 
-/**
- * INVENTORY MUTATIONS
- */
-export const INSERT_INVENTORY = gql`
-  mutation InsertInventory($inventory: [Inventory_insert_input!]!) {
-    insert_Inventory(objects: $inventory) {
-      affected_rows
-    }
-  }
-`;
-
-export const UPDATE_INVENTORY = gql`
-  mutation UpdateInventory($id: uuid!, $data: Inventory_set_input!) {
-    update_Inventory_by_pk(pk_columns: { id: $id }, _set: $data) {
+export const INSERT_DATASET = gql`
+  mutation InsertDataset($data: datasets_insert_input!) {
+    insert_datasets_one(object: $data) {
       id
     }
   }
 `;
 
-export const DELETE_INVENTORY = gql`
-  mutation DeleteInventoryByIds($ids: [uuid!]) {
-    delete_Inventory(where: { id: { _in: $ids } }) {
-      affected_rows
-    }
-  }
-`;
-
-export const UPDATE_INVENTORY_BREAK = gql`
-  mutation UpdateInventoryBreak($ids: [uuid!], $breakId: uuid!) {
-    removeInventory: update_Inventory(
-      where: { break_id: { _eq: $breakId } }
-      _set: { break_id: null }
-    ) {
-      affected_rows
-    }
-
-    update_Inventory(
-      where: { id: { _in: $ids } }
-      _set: { break_id: $breakId }
-    ) {
-      affected_rows
-    }
-  }
-`;
 
 /**
  * SETTINGS MUTATIONS

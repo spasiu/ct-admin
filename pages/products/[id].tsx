@@ -24,7 +24,6 @@ import {
 
 import {
   useGetProductByIdQuery,
-  useDeleteInventoryByIdsMutation,
   useArchiveProductsByIdsMutation,
   useUnarchiveProductsByIdsMutation,
 } from '@generated/graphql';
@@ -36,7 +35,6 @@ import ActionBar from '@components/ActionBar';
 import SEO from '@components/SEO';
 import FormModal from '@components/Modals/FormModal';
 import AddProductForm from '@components/Forms/AddProductForm';
-import AddInventoryForm from '@components/Forms/AddInventoryForm';
 import StatDisplay from '@components/StatDisplay';
 import ArchiveConfirm from '@components/ArchiveConfirm';
 
@@ -53,13 +51,9 @@ const ProductDetailsPage: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
   const productId = id as string;
-  const [isAddInventoryModalOpen, setAddInventoryModalOpen] = useState(false);
   const [isEditProductModalOpen, setEditProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<
     TSelectedProduct | undefined
-  >(undefined);
-  const [selectedInventory, setSelectedInventory] = useState<
-    TProductSelectedInventory | undefined
   >(undefined);
 
   const {
@@ -97,18 +91,6 @@ const ProductDetailsPage: React.FC = () => {
     },
   });
 
-  const [
-    deleteInventory,
-    {
-      data: deleteInventoryMutationData,
-      loading: deleteInventoryMutationLoading,
-      error: deleteInventoryMutationError,
-    },
-  ] = useDeleteInventoryByIdsMutation({
-    onCompleted: () => {
-      refetchProduct();
-    },
-  });
 
   const product = productQueryData?.Products_by_pk;
 
@@ -117,18 +99,6 @@ const ProductDetailsPage: React.FC = () => {
       <SEO title="Product" />
       <Layout pageNav="products">
         <ActionBar>
-          <Button
-            size="sm"
-            leftIcon={<AddIcon />}
-            colorScheme="blue"
-            onClick={() => {
-              setSelectedInventory(undefined);
-              setAddInventoryModalOpen(true);
-            }}
-          >
-            Add Inventory
-          </Button>
-
           <Button
             size="sm"
             leftIcon={<MdEdit />}
@@ -232,37 +202,6 @@ const ProductDetailsPage: React.FC = () => {
                     )}
                   </HStack>
 
-                  <HStack spacing={14}>
-                    <StatDisplay
-                      label="# Available"
-                      value={`${product?.unassignedCount?.aggregate?.count}`}
-                    />
-
-                    <StatDisplay
-                      label="# Assigned"
-                      value={`${product?.assignedCount?.aggregate?.count}`}
-                    />
-
-                    <StatDisplay
-                      label="Avg. Cost"
-                      value={new Intl.NumberFormat('en', {
-                        style: 'currency',
-                        currency: 'USD',
-                      }).format(
-                        product?.averageCost?.aggregate?.avg?.cost_basis || 0,
-                      )}
-                    />
-
-                    <StatDisplay
-                      label="Dollars on Hand"
-                      value={new Intl.NumberFormat('en', {
-                        style: 'currency',
-                        currency: 'USD',
-                      }).format(
-                        product?.totalCost?.aggregate?.sum?.cost_basis || 0,
-                      )}
-                    />
-                  </HStack>
                 </Box>
               </HStack>
             </Box>
@@ -271,26 +210,12 @@ const ProductDetailsPage: React.FC = () => {
           <Table width="100%" mb={12}>
             <Thead>
               <Tr>
-                <Th>Location</Th>
-                <Th>Supplier</Th>
-                <Th>Purchase Date</Th>
-                <Th>Cost/Unit</Th>
-                <Th>Break</Th>
-                <Th></Th>
+                <Th>Breaks</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {product?.Inventory?.map((item) => (
-                <Tr key={item.id} bg="white">
-                  <Td>{item.location}</Td>
-                  <Td>{item.supplier}</Td>
-                  <Td>{format(new Date(item.purchase_date), 'LLL dd, y')}</Td>
-                  <Td>
-                    {new Intl.NumberFormat('en', {
-                      style: 'currency',
-                      currency: 'USD',
-                    }).format(item.cost_basis)}
-                  </Td>
+              {product?.break_products?.map((item) => (
+                <Tr key={item.Break.id} bg="white">
                   <Td>
                     {item.Break?.id && (
                       <NextLink
@@ -302,36 +227,6 @@ const ProductDetailsPage: React.FC = () => {
                         </Link>
                       </NextLink>
                     )}
-                  </Td>
-                  <Td textAlign="right">
-                    <HStack spacing={2} justify="flex-end">
-                      <IconButton
-                        aria-label="Edit"
-                        icon={<MdEdit />}
-                        onClick={() => {
-                          setSelectedInventory({
-                            id: item.id,
-                            location: item.location,
-                            supplier: item.supplier,
-                            purchase_date: item.purchase_date,
-                            cost_basis: item.cost_basis,
-                          });
-                          setAddInventoryModalOpen(true);
-                        }}
-                      />
-
-                      {!item.Break?.id && (
-                        <ArchiveConfirm
-                          callback={() => {
-                            deleteInventory({
-                              variables: {
-                                ids: [item.id],
-                              },
-                            });
-                          }}
-                        />
-                      )}
-                    </HStack>
                   </Td>
                 </Tr>
               ))}
@@ -353,20 +248,6 @@ const ProductDetailsPage: React.FC = () => {
           />
         </FormModal>
 
-        <FormModal
-          title="Add Inventory"
-          isOpen={isAddInventoryModalOpen}
-          setModalOpen={setAddInventoryModalOpen}
-        >
-          <AddInventoryForm
-            product_id={product?.id}
-            inventoryItem={selectedInventory}
-            callback={() => {
-              setAddInventoryModalOpen(false);
-              refetchProduct();
-            }}
-          />
-        </FormModal>
       </Layout>
     </>
   );

@@ -1,4 +1,4 @@
-import { Break_Type_Enum, Scalars } from '@generated/graphql';
+import { Break_Type_Enum, Datasets, Maybe, Scalars } from '@generated/graphql';
 
 export type TBreakLineItem = {
   name: string;
@@ -42,10 +42,12 @@ export type TBreakData = {
   line_items?: TBreakLineItem[];
   dataset?: TDatasetLineItem[];
   status: string;
+  datasets?: Maybe<Pick<Datasets, "data">>;
   BreakProductItems: {
     id: string;
     title: string;
     price: number;
+    bc_product_id: number;
   }[];
 };
 
@@ -94,3 +96,10 @@ export type TStartBreakData = {
   breakId?: string;
   unsoldCount?: number;
 };
+
+export type TDatasetData = {
+  year:number;
+  category: string;
+  subcategory?: string;
+  type?: string;
+}

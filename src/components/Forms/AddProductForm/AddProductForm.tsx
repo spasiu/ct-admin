@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -15,6 +15,7 @@ import {
   Checkbox,
   HStack,
   Box,
+  FormHelperText,
 } from '@chakra-ui/react';
 
 import {
@@ -33,6 +34,13 @@ import {
   TAddProductFormData,
   TAddProductFormProps,
 } from '@customTypes/products';
+
+import {
+  DatasetManager
+} from './AddProductForm.utils'
+import { useApolloClient } from '@apollo/client';
+import FormModal from '@components/Modals/FormModal';
+import AddDatasetForm from './AddDatasetForm';
 
 const schema = yup.object().shape({
   unit_of_measure: yup.string().required('Required'),
@@ -208,21 +216,37 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
    * @param result object Validated form result
    */
   const onSubmit = (result: TAddProductFormData) => {
+    const {break_products, ...data} = result;
     switch (operation) {
       case 'ADD':
         addProduct({
           variables: {
-            data: result,
+            data: data,
           },
         });
         break;
       case 'UPDATE':
-        updateProduct({ variables: { id: product?.id, data: result } });
+        updateProduct({ variables: { id: product?.id, data: data } });
         break;
     }
   };
 
+  const [requireDataset, setRequireDataset] = useState<boolean>(false);
+  const [isAddDatasetModalOpen, setAddDatasetModalOpen] = useState(false);
+
   const watchUnitOfMeasureType = watch('unit_of_measure');
+  const client = useApolloClient();
+  const watchYear = watch('year');
+  const watchCat = watch('category');
+  const watchSubcat = watch('subcategory');
+  const watchManufacturer = watch('manufacturer');
+
+  const {automatic, manual} = DatasetManager(client);
+
+  if (watchManufacturer ) {
+      automatic(parseInt(watchYear), watchCat, watchSubcat)
+        .then(created => setRequireDataset(!created));
+  }
 
   return (
     <>
@@ -296,6 +320,19 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                   ))}
                 </Select>
                 <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
+              </FormControl>
+            </Flex>
+
+            <Flex mx={gridSpace.parent} mb={5}>
+
+
+              <FormControl
+                width="100%"
+                px={gridSpace.child}
+              >
+                <FormLabel>Subcategory (Optional)</FormLabel>
+                <Input {...register('subcategory')} />
+                <FormHelperText>e.g., soccer league</FormHelperText>
               </FormControl>
             </Flex>
 
@@ -620,8 +657,37 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
           </Box>
         )}
 
+        {requireDataset && (
+          <>
+                <Flex justifyContent="center">
+                  <Button mb={4} px={10} colorScheme="red" onClick={() => {setAddDatasetModalOpen(true)}}>
+                    Upload Dataset
+                  </Button>
+                </Flex>
+
+
+        <FormModal
+        title="Add Dataset"
+        isOpen={isAddDatasetModalOpen}
+        setModalOpen={setAddDatasetModalOpen}
+
+      >
+        <AddDatasetForm
+            year={watchYear}
+            category={watchCat}
+            subcategory={watchSubcat || ''}
+            datasetHandler={manual}
+            callback={() => {
+              setAddDatasetModalOpen(false);
+              setRequireDataset(false);
+            }}
+         />
+      </FormModal>
+      </>
+        )}
+
         <Flex justifyContent="center">
-          <Button mb={4} px={10} colorScheme="blue" type="submit">
+          <Button mb={4} px={10} colorScheme="blue" type="submit" disabled={requireDataset}>
             {operation === 'UPDATE' ? 'Update Product' : 'Add Product'}
           </Button>
         </Flex>

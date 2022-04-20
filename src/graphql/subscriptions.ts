@@ -33,6 +33,9 @@ export const GET_EVENT_BY_ID = gql`
         status
         dataset
         result
+        datasets {
+          data
+        }
         BreakProductItems_aggregate(where: { order_id: { _is_null: true } }) {
           aggregate {
             count
@@ -42,6 +45,7 @@ export const GET_EVENT_BY_ID = gql`
           id
           title
           price
+          bc_product_id
           Order {
             id
           }

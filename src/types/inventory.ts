@@ -3,6 +3,7 @@ export type TInventoryAutcomplete = {
   value: string;
   year: string;
   sport: string;
+  subcategory?: string | null;
 };
 
 export type TAddInventoryFormData = {

@@ -39,6 +39,7 @@ export type TAddProductFormData = {
   brand: string;
   series: string | null;
   category: string;
+  subcategory: string | null;
   type: string | null;
   boxes_per_case: number | null;
   packs_per_box: number | null;
@@ -53,6 +54,7 @@ export type TAddProductFormData = {
   numbered: number | null;
   grader: string | null;
   grade: string | null;
+  break_products?: [];
 };
 
 export type TAddProductFormProps = {
@@ -89,3 +91,12 @@ export type TFilterProductsFormData = {
 export type TFilterProductsFormProps = {
   callback: (search: string) => void;
 };
+
+export type TAddDatasetProps = {
+  year: string;
+  category: string;
+  subcategory: string;
+  datasetHandler:
+    (year: number, category: string, subcategory: string | null, datasetType: string | null, dataset: Object[]) => Promise<boolean>
+  callback: () => void;
+}

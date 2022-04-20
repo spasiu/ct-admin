@@ -26,6 +26,7 @@ export const GET_PRODUCTS = gql`
       brand
       series
       category
+      subcategory
       type
       boxes_per_case
       packs_per_box
@@ -41,32 +42,9 @@ export const GET_PRODUCTS = gql`
       grader
       grade
       available
-      totalCost: Inventory_aggregate {
-        aggregate {
-          sum {
-            cost_basis
-          }
-        }
-      }
-      averageCost: Inventory_aggregate {
-        aggregate {
-          avg {
-            cost_basis
-          }
-        }
-      }
-      unassignedCount: Inventory_aggregate(
-        where: { break_id: { _is_null: true } }
-      ) {
-        aggregate {
-          count
-        }
-      }
-      assignedCount: Inventory_aggregate(
-        where: { break_id: { _is_null: false } }
-      ) {
-        aggregate {
-          count
+      break_products {
+        Break {
+          id
         }
       }
     }
@@ -84,6 +62,7 @@ export const GET_PRODUCT_BY_ID = gql`
       brand
       series
       category
+      subcategory
       type
       boxes_per_case
       packs_per_box
@@ -99,110 +78,16 @@ export const GET_PRODUCT_BY_ID = gql`
       grader
       grade
       available
-      Inventory {
-        id
-        location
-        supplier
-        purchase_date
-        cost_basis
+      break_products {
         Break {
           id
           title
         }
       }
-      totalCost: Inventory_aggregate {
-        aggregate {
-          sum {
-            cost_basis
-          }
-        }
-      }
-      averageCost: Inventory_aggregate {
-        aggregate {
-          avg {
-            cost_basis
-          }
-        }
-      }
-      unassignedCount: Inventory_aggregate(
-        where: { break_id: { _is_null: true } }
-      ) {
-        aggregate {
-          count
-        }
-      }
-      assignedCount: Inventory_aggregate(
-        where: { break_id: { _is_null: false } }
-      ) {
-        aggregate {
-          count
-        }
-      }
     }
   }
 `;
 
-export const GET_INVENTORY = gql`
-  query GetInventory {
-    Inventory {
-      id
-      location
-      break_id
-      Product {
-        id
-        description
-        category
-        manufacturer
-        brand
-        type
-        year
-      }
-    }
-  }
-`;
-
-export const GET_UNASSIGNED_INVENTORY = gql`
-  query GetUnassignedInventory {
-    Inventory(where: { break_id: { _is_null: true } }) {
-      id
-      location
-      break_id
-      Product {
-        id
-        description
-        category
-        manufacturer
-        brand
-        type
-        year
-      }
-    }
-  }
-`;
-
-export const GET_INVENTORY_BY_PROD_ID = gql`
-  query GetInventoryByProdId($prod_id: uuid!) {
-    Inventory(where: { product_id: { _eq: $prod_id } }) {
-      id
-      cost_basis
-      Break {
-        id
-        Event {
-          id
-        }
-      }
-      Product {
-        id
-        unit_of_measure
-        category
-        manufacturer
-        brand
-        type
-        year
-      }
-    }
-  }
-`;
 
 export const GET_EVENTS = gql`
   query GetEvents {
@@ -301,6 +186,9 @@ export const GET_BREAK_BY_ID = gql`
       title
       dataset
       line_items
+      datasets {
+        data
+      }
       Event {
         id
         title
@@ -312,9 +200,7 @@ export const GET_BREAK_BY_ID = gql`
           last_name
         }
       }
-      Inventory {
-        id
-        location
+      break_products {
         Product {
           id
           description
@@ -324,6 +210,7 @@ export const GET_BREAK_BY_ID = gql`
         id
         title
         price
+        bc_product_id
         Order {
           id
           User {
@@ -350,7 +237,7 @@ export const GET_BREAK_DATA = gql`
           }
         }
       }
-      Inventory {
+      break_products {
         Product {
           id
           description,
@@ -554,6 +441,27 @@ export const GET_EVENT_RESULTS = gql`
           }
         }
       }
+    }
+  }
+`;
+
+export const GET_DATASETS = gql`
+  query GetDatasets($year: smallint!,
+                    $category: String!,
+                    $subcategory: String_comparison_exp,
+                    $type: String_comparison_exp) {
+    datasets(
+      where: {
+        _and: [
+          { year: { _eq: $year } },
+          {category: {_eq: $category}},
+          {subcategory: $subcategory },
+          {type: $type },
+        ]
+      }
+      ) {
+      id,
+      data
     }
   }
 `;

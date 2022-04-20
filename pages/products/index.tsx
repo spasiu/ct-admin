@@ -149,10 +149,6 @@ const ProductsPage: React.FC = () => {
                         <Th>Brand</Th>
                         <Th>Series</Th>
                         <Th>Type</Th>
-                        <Th># Available</Th>
-                        <Th># Assigned</Th>
-                        <Th>Avg. Cost</Th>
-                        <Th>Dollars on Hand</Th>
                         <Th textAlign="right">Actions</Th>
                       </Tr>
                     </Thead>
@@ -166,24 +162,7 @@ const ProductsPage: React.FC = () => {
                           <Td>{prod.brand}</Td>
                           <Td>{prod.series}</Td>
                           <Td>{prod.type}</Td>
-                          <Td>{prod.unassignedCount?.aggregate?.count}</Td>
-                          <Td>{prod.assignedCount?.aggregate?.count}</Td>
-                          <Td>
-                            {new Intl.NumberFormat('en', {
-                              style: 'currency',
-                              currency: 'USD',
-                            }).format(
-                              prod.averageCost?.aggregate?.avg?.cost_basis || 0,
-                            )}
-                          </Td>
-                          <Td>
-                            {new Intl.NumberFormat('en', {
-                              style: 'currency',
-                              currency: 'USD',
-                            }).format(
-                              prod.totalCost?.aggregate?.sum?.cost_basis || 0,
-                            )}
-                          </Td>
+
                           <Td textAlign="right">
                             <HStack spacing={2} justify="flex-end">
                               <NextLink
@@ -202,10 +181,6 @@ const ProductsPage: React.FC = () => {
                                 onClick={() => {
                                   // Remove agreggate fields
                                   const prodClone = (({
-                                    totalCost,
-                                    averageCost,
-                                    unassignedCount,
-                                    assignedCount,
                                     ...o
                                   }) => o)(prod);
 
@@ -235,10 +210,6 @@ const ProductsPage: React.FC = () => {
                       <Tr>
                         <Th>Sport/Category</Th>
                         <Th>Card</Th>
-                        <Th># Available</Th>
-                        <Th># Assigned</Th>
-                        <Th>Avg. Cost</Th>
-                        <Th>Dollars on Hand</Th>
                         <Th textAlign="right">Actions</Th>
                       </Tr>
                     </Thead>
@@ -247,24 +218,6 @@ const ProductsPage: React.FC = () => {
                         <Tr key={prod.id} bg="white">
                           <Td>{prod.category}</Td>
                           <Td>{prod.description}</Td>
-                          <Td>{prod.unassignedCount?.aggregate?.count}</Td>
-                          <Td>{prod.assignedCount?.aggregate?.count}</Td>
-                          <Td>
-                            {new Intl.NumberFormat('en', {
-                              style: 'currency',
-                              currency: 'USD',
-                            }).format(
-                              prod.averageCost?.aggregate?.avg?.cost_basis || 0,
-                            )}
-                          </Td>
-                          <Td>
-                            {new Intl.NumberFormat('en', {
-                              style: 'currency',
-                              currency: 'USD',
-                            }).format(
-                              prod.totalCost?.aggregate?.sum?.cost_basis || 0,
-                            )}
-                          </Td>
                           <Td textAlign="right">
                             <HStack spacing={2} justify="flex-end">
                               <NextLink
@@ -281,16 +234,7 @@ const ProductsPage: React.FC = () => {
                                 aria-label="Edit"
                                 icon={<MdEdit />}
                                 onClick={() => {
-                                  // Remove agreggate fields
-                                  const prodClone = (({
-                                    totalCost,
-                                    averageCost,
-                                    unassignedCount,
-                                    assignedCount,
-                                    ...o
-                                  }) => o)(prod);
-
-                                  setSelectedProduct(prodClone);
+                                  setSelectedProduct(prod);
                                   setAddProductModalOpen(true);
                                 }}
                               />

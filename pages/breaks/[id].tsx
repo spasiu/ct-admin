@@ -230,8 +230,8 @@ const BreakPage: React.FC = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {breakQueryData.Breaks_by_pk?.Inventory?.map((item) => (
-                    <Tr key={item.id} bg="white">
+                  {breakQueryData.Breaks_by_pk?.break_products?.map((item) => (
+                    <Tr key={item.Product.id} bg="white">
                       <Td>{item.Product?.description}</Td>
                     </Tr>
                   ))}
