@@ -434,7 +434,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                     borderColor="gray.300"
                     {...register('rookie_card')}
                     onChange={() => setRookie(!rookie)}
-                    isChecked={rookie}
+                    isChecked={rookie || undefined}
                   >
                     Rookie
                   </Checkbox>
