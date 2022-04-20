@@ -1,4 +1,4 @@
-import { useGetInventoryQuery } from '@generated/graphql';
+import { useGetProductsQuery, Unit_Of_Measure_Enum } from '@generated/graphql';
 import { TInventoryAutcomplete } from '@customTypes/inventory';
 import { TBreakData } from '@customTypes/breaks';
 
@@ -7,32 +7,42 @@ export default function useGetInventory(
   setSelectedInventory: ([]) => void,
   break_data?: TBreakData,
 ) {
-  const {} = useGetInventoryQuery({
+  const {} = useGetProductsQuery({
+    variables: {
+      unitOfMeasure: [
+        Unit_Of_Measure_Enum.Box,
+        Unit_Of_Measure_Enum.Case,
+        Unit_Of_Measure_Enum.Pack,
+      ],
+      input: '%',
+    },
     onCompleted: (data) => {
-      const pickerItems: TInventoryAutcomplete[] = [];
-      const selectedItems: TInventoryAutcomplete[] = [];
+      const pickerItems: TInventoryAutcomplete[] = data.Products.map(
+        (product) => {
+          return {
+            label: product.description || '',
+            value: product.id,
+            year: product.year,
+            sport: product.category,
+            subcategory: product.subcategory
+          };
+        },
+      );
 
-      for (let idx = 0; idx < data.Inventory?.length; idx++) {
-        if (data.Inventory[idx].break_id === null) {
-          pickerItems.push({
-            label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
-            value: data.Inventory[idx].id,
-            year: data.Inventory[idx].Product?.year,
-            sport: data.Inventory[idx].Product?.category,
-          });
-        }
-
-        if (data.Inventory[idx].break_id === break_data?.id) {
-          pickerItems.push({
-            label: `${data.Inventory[idx].Product?.description} - ${data.Inventory[idx].location}`,
-            value: data.Inventory[idx].id,
-            year: data.Inventory[idx].Product?.year,
-            sport: data.Inventory[idx].Product?.category,
-          });
-
-          selectedItems.push(pickerItems[pickerItems.length - 1]);
-        }
-      }
+      const selectedItems: TInventoryAutcomplete[] = data.Products.filter(
+        (product) =>
+          product.break_products
+            .map((item) => item.Break.id)
+            .includes(break_data?.id),
+      ).map((product) => {
+        return {
+          label: product.description || '',
+          value: product.id,
+          year: product.year,
+          sport: product.category,
+          subcategory: product.subcategory
+        };
+      });
 
       setPickerInventory(pickerItems);
       setSelectedInventory(selectedItems);

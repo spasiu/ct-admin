@@ -16,6 +16,7 @@ export type TEventSelectedBreak = {
     id: string;
     title: string;
     price: number;
+    bc_product_id: number;
   }[];
 };
 

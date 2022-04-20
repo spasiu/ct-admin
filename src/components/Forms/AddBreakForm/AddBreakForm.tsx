@@ -21,13 +21,10 @@ import {
 import {
   Break_Type_Enum,
   InsertBreakMutation,
-  UpdateBreakMutation,
   useInsertBreakMutation,
-  useUpdateBreakMutation,
-  useUpdateInventoryBreakMutation,
-  useGetTeamDataLazyQuery,
-  useGetDivisionDataLazyQuery,
   useGetProductIitemsWithOrderIdByBreakIdLazyQuery,
+  useGetDatasetsLazyQuery,
+  useFullBreakUpdateMutation
 } from '@generated/graphql';
 
 import { auth, functions } from '@config/firebase';
@@ -40,17 +37,14 @@ import LoadingSpinner from '@components/LoadingSpinner';
 
 import { TInventoryAutcomplete } from '@customTypes/inventory';
 import {
-  TBreakLineItem,
-  TDatasetLineItem,
   TAddBreakFormData,
   TAddBreakFormProps,
+  TDatasetLineItem,
 } from '@customTypes/breaks';
 
 import { schema } from './AddBreakForm.schema';
 import useGetInventory from './use-get-inventory.hook';
 import {
-  getNewDatasetItems,
-  getNewLineItems,
   getQueryVars,
   getSpotOptions,
 } from './AddBreakForm.utils';
@@ -66,7 +60,9 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
   break_data,
   callback,
 }) => {
+
   const createBreakProducts = functions.httpsCallable('createBreakProducts');
+  const deleteBreakProducts = functions.httpsCallable('deleteBreakProducts');
   const [isLoading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
   const operation = break_data ? 'UPDATE' : 'ADD';
@@ -76,34 +72,14 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
   const [selectedInventory, setSelectedInventory] = useState<
     TInventoryAutcomplete[]
   >([]);
-  const [breakLineItems, setBreakLineItems] = useState<TBreakLineItem[]>([]);
 
   const onInsertComplete = (data: InsertBreakMutation) => {
-    const breakId = data.insert_Breaks_one?.id;
-    const inventoryIds = selectedInventory.map((item) => item.value);
-
     createBreakProducts({
-      breakData: data.insert_Breaks_one,
-      lineItems: breakLineItems,
+      breakData: data.insert_Breaks?.returning[0],
+      lineItems: watchLineItems,
     }).then(() => {
-      updateInventory({
-        variables: {
-          ids: inventoryIds,
-          breakId,
-        },
-      });
-    });
-  };
-
-  const onUpdateComplete = (data: UpdateBreakMutation) => {
-    const breakId = data.update_Breaks_by_pk?.id;
-    const inventoryIds = selectedInventory.map((item) => item.value);
-
-    updateInventory({
-      variables: {
-        ids: inventoryIds,
-        breakId,
-      },
+      setLoading(false);
+      callback();
     });
   };
 
@@ -119,46 +95,19 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
   useGetInventory(setPickerInventory, setSelectedInventory, break_data);
 
   const [
-    addBreak,
-    {
-      data: addBreakMutationData,
-      loading: addBreakMutationLoading,
-      error: addBreakMutationError,
-    },
+    addBreak
   ] = useInsertBreakMutation({ onCompleted: onInsertComplete });
 
   const [
-    updateBreak,
-    {
-      data: updateBreakMutationData,
-      loading: updateBreakMutationLoading,
-      error: updateBreakMutationError,
-    },
-  ] = useUpdateBreakMutation({ onCompleted: onUpdateComplete });
+    updateBreak
+    // TODO: add code to update BPI's: probably set flag to delete previous and insert new from mutation result data
+  ] = useFullBreakUpdateMutation({ onCompleted: onInsertComplete });
 
   const [
-    updateInventory,
-    {
-      data: updateInventoryMutationData,
-      loading: updateInventoryMutationLoading,
-      error: updateInventoryMutationError,
-    },
-  ] = useUpdateInventoryBreakMutation({
-    onCompleted: () => {
-      setLoading(false);
-      callback();
-    },
-  });
+    getDataset,
+    { data: dataset },
+  ] = useGetDatasetsLazyQuery();
 
-  const [
-    getTeams,
-    { loading: teamDataLoading, data: teamData },
-  ] = useGetTeamDataLazyQuery();
-
-  const [
-    getDivisions,
-    { loading: divisionDataLoading, data: divisionData },
-  ] = useGetDivisionDataLazyQuery();
 
   const [getItemsWithOrderByBreak, {data: itemsWithOrderData }] = useGetProductIitemsWithOrderIdByBreakIdLazyQuery();
   const [isPurchased, setIsPurchased] = useState(false);
@@ -169,13 +118,31 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
 
   useEffect(() => setIsPurchased((itemsWithOrderData?.BreakProductItems.length || 0) > 0), [itemsWithOrderData]);
 
+
+  const prepareLineItemsForUpdate = () => {
+    let lineItems: TDatasetLineItem[] = [];
+    if (break_data && !break_data.BreakProductItems[0].title.includes('Spot')) {
+      lineItems = break_data.BreakProductItems.map(item => {
+        const entry = break_data.datasets?.data.find((datum:TDatasetLineItem) => datum.name === item.title);
+        return {
+          name: item.title,
+          short_code: entry.short_code,
+          color: entry.color,
+          color_secondary: entry.color_secondary,
+          city: entry.city,
+          cost: item.price,
+        };
+      })
+    }
+    return lineItems;
+  }
+  
   const {
     control,
     register,
     handleSubmit,
     watch,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<TAddBreakFormData>({
     resolver: yupResolver(schema),
@@ -186,13 +153,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
       break_type: BreakTypeValues.find(
         (b) => b.value === break_data?.break_type,
       )?.value,
-      lineItems: break_data
-        ? break_data.BreakProductItems.map((item) => ({
-            value: item.title,
-            cost: item.price,
-          }))
-        : [],
-      datasetItems: break_data && break_data.dataset ? break_data.dataset : [],
+      lineItems: prepareLineItemsForUpdate(),
+      datasetItems: break_data?.datasets?.data ? break_data.datasets.data : [],
     },
   });
 
@@ -218,80 +180,52 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
   const watchLineItems = watch('lineItems');
   const watchDatasetItems = watch('datasetItems');
 
-  // Change Line or Data Items
   useEffect(() => {
-    replaceLineItemFields([]);
-    replaceDatasetFields([]);
-    switch (watchType) {
-      case Break_Type_Enum.PickYourTeam: {
-        return replaceLineItemFields(
-          getNewLineItems(teamData?.Teams as TBreakLineItem[], [
-            'short_code',
-            'city+name',
-            'cost',
-            'color',
-            'color_secondary',
-          ]),
-        );
-      }
-      case Break_Type_Enum.PickYourDivision: {
-        return replaceLineItemFields(
-          getNewLineItems(divisionData?.Divisions as TBreakLineItem[], [
-            'short_code',
-            'name',
-            'cost',
-            'color',
-            'color_secondary',
-          ]),
-        );
-      }
-      case Break_Type_Enum.RandomTeam: {
-        teamData &&
-          watchSpots &&
-          setValue(
-            'teams_per_spot',
-            Number(teamData?.Teams.length / watchSpots),
-          );
-        return replaceDatasetFields(
-          getNewDatasetItems(
-            teamData?.Teams as TDatasetLineItem[],
-            (Number(watchSpots) * Number(watchTeamsPerSpot)) as number,
-            ['short_code', 'city', 'name', 'color', 'color_secondary'],
-          ),
-        );
-      }
-      case Break_Type_Enum.RandomDivision: {
-        divisionData &&
-          watchSpots &&
-          setValue(
-            'teams_per_spot',
-            Number(divisionData?.Divisions.length / watchSpots),
-          );
-
-        return replaceDatasetFields(
-          getNewDatasetItems(
-            divisionData?.Divisions as TDatasetLineItem[],
-            divisionData?.Divisions.length as number,
-            ['short_code', 'name', 'color', 'color_secondary'],
-          ),
-        );
-      }
-      default: {
-        replaceLineItemFields([]);
-        replaceDatasetFields([]);
-      }
-    }
-  }, [watchSpots, watchType, watchTeamsPerSpot, teamData, divisionData]);
-
-  useEffect(() => {
-    setValue('spots', operation === 'UPDATE' ? watchSpots : null);
-    setValue('teams_per_spot', operation === 'UPDATE' ? (teamData?.Teams.length || null) : null);
+    setValue('spots', break_data ? break_data.spots  : null);
+    setValue('teams_per_spot', break_data ? break_data.teams_per_spot : null);
+    const datasetType = watchType 
+      ? watchType.toLowerCase().includes('team') ? 'TEAM' : 'DIVISION'
+      : null;
     if (selectedInventory.length > 0) {
-      const { sport, year } = getQueryVars(selectedInventory);
-      getTeams({ variables: { year, sport } });
-      getDivisions({ variables: { sport } });
+      const { sport, year, subcategory } = getQueryVars(selectedInventory);
+      getDataset({ variables: {
+        year: year,
+        category: sport,
+        subcategory: subcategory ? { _eq: subcategory } : {},
+        type: datasetType ? {_eq: datasetType} : {}
+      }
+    })
     }
   }, [selectedInventory, watchType]);
+
+
+  // Change Line or Data Items
+  useEffect(() => {
+    if (dataset) {
+      replaceLineItemFields([]);
+      replaceDatasetFields([]);
+      switch (watchType) {
+        case Break_Type_Enum.PickYourTeam:
+        case Break_Type_Enum.PickYourDivision: {
+          return replaceLineItemFields(dataset?.datasets[0].data);
+        }
+        case Break_Type_Enum.RandomTeam:
+        case Break_Type_Enum.RandomDivision: {
+            watchSpots &&
+            setValue(
+              'teams_per_spot',
+              dataset?.datasets[0].data.length / watchSpots
+            );
+          return replaceDatasetFields(dataset?.datasets[0].data);
+        }
+        default: {
+          replaceLineItemFields([]);
+          replaceDatasetFields([]);
+        }
+      }
+    }
+  }, [dataset, watchSpots, watchType, watchTeamsPerSpot]);
+
 
   /**
    * Handle form submission
@@ -301,8 +235,6 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     if (user) {
       setLoading(true);
 
-      setBreakLineItems(result.lineItems);
-      console.log(result);
       const submitData = {
         event_id: result.event_id,
         title: result.title,
@@ -317,19 +249,11 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
         teams_per_spot: result.teams_per_spot ? result.teams_per_spot : null,
         break_type: result.break_type,
         price: result.price,
-        dataset:
-          result.lineItems.length > 0
-            ? result.lineItems
-            : result.datasetItems.length > 0
-            ? result.datasetItems.map((item) => ({
-                city: item.city || '',
-                name: item.name,
-                short_code: item.short_code,
-                color: item.color,
-                color_secondary: item.color_secondary,
-              }))
-            : null,
-      };
+        dataset_id: dataset?.datasets[0].id,
+        break_products: {
+          data: selectedInventory.map(i => ({ product_id: i.value}))
+        }
+      }
 
       switch (operation) {
         case 'ADD':
@@ -340,12 +264,17 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
           });
           break;
         case 'UPDATE':
+          deleteBreakProducts({
+            breakId: break_data?.id,
+            breakProdId: break_data?.BreakProductItems[0].bc_product_id
+          }).then(() => {
           updateBreak({
             variables: {
               id: break_data?.id,
-              data: submitData,
-            },
+              data: {id: break_data?.id, ...submitData},
+            }
           });
+        });
       }
     }
   };
@@ -394,7 +323,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl>
+        <FormControl isDisabled={isPurchased}>
           <CUIAutoComplete
             tagStyleProps={{
               display: 'flex',
@@ -455,7 +384,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
             )}
 
           {/* SPOTS INPUT */}
-          {watchType &&
+          {watchType && watchDatasetItems && 
             watchType !== Break_Type_Enum.Personal &&
             watchType !== Break_Type_Enum.PickYourTeam &&
             watchType !== Break_Type_Enum.PickYourDivision && (
@@ -473,9 +402,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                   <option value="">Select...</option>
                   {getSpotOptions(
                     watchType,
-                    watchType === Break_Type_Enum.RandomTeam
-                      ? (teamData?.Teams.length as number)
-                      : (divisionData?.Divisions.length as number),
+                    watchDatasetItems.length
                   ).map((num) => (
                     <option key={`spots-${num}`} value={num}>
                       {num}
@@ -510,7 +437,10 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
         </Flex>
 
         {/* RANDOM TEAMS / RANDOM DIVISION */}
-        {watchDatasetItems?.length > 0 && (
+        {watchDatasetItems?.length > 0 && 
+            watchType !== Break_Type_Enum.Personal &&
+            watchType !== Break_Type_Enum.PickYourTeam &&
+            watchType !== Break_Type_Enum.PickYourDivision &&  (
           <Box mb={10}>
             <Heading size="sm" mb={2}>
               Teams/Divisions List
@@ -531,7 +461,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                         {...register(
                           `datasetItems.${index}.short_code` as const,
                         )}
-                        isDisabled={isPurchased}
+                        disabled
                       />
                     </FormControl>
                   </Box>
@@ -548,7 +478,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                         <Input
                           placeholder="City"
                           {...register(`datasetItems.${index}.city` as const)}
-                          isDisabled={isPurchased}
+                          disabled
                         />
                       </FormControl>
                     </Box>
@@ -565,7 +495,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Team/Division"
                         {...register(`datasetItems.${index}.name` as const)}
-                        isDisabled={isPurchased}
+                        disabled
                       />
                     </FormControl>
                   </Box>
@@ -581,7 +511,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Color 1"
                         {...register(`datasetItems.${index}.color` as const)}
-                        isDisabled={isPurchased}
+                        disabled
                       />
                     </FormControl>
                   </Box>
@@ -599,7 +529,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                         {...register(
                           `datasetItems.${index}.color_secondary` as const,
                         )}
-                        isDisabled={isPurchased}
+                        disabled
                       />
                     </FormControl>
                   </Box>
@@ -628,7 +558,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Short"
                         {...register(`lineItems.${index}.short_code` as const)}
-                        isDisabled={isPurchased}
+                        disabled
                       />
                     </FormControl>
                   </Box>
@@ -642,7 +572,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
                       <Input
                         placeholder="Team/Division"
                         {...register(`lineItems.${index}.name` as const)}
-                        isDisabled={isPurchased}
+                        disabled
                       />
                     </FormControl>
                   </Box>

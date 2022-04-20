@@ -20,7 +20,6 @@ import { Break_Type_Enum } from '@generated/graphql';
 import {
   TBreakResult,
   TBreakResultRandom,
-  TBreakResultPick,
   TBreakResultDraft,
   TBreakResultList,
   TDatasetLineItem,
@@ -34,10 +33,13 @@ const BreakResult: React.FC<TBreakResult> = ({
 }) => {
   const list: TBreakResultList = [];
 
-  if (
-    type === Break_Type_Enum.RandomDivision ||
-    type === Break_Type_Enum.RandomTeam
-  ) {
+  if (type === Break_Type_Enum.HitDraft) {
+    results.map((res: TBreakResultDraft) => {
+      list.push({
+        username: res.username !== null ? res.username.trim(): '',
+      });
+    });
+  } else {
     results.map((res: TBreakResultRandom) => {
       res.items.map((item: TDatasetLineItem | string) => {
         list.push({
@@ -45,25 +47,6 @@ const BreakResult: React.FC<TBreakResult> = ({
           title: typeof item === 'object' ? item.name.trim() : item.trim(),
         });
       });
-    });
-  } else if (type === Break_Type_Enum.HitDraft) {
-    results.map((res: TBreakResultDraft) => {
-      list.push({
-        username: res.username !== null ? res.username.trim(): '',
-      });
-    });
-  } else if (
-    type === Break_Type_Enum.PickYourTeam ||
-    type === Break_Type_Enum.PickYourDivision ||
-    type === Break_Type_Enum.Personal
-  ) {
-    results.map((res: TBreakResultPick) => {
-      if (res.Order?.User) {
-        list.push({
-          username: res.Order.User.username,
-          title: res.title,
-        });
-      }
     });
   }
 

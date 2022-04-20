@@ -301,9 +301,7 @@ const LiveEventPage: React.FC = () => {
                           </Td>
                         </Tr>
                         {brk.result &&
-                          (brk.break_type === Break_Type_Enum.RandomDivision ||
-                            brk.break_type === Break_Type_Enum.RandomTeam ||
-                            brk.break_type === Break_Type_Enum.HitDraft) && (
+                           (
                             <Tr>
                               <Td colSpan={5} p={0}>
                                 <BreakResult
@@ -316,21 +314,7 @@ const LiveEventPage: React.FC = () => {
                             </Tr>
                           )}
 
-                        {(brk.break_type === Break_Type_Enum.Personal ||
-                          brk.break_type === Break_Type_Enum.PickYourTeam ||
-                          brk.break_type ===
-                            Break_Type_Enum.PickYourDivision) && (
-                          <Tr>
-                            <Td colSpan={5} p={0}>
-                              <BreakResult
-                                breakId={brk.id}
-                                breakTitle={brk.title}
-                                type={brk.break_type}
-                                results={brk.BreakProductItems}
-                              />
-                            </Td>
-                          </Tr>
-                        )}
+                        
                       </React.Fragment>
                     ))}
                   </Tbody>
