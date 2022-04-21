@@ -149,10 +149,10 @@ const EventPage: React.FC = () => {
             breakName: b.title,
             orderId: orderId,
             teams: orders[orderId].join('; '),
-            userId: item.Order.user_id,
-            username: item.Order.User.username,
-            first_name: item.Order.User.first_name,
-            last_name: item.Order.User.last_name
+            userId: item?.Order.user_id || '',
+            username: item?.Order.User.username || 'cardsntreasure',
+            first_name: item?.Order.User.first_name || 'Cards',
+            last_name: item?.Order.User.last_name || 'Treasure'
           }
         });
 
