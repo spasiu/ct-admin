@@ -39,6 +39,7 @@ import { TInventoryAutcomplete } from '@customTypes/inventory';
 import {
   TAddBreakFormData,
   TAddBreakFormProps,
+  TBreakLineItem,
   TDatasetLineItem,
 } from '@customTypes/breaks';
 
@@ -143,6 +144,8 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     handleSubmit,
     watch,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<TAddBreakFormData>({
     resolver: yupResolver(schema),
@@ -198,6 +201,17 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     }
   }, [selectedInventory, watchType]);
 
+  const handleDatasetUpdate = (f: ((value: Partial<TBreakLineItem> | Partial<TBreakLineItem>[]) => void) 
+    | ((value: Partial<TDatasetLineItem> | Partial<TDatasetLineItem>[]) => void) )  => {
+    
+    if (dataset && dataset.datasets?.length > 0) {
+      clearErrors();
+      return f(dataset?.datasets[0].data);
+    } else {
+      setError('break_type',{type:'custom', message: 'There are no datasets for this break type with the selected product(s)' });
+    }
+  }
+
 
   // Change Line or Data Items
   useEffect(() => {
@@ -207,16 +221,16 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
       switch (watchType) {
         case Break_Type_Enum.PickYourTeam:
         case Break_Type_Enum.PickYourDivision: {
-          return replaceLineItemFields(dataset?.datasets[0].data);
+          return handleDatasetUpdate(replaceLineItemFields)
         }
         case Break_Type_Enum.RandomTeam:
         case Break_Type_Enum.RandomDivision: {
-            watchSpots &&
-            setValue(
-              'teams_per_spot',
-              dataset?.datasets[0].data.length / watchSpots
-            );
-          return replaceDatasetFields(dataset?.datasets[0].data);
+          watchSpots &&
+          setValue(
+            'teams_per_spot',
+            dataset?.datasets[0]?.data.length / watchSpots || null
+          );
+          return handleDatasetUpdate(replaceDatasetFields)
         }
         default: {
           replaceLineItemFields([]);
