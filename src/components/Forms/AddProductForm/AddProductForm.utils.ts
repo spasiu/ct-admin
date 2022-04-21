@@ -12,12 +12,13 @@ export const DatasetManager = (client: ApolloClient<any>) => ({
     category: string,
     subcategory: string | null = null,
   ): Promise<boolean> => {
+
     const { data: existing } = await client.query({
       query: GET_DATASETS,
       variables: {
         year: year,
         category: category.toLowerCase(),
-        subcategory: subcategory ? { _eq: subcategory } : {},
+        subcategory: subcategory ? { _eq: subcategory } : {_is_null: true},
         type: {},
       },
     });

@@ -153,6 +153,8 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
     formState: { errors },
     reset,
     setValue,
+    getFieldState,
+    getValues,
   } = useForm<TAddProductFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -243,9 +245,10 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
 
   const {automatic, manual} = DatasetManager(client);
 
-  if (watchManufacturer ) {
-      automatic(parseInt(watchYear), watchCat, watchSubcat)
-        .then(created => setRequireDataset(!created));
+
+  const attemptAutoDatasetMgmt = async () => {
+    const created = await automatic(parseInt(watchYear), watchCat, watchSubcat);
+    setRequireDataset(!created);
   }
 
   return (
@@ -331,7 +334,7 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 px={gridSpace.child}
               >
                 <FormLabel>Subcategory (Optional)</FormLabel>
-                <Input {...register('subcategory')} />
+                <Input {...register('subcategory')} onBlur={attemptAutoDatasetMgmt} />
                 <FormHelperText>e.g., soccer league</FormHelperText>
               </FormControl>
             </Flex>
@@ -343,7 +346,7 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 px={gridSpace.child}
               >
                 <FormLabel>Manufacturer</FormLabel>
-                <Select {...register('manufacturer')}>
+                <Select {...register('manufacturer')} onFocus={attemptAutoDatasetMgmt}>
                   <option value="">Select...</option>
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_manufacturer',

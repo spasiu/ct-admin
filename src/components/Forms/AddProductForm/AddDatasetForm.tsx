@@ -32,6 +32,7 @@ const AddDatasetForm: React.FC<TAddDatasetProps> = ({
             // validate required fields for dataset
             results.data.forEach((row) => {
               if (
+                !row.hasOwnProperty('name') ||
                 !row.hasOwnProperty('short_code') ||
                 !row.hasOwnProperty('color') ||
                 !row.hasOwnProperty('color_secondary')
