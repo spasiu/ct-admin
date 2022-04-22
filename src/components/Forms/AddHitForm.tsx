@@ -86,8 +86,8 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
   const [imageFront, setImageFront] = useState<string | undefined | null>(hit?.image_front);
   const [imageBack, setImageBack] = useState<string | undefined | null>(hit?.image_back);
   const [clearInsert, setClearInsert] = useState(false);
-  const [rookie, setRookie] = useState(hit?.rookie_card);
-  const [autograph, setAutograph] = useState(false);
+  const [rookie, setRookie] = useState(hit?.rookie_card || false);
+  const [autograph, setAutograph] = useState(hit?.autograph || false);
   // Remove id, Break, User and Product objects from hit input when editing
   const { id: hitId, User, Break, Product, ...defaultValues } = hit || {};
 
@@ -142,6 +142,8 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
         setClearInsert(false);
         setRookie(false);
         setAutograph(false);
+        setValue('rookie_card', false);
+        setValue('autograph', false);
       }
     },
   });
@@ -434,7 +436,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                     borderColor="gray.300"
                     {...register('rookie_card')}
                     onChange={() => setRookie(!rookie)}
-                    isChecked={rookie || undefined}
+                    isChecked={rookie}
                   >
                     Rookie
                   </Checkbox>
