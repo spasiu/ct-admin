@@ -153,7 +153,6 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
     formState: { errors },
     reset,
     setValue,
-    getFieldState,
     getValues,
   } = useForm<TAddProductFormData>({
     resolver: yupResolver(schema),
