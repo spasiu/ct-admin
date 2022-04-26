@@ -24,7 +24,8 @@ import {
   useInsertBreakMutation,
   useGetProductIitemsWithOrderIdByBreakIdLazyQuery,
   useGetDatasetsLazyQuery,
-  useFullBreakUpdateMutation
+  useFullBreakUpdateMutation,
+  Dataset_Type_Enum
 } from '@generated/graphql';
 
 import { auth, functions } from '@config/firebase';
@@ -187,7 +188,7 @@ const AddBreakForm: React.FC<TAddBreakFormProps> = ({
     setValue('spots', break_data ? break_data.spots  : null);
     setValue('teams_per_spot', break_data ? break_data.teams_per_spot : null);
     const datasetType = watchType 
-      ? watchType.toLowerCase().includes('team') ? 'TEAM' : 'DIVISION'
+      ? watchType.toLowerCase().includes('team') ? Dataset_Type_Enum.Team : Dataset_Type_Enum.Division
       : null;
     if (selectedInventory.length > 0) {
       const { sport, year, subcategory } = getQueryVars(selectedInventory);

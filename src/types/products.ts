@@ -98,5 +98,5 @@ export type TAddDatasetProps = {
   subcategory: string;
   datasetHandler:
     (year: number, category: string, subcategory: string | null, datasetType: string | null, dataset: Object[]) => Promise<boolean>
-  callback: () => void;
+  callback: (closeModal: boolean) => void;
 }

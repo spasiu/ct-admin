@@ -659,7 +659,7 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
           </Box>
         )}
 
-        {requireDataset && (
+        {(requireDataset || isAddDatasetModalOpen) && (
           <>
                 <Flex justifyContent="center">
                   <Button mb={4} px={10} colorScheme="red" onClick={() => {setAddDatasetModalOpen(true)}}>
@@ -668,19 +668,18 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 </Flex>
 
 
-        <FormModal
+      <FormModal
         title="Add Dataset"
         isOpen={isAddDatasetModalOpen}
         setModalOpen={setAddDatasetModalOpen}
-
       >
         <AddDatasetForm
             year={watchYear}
             category={watchCat}
             subcategory={watchSubcat || ''}
             datasetHandler={manual}
-            callback={() => {
-              setAddDatasetModalOpen(false);
+            callback={(closeModal:boolean) => {
+              setAddDatasetModalOpen(!closeModal);
               setRequireDataset(false);
             }}
          />

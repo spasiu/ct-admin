@@ -50,8 +50,7 @@ We should look into Github hooks for the Firebase deploy, which are available, b
 
 1. (Optional, but good to avoid ambiguity with previous builds) `rm -rf .next out`
 2. `yarn build`
-3. `yarn next export`
-4. `firebase deploy --only hosting` (you must already be logged into firebase for this)
+3. `yarn deploy`
 
 ### Hasura changes
 

@@ -449,7 +449,7 @@ export const GET_DATASETS = gql`
   query GetDatasets($year: smallint!,
                     $category: String!,
                     $subcategory: String_comparison_exp,
-                    $type: String_comparison_exp) {
+                    $type: dataset_type_enum_comparison_exp) {
     datasets(
       where: {
         _and: [
