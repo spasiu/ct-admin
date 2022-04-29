@@ -2,7 +2,9 @@ import { gql } from '@apollo/client';
 
 export const GET_PRODUCT_ITEMS_WITH_ORDER_ID_BY_BREAK_ID = gql`
   query GetProductIitemsWithOrderIdByBreakId($id: uuid!) {
-    BreakProductItems(where: {order_id: {_is_null: false}, Break: {id: {_eq: $id}}}) {
+    BreakProductItems(
+      where: { order_id: { _is_null: false }, Break: { id: { _eq: $id } } }
+    ) {
       id
     }
   }
@@ -87,7 +89,6 @@ export const GET_PRODUCT_BY_ID = gql`
     }
   }
 `;
-
 
 export const GET_EVENTS = gql`
   query GetEvents {
@@ -240,10 +241,10 @@ export const GET_BREAK_DATA = gql`
       break_products {
         Product {
           id
-          description,
-          year,
-          category,
-          manufacturer,
+          description
+          year
+          category
+          manufacturer
           brand
         }
       }
@@ -446,22 +447,39 @@ export const GET_EVENT_RESULTS = gql`
 `;
 
 export const GET_DATASETS = gql`
-  query GetDatasets($year: smallint!,
-                    $category: String!,
-                    $subcategory: String_comparison_exp,
-                    $type: dataset_type_enum_comparison_exp) {
+  query GetDatasets(
+    $year: smallint!
+    $category: String!
+    $subcategory: String_comparison_exp
+    $type: dataset_type_enum_comparison_exp
+  ) {
     datasets(
       where: {
         _and: [
-          { year: { _eq: $year } },
-          {category: {_eq: $category}},
-          {subcategory: $subcategory },
-          {type: $type },
+          { year: { _eq: $year } }
+          { category: { _eq: $category } }
+          { subcategory: $subcategory }
+          { type: $type }
         ]
       }
-      ) {
-      id,
+    ) {
+      id
       data
+    }
+  }
+`;
+
+export const GET_SUBCATS = gql`
+  query getSubcats {
+    Products(
+      where: {
+        _and: [
+          { subcategory: { _is_null: false } }
+          { subcategory: { _neq: "" } }
+        ]
+      }
+    ) {
+      subcategory
     }
   }
 `;

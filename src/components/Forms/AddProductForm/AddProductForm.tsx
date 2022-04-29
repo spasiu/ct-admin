@@ -15,7 +15,6 @@ import {
   Checkbox,
   HStack,
   Box,
-  FormHelperText,
 } from '@chakra-ui/react';
 
 import {
@@ -23,24 +22,24 @@ import {
   useUpdateProductMutation,
   Unit_Of_Measure_Enum,
   useGetFilteredExtensibleValuesQuery,
+  useGetSubcatsQuery,
 } from '@generated/graphql';
 
 import { UnitOfMeasureValues } from '@config/values';
 import { gridSpace } from '@config/chakra/constants';
 
-import Autocomplete from '@components/Autocomplete';
-
 import {
   TAddProductFormData,
   TAddProductFormProps,
+  TSubcategory
 } from '@customTypes/products';
 
-import {
-  DatasetManager
-} from './AddProductForm.utils'
+import { DatasetManager } from './AddProductForm.utils';
 import { useApolloClient } from '@apollo/client';
 import FormModal from '@components/Modals/FormModal';
 import AddDatasetForm from './AddDatasetForm';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import Autocomplete from '@components/Autocomplete';
 
 const schema = yup.object().shape({
   unit_of_measure: yup.string().required('Required'),
@@ -144,6 +143,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
   product,
   callback,
 }) => {
+  const [subcat, setSubcat] = useState<TSubcategory[]>(
+    product?.subcategory ? [{ label: product.subcategory }] : [],
+  );
+
+  const { data: subcategories } = useGetSubcatsQuery();
+
   const operation = product ? 'UPDATE' : 'ADD';
 
   const {
@@ -153,7 +158,6 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
     formState: { errors },
     reset,
     setValue,
-    getValues,
   } = useForm<TAddProductFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -165,8 +169,6 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
   });
 
   const {
-    loading: extensibleValueQueryLoading,
-    error: extensibleValueQueryError,
     data: extensibleValueQueryData,
   } = useGetFilteredExtensibleValuesQuery({
     variables: {
@@ -195,21 +197,11 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
   });
 
   const [
-    addProduct,
-    {
-      data: addProductMutationData,
-      loading: addProductMutationLoading,
-      error: addProductMutationError,
-    },
+    addProduct
   ] = useInsertProductMutation({ onCompleted: callback });
 
   const [
-    updateProduct,
-    {
-      data: updateProductMutationData,
-      loading: updateProductMutationLoading,
-      error: updateProductMutationError,
-    },
+    updateProduct
   ] = useUpdateProductMutation({ onCompleted: callback });
 
   /**
@@ -240,15 +232,13 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
   const watchYear = watch('year');
   const watchCat = watch('category');
   const watchSubcat = watch('subcategory');
-  const watchManufacturer = watch('manufacturer');
 
-  const {automatic, manual} = DatasetManager(client);
-
+  const { automatic, manual } = DatasetManager(client);
 
   const attemptAutoDatasetMgmt = async () => {
     const created = await automatic(parseInt(watchYear), watchCat, watchSubcat);
     setRequireDataset(!created);
-  }
+  };
 
   return (
     <>
@@ -326,15 +316,26 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
             </Flex>
 
             <Flex mx={gridSpace.parent} mb={5}>
-
-
-              <FormControl
-                width="100%"
-                px={gridSpace.child}
-              >
+              <FormControl width="100%" px={gridSpace.child}>
                 <FormLabel>Subcategory (Optional)</FormLabel>
-                <Input {...register('subcategory')} onBlur={attemptAutoDatasetMgmt} />
-                <FormHelperText>e.g., soccer league</FormHelperText>
+                <Typeahead
+                  clearButton
+                  allowNew
+                  id="subcategory"
+                  onChange={(selected: TSubcategory[]) => {
+                    setValue('subcategory', selected[0]?.label || null);
+                    setSubcat(selected);
+                  }}
+                  newSelectionPrefix=""
+                  options={
+                    subcategories?.Products.map(
+                      (p) => ({ label: p.subcategory || '' } as TSubcategory),
+                    ) || []
+                  }
+                  placeholder="Choose a subcategory..."
+                  selected={subcat}
+                  onBlur={attemptAutoDatasetMgmt}
+                />
               </FormControl>
             </Flex>
 
@@ -345,7 +346,10 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 px={gridSpace.child}
               >
                 <FormLabel>Manufacturer</FormLabel>
-                <Select {...register('manufacturer')} onFocus={attemptAutoDatasetMgmt}>
+                <Select
+                  {...register('manufacturer')}
+                  onFocus={attemptAutoDatasetMgmt}
+                >
                   <option value="">Select...</option>
                   {extensibleValueQueryData?.ExtensibleValues.filter(
                     (o) => o.field === 'product_manufacturer',
@@ -661,34 +665,46 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
 
         {(requireDataset || isAddDatasetModalOpen) && (
           <>
-                <Flex justifyContent="center">
-                  <Button mb={4} px={10} colorScheme="red" onClick={() => {setAddDatasetModalOpen(true)}}>
-                    Upload Dataset
-                  </Button>
-                </Flex>
+            <Flex justifyContent="center">
+              <Button
+                mb={4}
+                px={10}
+                colorScheme="red"
+                onClick={() => {
+                  setAddDatasetModalOpen(true);
+                }}
+              >
+                Upload Dataset
+              </Button>
+            </Flex>
 
-
-      <FormModal
-        title="Add Dataset"
-        isOpen={isAddDatasetModalOpen}
-        setModalOpen={setAddDatasetModalOpen}
-      >
-        <AddDatasetForm
-            year={watchYear}
-            category={watchCat}
-            subcategory={watchSubcat || ''}
-            datasetHandler={manual}
-            callback={(closeModal:boolean) => {
-              setAddDatasetModalOpen(!closeModal);
-              setRequireDataset(false);
-            }}
-         />
-      </FormModal>
-      </>
+            <FormModal
+              title="Add Dataset"
+              isOpen={isAddDatasetModalOpen}
+              setModalOpen={setAddDatasetModalOpen}
+            >
+              <AddDatasetForm
+                year={watchYear}
+                category={watchCat}
+                subcategory={watchSubcat || ''}
+                datasetHandler={manual}
+                callback={(closeModal: boolean) => {
+                  setAddDatasetModalOpen(!closeModal);
+                  setRequireDataset(false);
+                }}
+              />
+            </FormModal>
+          </>
         )}
 
         <Flex justifyContent="center">
-          <Button mb={4} px={10} colorScheme="blue" type="submit" disabled={requireDataset}>
+          <Button
+            mb={4}
+            px={10}
+            colorScheme="blue"
+            type="submit"
+            disabled={requireDataset}
+          >
             {operation === 'UPDATE' ? 'Update Product' : 'Add Product'}
           </Button>
         </Flex>

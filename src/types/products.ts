@@ -80,6 +80,7 @@ export type TAddProductFormProps = {
     numbered?: number | null;
     grader?: string | null;
     grade?: string | null;
+    subcategory?: string | null;
   };
   callback: () => void;
 };
@@ -99,4 +100,8 @@ export type TAddDatasetProps = {
   datasetHandler:
     (year: number, category: string, subcategory: string | null, datasetType: string | null, dataset: Object[]) => Promise<boolean>
   callback: (closeModal: boolean) => void;
+}
+
+export type TSubcategory = {
+  label: string
 }

@@ -12100,6 +12100,17 @@ export type GetDatasetsQuery = (
   )> }
 );
 
+export type GetSubcatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSubcatsQuery = (
+  { __typename?: 'query_root' }
+  & { Products: Array<(
+    { __typename?: 'Products' }
+    & Pick<Products, 'subcategory'>
+  )> }
+);
+
 export type GetEventByIdSubscriptionVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -13807,6 +13818,42 @@ export function useGetDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetDatasetsQueryHookResult = ReturnType<typeof useGetDatasetsQuery>;
 export type GetDatasetsLazyQueryHookResult = ReturnType<typeof useGetDatasetsLazyQuery>;
 export type GetDatasetsQueryResult = Apollo.QueryResult<GetDatasetsQuery, GetDatasetsQueryVariables>;
+export const GetSubcatsDocument = gql`
+    query getSubcats {
+  Products(
+    where: {_and: [{subcategory: {_is_null: false}}, {subcategory: {_neq: ""}}]}
+  ) {
+    subcategory
+  }
+}
+    `;
+
+/**
+ * __useGetSubcatsQuery__
+ *
+ * To run a query within a React component, call `useGetSubcatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSubcatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSubcatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSubcatsQuery(baseOptions?: Apollo.QueryHookOptions<GetSubcatsQuery, GetSubcatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSubcatsQuery, GetSubcatsQueryVariables>(GetSubcatsDocument, options);
+      }
+export function useGetSubcatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSubcatsQuery, GetSubcatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSubcatsQuery, GetSubcatsQueryVariables>(GetSubcatsDocument, options);
+        }
+export type GetSubcatsQueryHookResult = ReturnType<typeof useGetSubcatsQuery>;
+export type GetSubcatsLazyQueryHookResult = ReturnType<typeof useGetSubcatsLazyQuery>;
+export type GetSubcatsQueryResult = Apollo.QueryResult<GetSubcatsQuery, GetSubcatsQueryVariables>;
 export const GetEventByIdDocument = gql`
     subscription GetEventById($id: uuid!) {
   Events_by_pk(id: $id) {
