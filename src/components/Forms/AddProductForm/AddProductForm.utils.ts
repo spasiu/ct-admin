@@ -13,6 +13,9 @@ export const DatasetManager = (client: ApolloClient<any>) => ({
     subcategory: string | null = null,
   ): Promise<boolean> => {
 
+    /**
+     * check for existing datasets
+     */
     const { data: existing } = await client.query({
       query: GET_DATASETS,
       variables: {
@@ -25,6 +28,18 @@ export const DatasetManager = (client: ApolloClient<any>) => ({
 
     if (existing.datasets.length > 0) return true;
 
+    /**
+     * if there is no existing dataset AND there
+     * is a subcategory, autogeneration is NOT
+     * an option, so return false here
+     */
+    if (subcategory !== null) return false;
+
+    /**
+     * if there is no dataset and NO subcategory,
+     * see if this is one of the sports we can
+     * autogenerate for
+     */
     const { data: teamData } = await client.query({
       query: GET_TEAM_DATA,
       variables: { year: year, sport: category.toLowerCase() },
@@ -77,9 +92,13 @@ export const DatasetManager = (client: ApolloClient<any>) => ({
         );
     }
 
+    /**
+     * if autogeneration was an option here, return true here
+     */
     if (teamData.Teams.length > 0 || divisionData.Divisions.length > 0)
       return true;
 
+    // default to false, requiring a custom dataset
     return false;
   },
   manual: async (
