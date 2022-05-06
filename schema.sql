@@ -495,8 +495,17 @@ BEGIN
             _new."description" := CONCAT(_new."description",' ', NEW.grader, ' ', NEW.grade);
         END if;
 
+        if NEW.subcategory IS NOT NULL and NEW.subcategory != '' then
+            _new."description" := CONCAT(_new."description",' - ', NEW.subcategory);
+        END if;
+
     else
         _new."description" := CONCAT(NEW.year,' ',NEW.manufacturer,' ',NEW.brand,' ', NEW.series,' ',NEW.category,' ',NEW.type,' ',NEW.unit_of_measure);
+        
+        if NEW.subcategory IS NOT NULL and NEW.subcategory != '' then
+            _new."description" := CONCAT(_new."description",' - ', NEW.subcategory);
+        END if;
+        
     END if;
 
     RETURN _new;
