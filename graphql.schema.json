@@ -16583,7 +16583,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "args": [],
             "type": {
@@ -17394,7 +17394,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -17709,7 +17709,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -17923,7 +17923,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "args": [],
             "type": {
@@ -18115,7 +18115,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18305,7 +18305,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "args": [],
             "type": {
@@ -18497,7 +18497,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -18862,7 +18862,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -19070,7 +19070,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -19253,7 +19253,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -19618,7 +19618,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -29570,13 +29570,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -29912,7 +29908,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "args": [],
             "type": {
@@ -30887,7 +30883,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -31334,7 +31330,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -31644,7 +31640,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "args": [],
             "type": {
@@ -31920,7 +31916,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -32194,7 +32190,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "args": [],
             "type": {
@@ -32470,7 +32466,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -32958,7 +32954,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -33238,7 +33234,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null
@@ -33487,7 +33483,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -34200,7 +34196,7 @@
             "deprecationReason": null
           },
           {
-            "name": "memoribillia",
+            "name": "memorabilia",
             "description": "column name",
             "isDeprecated": false,
             "deprecationReason": null

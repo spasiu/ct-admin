@@ -1,11 +1,12 @@
-import { Unit_Of_Measure_Enum } from '@generated/graphql';
+import { Maybe, Unit_Of_Measure_Enum } from '@generated/graphql';
+import { UseFormSetValue } from 'react-hook-form';
 
 export type TSelectedProduct = {
   id: string;
   unit_of_measure: string;
   year: string;
   manufacturer: string;
-  brand: string;
+  brand?: string | null;
   series?: string | null;
   category: string;
   type?: string | null;
@@ -17,7 +18,7 @@ export type TSelectedProduct = {
   parallel?: string | null;
   insert?: string | null;
   rookie_card?: boolean | null;
-  memoribillia?: string | null;
+  memorabilia?: string | null;
   autograph?: boolean | null;
   numbered?: number | null;
   grader?: string | null;
@@ -36,7 +37,7 @@ export type TAddProductFormData = {
   unit_of_measure: Unit_Of_Measure_Enum;
   year: string;
   manufacturer: string;
-  brand: string;
+  brand: string | null;
   series: string | null;
   category: string;
   subcategory: string | null;
@@ -49,7 +50,7 @@ export type TAddProductFormData = {
   parallel: string | null;
   insert: string | null;
   rookie_card: boolean | null;
-  memoribillia: string | null;
+  memorabilia: string | null;
   autograph: boolean | null;
   numbered: number | null;
   grader: string | null;
@@ -63,7 +64,7 @@ export type TAddProductFormProps = {
     unit_of_measure: string;
     year: string;
     manufacturer: string;
-    brand: string;
+    brand?: string | null;
     series?: string | null;
     category: string;
     type?: string | null;
@@ -75,7 +76,7 @@ export type TAddProductFormProps = {
     parallel?: string | null;
     insert?: string | null;
     rookie_card?: boolean | null;
-    memoribillia?: string | null;
+    memorabilia?: string | null;
     autograph?: boolean | null;
     numbered?: number | null;
     grader?: string | null;
@@ -97,11 +98,33 @@ export type TAddDatasetProps = {
   year: string;
   category: string;
   subcategory: string;
-  datasetHandler:
-    (year: number, category: string, subcategory: string | null, datasetType: string | null, dataset: Object[]) => Promise<boolean>
+  datasetHandler: (
+    year: number,
+    category: string,
+    subcategory: string | null,
+    datasetType: string | null,
+    dataset: Object[],
+  ) => Promise<boolean>;
   callback: (closeModal: boolean) => void;
-}
+};
 
-export type TSubcategory = {
-  label: string
-}
+export type TOption = {
+  label: string;
+};
+
+export type TProductTypeAhead = {
+  field: keyof TAddProductFormData;
+  setValue: UseFormSetValue<any>;
+  productOptions: {
+    year: string[];
+    subcategory: string[];
+    manufacturer: string[];
+    brand: string[];
+    series: string[];
+    parallel: string[];
+    insert: string[];
+    memorabilia: string[];
+  };
+  defaultValue?: string | null;
+  onBlur?: ((e: Event) => void) | undefined;
+};

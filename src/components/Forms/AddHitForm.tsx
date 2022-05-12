@@ -22,6 +22,7 @@ import {
   useUpdateHitMutation,
   useGetFilteredExtensibleValuesQuery,
   useGetBreakDataLazyQuery,
+  useGetHitOptionsQuery,
 } from '@generated/graphql';
 
 import { gridSpace } from '@config/chakra/constants';
@@ -40,6 +41,8 @@ import {
 import { functions } from '@config/firebase';
 import FormModal from '@components/Modals/FormModal';
 import Imgix from 'react-imgix';
+import { ProductTypeAhead } from './AddProductForm/ProductTypeAhead';
+import { useProductTypeAhead } from './AddProductForm/ProductTypeAhead.hook';
 
 const schema = yup.object().shape({
   user_id: yup.string().required('Required'),
@@ -52,7 +55,7 @@ const schema = yup.object().shape({
   parallel: yup.string().nullable(),
   insert: yup.string().nullable(),
   rookie_card: yup.boolean(),
-  memoribillia: yup.string().nullable(),
+  memorabilia: yup.string().nullable(),
   autograph: yup.boolean(),
   numbered: yup
     .number()
@@ -83,8 +86,12 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
     null,
   );
   const [finished, setFinished] = useState(true);
-  const [imageFront, setImageFront] = useState<string | undefined | null>(hit?.image_front);
-  const [imageBack, setImageBack] = useState<string | undefined | null>(hit?.image_back);
+  const [imageFront, setImageFront] = useState<string | undefined | null>(
+    hit?.image_front,
+  );
+  const [imageBack, setImageBack] = useState<string | undefined | null>(
+    hit?.image_back,
+  );
   const [clearInsert, setClearInsert] = useState(false);
   const [rookie, setRookie] = useState(hit?.rookie_card || false);
   const [autograph, setAutograph] = useState(hit?.autograph || false);
@@ -110,7 +117,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
     data: extensibleValueQueryData,
   } = useGetFilteredExtensibleValuesQuery({
     variables: {
-      fields: ['product_insert', 'product_memoribillia', 'product_parallel'],
+      fields: ['product_insert', 'product_memorabilia', 'product_parallel'],
     },
     onCompleted: () => {
       reset({
@@ -171,9 +178,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
 
   useEffect(() => {
     if (breakData && breakData.Breaks_by_pk) {
-      const products = breakData.Breaks_by_pk.break_products.filter(
-        (inv) => inv.Product,
-      ).map((inv) => inv.Product!);
+      const products = breakData.Breaks_by_pk.break_products
+        .filter((inv) => inv.Product)
+        .map((inv) => inv.Product!);
 
       if (products.length > 0) {
         setProductOptions(products);
@@ -245,10 +252,14 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
 
   const prepPreview = () => {
     const formData = getValues();
-    const product = productOptions.filter(p => p.id === formData.product_id)[0];
+    const product = productOptions.filter(
+      (p) => p.id === formData.product_id,
+    )[0];
     setPreviewData({ Product: product, ...formData });
     setPreviewModalOpen(true);
   };
+
+  const lookAheadOptions = useProductTypeAhead(useGetHitOptionsQuery);
 
   return (
     <>
@@ -394,19 +405,12 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                   px={gridSpace.child}
                 >
                   <FormLabel>Parallel</FormLabel>
-                  <Select {...register('parallel')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_parallel',
-                    ).map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                  </Select>
+                  <ProductTypeAhead
+                    field="parallel"
+                    setValue={setValue}
+                    productOptions={lookAheadOptions}
+                    defaultValue={hit?.parallel || undefined}
+                  />
                   <FormErrorMessage>
                     {errors.parallel?.message}
                   </FormErrorMessage>
@@ -452,26 +456,19 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                 </HStack>
 
                 <FormControl
-                  isInvalid={!!errors.memoribillia}
+                  isInvalid={!!errors.memorabilia}
                   width="50%"
                   px={gridSpace.child}
                 >
-                  <FormLabel>Memoribillia</FormLabel>
-                  <Select {...register('memoribillia')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_memoribillia',
-                    ).map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                  </Select>
+                  <FormLabel>Memorabilia</FormLabel>
+                  <ProductTypeAhead
+                    field="memorabilia"
+                    setValue={setValue}
+                    productOptions={lookAheadOptions}
+                    defaultValue={hit?.memorabilia || undefined}
+                  />
                   <FormErrorMessage>
-                    {errors.memoribillia?.message}
+                    {errors.memorabilia?.message}
                   </FormErrorMessage>
                 </FormControl>
               </Flex>
@@ -502,23 +499,28 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                 mr={4}
                 colorScheme="blue"
                 onClick={() => setFinished(true)}
-                type="submit">
+                type="submit"
+              >
                 {isUpdate ? 'Update Hit' : 'Add Draft and finish'}
               </Button>
-              {!isUpdate ?
+              {!isUpdate ? (
                 <Button
                   mb={4}
                   mr={4}
                   colorScheme="blue"
                   onClick={() => setFinished(false)}
-                  type="submit" >
+                  type="submit"
+                >
                   Add Draft and continue
-                </Button> : null}
+                </Button>
+              ) : null}
               {isUpdate && !hit?.published ? (
                 <Button
                   mb={4}
                   colorScheme="red"
-                  onClick={() => { setValue('published', true) }}
+                  onClick={() => {
+                    setValue('published', true);
+                  }}
                   type="submit"
                 >
                   Publish
@@ -527,7 +529,9 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                 <Button
                   mb={4}
                   colorScheme="red"
-                  onClick={() => { setValue('published', false) }}
+                  onClick={() => {
+                    setValue('published', false);
+                  }}
                   type="submit"
                 >
                   Unpublish
@@ -566,7 +570,7 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
               previewData?.parallel,
               previewData?.insert,
               previewData?.autograph ? 'Autograph' : '',
-              previewData?.memoribillia ? previewData.memoribillia : '',
+              previewData?.memorabilia ? previewData.memorabilia : '',
               previewData?.rookie_card ? 'Rookie' : '',
               previewData?.numbered ? '/' + previewData.numbered : '',
             ].join(' ')}

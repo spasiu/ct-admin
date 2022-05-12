@@ -22,7 +22,7 @@ import {
   useUpdateProductMutation,
   Unit_Of_Measure_Enum,
   useGetFilteredExtensibleValuesQuery,
-  useGetSubcatsQuery,
+  useGetProductOptionsQuery,
 } from '@generated/graphql';
 
 import { UnitOfMeasureValues } from '@config/values';
@@ -31,15 +31,14 @@ import { gridSpace } from '@config/chakra/constants';
 import {
   TAddProductFormData,
   TAddProductFormProps,
-  TSubcategory
 } from '@customTypes/products';
 
 import { DatasetManager } from './AddProductForm.utils';
 import { useApolloClient } from '@apollo/client';
 import FormModal from '@components/Modals/FormModal';
 import AddDatasetForm from './AddDatasetForm';
-import { Typeahead } from 'react-bootstrap-typeahead';
-import Autocomplete from '@components/Autocomplete';
+import { ProductTypeAhead } from './ProductTypeAhead';
+import { useProductTypeAhead } from './ProductTypeAhead.hook';
 
 const schema = yup.object().shape({
   unit_of_measure: yup.string().required('Required'),
@@ -51,7 +50,7 @@ const schema = yup.object().shape({
       'Enter a valid year or year range',
     ),
   manufacturer: yup.string().required('Required'),
-  brand: yup.string().required('Required'),
+  brand: yup.string().nullable(),
   series: yup.string().nullable(),
   category: yup.string().required('Required'),
   type: yup
@@ -120,7 +119,7 @@ const schema = yup.object().shape({
   parallel: yup.string().nullable(),
   insert: yup.string().nullable(),
   rookie_card: yup.boolean(),
-  memoribillia: yup.string().nullable(),
+  memorabilia: yup.string().nullable(),
   autograph: yup.boolean(),
   numbered: yup
     .number()
@@ -143,11 +142,7 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
   product,
   callback,
 }) => {
-  const [subcat, setSubcat] = useState<TSubcategory[]>(
-    product?.subcategory ? [{ label: product.subcategory }] : [],
-  );
-
-  const { data: subcategories } = useGetSubcatsQuery();
+  const productOptions = useProductTypeAhead(useGetProductOptionsQuery);
 
   const operation = product ? 'UPDATE' : 'ADD';
 
@@ -179,7 +174,7 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
         'product_grade',
         'product_insert',
         'product_manufacturer',
-        'product_memoribillia',
+        'product_memorabilia',
         'product_parallel',
         'product_series',
         'product_type',
@@ -196,20 +191,16 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
     },
   });
 
-  const [
-    addProduct
-  ] = useInsertProductMutation({ onCompleted: callback });
+  const [addProduct] = useInsertProductMutation({ onCompleted: callback });
 
-  const [
-    updateProduct
-  ] = useUpdateProductMutation({ onCompleted: callback });
+  const [updateProduct] = useUpdateProductMutation({ onCompleted: callback });
 
   /**
    * Handle form submission
    * @param result object Validated form result
    */
   const onSubmit = (result: TAddProductFormData) => {
-    const {break_products, ...data} = result;
+    const { break_products, ...data } = result;
     switch (operation) {
       case 'ADD':
         addProduct({
@@ -274,21 +265,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 px={gridSpace.child}
               >
                 <FormLabel>Year</FormLabel>
-                <Select {...register('year')}>
-                  <option value="">Select...</option>
-                  {extensibleValueQueryData?.ExtensibleValues.filter(
-                    (o) => o.field === 'product_year',
-                  )
-                    .reverse()
-                    .map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                </Select>
+                <ProductTypeAhead
+                  field="year"
+                  setValue={setValue}
+                  productOptions={productOptions}
+                  defaultValue={product?.year}
+                />
                 <FormErrorMessage>{errors.year?.message}</FormErrorMessage>
               </FormControl>
 
@@ -318,23 +300,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
             <Flex mx={gridSpace.parent} mb={5}>
               <FormControl width="100%" px={gridSpace.child}>
                 <FormLabel>Subcategory (Optional)</FormLabel>
-                <Typeahead
-                  clearButton
-                  allowNew
-                  id="subcategory"
-                  onChange={(selected: TSubcategory[]) => {
-                    setValue('subcategory', selected[0]?.label || null);
-                    setSubcat(selected);
-                  }}
-                  newSelectionPrefix=""
-                  options={
-                    subcategories?.Products.map(
-                      (p) => ({ label: p.subcategory || '' } as TSubcategory),
-                    ) || []
-                  }
-                  placeholder="Choose a subcategory..."
-                  selected={subcat}
+                <ProductTypeAhead
+                  field="subcategory"
+                  setValue={setValue}
+                  productOptions={productOptions}
                   onBlur={attemptAutoDatasetMgmt}
+                  defaultValue={product?.subcategory || undefined}
                 />
               </FormControl>
             </Flex>
@@ -346,22 +317,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 px={gridSpace.child}
               >
                 <FormLabel>Manufacturer</FormLabel>
-                <Select
-                  {...register('manufacturer')}
-                  onFocus={attemptAutoDatasetMgmt}
-                >
-                  <option value="">Select...</option>
-                  {extensibleValueQueryData?.ExtensibleValues.filter(
-                    (o) => o.field === 'product_manufacturer',
-                  ).map((val) => (
-                    <option
-                      key={`option-${val.field}-${val.value}`}
-                      value={val.value}
-                    >
-                      {val.value}
-                    </option>
-                  ))}
-                </Select>
+                <ProductTypeAhead
+                  field="manufacturer"
+                  setValue={setValue}
+                  productOptions={productOptions}
+                  defaultValue={product?.manufacturer}
+                />
                 <FormErrorMessage>
                   {errors.manufacturer?.message}
                 </FormErrorMessage>
@@ -373,19 +334,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 px={gridSpace.child}
               >
                 <FormLabel>Brand</FormLabel>
-                <Select {...register('brand')}>
-                  <option value="">Select...</option>
-                  {extensibleValueQueryData?.ExtensibleValues.filter(
-                    (o) => o.field === 'product_brand',
-                  ).map((val) => (
-                    <option
-                      key={`option-${val.field}-${val.value}`}
-                      value={val.value}
-                    >
-                      {val.value}
-                    </option>
-                  ))}
-                </Select>
+                <ProductTypeAhead
+                  field="brand"
+                  setValue={setValue}
+                  productOptions={productOptions}
+                  defaultValue={product?.brand}
+                />
                 <FormErrorMessage>{errors.brand?.message}</FormErrorMessage>
               </FormControl>
             </Flex>
@@ -397,19 +351,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                 px={gridSpace.child}
               >
                 <FormLabel>Series</FormLabel>
-                <Select {...register('series')}>
-                  <option value="">Select...</option>
-                  {extensibleValueQueryData?.ExtensibleValues.filter(
-                    (o) => o.field === 'product_series',
-                  ).map((val) => (
-                    <option
-                      key={`option-${val.field}-${val.value}`}
-                      value={val.value}
-                    >
-                      {val.value}
-                    </option>
-                  ))}
-                </Select>
+                <ProductTypeAhead
+                  field="series"
+                  setValue={setValue}
+                  productOptions={productOptions}
+                  defaultValue={product?.series || undefined}
+                />
                 <FormErrorMessage>{errors.series?.message}</FormErrorMessage>
               </FormControl>
 
@@ -518,19 +465,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                     px={gridSpace.child}
                   >
                     <FormLabel>Parallel</FormLabel>
-                    <Select {...register('parallel')}>
-                      <option value="">Select...</option>
-                      {extensibleValueQueryData?.ExtensibleValues.filter(
-                        (o) => o.field === 'product_parallel',
-                      ).map((val) => (
-                        <option
-                          key={`option-${val.field}-${val.value}`}
-                          value={val.value}
-                        >
-                          {val.value}
-                        </option>
-                      ))}
-                    </Select>
+                    <ProductTypeAhead
+                      field="parallel"
+                      setValue={setValue}
+                      productOptions={productOptions}
+                      defaultValue={product?.parallel || undefined}
+                    />
                     <FormErrorMessage>
                       {errors.parallel?.message}
                     </FormErrorMessage>
@@ -542,13 +482,11 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                     px={gridSpace.child}
                   >
                     <FormLabel>Insert</FormLabel>
-                    <Autocomplete
-                      isInvalid={!!errors.insert}
-                      defaultValue={product?.insert}
-                      callback={(val: string) => {
-                        setValue('insert', val);
-                      }}
-                      field="product_insert"
+                    <ProductTypeAhead
+                      field="insert"
+                      setValue={setValue}
+                      productOptions={productOptions}
+                      defaultValue={product?.insert || undefined}
                     />
                     <FormErrorMessage>
                       {errors.insert?.message}
@@ -575,26 +513,19 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                   </HStack>
 
                   <FormControl
-                    isInvalid={!!errors.memoribillia}
+                    isInvalid={!!errors.memorabilia}
                     width="50%"
                     px={gridSpace.child}
                   >
-                    <FormLabel>Memoribillia</FormLabel>
-                    <Select {...register('memoribillia')}>
-                      <option value="">Select...</option>
-                      {extensibleValueQueryData?.ExtensibleValues.filter(
-                        (o) => o.field === 'product_memoribillia',
-                      ).map((val) => (
-                        <option
-                          key={`option-${val.field}-${val.value}`}
-                          value={val.value}
-                        >
-                          {val.value}
-                        </option>
-                      ))}
-                    </Select>
+                    <FormLabel>memorabilia</FormLabel>
+                    <ProductTypeAhead
+                      field="memorabilia"
+                      setValue={setValue}
+                      productOptions={productOptions}
+                      defaultValue={product?.memorabilia || undefined}
+                    />
                     <FormErrorMessage>
-                      {errors.memoribillia?.message}
+                      {errors.memorabilia?.message}
                     </FormErrorMessage>
                   </FormControl>
                 </Flex>

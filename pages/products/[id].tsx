@@ -121,7 +121,7 @@ const ProductDetailsPage: React.FC = () => {
                 parallel: product?.parallel,
                 insert: product?.insert,
                 rookie_card: product?.rookie_card,
-                memoribillia: product?.memoribillia,
+                memorabilia: product?.memorabilia,
                 autograph: product?.autograph,
                 numbered: product?.numbered,
                 grader: product?.grader,

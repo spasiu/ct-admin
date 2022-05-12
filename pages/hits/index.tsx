@@ -145,7 +145,7 @@ const HitsPage: React.FC = () => {
                           hit.parallel,
                           hit.insert,
                           (hit.autograph)? 'Autograph' : '',
-                          (hit.memoribillia)? hit.memoribillia : '',
+                          (hit.memorabilia)? hit.memorabilia : '',
                           (hit.rookie_card)? 'Rookie' : '',
                           (hit.numbered)? '/' + hit.numbered : ''
                         ].join(' ')

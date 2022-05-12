@@ -43,7 +43,7 @@ export const ExtensibleValueFields = [
   { value: 'product_grade', label: 'Product - Grade' },
   { value: 'product_insert', label: 'Product - Insert' },
   { value: 'product_manufacturer', label: 'Product - Manufacturer' },
-  { value: 'product_memoribillia', label: 'Product - Memoribillia' },
+  { value: 'product_memorabilia', label: 'Product - memorabilia' },
   { value: 'product_parallel', label: 'Product - Parallel' },
   { value: 'product_series', label: 'Product - Series' },
   { value: 'product_type', label: 'Product - Type' },

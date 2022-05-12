@@ -2257,7 +2257,7 @@ export type Hits = {
   image_back?: Maybe<Scalars['String']>;
   image_front: Scalars['String'];
   insert?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player: Scalars['String'];
@@ -2349,7 +2349,7 @@ export type Hits_Bool_Exp = {
   image_back?: Maybe<String_Comparison_Exp>;
   image_front?: Maybe<String_Comparison_Exp>;
   insert?: Maybe<String_Comparison_Exp>;
-  memoribillia?: Maybe<String_Comparison_Exp>;
+  memorabilia?: Maybe<String_Comparison_Exp>;
   numbered?: Maybe<Int_Comparison_Exp>;
   parallel?: Maybe<String_Comparison_Exp>;
   player?: Maybe<String_Comparison_Exp>;
@@ -2386,7 +2386,7 @@ export type Hits_Insert_Input = {
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
@@ -2408,7 +2408,7 @@ export type Hits_Max_Fields = {
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
@@ -2427,7 +2427,7 @@ export type Hits_Max_Order_By = {
   image_back?: Maybe<Order_By>;
   image_front?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
-  memoribillia?: Maybe<Order_By>;
+  memorabilia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
@@ -2447,7 +2447,7 @@ export type Hits_Min_Fields = {
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
@@ -2466,7 +2466,7 @@ export type Hits_Min_Order_By = {
   image_back?: Maybe<Order_By>;
   image_front?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
-  memoribillia?: Maybe<Order_By>;
+  memorabilia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
@@ -2506,7 +2506,7 @@ export type Hits_Order_By = {
   image_back?: Maybe<Order_By>;
   image_front?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
-  memoribillia?: Maybe<Order_By>;
+  memorabilia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
   player?: Maybe<Order_By>;
@@ -2545,7 +2545,7 @@ export enum Hits_Select_Column {
   /** column name */
   Insert = 'insert',
   /** column name */
-  Memoribillia = 'memoribillia',
+  Memorabilia = 'memorabilia',
   /** column name */
   Numbered = 'numbered',
   /** column name */
@@ -2576,7 +2576,7 @@ export type Hits_Set_Input = {
   image_back?: Maybe<Scalars['String']>;
   image_front?: Maybe<Scalars['String']>;
   insert?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
@@ -2654,7 +2654,7 @@ export enum Hits_Update_Column {
   /** column name */
   Insert = 'insert',
   /** column name */
-  Memoribillia = 'memoribillia',
+  Memorabilia = 'memorabilia',
   /** column name */
   Numbered = 'numbered',
   /** column name */
@@ -4038,7 +4038,7 @@ export type Products = {
   autograph?: Maybe<Scalars['Boolean']>;
   available: Scalars['Boolean'];
   boxes_per_case?: Maybe<Scalars['Int']>;
-  brand: Scalars['String'];
+  brand?: Maybe<Scalars['String']>;
   /** An array relationship */
   break_products: Array<Break_Product>;
   /** An aggregate relationship */
@@ -4053,7 +4053,7 @@ export type Products = {
   id: Scalars['uuid'];
   insert?: Maybe<Scalars['String']>;
   manufacturer: Scalars['String'];
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   packs_per_box?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
@@ -4220,7 +4220,7 @@ export type Products_Bool_Exp = {
   id?: Maybe<Uuid_Comparison_Exp>;
   insert?: Maybe<String_Comparison_Exp>;
   manufacturer?: Maybe<String_Comparison_Exp>;
-  memoribillia?: Maybe<String_Comparison_Exp>;
+  memorabilia?: Maybe<String_Comparison_Exp>;
   numbered?: Maybe<Int_Comparison_Exp>;
   packs_per_box?: Maybe<Int_Comparison_Exp>;
   parallel?: Maybe<String_Comparison_Exp>;
@@ -4268,7 +4268,7 @@ export type Products_Insert_Input = {
   id?: Maybe<Scalars['uuid']>;
   insert?: Maybe<Scalars['String']>;
   manufacturer?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   packs_per_box?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
@@ -4298,7 +4298,7 @@ export type Products_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   insert?: Maybe<Scalars['String']>;
   manufacturer?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   packs_per_box?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
@@ -4324,7 +4324,7 @@ export type Products_Max_Order_By = {
   id?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
   manufacturer?: Maybe<Order_By>;
-  memoribillia?: Maybe<Order_By>;
+  memorabilia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   packs_per_box?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
@@ -4351,7 +4351,7 @@ export type Products_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   insert?: Maybe<Scalars['String']>;
   manufacturer?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   packs_per_box?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
@@ -4377,7 +4377,7 @@ export type Products_Min_Order_By = {
   id?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
   manufacturer?: Maybe<Order_By>;
-  memoribillia?: Maybe<Order_By>;
+  memorabilia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   packs_per_box?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
@@ -4431,7 +4431,7 @@ export type Products_Order_By = {
   id?: Maybe<Order_By>;
   insert?: Maybe<Order_By>;
   manufacturer?: Maybe<Order_By>;
-  memoribillia?: Maybe<Order_By>;
+  memorabilia?: Maybe<Order_By>;
   numbered?: Maybe<Order_By>;
   packs_per_box?: Maybe<Order_By>;
   parallel?: Maybe<Order_By>;
@@ -4482,7 +4482,7 @@ export enum Products_Select_Column {
   /** column name */
   Manufacturer = 'manufacturer',
   /** column name */
-  Memoribillia = 'memoribillia',
+  Memorabilia = 'memorabilia',
   /** column name */
   Numbered = 'numbered',
   /** column name */
@@ -4523,7 +4523,7 @@ export type Products_Set_Input = {
   id?: Maybe<Scalars['uuid']>;
   insert?: Maybe<Scalars['String']>;
   manufacturer?: Maybe<Scalars['String']>;
-  memoribillia?: Maybe<Scalars['String']>;
+  memorabilia?: Maybe<Scalars['String']>;
   numbered?: Maybe<Scalars['Int']>;
   packs_per_box?: Maybe<Scalars['Int']>;
   parallel?: Maybe<Scalars['String']>;
@@ -4636,7 +4636,7 @@ export enum Products_Update_Column {
   /** column name */
   Manufacturer = 'manufacturer',
   /** column name */
-  Memoribillia = 'memoribillia',
+  Memorabilia = 'memorabilia',
   /** column name */
   Numbered = 'numbered',
   /** column name */
@@ -11725,7 +11725,7 @@ export type GetProductsQuery = (
   { __typename?: 'query_root' }
   & { Products: Array<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'subcategory' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
+    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'subcategory' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memorabilia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
     & { break_products: Array<(
       { __typename?: 'break_product' }
       & { Break: (
@@ -11745,7 +11745,7 @@ export type GetProductByIdQuery = (
   { __typename?: 'query_root' }
   & { Products_by_pk?: Maybe<(
     { __typename?: 'Products' }
-    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'subcategory' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
+    & Pick<Products, 'id' | 'unit_of_measure' | 'description' | 'year' | 'manufacturer' | 'brand' | 'series' | 'category' | 'subcategory' | 'type' | 'boxes_per_case' | 'packs_per_box' | 'cards_per_pack' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memorabilia' | 'autograph' | 'numbered' | 'grader' | 'grade' | 'available'>
     & { break_products: Array<(
       { __typename?: 'break_product' }
       & { Break: (
@@ -11920,7 +11920,7 @@ export type GetHitsQuery = (
   { __typename?: 'query_root' }
   & { Hits: Array<(
     { __typename?: 'Hits' }
-    & Pick<Hits, 'id' | 'description' | 'user_id' | 'break_id' | 'product_id' | 'image_front' | 'image_back' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memoribillia' | 'autograph' | 'numbered' | 'published'>
+    & Pick<Hits, 'id' | 'description' | 'user_id' | 'break_id' | 'product_id' | 'image_front' | 'image_back' | 'card_number' | 'player' | 'parallel' | 'insert' | 'rookie_card' | 'memorabilia' | 'autograph' | 'numbered' | 'published'>
     & { User: (
       { __typename?: 'Users' }
       & Pick<Users, 'id' | 'username'>
@@ -12100,14 +12100,25 @@ export type GetDatasetsQuery = (
   )> }
 );
 
-export type GetSubcatsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetProductOptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSubcatsQuery = (
+export type GetProductOptionsQuery = (
   { __typename?: 'query_root' }
   & { Products: Array<(
     { __typename?: 'Products' }
-    & Pick<Products, 'subcategory'>
+    & Pick<Products, 'year' | 'subcategory' | 'manufacturer' | 'brand' | 'series' | 'parallel' | 'insert' | 'memorabilia'>
+  )> }
+);
+
+export type GetHitOptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetHitOptionsQuery = (
+  { __typename?: 'query_root' }
+  & { Hits: Array<(
+    { __typename?: 'Hits' }
+    & Pick<Hits, 'parallel' | 'memorabilia'>
   )> }
 );
 
@@ -12870,7 +12881,7 @@ export const GetProductsDocument = gql`
     parallel
     insert
     rookie_card
-    memoribillia
+    memorabilia
     autograph
     numbered
     grader
@@ -12934,7 +12945,7 @@ export const GetProductByIdDocument = gql`
     parallel
     insert
     rookie_card
-    memoribillia
+    memorabilia
     autograph
     numbered
     grader
@@ -13321,7 +13332,7 @@ export const GetHitsDocument = gql`
     parallel
     insert
     rookie_card
-    memoribillia
+    memorabilia
     autograph
     numbered
     published
@@ -13818,42 +13829,84 @@ export function useGetDatasetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetDatasetsQueryHookResult = ReturnType<typeof useGetDatasetsQuery>;
 export type GetDatasetsLazyQueryHookResult = ReturnType<typeof useGetDatasetsLazyQuery>;
 export type GetDatasetsQueryResult = Apollo.QueryResult<GetDatasetsQuery, GetDatasetsQueryVariables>;
-export const GetSubcatsDocument = gql`
-    query getSubcats {
+export const GetProductOptionsDocument = gql`
+    query getProductOptions {
   Products(
-    where: {_and: [{subcategory: {_is_null: false}}, {subcategory: {_neq: ""}}]}
+    distinct_on: [year, subcategory, manufacturer, brand, series, parallel, insert, memorabilia]
   ) {
+    year
     subcategory
+    manufacturer
+    brand
+    series
+    parallel
+    insert
+    memorabilia
   }
 }
     `;
 
 /**
- * __useGetSubcatsQuery__
+ * __useGetProductOptionsQuery__
  *
- * To run a query within a React component, call `useGetSubcatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSubcatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProductOptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductOptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetSubcatsQuery({
+ * const { data, loading, error } = useGetProductOptionsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetSubcatsQuery(baseOptions?: Apollo.QueryHookOptions<GetSubcatsQuery, GetSubcatsQueryVariables>) {
+export function useGetProductOptionsQuery(baseOptions?: Apollo.QueryHookOptions<GetProductOptionsQuery, GetProductOptionsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSubcatsQuery, GetSubcatsQueryVariables>(GetSubcatsDocument, options);
+        return Apollo.useQuery<GetProductOptionsQuery, GetProductOptionsQueryVariables>(GetProductOptionsDocument, options);
       }
-export function useGetSubcatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSubcatsQuery, GetSubcatsQueryVariables>) {
+export function useGetProductOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductOptionsQuery, GetProductOptionsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSubcatsQuery, GetSubcatsQueryVariables>(GetSubcatsDocument, options);
+          return Apollo.useLazyQuery<GetProductOptionsQuery, GetProductOptionsQueryVariables>(GetProductOptionsDocument, options);
         }
-export type GetSubcatsQueryHookResult = ReturnType<typeof useGetSubcatsQuery>;
-export type GetSubcatsLazyQueryHookResult = ReturnType<typeof useGetSubcatsLazyQuery>;
-export type GetSubcatsQueryResult = Apollo.QueryResult<GetSubcatsQuery, GetSubcatsQueryVariables>;
+export type GetProductOptionsQueryHookResult = ReturnType<typeof useGetProductOptionsQuery>;
+export type GetProductOptionsLazyQueryHookResult = ReturnType<typeof useGetProductOptionsLazyQuery>;
+export type GetProductOptionsQueryResult = Apollo.QueryResult<GetProductOptionsQuery, GetProductOptionsQueryVariables>;
+export const GetHitOptionsDocument = gql`
+    query getHitOptions {
+  Hits(distinct_on: [parallel, memorabilia]) {
+    parallel
+    memorabilia
+  }
+}
+    `;
+
+/**
+ * __useGetHitOptionsQuery__
+ *
+ * To run a query within a React component, call `useGetHitOptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHitOptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHitOptionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetHitOptionsQuery(baseOptions?: Apollo.QueryHookOptions<GetHitOptionsQuery, GetHitOptionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHitOptionsQuery, GetHitOptionsQueryVariables>(GetHitOptionsDocument, options);
+      }
+export function useGetHitOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHitOptionsQuery, GetHitOptionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHitOptionsQuery, GetHitOptionsQueryVariables>(GetHitOptionsDocument, options);
+        }
+export type GetHitOptionsQueryHookResult = ReturnType<typeof useGetHitOptionsQuery>;
+export type GetHitOptionsLazyQueryHookResult = ReturnType<typeof useGetHitOptionsLazyQuery>;
+export type GetHitOptionsQueryResult = Apollo.QueryResult<GetHitOptionsQuery, GetHitOptionsQueryVariables>;
 export const GetEventByIdDocument = gql`
     subscription GetEventById($id: uuid!) {
   Events_by_pk(id: $id) {

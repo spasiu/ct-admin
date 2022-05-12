@@ -12,7 +12,7 @@ export type TSelectedHit = {
   parallel?: string | null;
   insert?: string | null;
   rookie_card?: boolean | null;
-  memoribillia?: string | null;
+  memorabilia?: string | null;
   autograph?: boolean | null;
   numbered?: number | null;
   published: boolean;
@@ -41,7 +41,7 @@ export type TAddHitProduct = {
   year: string;
   category: string;
   manufacturer: string;
-  brand: string;
+  brand?: Maybe<string>;
   series?: Maybe<string>;
 };
 
@@ -57,7 +57,7 @@ export type TAddHitFormData = {
   parallel: string | null;
   insert: string | null;
   rookie_card: boolean | null;
-  memoribillia: string | null;
+  memorabilia: string | null;
   autograph: boolean | null;
   numbered: number | null;
   published: boolean;

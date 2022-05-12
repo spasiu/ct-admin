@@ -38,7 +38,7 @@ export const GET_PRODUCTS = gql`
       parallel
       insert
       rookie_card
-      memoribillia
+      memorabilia
       autograph
       numbered
       grader
@@ -74,7 +74,7 @@ export const GET_PRODUCT_BY_ID = gql`
       parallel
       insert
       rookie_card
-      memoribillia
+      memorabilia
       autograph
       numbered
       grader
@@ -276,7 +276,7 @@ export const GET_HITS = gql`
       parallel
       insert
       rookie_card
-      memoribillia
+      memorabilia
       autograph
       numbered
       published
@@ -469,17 +469,43 @@ export const GET_DATASETS = gql`
   }
 `;
 
-export const GET_SUBCATS = gql`
-  query getSubcats {
+export const GET_PRODUCT_OPTIONS = gql`
+  query getProductOptions {
     Products(
-      where: {
-        _and: [
-          { subcategory: { _is_null: false } }
-          { subcategory: { _neq: "" } }
-        ]
-      }
+      distinct_on: [
+        year
+        subcategory
+        manufacturer
+        brand
+        series
+        parallel
+        insert
+        memorabilia
+      ]
     ) {
+      year
       subcategory
+      manufacturer
+      brand
+      series
+      parallel
+      insert
+      memorabilia
     }
   }
 `;
+
+export const GET_HIT_OPTIONS = gql`
+  query getHitOptions {
+    Hits (
+      distinct_on: [
+        parallel
+        memorabilia
+      ]
+    ) {
+      parallel
+      memorabilia
+    }
+  }
+`;
+
