@@ -12118,7 +12118,7 @@ export type GetHitOptionsQuery = (
   { __typename?: 'query_root' }
   & { Hits: Array<(
     { __typename?: 'Hits' }
-    & Pick<Hits, 'parallel' | 'memorabilia'>
+    & Pick<Hits, 'parallel' | 'memorabilia' | 'insert'>
   )> }
 );
 
@@ -13874,9 +13874,10 @@ export type GetProductOptionsLazyQueryHookResult = ReturnType<typeof useGetProdu
 export type GetProductOptionsQueryResult = Apollo.QueryResult<GetProductOptionsQuery, GetProductOptionsQueryVariables>;
 export const GetHitOptionsDocument = gql`
     query getHitOptions {
-  Hits(distinct_on: [parallel, memorabilia]) {
+  Hits(distinct_on: [parallel, memorabilia, insert]) {
     parallel
     memorabilia
+    insert
   }
 }
     `;

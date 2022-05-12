@@ -422,12 +422,11 @@ const AddHitForm: React.FC<TAddHitFormProps> = ({ hit, callback, refetch }) => {
                   px={gridSpace.child}
                 >
                   <FormLabel>Insert</FormLabel>
-                  <Autocomplete
-                    isInvalid={!!errors.insert}
-                    defaultValue={hit?.insert}
-                    callback={(val: string) => setValue('insert', val)}
-                    field="product_insert"
-                    clear={clearInsert}
+                  <ProductTypeAhead
+                    field="insert"
+                    setValue={setValue}
+                    productOptions={lookAheadOptions}
+                    defaultValue={hit?.insert || undefined}
                   />
                   <FormErrorMessage>{errors.insert?.message}</FormErrorMessage>
                 </FormControl>

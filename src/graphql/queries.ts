@@ -501,10 +501,12 @@ export const GET_HIT_OPTIONS = gql`
       distinct_on: [
         parallel
         memorabilia
+        insert
       ]
     ) {
       parallel
       memorabilia
+      insert
     }
   }
 `;
