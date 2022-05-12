@@ -27,7 +27,6 @@ import {
 
 import { gridSpace } from '@config/chakra/constants';
 
-import Autocomplete from '@components/Autocomplete';
 import AutocompleteBreaks from '@components/AutocompleteBreaks';
 import ImageUploader from '@components/ImageUploader';
 

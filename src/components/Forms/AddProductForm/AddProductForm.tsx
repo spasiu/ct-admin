@@ -168,17 +168,10 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
   } = useGetFilteredExtensibleValuesQuery({
     variables: {
       fields: [
-        'product_brand',
         'product_category',
         'product_grader',
         'product_grade',
-        'product_insert',
-        'product_manufacturer',
-        'product_memorabilia',
-        'product_parallel',
-        'product_series',
         'product_type',
-        'product_year',
       ],
     },
     onCompleted: () => {
