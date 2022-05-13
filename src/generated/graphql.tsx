@@ -12107,7 +12107,7 @@ export type GetProductOptionsQuery = (
   { __typename?: 'query_root' }
   & { Products: Array<(
     { __typename?: 'Products' }
-    & Pick<Products, 'year' | 'subcategory' | 'manufacturer' | 'brand' | 'series' | 'parallel' | 'insert' | 'memorabilia'>
+    & Pick<Products, 'year' | 'subcategory' | 'manufacturer' | 'brand' | 'series' | 'type' | 'parallel' | 'insert' | 'memorabilia'>
   )> }
 );
 
@@ -13832,13 +13832,14 @@ export type GetDatasetsQueryResult = Apollo.QueryResult<GetDatasetsQuery, GetDat
 export const GetProductOptionsDocument = gql`
     query getProductOptions {
   Products(
-    distinct_on: [year, subcategory, manufacturer, brand, series, parallel, insert, memorabilia]
+    distinct_on: [year, subcategory, manufacturer, brand, series, type, parallel, insert, memorabilia]
   ) {
     year
     subcategory
     manufacturer
     brand
     series
+    type
     parallel
     insert
     memorabilia

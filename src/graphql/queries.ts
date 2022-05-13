@@ -478,6 +478,7 @@ export const GET_PRODUCT_OPTIONS = gql`
         manufacturer
         brand
         series
+        type
         parallel
         insert
         memorabilia
@@ -488,6 +489,7 @@ export const GET_PRODUCT_OPTIONS = gql`
       manufacturer
       brand
       series
+      type
       parallel
       insert
       memorabilia

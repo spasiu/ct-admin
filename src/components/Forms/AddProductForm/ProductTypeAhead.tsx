@@ -9,7 +9,7 @@ export const ProductTypeAhead: React.FC<TProductTypeAhead> = ({
   onBlur,
 }) => {
   
-  const formatOptions = (values: string[]) =>
+  const formatOptions = (values: string[]) => 
     values.map((v) => ({ label: v } as TOption)) || [];
 
   return (

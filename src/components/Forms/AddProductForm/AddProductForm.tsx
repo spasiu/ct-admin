@@ -360,19 +360,12 @@ const AddProductForm: React.FC<TAddProductFormProps> = ({
                   px={gridSpace.child}
                 >
                   <FormLabel>Type</FormLabel>
-                  <Select {...register('type')}>
-                    <option value="">Select...</option>
-                    {extensibleValueQueryData?.ExtensibleValues.filter(
-                      (o) => o.field === 'product_type',
-                    ).map((val) => (
-                      <option
-                        key={`option-${val.field}-${val.value}`}
-                        value={val.value}
-                      >
-                        {val.value}
-                      </option>
-                    ))}
-                  </Select>
+                  <ProductTypeAhead
+                    field="type"
+                    setValue={setValue}
+                    productOptions={productOptions}
+                    defaultValue={product?.type || undefined}
+                  />
                   <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
                 </FormControl>
               )}

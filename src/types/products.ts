@@ -121,6 +121,7 @@ export type TProductTypeAhead = {
     manufacturer: string[];
     brand: string[];
     series: string[];
+    type: string[];
     parallel: string[];
     insert: string[];
     memorabilia: string[];
